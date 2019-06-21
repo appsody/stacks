@@ -1,0 +1,7 @@
+id: sample-stack-id # must be unique
+name: sample stack # one liner description short meaningful name for the stack
+version: 0.1.0 # version of the stack
+description: sample stack to help creation of more appsody stacks # free form text explaining more about the capabilities of this stack and various templates
+maintainer: Neeraj Laad <neeraj.laad@gmail.com> # comma separated list for more than one maintainer
+default-template: hello # name of default template
+license: Apache-2.0 # license for the stack

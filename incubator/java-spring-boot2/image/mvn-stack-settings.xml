@@ -1,0 +1,15 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      https://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <!-- Use this file to customize maven repositories or other proxies that should be 
+       used when building projects: 
+       Defaults: https://maven.apache.org/settings.html
+       Reference: https://maven.apache.org/ref/3.6.1/maven-settings/settings.html
+  -->
+
+  <!-- Repository location in docker image -->
+  <localRepository>/mvn/repository</localRepository>
+
+</settings>
