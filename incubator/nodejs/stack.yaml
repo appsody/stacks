@@ -1,0 +1,7 @@
+id: nodejs
+name: Node.js application
+version: 0.2.0
+description: Simple Node.js application
+maintainer: Neeraj Laad <neeraj.laad@gmail.com>
+default-template: simple
+license: Apache-2.0

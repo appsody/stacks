@@ -1,0 +1,9 @@
+
+/ci/package
+/ci/build
+**/.DS_Store
+**/node_modules
+**/*.log
+**/target
+**/.settings
+**/.project
