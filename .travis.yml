@@ -1,0 +1,27 @@
+language: generic
+
+go:
+  - 1.12.x
+
+os:
+  - linux
+
+services:
+  - docker
+
+script:
+  - echo "No lint or test defined."
+
+# note before_deploy will run before each deploy provider
+before_deploy:
+  - ./ci/packageTemplates.sh .
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: "IK+SWjBLhhhw9HJUsILtOc6YdJQm3cXhqppKyfB2ac5t3JO+50tN58QA/7mofKBmd6Ozum+qZ4zRM2q44cqiUP3tM+FuAi1/PI4YOoVFUsOJu7qx6H8PNk4+3Idiof4/T//sJ5czZkW2yhjFNxoW7U3e+hg7w9mxJZBM5EqWFWHQEx0VS983vcqy2gP3WVr91KkC1THdhbvCaOCZgLsdAFBIAc/hcodCnN7Gs3bMEeR8+raOkIFBXWk3g2rRO07mU5QFwpi8yowEk5H3g7dyMW3ksek2DRUYYIjO7cBOiY16uGM5Qj+6vLcd9brRHqbOeJMGJmxPZkm1FDVt+wwGwsliPeYzCLjxLTwgyawGa3Eldklc4NM09sZeHNNCsPbN8ymMEWHzbsetbREHQVMd4hjs9QHCM4JmBtqodIqzQ2ijhuAYaxDjeWfGiu8UIfcNQ6Zv36TlKgo5sPrCIZweu1SwXrR0NPKgY7OqDX+hDJM2OyOA9EMe1698teRjK6pWbxPreQCtAJb3oSJOoGKCqxnxRo9/SVCuTrTldUPsmugv0UkCzH6KFmuoOErl+HdmF136ceYEHVTd2xjHV823YH7bzPiw1appIMTAg0Yv6BorEuDZlaRApNw34qnv7Y6RjF9ullgWzJUEgeDW7+ppDNLurrGPNnIWtQZAeb0srzk="
+  file: ci/package/*
+  file_glob: true
+  on:
+    tags: true
