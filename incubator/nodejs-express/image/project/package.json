@@ -1,12 +1,12 @@
 {
   "name": "nodejs-express",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Node.js Express Stack",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/appsody/stacks.git",
-    "directory": "incubator/nodejs-express/stack/project"
+    "directory": "incubator/nodejs-express/image/project"
   },
   "scripts": {
     "debug": "node --inspect=0.0.0.0 server.js",
