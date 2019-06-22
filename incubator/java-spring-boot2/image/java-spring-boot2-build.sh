@@ -47,12 +47,12 @@ version() {
 common() {
   # workaround: exit with error if repository does not exist
   if [ ! -d /mvn/repository ]; then
-    error "Could not find local Maven repository"
-    echo
-    echo "Create a .m2/repository directory in your home directory. For example:"
-    echo "   * linux:   mkdir -p ~/.m2/repository"
-    echo "   * windows: mkdir %SystemDrive%%HOMEPATH%\.m2\repository"
-    echo
+    error "Could not find local Maven repository
+
+    Create a .m2/repository directory in your home directory. For example:
+    * linux:   mkdir -p ~/.m2/repository
+    * windows: mkdir %SystemDrive%%HOMEPATH%\.m2\repository
+    "
     exit 1
   fi
 
@@ -63,16 +63,20 @@ common() {
   note "Installing parent ${GROUP_ID}:${ARTIFACT_ID}:${VERSION}"
   run_mvn install -q -f appsody-boot2-pom.xml
 
+  local groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:groupId" pom.xml)
+  local artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:artifactId" pom.xml)
+
   # Require parent in pom.xml
-  if ! grep -Gzq "<parent.*${GROUP_ID}.*${ARTIFACT_ID}.*</parent" pom.xml
-  then
+  if [ "${groupId}" != "${GROUP_ID}" ] || [ "${artifactId}" != "${ARTIFACT_ID}" ]; then
     error "Project is missing required parent:
 
     <parent>
       <groupId>${GROUP_ID}</groupId>
       <artifactId>${ARTIFACT_ID}</artifactId>
       <version>${VERSION}</version>
-    </parent>"
+      <relativePath/>
+    </parent>
+    "
     exit 1
   fi
 
