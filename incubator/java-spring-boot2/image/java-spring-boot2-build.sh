@@ -1,7 +1,5 @@
 #!/bin/bash
-if [ -x /usr/bin/tput ] && [[ `tput colors` != "0" ]]; then
-  color_prompt="yes"
-elif [ -x /ffp/bin/tput ] && [[ `tput colors` != "0" ]]; then
+if [ -n "$TERM" ] && [ "$TERM" != "dumb" ] && [ -x /usr/bin/tput ] && [[ `tput colors` != "0" ]]; then
   color_prompt="yes"
 else
   color_prompt=
@@ -22,46 +20,68 @@ else
   NO_COLOUR=""
 fi
 
+note() {
+  echo -e "${BLUE}$@${NO_COLOR}"
+}
+warn() {
+  echo -e "${YELLOW}$@${NO_COLOR}"
+}
+error() {
+  echo -e "${RED}$@${NO_COLOR}"
+}
+
 run_mvn () {
   echo -e "${GREEN}> mvn $@${NO_COLOR}"
   mvn "$@"
 }
 
-note() {
-  echo -e "${BLUE}$@${NO_COLOR}"
-}
-
-error() {
-  echo -e "${RED}$@${NO_COLOR}"
+version() {
+  # get version from specified POM
+  xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t \
+     -o "export GROUP_ID=" -v "/x:project/x:groupId" -n \
+     -o "export ARTIFACT_ID=" -v "/x:project/x:artifactId" -n \
+     -o "export VERSION=" -v "/x:project/x:version" \
+     $1
 }
 
 common() {
+  # workaround: exit with error if repository does not exist
+  if [ ! -d /mvn/repository ]; then
+    error "Could not find local Maven repository"
+    echo
+    echo "Create a .m2/repository directory in your home directory. For example:"
+    echo "   * linux:   mkdir -p ~/.m2/repository"
+    echo "   * windows: mkdir %SystemDrive%%HOMEPATH%\.m2\repository"
+    echo
+    exit 1
+  fi
+
   # Get parent pom information (appsody-boot2-pom.xml)
-  args='export PARENT_GROUP_ID=${project.groupId}; export PARENT_ARTIFACT_ID=${project.artifactId}; export PARENT_VERSION=${project.version}'
-  eval $(mvn -q -Dexec.executable=echo -Dexec.args="${args}" --non-recursive -f appsody-boot2-pom.xml exec:exec 2>/dev/null)
+  eval $(version appsody-boot2-pom.xml)
 
   # Install parent pom
-  note "Installing parent ${PARENT_GROUP_ID}:${PARENT_ARTIFACT_ID}:${PARENT_VERSION}"
+  note "Installing parent ${GROUP_ID}:${ARTIFACT_ID}:${VERSION}"
   run_mvn install -q -f appsody-boot2-pom.xml
 
   # Require parent in pom.xml
-  if ! grep -Gzq "<parent.*${PARENT_GROUP_ID}.*${PARENT_ARTIFACT_ID}.*</parent" pom.xml
+  if ! grep -Gzq "<parent.*${GROUP_ID}.*${ARTIFACT_ID}.*</parent" pom.xml
   then
     error "Project is missing required parent:
 
     <parent>
-      <groupId>${PARENT_GROUP_ID}</groupId>
-      <artifactId>${PARENT_ARTIFACT_ID}</artifactId>
-      <version>${PARENT_VERSION}</version>
+      <groupId>${GROUP_ID}</groupId>
+      <artifactId>${ARTIFACT_ID}</artifactId>
+      <version>${VERSION}</version>
     </parent>"
     exit 1
   fi
 
-  major=$(echo ${PARENT_VERSION} | cut -d'.' -f1)
+  major=$(echo ${VERSION} | cut -d'.' -f1)
   ((next=major+1))
 
   note "Updating parent version and resolving dependencies"
   run_mvn -q versions:update-parent "-DparentVersion=[${major},${next})" dependency:go-offline
+  unset GROUP_ID ARTIFACT_ID VERSION
 }
 
 recompile() {
@@ -87,10 +107,6 @@ run() {
 test() {
   note "Test project in the foreground"
   run_mvn package test
-}
-
-fail() {
-  error "Unexpected script usage, expected one of recompile,package,debug,run or test"
 }
 
 #set the action, default to fail text if none passed.
@@ -119,8 +135,8 @@ case "${ACTION}" in
   test)
     common
     test
-  ;;  
+  ;;
   *)
-    fail
+    error "Unexpected script usage, expected one of recompile, package, debug, run, test"
   ;;
 esac

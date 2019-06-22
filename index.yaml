@@ -34,7 +34,7 @@ projects:
     - you
     urls:
     - https://github.com/appsody/stacks/releases/download/0.0.1-alpha/incubator.java-spring-boot2.templates.default.tar.gz
-    version: 1.0.0    
+    version: 0.2.0
   nodejs:
   - created: 2019-02-01T13:08:45.039293383Z
     description: Node.js Base Project
