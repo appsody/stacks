@@ -1,42 +1,37 @@
 # Stacks
 
-This respository holds the default set of stacks avalible from the appsody cli. Stacks allow for rapid development whilst giving the stack developer the ability to control the overall applications that are created from it. A stack is make up of a stack and one or more templates.
+This respository holds the default set of stacks avalible from the Appsody CLI. Stacks allow for rapid development whilst giving the stack developer the ability to control the overall applications that are created from it. Stacks are make up of a image and one or more templates.
 
-**Stack:** A stack is the foundation for your application. A stack can set default functionality and controls what can be overwritten by a template or application based on it.
+**Image:** An image is the foundation for your application. It sets the default functionality and controls what can be overwritten by a template or application based on it.
 
-**Template:** A template is based upon a stack providing a template application that is ready to use. It has access to any dependencies supplied by that stack and is able to include extra dependencies plus new functionality to enhance the stack where allowed.
+**Template:** A template is based on a image and provides a starter application that is ready to use. It has access to any dependencies supplied by that image and is able to include extra dependencies plus new functionality to enhance the stack where allowed.
 
-## Getting started with Stacks
-1. Create app directory
+For more information on how to create a stack from scratch along with what is expected at each stage for it to be considered a stack go to [creating or modifying](https://github.com/appsody/stacks/blob/master/docs/create-or-modify.md) stacks.
+
+## Using Stacks
+1. Create a new directory
 ``` bash
-mkdir my-app && cd my-app
+mkdir my-app &&
+cd my-app
 ```
-2. Initalise Appsody stack with template
+2. Initalise Appsody stack
 ``` bash
-appsody init <stack>/<template>
+appsody init java-microprofile
 ```
 3. Launch application in development environment
 ``` bash
 appsody run
 ```
 
-## Creating a Stack
-The [creating a stack](https://github.com/appsody/stacks/blob/master/docs/creating-a-stack.md) doc explains how to create a stack from scratch along with what is expected at each stage for it to be considered a stack.
+Note: to list all available Appsody stacks run `appsody list`.
 
 ## Repository Structure
-Stacks are catagorised as either `experimental`, `incubator` or `stable` depending on the content of the stack.
+Stacks are catagorised as either `stable`, `incubator` or `experimental` depending on the content of the stack.
 
-`experimental/`: These stacks are labeled experimental as they may not fulfill the requirements of a appsody stack. Experimental stacks are also not expected to move out of this category into incubator or stable.
+- `stable/`: Stable stacks meet a set of technical requirements which are yet to be defined.
 
-`incubator/`:
+- `incubator/`: The incubator folder allows stacks to be shared and improved on until they meet the stable critria.
 
-`stable/`:
+- `experimental/`: These stacks are labeled experimental as they may not fulfill the requirements of a appsody stack. Experimental stacks are also not expected to move out of this category into incubator or stable.
 
-
-Links on how can a user get started with creating a new stack
-
-Quick explanation on various stability levels for stacks:
-
-- experimental
-- incubator
-- stable
+For infomation on moving a stack to a different folder check out the [stacks overview](https://github.com/appsody/stacks/blob/master/docs/stacks-overview.md)
