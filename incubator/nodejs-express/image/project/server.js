@@ -1,4 +1,5 @@
 const express = require('express');
+const vhost = require('vhost');
 const health = require('@cloudnative/health-connect');
 const fs = require('fs');
 
@@ -18,12 +19,14 @@ function getEntryPoint() {
     return package.main;
 }
 
-require(basePath + getEntryPoint())(app);
-
 const healthcheck = new health.HealthChecker();
 app.use('/live', health.LivenessEndpoint(healthcheck));
 app.use('/ready', health.ReadinessEndpoint(healthcheck));
 app.use('/health', health.HealthEndpoint(healthcheck));
+
+require(basePath + getEntryPoint()).app;
+const userApp = require(basePath + getEntryPoint()).app;
+app.use(vhost('*', userApp));
 
 app.get('*', (req, res) => {
   res.status(404).send("Not Found");
