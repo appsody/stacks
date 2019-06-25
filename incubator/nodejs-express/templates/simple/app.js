@@ -1,7 +1,7 @@
-module.exports = (app) => {
+const app = require('express')()
 
-  app.get('/', (req, res) => {
-    res.send("Hello World!");
-  });
-  
-}
+app.get('/', (req, res) => {
+  res.send("Hello World!");
+});
+ 
+module.exports.app = app;
