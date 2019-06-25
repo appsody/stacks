@@ -13,8 +13,8 @@ ENV APPSODY_RUN="npm start"
 ENV APPSODY_RUN_ON_CHANGE="npm start"
 ENV APPSODY_RUN_KILL=true
 
-ENV APPSODY_DEBUG="npm run debug --node-options --inspect=0.0.0.0"
-ENV APPSODY_DEBUG_ON_CHANGE="npm run debug --node-options --inspect=0.0.0.0"
+ENV APPSODY_DEBUG="npm start --node-options --inspect=0.0.0.0"
+ENV APPSODY_DEBUG_ON_CHANGE="npm start --node-options --inspect=0.0.0.0"
 ENV APPSODY_DEBUG_KILL=true
 
 ENV APPSODY_TEST="npm test"
@@ -24,4 +24,7 @@ ENV APPSODY_TEST_KILL=false
 COPY ./project /project
 WORKDIR /project/user-app
 
+ENV PORT=3000
+
+EXPOST 3000
 EXPOSE 9229
