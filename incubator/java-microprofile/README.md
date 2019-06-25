@@ -1,47 +1,63 @@
-# Java Microprofile
+# Java Microprofile Stack
 
-A stack is the foundation of your application which provides a prototype platform definition for Java Microprifile based projects.
+The Java Microprofile stack provides a consistent way of developing microservices based upon the [Eclipse MicroProfile® specifications](https://microprofile.io). This stack lets you use [Maven](https://maven.apache.org) to develop applications for [Open Liberty](https://openliberty.io) runtime, which includes OpenJDK with container-optimizations in OpenJ9.
 
-The Java Microprofile stack uses a parent POM to manage dependency versions and provide required capabilities and plugins whilst using Maven. Specifically, this stack enables adoptopenjdk/openjdk8-openj9 and Open Liberty version `19.0.0.5`.
+The Java Microprofile stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins.
+
+This stack is based on `adoptopenjdk/openjdk8-openj9` and `Open Liberty v19.0.0.5`. It provides live reloading during development by utilizing `loose application` capabilities.
 
 ## Templates
 
-Templates are used to create your local project and start your developement. When initializing your project you will be provided with a open liberty sample application by default.
+Templates are used to create your local project and start your development. When initializing your project you will be provided with an Open Liberty template application.
 
-The following capabilities are available from the Java Microprofile templates:
+The default template provides a `pom.xml` file that references the parent POM defined by the stack and enables Liberty features that support [Eclipse MicroProfile 2.2](https://openliberty.io/docs/ref/feature/#microProfile-2.2.html). Specifically, this template includes:
 
-### Health checking
+### MicroProfile Health
 
-The open liberty sample application comes with in-built Health-checking that enables the cloud platform to determine `liveness` (is your application live or does it need to be restarted?).
+The `mpHealth` feature allows services to report their health - UP if it is available and DOWN if it is unavailable. It then publishes the status from each service along with the overall health status to a defined endpoint `/health`. A service orchestrator can then use the health statuses to make decisions.
 
-Health Check: http://localhost:9080/health
+Health endpoint: http://localhost:9080/health
 
-### Application metrics
+### MicroProfile Metrics
 
-Enable powerful monitoring for your distributed application. You can monitor metrics to determine the performance and health of a service. You can also use them to pinpoint issues, collect data for capacity planning, or to decide when to scale a service to run with more or fewer resources.
+The `mpMetrics` feature enables MicroProfile Metrics support in Open Liberty. Note that this feature requires SSL and the configuration has been provided for you. You can monitor metrics to determine the performance and health of a service. You can also use them to pinpoint issues, collect data for capacity planning, or to decide when to scale a service to run with more or fewer resources.
 
-- Metrics: http://localhost:9080/metricsOverHTTP
+Metrics endpoint: http://localhost:9443/metrics
 
-### Sample Template
+Log in as the `admin` user with `adminpwd` as the password to see both the system and application metrics in a text format.
 
-The sample template provides you with a simple REST microservice on an Open Liberty server using maven. This template supports the full MicroProfile and Java EE APIs and is composable, meaning that you can use only the features that you need, keeping the server lightweight, which is great for microservices.
+### MicroProfile OpenAPI
+
+The `mpOpenAPI` feature provides a set of Java interfaces and programming models that allow Java developers to natively produce OpenAPI v3 documents from their JAX-RS applications. This provides a standard interface for documenting and exposing RESTful APIs.
+
+OpenAPI endpoints:
+- http://localhost:9080/openapi (the RESTful APIs of the inventory service)
+- http://localhost:9080/openapi/ui (Swagger UI of the deployed APIs)
 
 ## Getting Started
 
-### Initializing the project
+1. Create a new folder in your local directory and initialize it using the Appsody CLI, e.g.:
+    ```bash
+    mkdir my-project
+    cd my-project
+    appsody init java-microprofile
+    ```
 
-1. To start using this Java Microprofile stack you can create a new folder in your local directory and initialize it using with the Appsody CLI eg:
-```bash
-mkdir <my-project>
-cd <my-project>
-appsody init java-microprofile
-```
-This command creates a new project based on the Java Microprofile sample template and then installs your development environment. This will also also install all your applications dependancies into your local .m2 directory.
+    This will initialize a Java MicroProfile project using the default template. This will also install all parent pom dependencies into your local .m2 directory.
 
-2. After your project has been intialized you can then run your application using the following command:
-```bash
-appsody run
-```
-This launches a Docker container that continuously re-builds and re-runs your project, exposing it on port 9080.
+1. Once your project has been initialized, you can run your application using the following command:
 
-Note: you can continue to edit the application in Eclipse or VSCode IDE. Changes will be reflected in the running container around 2 seconds after the changes are saved.
+    ```bash
+    appsody run
+    ```
+
+    This launches a Docker container that starts your application in the foreground, exposing it on port 9080.
+
+    You can continue to edit the application in your preferred IDE (Eclipse, VSCode or others) and your changes will be reflected in the running container within a few seconds.
+
+1. You should be able to access the following endpoints that are exposed by your template  application by default:
+
+    - Health endpoint: http://localhost:9080/health
+    - Metrics endpoint: http://localhost:9443/metrics (login as `admin` user with `adminpwd` password)
+    - OpenAPI endpoint: http://localhost:9080/openapi
+    - Swagger UI endpoint: http://localhost:9080/openapi/ui
