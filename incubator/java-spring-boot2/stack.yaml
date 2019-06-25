@@ -7,3 +7,8 @@ maintainers:
     email: schnabel@us.ibm.com
     github-id: ebullient
 default-template: default
+icon: https://
+keywords:
+- Java
+- Spring Boot
+- Maven

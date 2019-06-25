@@ -10,3 +10,6 @@ maintainers:
     email: neeraj.laad@gmail.com
     github-id: neeraj-laad
 default-template: simple
+icon: https://
+keywords:
+- Node.js
