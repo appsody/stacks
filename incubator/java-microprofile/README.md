@@ -22,7 +22,7 @@ Health endpoint: http://localhost:9080/health
 
 The `mpMetrics` feature enables MicroProfile Metrics support in Open Liberty. Note that this feature requires SSL and the configuration has been provided for you. You can monitor metrics to determine the performance and health of a service. You can also use them to pinpoint issues, collect data for capacity planning, or to decide when to scale a service to run with more or fewer resources.
 
-Metrics endpoint: http://localhost:9443/metrics
+Metrics endpoint: http://localhost:9080/metrics
 
 Log in as the `admin` user with `adminpwd` as the password to see both the system and application metrics in a text format.
 
@@ -58,6 +58,6 @@ OpenAPI endpoints:
 1. You should be able to access the following endpoints, as they are exposed by your template application by default:
 
     - Health endpoint: http://localhost:9080/health
-    - Metrics endpoint: http://localhost:9443/metrics (login as `admin` user with `adminpwd` password)
+    - Metrics endpoint: http://localhost:9080/metrics (login as `admin` user with `adminpwd` password)
     - OpenAPI endpoint: http://localhost:9080/openapi
     - Swagger UI endpoint: http://localhost:9080/openapi/ui
