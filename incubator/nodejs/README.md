@@ -2,13 +2,11 @@
 
 The Node.js stack provides a consistent way of developing [Node.js](https://nodejs.org/) applications. As an asynchronous event-driven JavaScript runtime, Node is designed to build scalable network applications.
 
-This stack is based on `Node.js v10` runtime and allows you to bring any Node.js application that can work with this version of the runtime.
+This stack is based on the `Node.js v10` runtime and allows you to develop new or existing Node.js application using Appsody.
 
 ## Templates
 
-Templates are used to create your local project and start your development. When initializing your project you will be provided with the simplest Node.js application you can possibly write.
-
-The default template provides a simple application that logs a message to the console. The application metadata is provided via a `package.json` file.
+Templates are used to create your local project and start your development. When initializing your project you will be provided with the default template project. This tempalte provides a simple application that logs a message to the console. The application metadata is provided via a `package.json` file.
 
 ## Getting Started
 
@@ -29,7 +27,7 @@ The default template provides a simple application that logs a message to the co
 
     This launches a Docker container that continuously re-builds and re-runs your project, exposing it on port 3000.
 
-    You can continue to edit the application in your preferred IDE (VSCode or others) and your changes will be reflected in the running container within a few seconds.
+    You can continue to edit the application in your preferred IDE (VSCode or other) and your changes will be reflected in the running container within a few seconds.
 
 1. You should see a message printed on the console:
 
