@@ -16,7 +16,6 @@
   "dependencies": {
     "@cloudnative/health-connect": "^2.0.0",
     "appmetrics-prometheus": "^2.0.0",
-    "vhost": "^3.0.2",
     "express": "~4.16.0"
   },
   "devDependencies": {
