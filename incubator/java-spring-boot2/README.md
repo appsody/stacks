@@ -2,9 +2,7 @@
 
 The Spring Boot 2 stack supports the development of [Spring Boot 2](https://spring.io/projects/spring-boot) applications using [IBM&#174; SDK, Java Technology Edition, Version 8 with OpenJ9](https://developer.ibm.com/javasdk/) and [Maven](https://maven.apache.org).
 
-## Stacks
-
-A stack is the foundation of your application and provides a prototype platform definition for Spring Boot 2 Java projects. The Spring Boot 2 stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins. Specifically, this stack enables [Spring Boot Actuator](https://github.com/spring-projects/spring-boot/tree/master/spring-boot-project/spring-boot-actuator), the Prometheus Micrometer reporter, and OpenTracing support for Spring using a Jaeger tracer.
+The Spring Boot 2 stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins. Specifically, this stack enables [Spring Boot Actuator](https://github.com/spring-projects/spring-boot/tree/master/spring-boot-project/spring-boot-actuator), the Prometheus Micrometer reporter, and OpenTracing support for Spring using a Jaeger tracer.
 
 The [Spring Developer Tools](https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-devtools.html#using-boot-devtools) module is also included to support automatic restarts and live reloading during development.
 
@@ -16,8 +14,6 @@ The default template provides a `pom.xml` file that references the parent POM de
 
 ## Getting Started
 
-### Initializing the project
-
 1. Create a new folder in your local directory and initialize it using the Appsody CLI, e.g.:
 
     ```bash
@@ -28,13 +24,20 @@ The default template provides a `pom.xml` file that references the parent POM de
 
     This will initialize a Spring Boot 2 project using the microservice template.
 
-2. After your project has been initialized you can then run your application using the following command:
+1. Once your project has been initialized you can then run your application using the following command:
 
     ```bash
     appsody run
     ```
 
     This launches a Docker container that will run your application in the foreground, exposing it on port 8080. The application will be restarted automatically when changes are detected.
+
+1. You should be able to access the following endpoints, as they are exposed by your template application by default:
+
+    - Health endpoint: http://localhost:8080/actuator/health
+    - Liveness endpoint: http://localhost:8080/actuator/liveness
+    - Metrics endpoint: http://localhost:8080/actuator/metrics
+    - Prometheus endpoint: http://localhost:8080/actuator/prometheus
 
 ## Health checks, readiness and liveness
 
