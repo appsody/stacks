@@ -1,5 +1,4 @@
 const express = require('express');
-const vhost = require('vhost');
 const health = require('@cloudnative/health-connect');
 const fs = require('fs');
 
@@ -19,13 +18,15 @@ function getEntryPoint() {
     return package.main;
 }
 
+// Register the users app. As this is before the health/live/ready routes,
+// those can be overridden by the user
+const userApp = require(basePath + getEntryPoint()).app;
+app.use('/', userApp);
+
 const healthcheck = new health.HealthChecker();
 app.use('/live', health.LivenessEndpoint(healthcheck));
 app.use('/ready', health.ReadinessEndpoint(healthcheck));
 app.use('/health', health.HealthEndpoint(healthcheck));
-
-const userApp = require(basePath + getEntryPoint()).app;
-app.use(vhost('*', userApp));
 
 app.get('*', (req, res) => {
   res.status(404).send("Not Found");
