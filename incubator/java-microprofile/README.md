@@ -55,7 +55,7 @@ OpenAPI endpoints:
 
     You can continue to edit the application in your preferred IDE (Eclipse, VSCode or others) and your changes will be reflected in the running container within a few seconds.
 
-1. You should be able to access the following endpoints that are exposed by your template  application by default:
+1. You should be able to access the following endpoints, as they are exposed by your template application by default:
 
     - Health endpoint: http://localhost:9080/health
     - Metrics endpoint: http://localhost:9443/metrics (login as `admin` user with `adminpwd` password)
