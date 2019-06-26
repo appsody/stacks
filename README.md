@@ -1,42 +1,34 @@
 # Stacks
 
-This respository holds the default set of stacks avalible from the appsody cli. Stacks allow for rapid development whilst giving the stack developer the ability to control the overall applications that are created from it. A stack is make up of a stack and one or more templates.
+This respository holds the default set of stacks avalible from the appsody cli. Stacks allow for rapid development whilst giving the stack developer the ability to control the overall applications that are created from it. 
 
-**Stack:** A stack is the foundation for your application. A stack can set default functionality and controls what can be overwritten by a template or application based on it.
+Appsody provides pre-configured application stacks that enable rapid development of quality microservice-based applications. Stacks include a base container image and project templates which act as a starting point for your application development.
 
-**Template:** A template is based upon a stack providing a template application that is ready to use. It has access to any dependencies supplied by that stack and is able to include extra dependencies plus new functionality to enhance the stack where allowed.
+Appsody stacks include language runtimes, frameworks and any additonal libraries and tools that are required to simplify your local application development. Stacks are an easy way to manage consistency and adopt best practices across many applications.
 
-## Getting started with Stacks
-1. Create app directory
-``` bash
-mkdir my-app && cd my-app
-```
-2. Initalise Appsody stack with template
-``` bash
-appsody init <stack>/<template>
-```
-3. Launch application in development environment
-``` bash
-appsody run
-```
-
-## Creating a Stack
-The [creating a stack](https://github.com/appsody/stacks/blob/master/docs/creating-a-stack.md) doc explains how to create a stack from scratch along with what is expected at each stage for it to be considered a stack.
+To find out more about Appsody check out [appsody.dev](https://appsody.dev).
 
 ## Repository Structure
-Stacks are catagorised as either `experimental`, `incubator` or `stable` depending on the content of the stack.
+Stacks are catagorized as either stable, incubator or experimental depending on the content of the stack.
 
-`experimental/`: These stacks are labeled experimental as they may not fulfill the requirements of a appsody stack. Experimental stacks are also not expected to move out of this category into incubator or stable.
+- `stable/:` Stable stacks meet a set of technical requirements which are yet to be defined.
 
-`incubator/`:
+- `incubator/:` The stacks in the incubator folder are actively being worked on to satisfy the stable critria.
 
-`stable/`:
+- `experimental/:` Exprimental stacks are not being actively been worked on and may not fulfill the requirements of an Appsody stack. These can be used for trying out specific capabilites or proof of concept work.
 
+**Stacks currently available:**
+- [nodejs](incubator/nodejs/README.md) - Node.js Runtime
+- [nodejs-express](incubator/nodejs-express/README.md) - Express web framework for Node.js
+- [java-microprofile](incubator/java-microprofile/README.md) - Microprofile using AdoptOpenJDK and Maven
+- [java-spring-boot2](incubator/java-spring-boot2/README.md) - Spring Boot using IBM Java SDK and Maven
 
-Links on how can a user get started with creating a new stack
+Click here to find out more about [Appsody stacks](https://github.com/appsody/docs/blob/master/docs/stacks/stacks-overview.md).
 
-Quick explanation on various stability levels for stacks:
+## Creating a Stack
+We are actively working to create new stacks so that more people can adopt Appsody. If you find that none of the existing stacks meet your needs please reach out to us on the [Appsody Slack](https://appsody-slack.eu-gb.mybluemix.net/) or create a new GitHub issue to track the discussion.
 
-- experimental
-- incubator
-- stable
+We always welcome any contributions. If you wanted to create your own stack for a framework or language that we do not currently support, please review the [contributing guidelines](../../CONTRIBUTING.md) and follow the steps outlined in [creating a stack](create-or-modify.md#creating-a-stack).
+
+## Need help?
+If you have a question that you can't find an answer to, we would also like to hear about that too. You can reach out to the community for assistance on [Slack](https://appsody-slack.eu-gb.mybluemix.net/).
