@@ -20,7 +20,7 @@ Stacks are catagorized as either stable, incubator or experimental depending on 
 **Stacks currently available:**
 - [nodejs](incubator/nodejs/README.md) - Node.js Runtime
 - [nodejs-express](incubator/nodejs-express/README.md) - Express web framework for Node.js
-- [java-microprofile](incubator/java-microprofile/README.md) - Microprofile using Adopt OpenJDK and Maven
+- [java-microprofile](incubator/java-microprofile/README.md) - Microprofile using AdoptOpenJDK and Maven
 - [java-spring-boot2](incubator/java-spring-boot2/README.md) - Spring Boot using IBM Java SDK and Maven
 
 Click here to find out more about [Appsody stacks](https://github.com/appsody/docs/blob/master/docs/stacks/stacks-overview.md).
