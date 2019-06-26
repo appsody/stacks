@@ -1,27 +1,19 @@
 # Stacks
 
-This respository holds the default set of stacks avalible from the appsody cli. Stacks allow for rapid development whilst giving the stack developer the ability to control the overall applications that are created from it. 
+This respository holds the default set of stacks available from Appsody. Each stack is pre-configured with popular open source technologies to enable rapid development of quality microservice-based applications. Stacks include a base container image and project templates which act as a starting point for your application development.
 
-Appsody provides pre-configured application stacks that enable rapid development of quality microservice-based applications. Stacks include a base container image and project templates which act as a starting point for your application development.
-
-Appsody stacks include language runtimes, frameworks and any additonal libraries and tools that are required to simplify your local application development. Stacks are an easy way to manage consistency and adopt best practices across many applications.
+Stacks allow for rapid development whilst giving the stack developer the ability to control the overall applications that are created from it.
 
 To find out more about Appsody check out [appsody.dev](https://appsody.dev).
 
 ## Repository Structure
 Stacks are catagorized as either stable, incubator or experimental depending on the content of the stack.
 
-- `stable/:` Stable stacks meet a set of technical requirements which are yet to be defined.
+- `stable/`: Stable stacks meet this set of [technical requirements](https://github.com/appsody/docs/blob/master/STABLE_TECHNICAL_REQUIREMENTS.md).
 
 - `incubator/:` The stacks in the incubator folder are actively being worked on to satisfy the stable critria.
 
 - `experimental/:` Exprimental stacks are not being actively been worked on and may not fulfill the requirements of an Appsody stack. These can be used for trying out specific capabilites or proof of concept work.
-
-**Stacks currently available:**
-- [nodejs](incubator/nodejs/README.md) - Node.js Runtime
-- [nodejs-express](incubator/nodejs-express/README.md) - Express web framework for Node.js
-- [java-microprofile](incubator/java-microprofile/README.md) - Microprofile using AdoptOpenJDK and Maven
-- [java-spring-boot2](incubator/java-spring-boot2/README.md) - Spring Boot using IBM Java SDK and Maven
 
 Click here to find out more about [Appsody stacks](https://github.com/appsody/docs/blob/master/docs/stacks/stacks-overview.md).
 
