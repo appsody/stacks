@@ -1,10 +1,10 @@
 # Java Microprofile Stack
 
-The Java Microprofile stack provides a consistent way of developing microservices based upon the [Eclipse MicroProfile® specifications](https://microprofile.io). This stack lets you use [Maven](https://maven.apache.org) to develop applications for [Open Liberty](https://openliberty.io) runtime, which includes OpenJDK with container-optimizations in OpenJ9.
+The Java Microprofile stack provides a consistent way of developing microservices based upon the [Eclipse MicroProfile® specifications](https://microprofile.io). This stack lets you use [Maven](https://maven.apache.org) to develop applications for [Open Liberty](https://openliberty.io) runtime, that is running on OpenJDK with container-optimizations in OpenJ9.
 
 The Java Microprofile stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins.
 
-This stack is based on `adoptopenjdk/openjdk8-openj9` and `Open Liberty v19.0.0.5`. It provides live reloading during development by utilizing `loose application` capabilities.
+This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.5`. It provides live reloading during development by utilizing `loose application` capabilities.
 
 ## Templates
 
@@ -12,13 +12,13 @@ Templates are used to create your local project and start your development. When
 
 The default template provides a `pom.xml` file that references the parent POM defined by the stack and enables Liberty features that support [Eclipse MicroProfile 2.2](https://openliberty.io/docs/ref/feature/#microProfile-2.2.html). Specifically, this template includes:
 
-### MicroProfile Health
+### Health
 
 The `mpHealth` feature allows services to report their health - UP if it is available and DOWN if it is unavailable. It then publishes the status from each service along with the overall health status to a defined endpoint `/health`. A service orchestrator can then use the health statuses to make decisions.
 
 Health endpoint: http://localhost:9080/health
 
-### MicroProfile Metrics
+### Metrics
 
 The `mpMetrics` feature enables MicroProfile Metrics support in Open Liberty. Note that this feature requires SSL and the configuration has been provided for you. You can monitor metrics to determine the performance and health of a service. You can also use them to pinpoint issues, collect data for capacity planning, or to decide when to scale a service to run with more or fewer resources.
 
@@ -26,7 +26,7 @@ Metrics endpoint: http://localhost:9443/metrics
 
 Log in as the `admin` user with `adminpwd` as the password to see both the system and application metrics in a text format.
 
-### MicroProfile OpenAPI
+### OpenAPI
 
 The `mpOpenAPI` feature provides a set of Java interfaces and programming models that allow Java developers to natively produce OpenAPI v3 documents from their JAX-RS applications. This provides a standard interface for documenting and exposing RESTful APIs.
 
