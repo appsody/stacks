@@ -56,7 +56,7 @@ This template only has a simple `app.js` file which implements the `/` endpoint.
 
     You can continue to edit the application in your preferred IDE (VSCode or others) and your changes will be reflected in the running container within a few seconds.
 
-1. You should be able to access the following endpoints that are exposed by your template application by default:
+1. You should be able to access the following endpoints, as they are exposed by your template application by default:
 
 Health endpoint: http://localhost:3000/health
 Liveness endpoint: http://localhost:3000/live
