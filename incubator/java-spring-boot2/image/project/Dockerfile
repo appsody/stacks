@@ -3,18 +3,19 @@ LABEL maintainer="IBM Java Engineering at IBM Cloud"
 
 # Ensure up to date / patched OS
 RUN  apt-get -qq update \
-  && apt-get -qq install -y curl wget \
+  && apt-get -qq install -y curl wget xmlstarlet \
   && DEBIAN_FRONTEND=noninteractive apt-get -qq upgrade -y \
   && apt-get -qq clean \
-  && rm -rf /tmp/* /var/lib/apt/lists/*
+  && rm -rf /tmp/* /var/lib/apt/lists/* \
+  && mkdir -p /mvn/repository
 
 #setup project folder for java build step
 COPY . /project
 COPY ./.mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 
-WORKDIR "/project"
+WORKDIR /project/user-app
 
-RUN ./java-spring-boot2-build.sh package
+RUN /project/java-spring-boot2-build.sh package
 
 FROM ibmjava:8-sdk
 
@@ -26,6 +27,6 @@ LABEL maintainer="IBM Java Engineering at IBM Cloud"
 LABEL org.opencontainers.image.version=${version}
 LABEL org.opencontainers.image.title=${artifactId}
 
-COPY --from=compile /project/target/app.jar /app.jar
+COPY --from=compile /project/user-app/target/app.jar /app.jar
 
 ENTRYPOINT [ "sh", "-c", "java $JVM_ARGS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]

@@ -11,30 +11,31 @@ RUN  apt-get -qq update \
 COPY ./project /project
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 COPY ./mvn-stack-settings.xml /project/.mvn-stack-settings.xml
-COPY ./java-spring-boot2-build.sh /project/java-spring-boot2-build.sh
 
-WORKDIR "/project"
+RUN mkdir -p /project/target   && chmod 777 /project/target \
+ && mkdir -p /project/user-app && chmod 777 /project/user-app \
+ && /project/java-spring-boot2-build.sh stack && rm -rf /mvn
 
-RUN mkdir -p /project/target && chmod 777 /project/target
+WORKDIR /project/user-app
 
 ENV APPSODY_USER_RUN_AS_LOCAL=true
 
-ENV APPSODY_MOUNTS="src:/project/src;pom.xml:/project/pom.xml;~/.m2/repository:/mvn/repository"
+ENV APPSODY_MOUNTS=".:/project/user-app;~/.m2/repository:/mvn/repository"
 ENV APPSODY_DEPS=
 
-ENV APPSODY_WATCH_DIR="/project"
-ENV APPSODY_WATCH_IGNORE_DIR="/project/target"
+ENV APPSODY_WATCH_DIR="/project/user-app/src"
+ENV APPSODY_WATCH_IGNORE_DIR=""
 ENV APPSODY_WATCH_REGEX=""
 
-ENV APPSODY_RUN="./java-spring-boot2-build.sh run"
-ENV APPSODY_RUN_ON_CHANGE="./java-spring-boot2-build.sh recompile"
+ENV APPSODY_RUN="/project/java-spring-boot2-build.sh run"
+ENV APPSODY_RUN_ON_CHANGE="/project/java-spring-boot2-build.sh recompile"
 ENV APPSODY_RUN_KILL=false
 
-ENV APPSODY_DEBUG="./java-spring-boot2-build.sh debug"
+ENV APPSODY_DEBUG="/project/java-spring-boot2-build.sh debug"
 ENV APPSODY_DEBUG_ON_CHANGE=""
 ENV APPSODY_DEBUG_KILL=false
 
-ENV APPSODY_TEST="./java-spring-boot2-build.sh test"
+ENV APPSODY_TEST="/project/java-spring-boot2-build.sh test"
 ENV APPSODY_TEST_ON_CHANGE=""
 ENV APPSODY_TEST_KILL=true
 
@@ -43,4 +44,4 @@ ENV PORT=8080
 EXPOSE 8080
 EXPOSE 5005
 EXPOSE 35729
-ENTRYPOINT ["./java-spring-boot2-build.sh", "run"]
+ENTRYPOINT ["/project/java-spring-boot2-build.sh", "run"]

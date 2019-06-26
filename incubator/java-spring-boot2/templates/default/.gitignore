@@ -1,6 +1,4 @@
-/target/*
-!.keep
-
+/target
 
 ### STS ###
 .apt_generated

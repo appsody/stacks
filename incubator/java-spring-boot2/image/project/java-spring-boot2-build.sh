@@ -36,12 +36,46 @@ run_mvn () {
 }
 
 version() {
+  if [ ! -f $1 ]; then
+    error "$1 does not exist."
+    exit 1
+  fi
+
   # get version from specified POM
   xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t \
      -o "export GROUP_ID=" -v "/x:project/x:groupId" -n \
      -o "export ARTIFACT_ID=" -v "/x:project/x:artifactId" -n \
      -o "export VERSION=" -v "/x:project/x:version" \
      $1
+}
+
+pushd () {
+    if ! command pushd "$@" > /dev/null; then
+      note "$@ does not exist"
+      exit
+    fi
+}
+
+popd () {
+    command popd "$@" > /dev/null
+}
+
+libraries() {
+  note "Building stack libraries"
+  mkdir /project/lib
+  echo > /project/lib/install
+
+  # Compile stack-defined libraries, clean up afterwards
+  pushd /project/liveness
+    eval $(version /project/liveness/pom.xml)
+    mvn package -q
+    cp target/${ARTIFACT_ID}-${VERSION}.jar /project/lib
+    mvn clean -q
+    # Store information for how to install the pre-built binary later
+    echo "run_mvn install:install-file -q -Dfile=/project/lib/${ARTIFACT_ID}-${VERSION}.jar -DpomFile=/project/liveness/pom.xml" >> /project/lib/install
+  popd
+
+  unset GROUP_ID ARTIFACT_ID VERSION
 }
 
 common() {
@@ -56,12 +90,17 @@ common() {
     exit 1
   fi
 
-  # Get parent pom information (appsody-boot2-pom.xml)
-  eval $(version appsody-boot2-pom.xml)
+  find /project
+
+  note "Installing stack libraries"
+  source /project/lib/install
+
+  # Get parent pom information ${GROUP_ID}:${ARTIFACT_ID}:${VERSION}
+  eval $(version "/project/appsody-boot2-pom.xml")
 
   # Install parent pom
   note "Installing parent ${GROUP_ID}:${ARTIFACT_ID}:${VERSION}"
-  run_mvn install -q -f appsody-boot2-pom.xml
+  run_mvn install -q -f /project/appsody-boot2-pom.xml
 
   local groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:groupId" pom.xml)
   local artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:artifactId" pom.xml)
@@ -85,6 +124,7 @@ common() {
 
   note "Updating parent version and resolving dependencies"
   run_mvn -q versions:update-parent "-DparentVersion=[${major},${next})" dependency:go-offline
+
   unset GROUP_ID ARTIFACT_ID VERSION
 }
 
@@ -135,6 +175,9 @@ case "${ACTION}" in
   run)
     common
     run
+  ;;
+  stack)
+    libraries
   ;;
   test)
     common
