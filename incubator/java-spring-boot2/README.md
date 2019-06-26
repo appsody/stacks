@@ -32,7 +32,7 @@ The default template provides a `pom.xml` file that references the parent POM de
 
     This launches a Docker container that will run your application in the foreground, exposing it on port 8080. The application will be restarted automatically when changes are detected.
 
-1. You should be able to access the following endpoints that are exposed by your template  application by default:
+1. You should be able to access the following endpoints, as they are exposed by your template application by default:
 
     - Health endpoint: http://localhost:8080/actuator/health
     - Liveness endpoint: http://localhost:8080/actuator/liveness
