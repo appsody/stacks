@@ -3,7 +3,7 @@ LABEL maintainer="IBM Java Engineering at IBM Cloud"
 
 # Ensure up to date / patched OS
 RUN  apt-get -qq update \
-  && apt-get -qq install -y curl wget \
+  && apt-get -qq install -y curl wget xmlstarlet \
   && DEBIAN_FRONTEND=noninteractive apt-get -qq upgrade -y \
   && apt-get -qq clean \
   && rm -rf /tmp/* /var/lib/apt/lists/*
@@ -12,11 +12,12 @@ RUN  apt-get -qq update \
 COPY . /project
 COPY ./.mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 
-WORKDIR "/project"
+WORKDIR /project
 
-RUN ./java-spring-boot2-build.sh package
+RUN mkdir -p /mvn/repository && ./java-spring-boot2-build.sh package
 
-FROM ibmjava:8-sdk
+####
+FROM adoptopenjdk:8-jdk-openj9
 
 ARG artifactId=serverless
 ARG version=1.0-SNAPSHOT
