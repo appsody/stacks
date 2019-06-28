@@ -1,4 +1,4 @@
-# Spring Boot 2 Stack
+# Spring® Boot 2 Stack
 
 The Spring Boot 2 stack supports the development of [Spring Boot 2](https://spring.io/projects/spring-boot) applications using [IBM&#174; SDK, Java Technology Edition, Version 8 with OpenJ9](https://developer.ibm.com/javasdk/) and [Maven](https://maven.apache.org).
 
