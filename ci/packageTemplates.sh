@@ -64,7 +64,7 @@ do
       ((i+=1))
     fi
 
-    tar -cvzf $package_dir/$filename .
+    tar -cvz --exclude-from=$base_dir/.gitignore -f $package_dir/$filename .
     popd
   done
 done
