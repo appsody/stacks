@@ -6,4 +6,5 @@
 **/*.log
 **/target
 **/.settings
+**/.project
 .*.swp
