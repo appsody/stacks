@@ -6,7 +6,7 @@ The Java Microprofile stack uses a parent Maven project object model (POM) to ma
 
 This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.5`. It provides live reloading during development by utilizing `loose application` capabilities.
 
-*Note:* This stack recommends you to have Maven installed on your system for best IDE experience. If you do not wish to do so, please ignore the warning message during `appsoy init`. You can still use Appsody for your application development as Maven will be provided by the Appsody container.
+*Note:* Maven is provided by the Appsody stack container, allowing you to build, test, and debug your Java application without installing Maven locally. However, we recommend installing Maven locally for the best IDE experience.
 
 ## Templates
 
