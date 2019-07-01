@@ -6,7 +6,7 @@ This stack is based on the `Node.js v10` runtime and allows you to develop new o
 
 ## Templates
 
-Templates are used to create your local project and start your development. When initializing your project you will be provided with the default template project. This tempalte provides a simple application that logs a message to the console. The application metadata is provided via a `package.json` file.
+Templates are used to create your local project and start your development. When initializing your project you will be provided with the default template project. This template provides a simple application that logs a message to the console. The application metadata is provided via a `package.json` file.
 
 ## Getting Started
 

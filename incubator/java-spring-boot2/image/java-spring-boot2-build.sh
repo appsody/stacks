@@ -83,8 +83,8 @@ common() {
   major=$(echo ${VERSION} | cut -d'.' -f1)
   ((next=major+1))
 
-  note "Updating parent version and resolving dependencies"
-  run_mvn -q versions:update-parent "-DparentVersion=[${major},${next})" dependency:go-offline
+  note "Updating parent version"
+  run_mvn -q versions:update-parent "-DparentVersion=[${major},${next})"
   unset GROUP_ID ARTIFACT_ID VERSION
 }
 
