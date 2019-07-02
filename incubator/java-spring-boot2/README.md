@@ -6,7 +6,7 @@ The Spring Boot 2 stack uses a parent Maven project object model (POM) to manage
 
 The [Spring Developer Tools](https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-devtools.html#using-boot-devtools) module is also included to support automatic restarts and live reloading during development.
 
-*Note:* Maven is provided by the Appsody stack container, allowing you to build, test, and debug your Java application without installing Maven locally. We recommend installing Maven locally for the best IDE experience.
+**Note:** Maven is provided by the Appsody stack container, allowing you to build, test, and debug your Java application without installing Maven locally. We recommend installing Maven locally for the best IDE experience.
 
 ## Templates
 
