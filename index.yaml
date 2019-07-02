@@ -10,11 +10,11 @@ projects:
     - Microprofile
     - Maven
     - Open Liberty
-    name: java-microprofile
+    name: java-microprofile-mct
     maintainers:
     - neeraj.laad@gmail.com
     urls:
-    - https://github.com/appsody/stacks/releases/download/0.2.1/incubator.java-microprofile.templates.default.tar.gz
+    - https://github.com/barecode/stacks/releases/download/0.2.1/incubator.java-microprofile.templates.default.tar.gz
     version: 0.2.0
   java-spring-boot2:
   - created: 2019-06-24T21:00:00+00:00
