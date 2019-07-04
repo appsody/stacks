@@ -31,6 +31,16 @@ We are actively working to create new stacks so that more people can adopt Appso
 
 We always welcome any contributions. If you wanted to create your own stack for a framework or language that we do not currently support, please review the [contributing guidelines](https://github.com/appsody/docs/blob/master/CONTRIBUTING.md) and follow the steps outlined in [creating a stack](https://github.com/appsody/docs/blob/master/docs/stacks/create-or-modify.md#creating-a-stack).
 
+## Creating a private Stacks repository
+You can create a private repository to share with teams or for local development, by cloning or forking this repo and adding the new location with the `appsody repo add [name] [url]` command, where `url` refers to the location of the `index.yaml`
+
+Example local development workflow:
+- (optional) Fork the repo (guidance [here](https://help.github.com/en/articles/fork-a-repo))
+- Clone the repo `git clone https://github.com/appsody/stacks/.git` (or your fork)
+- Add to Appsody repo list `appsody repo add my-repo file:///Users/<name>/<folder>/index.yaml`
+
+If you publish your Stacks repository for others to use, ensure they can access the repository and then they will be able to connect in the same way by using the `appsody repo add` command. 
+
 ## Need help?
 If you have a question that you can't find an answer to, we would also like to hear about that too. You can reach out to the community for assistance on [Slack](https://appsody-slack.eu-gb.mybluemix.net/).
 
