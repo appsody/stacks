@@ -1,6 +1,6 @@
 id: nodejs-express
 name: Node.js Express application
-version: 0.2.0
+version: 0.2.1
 description: Simple Node.js Express application with health checks and application metrics for Prometheus.
 maintainer: Neeraj Laad <neeraj.laad@gmail.com>
 default-template: simple
