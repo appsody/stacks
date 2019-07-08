@@ -28,6 +28,12 @@ This stack also comes with Prometheus metrics, which has been preconfigured to w
 
 - Metrics endpoint: http://localhost:3000/metrics
 
+## Application monitoring dashboard (development only)
+
+During development of your application, the nodejs-express stack provides a built-in application performance dashboard using the [appmetrics-dash](https://github.com/runtimetools/appmetrics-dash) module. This makes it easy to see the resource usage and HTTP endpoint performance of your application as it is developed.
+
+The dashboard is only included during development, and is not included in images build using `appsody build`.
+
 ## Templates
 
 Templates are used to create your local project and start your development. When initializing your project you will be provided with the simplest Node.js Express application you can write.
@@ -63,3 +69,4 @@ This template only has a simple `app.js` file which implements the `/` endpoint.
     - Liveness endpoint: http://localhost:3000/live
     - Readiness endpoint: http://localhost:3000/ready
     - Metrics endpoint: http://localhost:3000/metrics
+    - Dashboard endpoint: http://localhost:3000/appmetrics-dash (development only)

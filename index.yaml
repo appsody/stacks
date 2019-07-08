@@ -3,7 +3,7 @@ generated: 2019-06-24T21:00:00+00:00
 projects:
   java-microprofile:
   - created: 2019-06-24T21:00:00+00:00
-    description: Microprofile using Adopt OpenJDK and Maven
+    description: Microprofile using AdoptOpenJDK and Maven
     icon: https://
     keywords:
     - Java
@@ -28,8 +28,8 @@ projects:
     maintainers:
     - schnabel@us.ibm.com
     urls:
-    - https://github.com/appsody/stacks/releases/download/0.2.0/incubator.java-spring-boot2.templates.default.tar.gz
-    version: 0.2.0
+    - https://github.com/appsody/stacks/releases/download/java-spring-boot2-v0.3.0/incubator.java-spring-boot2.templates.default.tar.gz
+    version: 0.3.0
   nodejs:
   - created: 2019-06-24T21:00:00+00:00
     description: Node.js Runtime
@@ -40,8 +40,8 @@ projects:
     maintainers:
     - neeraj.laad@gmail.com
     urls:
-    - https://github.com/appsody/stacks/releases/download/0.2.0/incubator.nodejs.templates.simple.tar.gz
-    version: 0.2.0
+    - https://github.com/appsody/stacks/releases/download/nodejs-v0.2.1/incubator.nodejs.templates.simple.tar.gz
+    version: 0.2.1
   nodejs-express:
   - created: 2019-06-24T21:00:00+00:00
     description: Express web framework for Node.js
@@ -53,5 +53,5 @@ projects:
     maintainers:
     - neeraj.laad@gmail.com
     urls:
-    - https://github.com/appsody/stacks/releases/download/0.2.0/incubator.nodejs-express.templates.simple.tar.gz
-    version: 0.2.0
+    - https://github.com/appsody/stacks/releases/download/nodejs-express-v0.2.1/incubator.nodejs-express.templates.simple.tar.gz
+    version: 0.2.1

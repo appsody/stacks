@@ -1,6 +1,6 @@
 id: nodejs
 name: Node.js application
-version: 0.2.0
+version: 0.2.1
 description: Simple Node.js application
 maintainer: Neeraj Laad <neeraj.laad@gmail.com>
 default-template: simple

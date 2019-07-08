@@ -6,7 +6,7 @@
   <parent><!--required parent POM-->
     <groupId>dev.appsody</groupId>
     <artifactId>spring-boot2-stack</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <relativePath/>
   </parent>
 
@@ -22,6 +22,11 @@
     -->
 
   <dependencies>
+    <!-- From parent:
+      org.springframework.boot:spring-boot-starter
+      org.springframework.boot:spring-boot-starter-actuator
+      org.springframework.boot:spring-boot-starter-test
+     -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
