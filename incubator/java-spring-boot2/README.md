@@ -1,10 +1,12 @@
-# Spring Boot 2 Stack
+# Spring® Boot 2 Stack
 
 The Spring Boot 2 stack supports the development of [Spring Boot 2](https://spring.io/projects/spring-boot) applications using OpenJDK 8 and OpenJ9 from [AdoptOpenJDK](https://adoptopenjdk.net/).
 
 The Spring Boot 2 stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins. Specifically, this stack enables [Spring Boot Actuator](https://github.com/spring-projects/spring-boot/tree/master/spring-boot-project/spring-boot-actuator), the Prometheus Micrometer reporter, and OpenTracing support for Spring using a Jaeger tracer.
 
 The [Spring Developer Tools](https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-devtools.html#using-boot-devtools) module is also included to support automatic restarts and live reloading during development.
+
+**Note:** Maven is provided by the Appsody stack container, allowing you to build, test, and debug your Java application without installing Maven locally. We recommend installing Maven locally for the best IDE experience.
 
 ## Templates
 

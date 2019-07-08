@@ -36,6 +36,11 @@ run_mvn () {
 }
 
 version() {
+  if [ ! -f $1 ]; then
+    error "$1 does not exist."
+    exit 1
+  fi
+
   # get version from specified POM
   xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t \
      -o "export GROUP_ID=" -v "/x:project/x:groupId" -n \
@@ -57,17 +62,21 @@ common() {
   fi
 
   # Get parent pom information (appsody-boot2-pom.xml)
-  eval $(version appsody-boot2-pom.xml)
+  eval $(version /project/appsody-boot2-pom.xml)
 
-  # Install parent pom
-  note "Installing parent ${GROUP_ID}:${ARTIFACT_ID}:${VERSION}"
-  run_mvn install -q -f appsody-boot2-pom.xml
+  if ! $(mvn -N dependency:get -q -o -Dartifact=${GROUP_ID}:${ARTIFACT_ID}:${VERSION} -Dpackaging=pom >/dev/null)
+  then
+    # Install parent pom
+    note "Installing parent ${GROUP_ID}:${ARTIFACT_ID}:${VERSION}"
+    run_mvn install -q -f /project/appsody-boot2-pom.xml
+  fi
 
-  local groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:groupId" pom.xml)
-  local artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:artifactId" pom.xml)
+  local p_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:groupId" pom.xml)
+  local p_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:artifactId" pom.xml)
+  local p_version=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:version" pom.xml)
 
   # Require parent in pom.xml
-  if [ "${groupId}" != "${GROUP_ID}" ] || [ "${artifactId}" != "${ARTIFACT_ID}" ]; then
+  if [ "${p_groupId}" != "${GROUP_ID}" ] || [ "${p_artifactId}" != "${ARTIFACT_ID}" ]; then
     error "Project is missing required parent:
 
     <parent>
@@ -80,11 +89,14 @@ common() {
     exit 1
   fi
 
-  major=$(echo ${VERSION} | cut -d'.' -f1)
-  ((next=major+1))
+  if [ "${p_version}" != "${VERSION}" ]; then
+    major=$(echo ${VERSION} | cut -d'.' -f1)
+    ((next=major+1))
 
-  note "Updating parent version"
-  run_mvn -q versions:update-parent "-DparentVersion=[${major},${next})"
+    note "Updating parent version"
+    run_mvn -q versions:update-parent "-DparentVersion=[${major},${next})"
+  fi
+
   unset GROUP_ID ARTIFACT_ID VERSION
 }
 
