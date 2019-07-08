@@ -40,8 +40,8 @@ projects:
     maintainers:
     - neeraj.laad@gmail.com
     urls:
-    - https://github.com/appsody/stacks/releases/download/0.2.0/incubator.nodejs.templates.simple.tar.gz
-    version: 0.2.0
+    - https://github.com/appsody/stacks/releases/download/nodejs-v0.2.1/incubator.nodejs.templates.simple.tar.gz
+    version: 0.2.1
   nodejs-express:
   - created: 2019-06-24T21:00:00+00:00
     description: Express web framework for Node.js
@@ -53,5 +53,5 @@ projects:
     maintainers:
     - neeraj.laad@gmail.com
     urls:
-    - https://github.com/appsody/stacks/releases/download/0.2.0/incubator.nodejs-express.templates.simple.tar.gz
-    version: 0.2.0
+    - https://github.com/appsody/stacks/releases/download/nodejs-express-v0.2.1/incubator.nodejs-express.templates.simple.tar.gz
+    version: 0.2.1
