@@ -28,8 +28,8 @@ projects:
     maintainers:
     - schnabel@us.ibm.com
     urls:
-    - https://github.com/appsody/stacks/releases/download/java-spring-boot2-v0.3.0/incubator.java-spring-boot2.templates.default.tar.gz
-    version: 0.3.0
+    - https://github.com/appsody/stacks/releases/download/java-spring-boot2-v0.3.1/incubator.java-spring-boot2.templates.default.tar.gz
+    version: 0.3.1
   nodejs:
   - created: 2019-06-24T21:00:00+00:00
     description: Node.js Runtime
