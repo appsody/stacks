@@ -1,6 +1,6 @@
 id: java-microprofile
 name: Java MicroProfile application built using Maven
-version: 0.2.0
+version: 0.2.1
 description:  Sample Java MicroProfile application built using Maven
 maintainer: Neeraj Laad <neeraj.laad@gmail.com>
 default-template: default
