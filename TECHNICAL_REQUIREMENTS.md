@@ -1,7 +1,7 @@
 # Stable Technical requirements
 
 All stable stacks must:
-- Adhere to the [Structure of a stack](docs/stacks/stack-structure.md)
+- Adhere to the [Structure of a stack](https://github.com/appsody/website/blob/master/content/docs/stacks/stack-structure.md)
 - Support all the Appsody CLI commmands
 - Support all the operating systems supported by Appsody, today this list includes:
     - macOS Mojave
