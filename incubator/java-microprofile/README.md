@@ -1,10 +1,12 @@
-# Java Microprofile Stack
+# Java MicroProfile Stack
 
-The Java Microprofile stack provides a consistent way of developing microservices based upon the [Eclipse MicroProfile® specifications](https://microprofile.io). This stack lets you use [Maven](https://maven.apache.org) to develop applications for [Open Liberty](https://openliberty.io) runtime, that is running on OpenJDK with container-optimizations in OpenJ9.
+The Java MicroProfile stack provides a consistent way of developing microservices based upon the [Eclipse MicroProfile specifications](https://microprofile.io). This stack lets you use [Maven](https://maven.apache.org) to develop applications for [Open Liberty](https://openliberty.io) runtime, that is running on OpenJDK with container-optimizations in OpenJ9.
 
-The Java Microprofile stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins.
+The Java MicroProfile stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins.
 
 This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.5`. It provides live reloading during development by utilizing `loose application` capabilities.
+
+**Note:** Maven is provided by the Appsody stack container, allowing you to build, test, and debug your Java application without installing Maven locally. However, we recommend installing Maven locally for the best IDE experience.
 
 ## Templates
 
