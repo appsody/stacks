@@ -57,7 +57,7 @@ projects:
     version: 0.2.1
   swift:
   - created: 2019-07-15T12:00:00+00:00
-    description: Swift application
+    description: Swift runtime
     icon: https://
     keywords:
     - Swift
