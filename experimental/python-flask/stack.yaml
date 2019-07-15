@@ -1,0 +1,7 @@
+id: python-flask
+name: Python Flask application
+version: 0.1.0
+description: Simple Python Flask application with health checks and application metrics for Prometheus.
+maintainer: Chris Bailey <cnbailey@gmail.com>
+default-template: simple
+license: Apache-2.0
