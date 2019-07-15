@@ -1,0 +1,7 @@
+id: swift
+name: Swift application
+version: 0.1.0
+description: Simple Swift application
+maintainer: Ian Partridge <i.partridge@uk.ibm.com>
+default-template: simple
+license: Apache-2.0
