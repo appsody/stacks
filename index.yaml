@@ -14,8 +14,8 @@ projects:
     maintainers:
     - neeraj.laad@gmail.com
     urls:
-    - https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.1/incubator.java-microprofile.templates.default.tar.gz
-    version: 0.2.1
+    - https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.2/incubator.java-microprofile.templates.default.tar.gz
+    version: 0.2.2
   java-spring-boot2:
   - created: 2019-06-24T21:00:00+00:00
     description: Spring Boot using IBM Java SDK and Maven
@@ -55,3 +55,15 @@ projects:
     urls:
     - https://github.com/appsody/stacks/releases/download/nodejs-express-v0.2.1/incubator.nodejs-express.templates.simple.tar.gz
     version: 0.2.1
+  swift:
+  - created: 2019-07-15T12:00:00+00:00
+    description: Swift runtime
+    icon: https://
+    keywords:
+    - Swift
+    name: swift
+    maintainers:
+    - i.partridge@uk.ibm.com
+    urls:
+    - https://github.com/appsody/stacks/releases/download/swift-v0.1.0/incubator.swift.templates.simple.tar.gz
+    version: 0.1.0
