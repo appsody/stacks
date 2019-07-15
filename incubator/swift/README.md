@@ -25,6 +25,14 @@ Templates are used to create your local project and start your development. When
     appsody run
     ```
 
-    This launches a Docker container that continuously re-builds and re-runs your project, exposing it on port `8080`.
+    This launches a Docker container that continuously re-builds and re-runs your project. It also exposes port 8080, to allow you to bring your own web application and use it with this stack.
 
     You can continue to edit the application in your preferred IDE (VSCode or other) and your changes will be reflected in the running container within a few seconds.
+
+3. You should see a message printed on the console:
+
+    ```bash
+    Hello, world!
+    ```
+
+**NOTE:** Currently the `appsody deploy` command only works for deploying web applications.
