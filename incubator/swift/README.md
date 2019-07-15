@@ -35,4 +35,4 @@ Templates are used to create your local project and start your development. When
     Hello, world!
     ```
 
-**NOTE:** Using the `appsody deploy` cmd will fail because kubernetes doesn’t respond on the HTTP route, if you a web application it should successfully deploy your application using KNative.
+**NOTE:** Currently the `appsody deploy` command only works for deploying web applications.
