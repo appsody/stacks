@@ -15,11 +15,9 @@ Fixes #
 <!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
 <!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
 - [ ] Changes adhere to the [Appsody stack structure](https://github.com/appsody/website/blob/master/content/docs/stacks/stack-structure.md)
-
-**Please provide the following in as much detail as you can:**
-
 - [ ] Provided a README that conforms to published guidelines
 
+### **More info:**
 **Provide usage of the Appsody controller:**
 <!--- Describe how your stack utilses the Appsody Controller -->
 
