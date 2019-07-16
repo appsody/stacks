@@ -1,0 +1,34 @@
+FROM appsody/nodejs:0.2
+
+ENV APPSODY_MOUNTS=/:/project/user-app
+ENV APPSODY_DEPS=/project/user-app/node_modules
+
+ENV APPSODY_WATCH_DIR=/project/user-app
+ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/node_modules
+ENV APPSODY_WATCH_REGEX="^.*.ts$"
+
+# LoopBack 4 applications require 'npm run build' to transpile TypeScript source code
+ENV APPSODY_INSTALL="npm install --prefix user-app && npm run build --prefix user-app"
+
+ENV APPSODY_RUN="npm start"
+ENV APPSODY_RUN_ON_CHANGE="npm start"
+ENV APPSODY_RUN_KILL=true
+
+ENV APPSODY_DEBUG="npm run debug"
+ENV APPSODY_DEBUG_ON_CHANGE="npm run debug"
+ENV APPSODY_DEBUG_KILL=true
+
+ENV APPSODY_TEST="npm test && npm test --prefix user-app"
+ENV APPSODY_TEST_ON_CHANGE=""
+ENV APPSODY_TEST_KILL=false
+
+COPY ./project /project
+WORKDIR /project
+RUN npm install
+RUN npm run build
+
+ENV PORT=3000
+ENV NODE_PATH=/project/user-app/node_modules
+
+EXPOSE 3000
+EXPOSE 9229
