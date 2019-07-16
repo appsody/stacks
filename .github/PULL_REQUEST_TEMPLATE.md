@@ -9,7 +9,7 @@
 - [ ] Stack satisfies the [stable stack requirements](https://github.com/appsody/stacks/blob/master/TECHNICAL_REQUIREMENTS.md).
 
 
-### Related Issues
+### Related Issues:
 <!-- e.g. Fixes #32, Related to #54, etc. -->
 
 
