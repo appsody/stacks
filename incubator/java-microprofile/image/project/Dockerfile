@@ -14,7 +14,7 @@ RUN cd target && \
     mkdir /config && \
     mv wlp/usr/servers/*/* /config/
 
-FROM open-liberty:kernel-java8-openj9
+FROM openliberty/open-liberty:microProfile2-ubi-min
 
 COPY --chown=1001:0 --from=0 /config/ /config/
 
