@@ -45,7 +45,7 @@ do
 
   echo "  $stack_id:"      >> $index_v1
   echo "  - created: $(date --iso-8601=seconds)" >> $index_v1
-  sed 's/^/    /' $stack >> $index_v1
+  sed -e 's/^/    /' -e 's/name:/display-name:/' -e 's/id:/name:/' $stack >> $index_v1
   echo "    urls:"       >> $index_v1
 
   for template_dir in $stack_dir/templates/*/
