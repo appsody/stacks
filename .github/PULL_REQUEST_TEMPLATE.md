@@ -18,12 +18,11 @@
 
 
 ### Contributing a new stack:
-<!--- Describe how the stack uses Appsody environment variables throughout the development lifecycle -->
 
-- Describe the mounts used by the stack:
+- Describe the Appsody environment variables defined in stack image:
 
-- Describe the run / debug / test commands executed by the stack:
+- Explain how applicaiton dependencies are managed:
 
-- Explain how the stack utilizes Appsody file watcher:
+- Explain how Appsody file watcher is utilized:
 
 - Describe any limitations and known issues:
