@@ -6,8 +6,6 @@
 
 - [ ] Stack adheres to [Appsody stack structure](https://github.com/appsody/website/blob/master/content/docs/stacks/stack-structure.md).
 
-- [ ] Stack satisfies the [stable stack requirements](https://github.com/appsody/stacks/blob/master/TECHNICAL_REQUIREMENTS.md).
-
 
 ### Related Issues:
 <!-- e.g. Fixes #32, Related to #54, etc. -->
@@ -16,13 +14,14 @@
 ### Modifying an existing stack:
 <!--- Describe your changes in detail -->
 
+- [ ] Updated the stack version in `stack.yaml`
 
 ### Contributing a new stack:
 
-- Describe the Appsody environment variables defined in stack image:
-
-- Explain how applicaiton dependencies are managed:
+- Describe how application dependencies are managed:
 
 - Explain how Appsody file watcher is utilized:
+
+- Describe other Appsody environment variables defined by the stack image:
 
 - Describe any limitations and known issues:
