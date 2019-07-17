@@ -1,42 +1,28 @@
-<!--
-Please read the [Code of Conduct](https://github.com/appsody/website/blob/master/CODE_OF_CONDUCT.md) and the [Contributing Guidelines](https://github.com/appsody/website/blob/master/CONTRIBUTING.md) before opening a pull request.
--->
+### Checklist:
 
-- [ ] commit message follows [commit guidelines](https://github.com/appsody/website/blob/master/CONTRIBUTING.md#commit-message-guidelines).
+- [ ] Read the [Code of Conduct](https://github.com/appsody/website/blob/master/CODE_OF_CONDUCT.md) and [Contributing Guidelines](https://github.com/appsody/website/blob/master/CONTRIBUTING.md).
 
-## Related Issues
-<!--
-  Link to the issue that is fixed by this PR (if there is one)
-  e.g. Fixes #32, Related to #54, etc.
--->
-Fixes #
+- [ ] Followed the [commit message guidelines](https://github.com/appsody/website/blob/master/CONTRIBUTING.md#commit-message-guidelines).
 
-## Contributing a new stack:
-<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
-<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
-- [ ] Changes adhere to the [Appsody stack structure](https://github.com/appsody/website/blob/master/content/docs/stacks/stack-structure.md)
+- [ ] Stack adheres to [Appsody stack structure](https://github.com/appsody/website/blob/master/content/docs/stacks/stack-structure.md).
 
-Please provide the following in as much detail as you can:
 
-- [ ] Provided a README that conforms to published guidelines
+### Modifying an existing stack:
 
-Provide usage of the Appsody controller:
-<!--- Describe how your stack utilses the Appsody Controller -->
+- [ ] Updated the stack version in `stack.yaml`
 
-Explain your rationale behind mount points:
-<!--- Describe the mount points your stack uses -->
-
-Explain the commands that your stack executes:
-<!--- Describe what commands your stack uses -->
-
-Describe any limitations and known issues:
-<!--- Please provide details about any limitations your stack has and describe any known issues -->
-
-- [ ] Stack meets the [technical requirements](https://github.com/appsody/stacks/blob/master/TECHNICAL_REQUIREMENTS.md) (STABLE stack only)
-
-## Modifying an existing stack:
-
-### Description
 <!--- Describe your changes in detail -->
 
-- [ ] Stack meets the [technical requirements](https://github.com/appsody/stacks/blob/master/TECHNICAL_REQUIREMENTS.md) (STABLE stack only)
+### Contributing a new stack:
+
+- Describe how application dependencies are managed:
+
+- Explain how Appsody file watcher is utilized:
+
+- Describe other Appsody environment variables defined by the stack image:
+
+- Describe any limitations and known issues:
+
+
+### Related Issues:
+<!-- e.g. Fixes #32, Related to #54, etc. -->
