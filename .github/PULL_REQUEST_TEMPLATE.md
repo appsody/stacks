@@ -7,14 +7,11 @@
 - [ ] Stack adheres to [Appsody stack structure](https://github.com/appsody/website/blob/master/content/docs/stacks/stack-structure.md).
 
 
-### Related Issues:
-<!-- e.g. Fixes #32, Related to #54, etc. -->
-
-
 ### Modifying an existing stack:
-<!--- Describe your changes in detail -->
 
 - [ ] Updated the stack version in `stack.yaml`
+
+<!--- Describe your changes in detail -->
 
 ### Contributing a new stack:
 
@@ -25,3 +22,7 @@
 - Describe other Appsody environment variables defined by the stack image:
 
 - Describe any limitations and known issues:
+
+
+### Related Issues:
+<!-- e.g. Fixes #32, Related to #54, etc. -->
