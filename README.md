@@ -18,13 +18,13 @@ To find out more about Appsody check out [appsody.dev](https://appsody.dev).
 ## Repository Structure
 Stacks are catagorized as either stable, incubator or experimental depending on the content of the stack.
 
-- `stable/`: Stable stacks meet this set of [technical requirements](https://github.com/appsody/docs/blob/master/STABLE_TECHNICAL_REQUIREMENTS.md).
+- `stable/`: Stable stacks meet this set of [technical requirements](https://github.com/appsody/stacks/blob/master/TECHNICAL_REQUIREMENTS.md).
 
 - `incubator/:` The stacks in the incubator folder are actively being worked on to satisfy the stable critria.
 
 - `experimental/:` Exprimental stacks are not being actively been worked on and may not fulfill the requirements of an Appsody stack. These can be used for trying out specific capabilites or proof of concept work.
 
-Click here to find out more about [Appsody stacks](https://github.com/appsody/docs/blob/master/docs/stacks/stacks-overview.md).
+Click here to find out more about [Appsody stacks](https://github.com/appsody/website/blob/master/content/docs/stacks/stacks-overview.md).
 
 ## Creating a Stack
 We are actively working to create new stacks so that more people can adopt Appsody. If you find that none of the existing stacks meet your needs please reach out to us on the [Appsody Slack](https://appsody-slack.eu-gb.mybluemix.net/) or create a new GitHub issue to track the discussion.
@@ -36,4 +36,4 @@ If you have a question that you can't find an answer to, we would also like to h
 
 ## Licence
 
-Please see [LICENSE](https://github.com/appsody/docs/blob/master/LICENSE) and [NOTICES](https://github.com/appsody/website/blob/master/NOTICE.md) for more information.
+Please see [LICENSE](https://github.com/appsody/website/blob/master/LICENSE) and [NOTICES](https://github.com/appsody/website/blob/master/NOTICE.md) for more information.

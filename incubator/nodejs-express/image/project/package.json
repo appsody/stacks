@@ -1,6 +1,6 @@
 {
   "name": "nodejs-express",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Node.js Express Stack",
   "license": "Apache-2.0",
   "repository": {
@@ -21,6 +21,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "~6.1.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "appmetrics-dash": "^4.1.0"
   }
 }

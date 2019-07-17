@@ -1,3 +1,7 @@
+// Requires statements and code for non-production mode usage
+if (!process.env.NODE_ENV || !process.env.NODE_ENV === 'production') {
+  require('appmetrics-dash').attach();
+}
 const express = require('express');
 const health = require('@cloudnative/health-connect');
 const fs = require('fs');
