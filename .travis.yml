@@ -9,7 +9,6 @@ dist: bionic
 services:
   - docker
 install:
-  - make install-controller
   - make get-cli
 
 # Delete git repo setup from travis
