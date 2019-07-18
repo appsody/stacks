@@ -37,9 +37,9 @@ do
 
   i=0
   stack_dir=$(dirname $stack)
-  stack_id=$(cat $stack | grep ^id | cut -d' ' -f2)
+  stack_id=$(basename $stack_dir)
 
-  echo "  $stack_id:"    >> $index_v2
+  echo "  - id: $stack_id"    >> $index_v2
   sed 's/^/    /' $stack >> $index_v2
   echo "    templates:"  >> $index_v2
 
@@ -55,8 +55,8 @@ do
     filename=${template_dir:$base_dir_len}
     filename=${filename////.}tar.gz
 
-    echo "    - url: \"%PATH%/$filename\"" >> $index_v2
-    echo "      name: $name" >> $index_v2
+    echo "    - id: $name" >> $index_v2
+    echo "      url: \"%PATH%/$filename\"" >> $index_v2
 
     if [ $i -eq 0 ]
     then
