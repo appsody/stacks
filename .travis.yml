@@ -10,18 +10,13 @@ os:
 
 services:
   - docker
+install:
+  - make install-controller
+  - make get-cli
 
-script: skip
-
-stages:
-  - name: lint
-  - name: test
-  - name: deploy
-    if: branch = master AND tag IS present
-
-test-template: &test-template
-  stage: test
-  script: make test
+script:
+  - make test
+ 
 
 deploy:
   provider: releases
