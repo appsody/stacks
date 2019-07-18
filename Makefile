@@ -30,14 +30,12 @@ package_binary = $(COMMAND)$(BINARY_EXT_$(os))
 .PHONY: all
 all: lint test package ## Run lint, test, build, and package
 
-.PHONY: install-controller
-install-controller: ## Get the controller and install it
-	wget https://github.com/appsody/controller/releases/download/0.2.1/appsody-controller && chmod +x appsody-controller && mkdir ~/.appsody && cp appsody-controller ~/.appsody/ && if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco install make; fi
-
 .PHONY: get-cli
 get-cli: ## get cli code from repo
 	#wget https://github.com/appsody/appsody/archive/0.2.5.zip
 	#unzip 0.2.5.zip
+	echo $GOPATH
+	go env GOPATH
 	git clone https://github.com/tnixa/appsody.git
 	cd appsody && make install-controller
 	#cd appsody-0.2.5/functest && go test
