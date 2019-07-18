@@ -36,9 +36,13 @@ install-controller: ## Get the controller and install it
 
 .PHONY: get-cli
 get-cli: ## get cli code from repo
-	wget https://github.com/appsody/appsody/archive/0.2.5.zip
-    unzip 0.2.5.zip
-    cd appsody-0.2.5/functest && go test
+	#wget https://github.com/appsody/appsody/archive/0.2.5.zip
+	#unzip 0.2.5.zip
+	git clone https://github.com/tnixa/appsody.git
+	cd appsody && make install-controller
+	#cd appsody-0.2.5/functest && go test
+	cd appsody/functest && go test
+
 	
 .PHONY: test
 test: ## Run the all the automated tests
