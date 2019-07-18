@@ -3,18 +3,25 @@ language: generic
 go:
   - 1.12.x
 
+go_import_path: github.com/appsody/appsody
+
 os:
   - linux
 
 services:
   - docker
 
-script:
-  - echo "No lint or test defined."
+script: skip
 
-# note before_deploy will run before each deploy provider
-before_deploy:
-  - ./ci/packageTemplates.sh .
+stages:
+  - name: lint
+  - name: test
+  - name: deploy
+    if: branch = master AND tag IS present
+
+test-template: &test-template
+  stage: test
+  script: make test
 
 deploy:
   provider: releases
