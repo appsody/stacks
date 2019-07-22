@@ -1,6 +1,6 @@
 name: Swift
 version: 0.1.0
-description: Swift runtime
+description: Runtime for Swift applications
 license: Apache-2.0
 maintainers:
   - name: Ian Partridge

@@ -1,6 +1,6 @@
 name: Node.js Functions
 version: 0.1.0
-description: Serverless Node.js functions
+description: Serverless runtime for Node.js functions
 license: Apache-2.0
 maintainers:
   - name: Chris Bailey
