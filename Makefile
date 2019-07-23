@@ -34,17 +34,16 @@ all: lint test package ## Run lint, test, build, and package
 get-cli: ## get cli code from repo
 	#wget https://github.com/appsody/appsody/archive/0.2.5.zip
 	#unzip 0.2.5.zip
-	echo $GOPATH
 	go env GOPATH
-	git clone https://github.com/tnixa/appsody.git
-	cd appsody && make install-controller
-	#cd appsody-0.2.5/functest && go test
-	cd appsody/functest && go test
+	mkdir -p /home/travis/gopath/src/github.com/appsody
+	cd /home/travis/gopath/src/github.com/appsody && git clone https://github.com/tnixa/appsody.git
+	cd /home/travis/gopath/src/github.com/appsody/appsody && make install-controller
+	cd /home/travis/gopath/src/github.com/appsody/appsody/functest && go test
 
 	
 .PHONY: test
 test: ## Run the all the automated tests
-	$(GO_TEST_COMMAND) ./...
+	$(GO_TEST_COMMAND) ./...  #pass in parameter for which stack to test
 
 .PHONY: unittest
 unittest: ## Run the automated unit tests
