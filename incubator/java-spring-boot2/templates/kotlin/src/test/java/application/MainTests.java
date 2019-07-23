@@ -30,6 +30,13 @@ public class MainTests {
     }
 
     @Test
+    public void testKotlinEndpoint() {
+        ResponseEntity<String> entity = this.restTemplate.getForEntity("/hello", String.class);
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(entity.getBody()).contains("Hello, Appsody!");
+    }    
+
+    @Test
     public void testLivenessEndpoint() {
         ResponseEntity<String> entity = this.restTemplate.getForEntity("/actuator/liveness", String.class);
         assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
