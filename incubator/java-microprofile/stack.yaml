@@ -12,7 +12,7 @@ maintainers:
 default-template: default
 icon: https://
 keywords:
-- Java
-- MicroProfile
-- Maven
-- Open Liberty
+  - Java
+  - MicroProfile
+  - Maven
+  - Open Liberty

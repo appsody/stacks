@@ -7,3 +7,6 @@ maintainers:
     email: cnbailey@gmail.com
     github-id: seabaylea
 default-template: simple
+keywords:
+  - Node.js
+  - Functions

@@ -9,6 +9,6 @@ maintainers:
 default-template: default
 icon: https://
 keywords:
-- Java
-- Spring Boot
-- Maven
+  - Java
+  - Spring Boot
+  - Maven

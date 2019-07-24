@@ -7,3 +7,5 @@ maintainers: # list of maintainers for this stack
     email: name@email.com
     github-id: github-account
 default-template: hello # folder name of default template
+keywords:
+  - Sample

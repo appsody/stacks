@@ -40,13 +40,13 @@ do
   stack_id=$(basename $stack_dir)
 
   echo "  - id: $stack_id"    >> $index_v2
-  sed 's/^/    /' $stack >> $index_v2
-  echo "    templates:"  >> $index_v2
+  sed 's/^/      /' $stack >> $index_v2
+  echo "      templates:"  >> $index_v2
 
   echo "  $stack_id:"      >> $index_v1
-  echo "  - created: $(date --iso-8601=seconds)" >> $index_v1
-  sed -e 's/^/    /' -e 's/name:/display-name:/' -e 's/id:/name:/' $stack >> $index_v1
-  echo "    urls:"       >> $index_v1
+  echo "    - created: $(date --iso-8601=seconds)" >> $index_v1
+  sed -e 's/^/      /' -e 's/name:/display-name:/' -e 's/id:/name:/' $stack >> $index_v1
+  echo "      urls:"       >> $index_v1
 
   for template_dir in $stack_dir/templates/*/
   do
@@ -55,12 +55,12 @@ do
     filename=${template_dir:$base_dir_len}
     filename=${filename////.}tar.gz
 
-    echo "    - id: $name" >> $index_v2
-    echo "      url: \"%PATH%/$filename\"" >> $index_v2
+    echo "        - id: $name" >> $index_v2
+    echo "          url: \"%PATH%/$filename\"" >> $index_v2
 
     if [ $i -eq 0 ]
     then
-      echo "    - \"%PATH%/$filename\"" >> $index_v1
+      echo "      - \"%PATH%/$filename\"" >> $index_v1
       ((i+=1))
     fi
 

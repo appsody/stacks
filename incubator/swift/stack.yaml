@@ -7,3 +7,5 @@ maintainers:
     email: i.partridge@uk.ibm.com
     github-id: ianpartridge
 default-template: simple
+keywords:
+  - Swift

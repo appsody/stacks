@@ -12,5 +12,5 @@ maintainers:
 default-template: simple
 icon: https://
 keywords:
-- Node.js
-- Express
+  - Node.js
+  - Express
