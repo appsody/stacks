@@ -6,13 +6,13 @@ ENV APPSODY_DEPS=/project/user-app/functions/node_modules
 ENV APPSODY_WATCH_DIR=/project/user-app/functions
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/functions/node_modules
 
-ENV APPSODY_INSTALL="npm install --prefix user-app/functions"
+ENV APPSODY_INSTALL="npm install --prefix user-app/functions && npm audit fix --prefix user-app/functions"
 
 ENV APPSODY_TEST="npm test && npm test --prefix user-app/functions"
 
 COPY ./project /project/user-app
 WORKDIR /project
-RUN npm install
+RUN npm install && npm audit fix
 
 ENV PORT=3000
 ENV NODE_PATH=/project/user-app/functions/node_modules
