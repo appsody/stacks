@@ -1,7 +1,9 @@
-id: sample-stack-id # must be unique
-name: sample stack # one liner description short meaningful name for the stack
+name: sample stack # title or short name for the stack (used on the website)
 version: 0.1.0 # version of the stack
-description: sample stack to help creation of more appsody stacks # free form text explaining more about the capabilities of this stack and various templates
-maintainer: Neeraj Laad <neeraj.laad@gmail.com> # comma separated list for more than one maintainer
-default-template: hello # name of default template
-license: Apache-2.0 # license for the stack
+description: sample stack to help creation of more appsody stacks # short description of this stack (used on the website and `list` command)
+license: Apache-2.0 # license for the stack (SPDX license id)
+maintainers: # list of maintainers for this stack
+  - name: First Middle Last
+    email: name@email.com
+    github-id: github-account
+default-template: hello # folder name of default template
