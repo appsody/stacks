@@ -3,10 +3,19 @@ LABEL maintainer="IBM Java Engineering at IBM Cloud"
 
 # Ensure up to date / patched OS
 RUN  apt-get -qq update \
-  && apt-get -qq install -y curl wget xmlstarlet \
+  && apt-get -qq install -y curl wget xmlstarlet unzip \
   && DEBIAN_FRONTEND=noninteractive apt-get -qq upgrade -y \
   && apt-get -qq clean \
   && rm -rf /tmp/* /var/lib/apt/lists/*
+
+# Kotlin support
+COPY ./project/stack.properties /project/stack.properties
+RUN cd /usr/lib && \
+    KVER=$(cat /project/stack.properties | grep kotlin.version | sed 's/kotlin.version=//') && \
+    wget -q https://github.com/JetBrains/kotlin/releases/download/v$KVER/kotlin-compiler-$KVER.zip && \
+    unzip kotlin-compiler-*.zip && \
+    rm kotlin-compiler-*.zip && \
+    rm -f kotlinc/bin/*.bat  
 
 COPY ./project /project
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
