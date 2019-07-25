@@ -8,7 +8,7 @@
     <parent>
         <groupId>dev.appsody</groupId>
         <artifactId>java-microprofile</artifactId>
-        <version>0.2.2</version>
+        <version>0.2.3</version>
     </parent>
 
     <groupId>dev.appsody.starter.java-microprofile</groupId>
