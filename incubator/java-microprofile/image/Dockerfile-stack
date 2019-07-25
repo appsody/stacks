@@ -25,11 +25,11 @@ ENV APPSODY_DEPS=/mvn/repository
 ENV APPSODY_INSTALL="mvn -Dmaven.repo.local=/mvn/repository install -DskipTests"
 
 ENV APPSODY_RUN="../validate.sh && mvn -Dmaven.repo.local=/mvn/repository liberty:run"
-ENV APPSODY_RUN_ON_CHANGE="mvn -Dmaven.repo.local=/mvn/repository compile"
+ENV APPSODY_RUN_ON_CHANGE="mvn -Dmaven.repo.local=/mvn/repository package -DskipTests"
 ENV APPSODY_RUN_KILL=false
 
 ENV APPSODY_DEBUG="../validate.sh && mvn -Dmaven.repo.local=/mvn/repository liberty:debug"
-ENV APPSODY_DEBUG_ON_CHANGE="mvn -Dmaven.repo.local=/mvn/repository compile"
+ENV APPSODY_DEBUG_ON_CHANGE="mvn -Dmaven.repo.local=/mvn/repository package -DskipTests"
 ENV APPSODY_DEBUG_KILL=false
 
 ENV APPSODY_TEST="../validate.sh && mvn -Dmaven.repo.local=/mvn/repository verify"
