@@ -31,9 +31,20 @@ if [ -z $DOCKERHUB_ORG ]; then
     export DOCKERHUB_ORG=appsody
 fi
 
+# find github repository slug
+if [ -z "$TRAVIS_REPO_SLUG" ]
+then
+  git_org=$(git branch -vv | grep -e '^\*.*' | cut -d' ' -f4 | cut -d'[' -f2 | cut -d'/' -f1)
+  export REPO_SLUG=$(git remote get-url $git_org | sed -e 's#git@\(.*\):\([^.]*\)\(\.git\)\?#\2#' -e 's#https://\([^/]*\)/\([^.]*\)\(\.git\)\?#\2#')
+else
+  export REPO_SLUG=$TRAVIS_REPO_SLUG
+fi
+echo REPO_SLUG=$REPO_SLUG
+
 # url for downloading released assets
-if [ -z $RELEASE_URL ]; then
-    export RELEASE_URL="https://github.com/$TRAVIS_REPO_SLUG/releases/download"
+if [ -z "$RELEASE_URL" ]
+then
+  export RELEASE_URL="https://github.com/$REPO_SLUG/releases/download"
 fi
 
 #expose an extension point for running after main 'env' processing

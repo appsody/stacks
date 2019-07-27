@@ -4,14 +4,14 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent><!--required parent POM-->
-    <groupId>dev.appsody</groupId>
-    <artifactId>spring-boot2-stack</artifactId>
-    <version>0.3.2</version>
+    <groupId>{{MAVEN_GROUP_ID}}</groupId>
+    <artifactId>{{MAVEN_ARTIFACT_ID}}</artifactId>
+    <version>{{MAVEN_ARTIFACT_VERSION}}</version>
     <relativePath/>
   </parent>
 
-  <groupId>dev.appsody</groupId>
-  <artifactId>application</artifactId>
+  <groupId>{{MAVEN_GROUP_ID}}</groupId>
+  <artifactId>kotlin-application</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
@@ -34,7 +34,7 @@
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-stdlib-jdk8</artifactId>
-    </dependency>     
+    </dependency>
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
@@ -50,8 +50,8 @@
         <executions>
           <execution>
               <id>compile</id>
-              <goals> 
-                <goal>compile</goal> 
+              <goals>
+                <goal>compile</goal>
               </goals>
               <configuration>
                   <sourceDirs>
@@ -105,7 +105,7 @@
               <execution>
                   <id>java-compile</id>
                   <phase>compile</phase>
-                  <goals> 
+                  <goals>
                     <goal>compile</goal>
                   </goals>
               </execution>
@@ -117,7 +117,7 @@
                   </goals>
               </execution>
           </executions>
-      </plugin>      
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -131,6 +131,6 @@
         </executions>
       </plugin>
     </plugins>
-  </build>  
+  </build>
 
 </project>

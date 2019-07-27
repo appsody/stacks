@@ -10,6 +10,7 @@ fi
 
 base_dir="$(cd "$1" && pwd)"
 
+# packaging/publishing settings
 . $base_dir/ci/env.sh $base_dir
 
 # directory to store assets for test or release
@@ -22,6 +23,50 @@ if [ -f $base_dir/ci/ext/pre_package.sh ]
 then
     . $base_dir/ci/ext/pre_package.sh $base_dir
 fi
+
+package_template() {
+    local template_dir=$1
+    local build_me=$2
+    local build_mode=$3
+
+    if [ -d $template_dir ]
+    then
+        echo "    templates:" >> $index_file
+        echo "    templates:" >> $index_file_local
+
+        for dir in $template_dir/*/
+        do
+            if [ -d "$dir" ]
+            then
+                template_id=$(basename $dir)
+                template_archive=$repo_name.$stack_id.templates.$template_id.tar.gz
+
+                if [ $build_me ]
+                then
+                  case "$build_mode" in
+                    tar)
+                        # build template archives
+                        tar -cz -f $assets_dir/$template_archive -C $template_dir .
+                        echo -e "--- Created template archive: $template_archive"
+                    ;;
+                    extract)
+                        docker run --rm -iv${assets_dir}:/host-volume --entrypoint "" \
+                          $DOCKERHUB_ORG/$stack_id sh -c "cp /templates/${template_id}.tar.gz /host-volume/${template_archive}; \
+                                chown $(id -u):$(id -g) /host-volume/${template_archive}"
+                        echo -e "--- Extracted template archive: $template_archive"
+                    ;;
+                  esac
+                fi
+
+                echo "      - id: $template_id" >> $index_file
+                echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$template_archive" >> $index_file
+
+                echo "      - id: $template_id" >> $index_file_local
+                echo "        url: file://$assets_dir/$template_archive" >> $index_file_local
+            fi
+        done
+    fi
+}
 
 # iterate over each repo
 for repo_name in $REPO_LIST
@@ -68,17 +113,19 @@ do
 
                     if [ -d $stack_dir/image ]
                     then
-                        docker build -t $DOCKERHUB_ORG/$stack_id \
+                        docker build \
+                            --build-arg REPO_SLUG=$REPO_SLUG \
+                            --build-arg DOCKERHUB_ORG=$DOCKERHUB_ORG \
+                            --build-arg STACK_ID=$stack_id \
+                            --build-arg MAJOR_VERSION=$stack_version_major \
+                            --build-arg MINOR_VERSION=$stack_version_minor \
+                            --build-arg PATCH_VERSION=$stack_version_patch \
+                            -t $DOCKERHUB_ORG/$stack_id \
                             -t $DOCKERHUB_ORG/$stack_id:$stack_version_major \
                             -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor \
                             -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
                             -f $stack_dir/image/Dockerfile-stack $stack_dir/image
                     fi
-
-                    echo "  - id: $stack_id" >> $index_file_local
-                    sed 's/^/    /' $stack >> $index_file_local
-                    [ -n "$(tail -c1 $index_file_local)" ] && echo >> $index_file_local
-                    echo "    templates:" >> $index_file_local
                 else
                     echo -e "\n- SKIPPING stack: $repo_name/$stack_id"
                 fi
@@ -86,29 +133,21 @@ do
                 echo "  - id: $stack_id" >> $index_file
                 sed 's/^/    /' $stack >> $index_file
                 [ -n "$(tail -c1 $index_file)" ] && echo >> $index_file
-                echo "    templates:" >> $index_file
+                echo "    default-image: $DOCKERHUB_ORG/$stack_id:$stack_version" >> $index_file
 
-                for template_dir in $stack_dir/templates/*/
-                do
-                    if [ -d $template_dir ]
-                    then
-                        template_id=$(basename $template_dir)
-                        template_archive=$repo_name.$stack_id.templates.$template_id.tar.gz
+                echo "  - id: $stack_id" >> $index_file_local
+                sed 's/^/    /' $stack >> $index_file_local
+                [ -n "$(tail -c1 $index_file_local)" ] && echo >> $index_file_local
+                echo "    default-image: $DOCKERHUB_ORG/$stack_id:$stack_version" >> $index_file_local
 
-                        if [ $build = true ]
-                        then
-                            # build template archives
-                            tar -cz -f $assets_dir/$template_archive -C $template_dir .
-                            echo -e "--- Created template archive: $template_archive"
-
-                            echo "      - id: $template_id" >> $index_file_local
-                            echo "        url: file://$assets_dir/$template_archive" >> $index_file_local
-                        fi
-
-                        echo "      - id: $template_id" >> $index_file
-                        echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$template_archive" >> $index_file
-                    fi
-                done
+                # Create or extract template archives
+                if [ -d $stack_dir/templates ]
+                then
+                    package_template "$stack_dir/templates" $build tar
+                elif [ -d $stack_dir/image/templates ]
+                then
+                    package_template "$stack_dir/image/templates" $build extract
+                fi
             fi
         done
     else
