@@ -9,7 +9,7 @@
             "type": "node",
             "request": "attach",
             "port": 9229,
-            "remoteRoot": "/project/user-app/functions",
+            "remoteRoot": "/project/user-app",
             "localRoot": "${workspaceFolder}",
             "protocol": "inspector"
         }
