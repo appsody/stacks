@@ -5,7 +5,7 @@
 
   <groupId>dev.appsody</groupId>
   <artifactId>spring-boot2-stack</artifactId>
-  <version>0.3.1</version>
+  <version>0.3.2</version>
   <packaging>pom</packaging>
 
   <name>Appsody Spring Boot2 stack</name>
@@ -42,6 +42,8 @@
     <opentracing-spring-jaeger-web-starter.version>2.0.0</opentracing-spring-jaeger-web-starter.version>
 
     <java.version>1.8</java.version>
+    <kotlin.version>1.3.40</kotlin.version> <!-- matches ver in stack.properties -->
+
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
