@@ -25,6 +25,9 @@ do
         continue
     else
         echo "RELEASING: $asset"
-        cat $asset
+        if [[ $asset == *.yaml ]]
+        then
+            cat $asset
+        fi
     fi
 done
