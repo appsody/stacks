@@ -25,10 +25,10 @@ do
         continue
     else
         echo "RELEASING: $asset"
-        mv $asset $release_dir
         if [[ $asset == *.yaml ]]
         then
             cat $asset
         fi
+        mv $asset $release_dir
     fi
 done
