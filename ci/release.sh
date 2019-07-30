@@ -19,7 +19,7 @@ mkdir -p $release_dir
 # iterate over each stack
 for asset in $assets_dir/*
 do
-    if [[ $asset == *-test.yaml ]] || [ ! -f $asset ]
+    if [[ $asset == *-test.yaml ]] || [[ $asset == *-v2.yaml ]] || [ ! -f $asset ]
     then
         echo "SKIPPING: $asset"
         continue
