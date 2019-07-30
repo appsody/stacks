@@ -11,8 +11,7 @@ fi
 base_dir="$(cd "$1" && pwd)"
 
 # check if running locally or in travis
-
-if [[ $TRAVIS_PULL_REQUEST -eq true ]]
+if [[ $TRAVIS_PULL_REQUEST ]] && [[ $TRAVIS_PULL_REQUEST -eq true ]]
 then
     # check for changed files
     CHANGED_FILES=$(git diff --name-only $TRAVIS_COMMIT_RANGE)
@@ -51,4 +50,4 @@ fi
 
 # expose environment variable for stacks
 export STACKS_LIST=${STACKS_LIST[@]}
-echo $STACKS_LIST
+echo "STACKS_LIST=$STACKS_LIST"
