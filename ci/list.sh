@@ -12,7 +12,7 @@ base_dir="$(cd "$1" && pwd)"
 
 # check if running locally or in travis
 echo $TRAVIS_PULL_REQUEST
-if [[ $TRAVIS_PULL_REQUEST -ne false ]]
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]
 then
     # check for changed files
     CHANGED_FILES=$(git diff --name-only $TRAVIS_COMMIT_RANGE)
