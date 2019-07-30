@@ -11,6 +11,7 @@ fi
 base_dir="$(cd "$1" && pwd)"
 
 # check if running locally or in travis
+echo $TRAVIS_PULL_REQUEST
 if [[ $TRAVIS_PULL_REQUEST -ne false ]]
 then
     # check for changed files
