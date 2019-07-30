@@ -10,7 +10,7 @@ fi
 
 base_dir="$(cd "$1" && pwd)"
 
-# check if running locally or in travis
+# check if running on travis pull request or not
 if [ "$TRAVIS_PULL_REQUEST" != "false" ]
 then
     # check for changed files
