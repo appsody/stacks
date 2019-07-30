@@ -11,7 +11,8 @@ fi
 base_dir="$(cd "$1" && pwd)"
 
 # check if running locally or in travis
-if [[ $TRAVIS_PULL_REQUEST -eq true ]]
+
+if [[ $TRAVIS_PULL_REQUEST -eq true ]] && [[ $TRAVIS_PULL_REQUEST ]]
 then
     # check for changed files
     CHANGED_FILES=$(git diff --name-only $TRAVIS_COMMIT_RANGE)
@@ -24,6 +25,7 @@ then
             STACKS_LIST+=("$var")
         fi
     done
+    echo "Generated list for new or modified stacks"
 else
     # list of repositories to build indexes for
     repo_list="experimental incubator stable"
@@ -44,6 +46,7 @@ else
             done
         fi
     done
+    echo "Generated list for all stacks"
 fi
 
 # expose environment variable for stacks
