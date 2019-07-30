@@ -11,7 +11,7 @@ fi
 base_dir="$(cd "$1" && pwd)"
 
 # check if running on travis pull request or not
-if [ "$TRAVIS_PULL_REQUEST" != "false" ]
+if [ $TRAVIS_PULL_REQUEST ] && [ "$TRAVIS_PULL_REQUEST" != "false" ]
 then
     # check for changed files
     CHANGED_FILES=$(git diff --name-only $TRAVIS_COMMIT_RANGE)
