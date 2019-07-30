@@ -11,12 +11,10 @@ services:
 
 script:
   - ./ci/build.sh .
-  - ./ci/release.sh .
 
 # note before_deploy will run before each deploy provider
 before_deploy:
   - ./ci/release.sh .
-
 
 deploy:
   provider: releases
@@ -27,4 +25,4 @@ deploy:
   file_glob: true
   on:
     tags: true
-    repo: appsody/stacks
+    repo: neeraj-laad/stacks
