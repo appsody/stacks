@@ -134,5 +134,3 @@ do
         echo "SKIPPING: $repo_dir"
     fi
 done
-
-docker images

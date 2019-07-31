@@ -32,3 +32,5 @@ do
         mv $asset $release_dir
     fi
 done
+
+docker images
