@@ -15,7 +15,7 @@ projects:
     - neeraj.laad@gmail.com
     urls:
     - https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.2/incubator.java-microprofile.templates.default.tar.gz
-    version: 0.2.2
+    version: 0.2.3
   java-spring-boot2:
   - created: 2019-06-24T21:00:00+00:00
     description: Spring Boot using IBM Java SDK and Maven
@@ -28,8 +28,8 @@ projects:
     maintainers:
     - schnabel@us.ibm.com
     urls:
-    - https://github.com/appsody/stacks/releases/download/java-spring-boot2-v0.3.1/incubator.java-spring-boot2.templates.default.tar.gz
-    version: 0.3.1
+    - https://github.com/appsody/stacks/releases/download/java-spring-boot2-v0.3.2/incubator.java-spring-boot2.templates.default.tar.gz
+    version: 0.3.2
   nodejs:
   - created: 2019-06-24T21:00:00+00:00
     description: Node.js Runtime
@@ -40,8 +40,8 @@ projects:
     maintainers:
     - neeraj.laad@gmail.com
     urls:
-    - https://github.com/appsody/stacks/releases/download/nodejs-v0.2.1/incubator.nodejs.templates.simple.tar.gz
-    version: 0.2.1
+    - https://github.com/appsody/stacks/releases/download/nodejs-v0.2.2/incubator.nodejs.templates.simple.tar.gz
+    version: 0.2.2
   nodejs-express:
   - created: 2019-06-24T21:00:00+00:00
     description: Express web framework for Node.js
@@ -53,8 +53,8 @@ projects:
     maintainers:
     - neeraj.laad@gmail.com
     urls:
-    - https://github.com/appsody/stacks/releases/download/nodejs-express-v0.2.1/incubator.nodejs-express.templates.simple.tar.gz
-    version: 0.2.1
+    - https://github.com/appsody/stacks/releases/download/nodejs-express-v0.2.2/incubator.nodejs-express.templates.simple.tar.gz
+    version: 0.2.2
   swift:
   - created: 2019-07-15T12:00:00+00:00
     description: Swift runtime

@@ -4,7 +4,7 @@ The Java MicroProfile stack provides a consistent way of developing microservice
 
 The Java MicroProfile stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins.
 
-This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.5`. It provides live reloading during development by utilizing `loose application` capabilities.
+This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.6`. It provides live reloading during development by utilizing `loose application` capabilities.
 
 **Note:** Maven is provided by the Appsody stack container, allowing you to build, test, and debug your Java application without installing Maven locally. However, we recommend installing Maven locally for the best IDE experience.
 

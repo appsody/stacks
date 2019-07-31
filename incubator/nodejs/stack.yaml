@@ -1,7 +1,12 @@
-id: nodejs
-name: Node.js application
-version: 0.2.1
-description: Simple Node.js application
-maintainer: Neeraj Laad <neeraj.laad@gmail.com>
-default-template: simple
+name: Node.js
+version: 0.2.2
+description: Runtime for Node.js applications
 license: Apache-2.0
+maintainers:
+  - name: Chris Bailey
+    email: cnbailey@gmail.com
+    github-id: seabaylea
+  - name: Neeraj Laad
+    email: neeraj.laad@gmail.com
+    github-id: neeraj-laad
+default-template: simple

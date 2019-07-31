@@ -1,7 +1,9 @@
-id: java-spring-boot2
-name: Java application using Spring Boot 2
-version: 0.3.1
-description: Spring Boot 2 project with health and metrics actuators enabled. Metrics support is provided by Micrometer, and is configured with Prometheus support.
-maintainer: Erin Schnabel <schnabel@us.ibm.com>
-default-template: default
+name: Spring Boot®
+version: 0.3.2
+description: Spring Boot using OpenJ9 and Maven
 license: Apache-2.0
+maintainers:
+  - name: Erin Schnabel
+    email: schnabel@us.ibm.com
+    github-id: ebullient
+default-template: default

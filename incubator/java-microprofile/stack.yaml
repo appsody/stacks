@@ -1,7 +1,12 @@
-id: java-microprofile
-name: Java MicroProfile application built using Maven
-version: 0.2.2
-description:  Sample Java MicroProfile application built using Maven
-maintainer: Neeraj Laad <neeraj.laad@gmail.com>
-default-template: default
+name: Eclipse MicroProfile®
+version: 0.2.3
+description: Eclipse MicroProfile using OpenJ9 and Maven
 license: Apache-2.0
+maintainers:
+  - name: Emily Jiang
+    email: emijiang6@googlemail.com
+    github-id: Emily-Jiang
+  - name: Neeraj Laad
+    email: neeraj.laad@gmail.com
+    github-id: neeraj-laad
+default-template: default
