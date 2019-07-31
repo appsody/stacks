@@ -75,11 +75,11 @@ do
                     if [ -d $stack_dir/image ]
                     then
                         cd $stack_dir/image
-                        # docker build -t $dockerhub_org/$stack_id \
-                        #     -t $dockerhub_org/$stack_id:$stack_version_major \
-                        #     -t $dockerhub_org/$stack_id:$stack_version_major.$stack_version_minor \
-                        #     -t $dockerhub_org/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
-                        #     -f Dockerfile-stack .
+                        docker build -t $dockerhub_org/$stack_id \
+                            -t $dockerhub_org/$stack_id:$stack_version_major \
+                            -t $dockerhub_org/$stack_id:$stack_version_major.$stack_version_minor \
+                            -t $dockerhub_org/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
+                            -f Dockerfile-stack .
                     fi
                 else
                     echo -e "\n  - SKIPPING stack: $repo_name/$stack_id"
@@ -134,3 +134,5 @@ do
         echo "SKIPPING: $repo_dir"
     fi
 done
+
+docker images
