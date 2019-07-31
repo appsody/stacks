@@ -14,6 +14,7 @@ base_dir="$(cd "$1" && pwd)"
 if [ $TRAVIS_PULL_REQUEST ] && [ "$TRAVIS_PULL_REQUEST" != "false" ]
 then
     # check for changed files
+    echo "Listing new/updated stacks in this pull request"
     CHANGED_FILES=$(git diff --name-only $TRAVIS_COMMIT_RANGE)
 
     for changed_stacks in $CHANGED_FILES
@@ -24,11 +25,15 @@ then
             STACKS_LIST+=("$var")
         fi
     done
-    echo "Generated list for new or modified stacks"
 else
-    # list of repositories to build indexes for
-    repo_list="experimental incubator stable"
+    if [ $TRAVIS_TAG ]
+    then
+        echo "Listing stacks for this release"
+    else
+        echo "Listing all stacks"
+    fi
 
+    repo_list="experimental incubator stable"
     for repo_name in $repo_list
     do
         repo_dir=$base_dir/$repo_name
@@ -39,13 +44,17 @@ else
                 if [ -f $stack_exists ]
                 then
                     var=`echo $stack_exists | sed 's/.*stacks\///'`
-                    split_stack=`awk '{split($1, a, "/*"); print a[1]"/"a[2]}' <<< $var`
-                    STACKS_LIST+=("$split_stack")
+                    repo_stack=`awk '{split($1, a, "/*"); print a[1]"/"a[2]}' <<< $var`
+                    if [ $TRAVIS_TAG ] && [[ $repo_stack != */$TRAVIS_TAG ]]
+                    then
+                        continue;
+                    fi
+                    # list of repositories to build indexes for
+                    STACKS_LIST+=("$repo_stack")
                 fi
             done
         fi
     done
-    echo "Generated list for all stacks"
 fi
 
 # expose environment variable for stacks

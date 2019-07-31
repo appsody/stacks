@@ -17,10 +17,10 @@ assets_dir=$base_dir/ci/assets
 repo_list="experimental incubator stable"
 
 # url for downloading released assets
-release_url="https://github.com/$TRAVIS_REPO_SLUG/releases/download/$TRAVIS_TAG"
+release_url="https://github.com/$TRAVIS_REPO_SLUG/releases/download"
 
 # dockerhub org for publishing stack docker images
-dockerhub_org=appsody
+export DOCKERHUB_ORG=appsody
 
 mkdir -p $assets_dir
 
@@ -72,14 +72,20 @@ do
                     stack_version_minor=`echo $stack_version | cut -d. -f2`
                     stack_version_patch=`echo $stack_version | cut -d. -f3`
 
+                    if [ $TRAVIS_TAG ] && [[ $stack_id == $TRAVIS_TAG ]]
+                    then
+                        export TRAVIS_TAG=$stack_id-v$stack_version
+                        echo Updated TRAVIS_TAG to: $TRAVIS_TAG
+                    fi
+
                     if [ -d $stack_dir/image ]
                     then
-                        cd $stack_dir/image
-                        docker build -t $dockerhub_org/$stack_id \
-                            -t $dockerhub_org/$stack_id:$stack_version_major \
-                            -t $dockerhub_org/$stack_id:$stack_version_major.$stack_version_minor \
-                            -t $dockerhub_org/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
-                            -f Dockerfile-stack .
+                        echo "docker build"
+                        # docker build -t $DOCKERHUB_ORG/$stack_id \
+                        #     -t $DOCKERHUB_ORG/$stack_id:$stack_version_major \
+                        #     -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor \
+                        #     -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
+                        #     -f Dockerfile-stack $stack_dir/image
                     fi
                 else
                     echo -e "\n  - SKIPPING stack: $repo_name/$stack_id"
@@ -106,23 +112,22 @@ do
                 do
                     if [ -d $template_dir ]
                     then
-                        cd $template_dir
                         template_id=$(basename $template_dir)
                         template_archive=$repo_name.$stack_id.$template_id.tar.gz
 
                         if [ $build = true ]
                         then
                             # build template archives
-                            tar -cz --exclude-from=$base_dir/.gitignore -f $assets_dir/$template_archive .
+                            tar -cz -f $assets_dir/$template_archive -C $template_dir .
                             echo -e "    - Created template archive: $template_archive"
                         fi
 
                         echo "      - id: $template_id" >> $index_file_v2
-                        echo "        url: $release_url/$template_archive" >> $index_file_v2
+                        echo "        url: $release_url/$stack_id-v$stack_version/$template_archive" >> $index_file_v2
 
                         if [ $i -eq 0 ]
                         then
-                            echo "    - $release_url/$template_archive" >> $index_file_v1
+                            echo "    - $release_url/$stack_id-v$stack_version/$template_archive" >> $index_file_v1
                             echo "    - file://$assets_dir/$template_archive" >> $index_file_v1_test
                             ((i+=1))
                         fi

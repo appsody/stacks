@@ -19,18 +19,12 @@ mkdir -p $release_dir
 # iterate over each stack
 for asset in $assets_dir/*
 do
-    if [[ $asset == *-test.yaml ]] || [[ $asset == *-v2.yaml ]] || [ ! -f $asset ]
+    if [[ $asset != *-test.yaml ]] && [[ $asset != *-v2.yaml ]]
     then
-        echo "SKIPPING: $asset"
-        continue
-    else
         echo "RELEASING: $asset"
-        if [[ $asset == *.yaml ]]
-        then
-            cat $asset
-        fi
         mv $asset $release_dir
     fi
 done
 
+echo "docker push $DOCKERHUB_ORG/*"
 docker images
