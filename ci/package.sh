@@ -88,15 +88,18 @@ do
                 echo "  $stack_id:" >> $index_file_v1
                 echo "  - updated: $(date -u +'%Y-%m-%dT%H:%M:%S%z')"  >> $index_file_v1
                 sed 's/^/    /' $stack >> $index_file_v1
+                [ -n "$(tail -c1 $index_file_v1)" ] && echo >> $index_file_v1
                 echo "    urls:" >> $index_file_v1
 
                 echo "  $stack_id:" >> $index_file_v1_test
                 echo "  - updated: $(date -u +'%Y-%m-%dT%H:%M:%S%z')"  >> $index_file_v1_test
                 sed 's/^/    /' $stack >> $index_file_v1_test
+                [ -n "$(tail -c1 $index_file_v1_test)" ] && echo >> $index_file_v1_test
                 echo "    urls:" >> $index_file_v1_test
 
                 echo "  - id: $stack_id" >> $index_file_v2
                 sed 's/^/    /' $stack >> $index_file_v2
+                [ -n "$(tail -c1 $index_file_v2)" ] && echo >> $index_file_v2
                 echo "    templates:" >> $index_file_v2
 
                 for template_dir in $stack_dir/templates/*/
