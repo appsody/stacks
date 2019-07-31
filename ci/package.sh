@@ -19,7 +19,7 @@ repo_list="experimental incubator stable"
 # url for downloading released assets
 release_url="https://github.com/$TRAVIS_REPO_SLUG/releases/download"
 
-# dockerhub org for publishing stack docker images
+# dockerhub org for publishing stack
 export DOCKERHUB_ORG=appsody
 
 mkdir -p $assets_dir
@@ -53,6 +53,7 @@ do
             then
                 i=0
                 stack_id=$(basename $stack_dir)
+                stack_version=$(awk '/^version *:/ { gsub("version:","",$NF); gsub("\"","",$NF); print $NF}' $stack)
 
                 # check if the stack needs to be built
                 build=false
@@ -67,7 +68,6 @@ do
                 if [ $build = true ]
                 then
                     echo -e "\n  - Building stack: $repo_name/$stack_id"
-                    stack_version=$(awk '/^version *:/ { gsub("version:","",$NF); gsub("\"","",$NF); print $NF}' $stack)
                     stack_version_major=`echo $stack_version | cut -d. -f1`
                     stack_version_minor=`echo $stack_version | cut -d. -f2`
                     stack_version_patch=`echo $stack_version | cut -d. -f3`
