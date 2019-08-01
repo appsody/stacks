@@ -1,6 +1,7 @@
 ## Stage 1 : build with maven builder image with native capabilities
 FROM quay.io/quarkus/centos-quarkus-maven:19.0.2 AS build
 
+COPY . /project
 
 # Install user-app dependencies
 WORKDIR "/project/user-app"
