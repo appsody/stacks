@@ -67,22 +67,21 @@ do
 
                 if [ $build = true ]
                 then
-                    echo -e "\n  - Building stack: $repo_name/$stack_id"
+                    echo -e "\n- BUILDING stack: $repo_name/$stack_id"
                     stack_version_major=`echo $stack_version | cut -d. -f1`
                     stack_version_minor=`echo $stack_version | cut -d. -f2`
                     stack_version_patch=`echo $stack_version | cut -d. -f3`
 
                     if [ -d $stack_dir/image ]
                     then
-                        echo "docker build"
-                        # docker build -t $DOCKERHUB_ORG/$stack_id \
-                        #     -t $DOCKERHUB_ORG/$stack_id:$stack_version_major \
-                        #     -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor \
-                        #     -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
-                        #     -f Dockerfile-stack $stack_dir/image
+                        docker build -t $DOCKERHUB_ORG/$stack_id \
+                            -t $DOCKERHUB_ORG/$stack_id:$stack_version_major \
+                            -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor \
+                            -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
+                            -f Dockerfile-stack $stack_dir/image
                     fi
                 else
-                    echo -e "\n  - SKIPPING stack: $repo_name/$stack_id"
+                    echo -e "\n- SKIPPING stack: $repo_name/$stack_id"
                 fi
 
                 echo "  $stack_id:" >> $index_file
@@ -113,7 +112,7 @@ do
                         then
                             # build template archives
                             tar -cz -f $assets_dir/$template_archive -C $template_dir .
-                            echo -e "    - Created template archive: $template_archive"
+                            echo -e "--- Created template archive: $template_archive"
                         fi
 
                         echo "      - id: $template_id" >> $index_file_v2
