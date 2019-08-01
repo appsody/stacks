@@ -16,7 +16,7 @@ release_dir=$base_dir/ci/release
 
 mkdir -p $release_dir
 
-# iterate over each stack
+# iterate over each asset
 for asset in $assets_dir/*
 do
     if [[ $asset != *-test.yaml ]] && [[ $asset != *-v2.yaml ]]
@@ -26,5 +26,9 @@ do
     fi
 done
 
-echo "docker push $DOCKERHUB_ORG/*"
-docker images
+# iterate over each stack
+for repo_stack in $STACKS_LIST
+do
+    stack_id=echo $repo_stack | awk -F "/" '{print $NF}'
+    echo "docker push $DOCKERHUB_ORG/$stack_id"
+done

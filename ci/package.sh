@@ -72,12 +72,6 @@ do
                     stack_version_minor=`echo $stack_version | cut -d. -f2`
                     stack_version_patch=`echo $stack_version | cut -d. -f3`
 
-                    if [ $TRAVIS_TAG ] && [[ $stack_id == $TRAVIS_TAG ]]
-                    then
-                        export TRAVIS_TAG=$stack_id-v$stack_version
-                        echo Updated TRAVIS_TAG to: $TRAVIS_TAG
-                    fi
-
                     if [ -d $stack_dir/image ]
                     then
                         echo "docker build"
