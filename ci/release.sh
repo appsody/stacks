@@ -30,7 +30,6 @@ done
 echo "########$STACKS_LIST"
 for repo_stack in $STACKS_LIST
 do
-    echo "#### $repo_stack"
-    stack_id=echo $repo_stack | awk -F "/" '{print $NF}'
+    stack_id=`echo ${repo_stack/*\//}`
     echo "docker push $DOCKERHUB_ORG/$stack_id"
 done
