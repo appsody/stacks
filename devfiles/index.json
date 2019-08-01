@@ -1,0 +1,52 @@
+[
+    {
+        "displayName": "Appsody Java MicroProfile template",
+        "description": "Microprofile using AdoptOpenJDK and Maven",
+        "language": "java",
+        "projectType": "appsodyExtension",
+        "location": "https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.2/incubator.java-microprofile.templates.default.tar.gz",
+        "links": {
+            "self": "/devfiles/java-microprofile/devfile.yaml"
+        }
+    },
+    {
+        "displayName": "Appsody Spring Boot 2 template",
+        "description": "Spring Boot using IBM Java SDK and Maven",
+        "language": "java",
+        "projectType": "appsodyExtension",
+        "location": "https://github.com/appsody/stacks/releases/download/java-spring-boot2-v0.3.2/incubator.java-spring-boot2.templates.default.tar.gz",
+        "links": {
+            "self": "/devfiles/java-spring-boot2/devfile.yaml"
+        }
+    },
+    {
+        "displayName": "Appsody Node.js template",
+        "description": "Node.js Runtime",
+        "language": "nodejs",
+        "projectType": "appsodyExtension",
+        "location": "https://github.com/appsody/stacks/releases/download/nodejs-v0.2.2/incubator.nodejs.templates.simple.tar.gz",
+        "links": {
+            "self": "/devfiles/nodejs/devfile.yaml"
+        }
+    },
+    {
+        "displayName": "Appsody Node.js Express template",
+        "description": "Express web framework for Node.js",
+        "language": "nodejs",
+        "projectType": "appsodyExtension",
+        "location": "https://github.com/appsody/stacks/releases/download/nodejs-express-v0.2.2/incubator.nodejs-express.templates.simple.tar.gz",
+        "links": {
+            "self": "/devfiles/nodejs-express/devfile.yaml"
+        }
+    },
+    {
+        "displayName": "Appsody Swift template",
+        "description": "Swift runtime",
+        "language": "swift",
+        "projectType": "appsodyExtension",
+        "location": "https://github.com/appsody/stacks/releases/download/swift-v0.1.0/incubator.swift.templates.simple.tar.gz",
+        "links": {
+            "self": "/devfiles/swift/devfile.yaml"
+        }
+    }
+]
