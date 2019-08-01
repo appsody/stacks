@@ -27,8 +27,10 @@ do
 done
 
 # iterate over each stack
+echo "########$STACKS_LIST"
 for repo_stack in $STACKS_LIST
 do
+    echo "#### $repo_stack"
     stack_id=echo $repo_stack | awk -F "/" '{print $NF}'
     echo "docker push $DOCKERHUB_ORG/$stack_id"
 done

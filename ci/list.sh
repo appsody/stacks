@@ -48,7 +48,6 @@ else
                     repo_stack=`awk '{split($1, a, "/*"); print a[1]"/"a[2]}' <<< $var`
                     if [ $TRAVIS_TAG ] && [[ $repo_stack != */$stack_id ]]
                     then
-                        echo "SKIPPING:$repo_stack"
                         continue;
                     fi
                     # list of repositories to build indexes for
