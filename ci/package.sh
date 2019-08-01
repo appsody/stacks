@@ -78,7 +78,7 @@ do
                             -t $DOCKERHUB_ORG/$stack_id:$stack_version_major \
                             -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor \
                             -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
-                            -f Dockerfile-stack $stack_dir/image
+                            -f $stack_dir/image/Dockerfile-stack $stack_dir/image
                     fi
                 else
                     echo -e "\n- SKIPPING stack: $repo_name/$stack_id"
