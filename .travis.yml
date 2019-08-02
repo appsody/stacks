@@ -24,5 +24,5 @@ deploy:
   file_glob: true
   on:
     tags: true
-    repo: neeraj-laad/stacks
-#    branch: master
+    repo: appsody/stacks
+    branch: master
