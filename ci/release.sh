@@ -30,6 +30,6 @@ done
 for repo_stack in $STACKS_LIST
 do
     stack_id=`echo ${repo_stack/*\//}`
-    echo "Releasing stsack images for: $stack_id"
+    echo "Releasing stack images for: $stack_id"
     echo "docker push $DOCKERHUB_ORG/$stack_id"
 done
