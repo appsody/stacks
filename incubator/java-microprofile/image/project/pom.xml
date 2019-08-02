@@ -14,7 +14,7 @@
 
     <groupId>dev.appsody</groupId>
     <artifactId>java-microprofile</artifactId>
-    <version>0.2.2</version>
+    <version>0.2.3</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -30,7 +30,7 @@
         <!-- OpenLiberty runtime -->
         <liberty.groupId>io.openliberty</liberty.groupId>
         <liberty.artifactId>openliberty-runtime</liberty.artifactId>
-        <version.openliberty-runtime>19.0.0.5</version.openliberty-runtime>
+        <version.openliberty-runtime>19.0.0.6</version.openliberty-runtime>
         <http.port>9080</http.port>
         <https.port>9443</https.port>
         <packaging.type>usr</packaging.type>
@@ -62,12 +62,12 @@
                     <configuration>
                         <rules>
                             <requireJavaVersion>
-                                <version>[1.8.0-212]</version>
+                                <version>[1.8,1.9)</version>
                             </requireJavaVersion>
                             <requireProperty>
                                 <property>version.openliberty-runtime</property>
-                                <regex>19.0.0.5</regex>
-                                <regexMessage>OpenLiberty runtime version must be 19.0.0.5</regexMessage>
+                                <regex>19.0.0.6</regex>
+                                <regexMessage>OpenLiberty runtime version must be 19.0.0.6</regexMessage>
                             </requireProperty>
                         </rules>
                     </configuration>
