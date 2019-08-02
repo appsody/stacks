@@ -1,7 +1,9 @@
-id: quarkus
-name: Java Application running on Quarkus 
-version: 0.1.0 # version of the stack
-description: A stack containing the Quarkus runtime for running Java applictions
-maintainer: Paul Robinson <probinso@redhat.com>
-default-template: default
+name: Quarkus
+version: 0.1.0
+description: Quarkus runtime for running Java applications
 license: Apache-2.0
+maintainers:
+  - name: Paul Robinson
+    email: probinso@redhat.com
+    github-id: paulrobinson
+default-template: default
