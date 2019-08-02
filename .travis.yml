@@ -10,20 +10,19 @@ services:
   - docker
 
 script:
-  - echo "No lint or test defined."
+  - . ./ci/build.sh .
 
 # note before_deploy will run before each deploy provider
 before_deploy:
-  - ./ci/packageTemplates.sh .
+  - . ./ci/release.sh .
 
 deploy:
   provider: releases
   skip_cleanup: true
-  api_key:
-    secure: IoOz/0+9q6V/LU6WpklMTZ3mR67tTO0TOt7jIdymshVWMngOnHh8AYOKqOHu7QG6n2qU0s0BzH3T7YKh15UgjK3gWfPV2gpXxbZiWky1nKoq3KCtLfd4PBJX/cFCxGXKC+ZbRtMsxtmpkSsUJTPOt8rh7V0A+MxvePpIiXN5FgjW5qSXt5xo+4c4lloGy+6oNAIytS14RdEAvTFLRvVndQboqcHKIZxwWvFhWrgFIQTTsvDYGjBu3w4AFn2LWIvKdR1j9aLv1sU8rPc18+2Y01joBS/SC/MCjoRJNqkPGsP3gyT02uC3SPaP/OyjVzeKjkhruWiqIOIhHM//G1tkhmLD+eRYaI+gaZmn0f48ijzEpDNozOr7zgL1NEeFnOmhz/FitMTsxuv3MSeCJ5rvZLeRVIUaOmS+85w5RBAvFN2K3opKc/2B2D6HU7sjMgG9IDwBR1IyJXsNrQ2d8iFKVEMjuhvSpBrvfjYxCOTYElmLfQdmNFtFPIVOr30MwMxfivPyXHkX29I2aZuP3SrWF5t5zYcEzwDyHNZETr6yGHl7Obimt0yN3YE5AvpJe5iQsHQuKqmAY1pNO4829b7qLFa8b1H6HbkVP2sssBHj0hBkgw4NxYZwhwWblpNT7rVis/DlhJsy0VR1aqhnTaHp9S9j+Hiob/Hj/FCIBxYNk4Y=
-  file: ci/package/*
+  api_key: $GITHUB_TOKEN
+  file: ci/release/*
   file_glob: true
   on:
     tags: true
     repo: appsody/stacks
-
+    branch: master
