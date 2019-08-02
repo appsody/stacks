@@ -1,50 +1,42 @@
 # Stacks Release Process
 
-This document outlines the process for releasing stacks.
+This document outlines the process for building, testing and releasing Appsody stacks. 
 
-## Build release
+`appsody/stacks` contains multiple stacks repos such as `experimental`, `incubator` and `stable`. Each repo includes several stacks. The build process allows you to build and release each stack and indexes for each stack repo. 
 
-When a pull request is opened on the `appsody/stacks` repo the TravisCI is triggered. The Travis builds the Appsody stacks, packages the all the templates and runs the tests for new stacks or stacks that have been modified.
+[Travis-CI](https://travis-ci.org) is configured to build and test the stacks and indexes on GitHub pull requests. When a GitHub release is created manually, the built and tested stacks and indexes are published on DockerHub and GitHub releases. 
 
-## Check
+## Build
 
-Firstly this script checks whether the TravisCI has been triggered by a pull request. If the script is running inside a pull request then then the script will check for any modified or new `stack.yaml` files, it will then return a list containing all the `repo/stacks` that have been changed. It will expose that list to an environment variable called **STACKS_LIST**. If the script is been run locally it will return a list of all the stacks to the same environment variable.
+The `build.sh` script is a wrapper created for convenience and covers the process of identifying which stacks need to be built, builds stack images and templates, generates all repo indexes and then tests the stacks and indexes locally. 
+
+### List
+
+This script decides which stacks need to be built and exposes that list as an environment variable called **STACKS_LIST** which contains a space-separated list of `repo/stack`.
 
 Example:
-
 ```
 STACKS_LIST=incubator/nodejs incubator/nodejs-express experimental/nodejs-functions
 ```
 
-## Package
+The script makes use of several Travis environment variables to determine which stacks should be built:
+1. In a pull request build, it lists stacks with modified or new `stack.yaml` files
+1. In a release build, it looks at the release tag and builds only the stack with matching id.
+1. If none of these criteria is matched, it will include all stacks.
 
-At the moment the script iterates over each repository (experimental incubator stable) and creates an index for each repository (**stable**, **incubator** and **experimental**) . It then utilises the **STACK_LIST** ennvironment variable that is exposed by the [check script](#check-script)  and does a **docker build** only for the stacks in that list. It then updates the **index.yaml** files pointing to the newly built images. The templates are packaged and built for for every stack.
+### Package
 
-## Test
+`package.sh` script iterates over each repository (`experimental incubator stable`) and creates indexes for each repository. The indexes are based on `stack.yaml` file for each stack. It then iterates over the **STACKS_LIST** environment variable and for each stack does the following:
+- build docker image of the stack
+- tags the images with right labels based on the stack version
+- create template archives for each template
 
-Uses the assets in the test directory and runs stacks tests...
+### Test
+
+`test.sh` script is currently being implemented. https://careers.ibm.com/ShowJob/Id/715502/Software-Engineer-Event-Services/ and run test for each stack using the assets created by the `package.sh` script.
 
 ## Release
 
-To kick off a stacks release go to the releases section of the stacks repository. You should tag the release witht the stack you want to release, for example: `java-microprifle:0.3.0`. The release script will pick up the tag and only build and release the stack you have specified in the release tag. each release includes the three `index.yaml` files and the packaged template of the stack you have released. Additionally it builds the latest, the lastest major version, the latest minor version and the latest patch version of the stack and pushes them to the [appsody docker hub](https://hub.docker.com/u/appsody) registry. 
+ The release process is invoked when a GitHub release is created with a tag manually. The tag must follow the `<name>-v<version>` format, for example: `java-microprofile-v0.2.1`. Currently, we create a release for each stack version. This triggers a Travis that builds, tests and publishes the stack being released. 
 
-At the moment we mark each release as a pre-release because...
-
-## Local Release
-
-clone the stacks repo
-```bash
-git clone https://github.com/appsody/stacks.git
-```
-
-whilst inside the ci folder run build script and specify the root directory
-```bash
-. ./build.sh ../
-```
-
-to run each section individually run
-```
-
-```
-
-## Limitations
+`release.sh` script iterates over the **STACKS_LIST** environment variable to determine which stack need to be released and then publishes the template archives for that stack as GitHub release assets and publishes the stack images on [Appsody dockerhub]((https://hub.docker.com/u/appsody). It also publishes all repo indexes as GitHub release assets.
