@@ -2,6 +2,8 @@
 
 #### Constant variables
 # use -count=1 to disable cache and -p=1 to stream output live
+# EXPORTVAR := export APPSODY_STACKS=incubator/nodejs-express,incubator/java-microprofile
+# EXPORTVAR := export APPSODY_STACKS=incubator/terrence
 GO_TEST_COMMAND := go test -v -count=1 -p=1
 # Set a default VERSION only if it is not already set
 VERSION ?= 0.0.0
@@ -34,16 +36,42 @@ all: lint test package ## Run lint, test, build, and package
 get-cli: ## get cli code from repo
 	#wget https://github.com/appsody/appsody/archive/0.2.5.zip
 	#unzip 0.2.5.zip
-	go env GOPATH
-	mkdir -p /home/travis/gopath/src/github.com/appsody
-	cd /home/travis/gopath/src/github.com/appsody && git clone https://github.com/tnixa/appsody.git
-	cd /home/travis/gopath/src/github.com/appsody/appsody && make install-controller
-	cd /home/travis/gopath/src/github.com/appsody/appsody/functest && go test
 
+	# this way was working as of 7/24/19...
+	# go env GOPATH
+	# mkdir -p /home/travis/gopath/src/github.com/appsody
+	# cd /home/travis/gopath/src/github.com/appsody && git clone https://github.com/tnixa/appsody.git
+	# cd /home/travis/gopath/src/github.com/appsody/appsody && git checkout testsandbox
+	# cd /home/travis/gopath/src/github.com/appsody/appsody && make install-controller
+	# cd /home/travis/gopath/src/github.com/appsody/appsody/functest && go test
+
+	# try new way with vendor path...
 	
+	go env GOPATH
+	mkdir -p vendor/github.com/appsody
+	cd vendor/github.com/appsody && git clone https://github.com/tnixa/appsody.git
+	cd vendor/github.com/appsody/appsody && git checkout testsandbox
+	cd vendor/github.com/appsody/appsody && make install-controller
+	#unzip 0.2.5.zip -d vendor/github.com/appsody
+	#mv vendor/github.com/appsody/appsody-0.2.5 vendor/github.com/appsody/appsody
+	#$(EXPORTVAR) && cd vendor/github.com/appsody/appsody/functest && go test -v -count=1 -p=1 -run TestParser
+	#go test -v -count=1 -p=1 ./vendor/github.com/appsody/appsody/functest -run TestParser
+
 .PHONY: test
 test: ## Run the all the automated tests
 	$(GO_TEST_COMMAND) ./...  #pass in parameter for which stack to test
+	
+.PHONY: parser-test
+parser-test: ## Run the all the automated tests
+	#$(GO_TEST_COMMAND) ./...  #pass in parameter for which stack to test
+	#$(EXPORTVAR) && cd vendor/github.com/appsody/appsody/functest && $(GO_TEST_COMMAND) -run TestParser
+	pwd && cd vendor/github.com/appsody/appsody/functest && $(GO_TEST_COMMAND) -run TestParser
+
+.PHONY: run_simple-test
+run_simple-test: ## Run the all the automated tests
+	#$(GO_TEST_COMMAND) ./...  #pass in parameter for which stack to test
+	#$(EXPORTVAR) && cd vendor/github.com/appsody/appsody/functest && $(GO_TEST_COMMAND) -timeout 12h -run TestRunSimple
+	cd vendor/github.com/appsody/appsody/functest && $(GO_TEST_COMMAND) -timeout 12h -run TestRunSimple
 
 .PHONY: unittest
 unittest: ## Run the automated unit tests

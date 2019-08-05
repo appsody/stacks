@@ -3,30 +3,59 @@ language: go
 go:
   - 1.12.x
 
-go_import_path: github.com/appsody/appsody
-
 os:
   - linux
 
 services:
   - docker
-install:
-  - make get-cli
 
-script:
-  - . ./ci/build.sh .
+# skip the default language's install and script steps, we implement job stages instead
+install: skip
+script: skip
+
+stages:
+  - name: test
+  - name: deploy
+    if: tag IS present
+
+# script:
+#   - . ./ci/build.sh .
+
+get-cli: &get-cli
+  install:
+      - make get-cli
+      - source ci/list.sh .
+      - echo $STACKS_LIST
+      - export STACKSLIST=$STACKS_LIST
+
+test-template: &test-template
+  stage: test
+  <<: *get-cli
+  script: make test      
 
 # note before_deploy will run before each deploy provider
 before_deploy:
   - . ./ci/release.sh .
 
-deploy:
-  provider: releases
-  skip_cleanup: true
-  api_key: $GITHUB_TOKEN
-  file: ci/release/*
-  file_glob: true
-  on:
-    tags: true
-    repo: appsody/stacks
-    branch: master
+jobs:
+  include:
+    - <<: *test-template
+      name: Parser Test on Linux
+      os: linux
+      script: make parser-test
+    - <<: *test-template
+      name: Simple Run Test on Linux
+      os: linux
+      script: make run_simple-test  
+
+  # # - name: Deploy Release
+  #     deploy:
+  #       provider: releases
+  #       skip_cleanup: true
+  #       api_key: $GITHUB_TOKEN
+  #       file: ci/release/*
+  #       file_glob: true
+  #       on:
+  #         tags: true
+  #         repo: appsody/stacks
+  #         # branch: master
