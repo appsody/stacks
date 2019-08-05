@@ -1,69 +1,60 @@
 apiVersion: v1
-generated: 2019-06-24T21:00:00+00:00
 projects:
   java-microprofile:
-  - created: 2019-06-24T21:00:00+00:00
-    description: Microprofile using AdoptOpenJDK and Maven
-    icon: https://
-    keywords:
-    - Java
-    - Microprofile
-    - Maven
-    - Open Liberty
-    name: java-microprofile
+  - updated: 2019-08-02T23:12:19+0000
+    name: Eclipse MicroProfile®
+    version: 0.2.4
+    description: Eclipse MicroProfile using OpenJ9 and Maven
+    license: Apache-2.0
     maintainers:
-    - neeraj.laad@gmail.com
+      - emijiang6@googlemail.com
+      - neeraj.laad@gmail.com
+    default-template: default
     urls:
-    - https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.2/incubator.java-microprofile.templates.default.tar.gz
-    version: 0.2.3
+    - https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.4/incubator.java-microprofile.templates.default.tar.gz
   java-spring-boot2:
-  - created: 2019-06-24T21:00:00+00:00
-    description: Spring Boot using IBM Java SDK and Maven
-    icon: https://
-    keywords:
-    - Java
-    - Spring Boot
-    - Maven
-    name: java-spring-boot2
+  - updated: 2019-08-02T23:12:19+0000
+    name: Spring Boot®
+    version: 0.3.2
+    description: Spring Boot using OpenJ9 and Maven
+    license: Apache-2.0
     maintainers:
-    - schnabel@us.ibm.com
+      - schnabel@us.ibm.com
+    default-template: default
     urls:
     - https://github.com/appsody/stacks/releases/download/java-spring-boot2-v0.3.2/incubator.java-spring-boot2.templates.default.tar.gz
-    version: 0.3.2
-  nodejs:
-  - created: 2019-06-24T21:00:00+00:00
-    description: Node.js Runtime
-    icon: https://
-    keywords:
-    - Node.js
-    name: nodejs
-    maintainers:
-    - neeraj.laad@gmail.com
-    urls:
-    - https://github.com/appsody/stacks/releases/download/nodejs-v0.2.2/incubator.nodejs.templates.simple.tar.gz
-    version: 0.2.2
   nodejs-express:
-  - created: 2019-06-24T21:00:00+00:00
+  - updated: 2019-08-02T23:12:19+0000
+    name: Node.js Express
+    version: 0.2.2
     description: Express web framework for Node.js
-    icon: https://
-    keywords:
-    - Node.js
-    - Express
-    name: nodejs-express
+    license: Apache-2.0
     maintainers:
-    - neeraj.laad@gmail.com
+      - cnbailey@gmail.com
+      - neeraj.laad@gmail.com
+    default-template: simple
     urls:
     - https://github.com/appsody/stacks/releases/download/nodejs-express-v0.2.2/incubator.nodejs-express.templates.simple.tar.gz
+  nodejs:
+  - updated: 2019-08-02T23:12:19+0000
+    name: Node.js
     version: 0.2.2
-  swift:
-  - created: 2019-07-15T12:00:00+00:00
-    description: Swift runtime
-    icon: https://
-    keywords:
-    - Swift
-    name: swift
+    description: Runtime for Node.js applications
+    license: Apache-2.0
     maintainers:
-    - i.partridge@uk.ibm.com
+      - cnbailey@gmail.com
+      - neeraj.laad@gmail.com
+    default-template: simple
+    urls:
+    - https://github.com/appsody/stacks/releases/download/nodejs-v0.2.2/incubator.nodejs.templates.simple.tar.gz
+  swift:
+  - updated: 2019-08-02T23:12:19+0000
+    name: Swift
+    version: 0.1.0
+    description: Runtime for Swift applications
+    license: Apache-2.0
+    maintainers:
+      - i.partridge@uk.ibm.com
+    default-template: simple
     urls:
     - https://github.com/appsody/stacks/releases/download/swift-v0.1.0/incubator.swift.templates.simple.tar.gz
-    version: 0.1.0
