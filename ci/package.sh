@@ -106,7 +106,7 @@ do
                     if [ -d $template_dir ]
                     then
                         template_id=$(basename $template_dir)
-                        template_archive=$repo_name.$stack_id.$template_id.tar.gz
+                        template_archive=$repo_name.$stack_id.templates.$template_id.tar.gz
 
                         if [ $build = true ]
                         then
