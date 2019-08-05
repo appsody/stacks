@@ -24,7 +24,7 @@ stages:
 get-cli: &get-cli
   install:
       - make get-cli
-      - source ci/list.sh .
+      - source ci/build.sh .
       - echo $STACKS_LIST
       - export STACKSLIST=$STACKS_LIST
 
