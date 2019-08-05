@@ -67,4 +67,4 @@ You can verify that this worked by visiting http://0.0.0.0:8080/ and observing t
 
 - Currently there is a problem with `appsody test`. The tests fail due to them not being able to communicate with the Quarkus server. It seems like the 8080 port is not being exposed.
 
-- Documentation on how to attach the debugger using `appsody debug`.
+- Currently there is no configuration or documentation on `appsody debug`.
