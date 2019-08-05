@@ -8,7 +8,7 @@ This stack is based on the `Quarkus 0.18.0` runtime. It allows you to develop ne
 
 See: https://quarkus.io/
 
-`Kubernetes Native Java stack tailored for GraalVM & OpenJDK HotSpot, crafted from the best of breed Java libraries and standards`
+> Kubernetes Native Java stack tailored for GraalVM & OpenJDK HotSpot, crafted from the best of breed Java libraries and standards
 
 ## Templates
 
