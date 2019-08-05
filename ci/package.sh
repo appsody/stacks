@@ -32,18 +32,18 @@ do
     then
         echo -e "\nProcessing repo: $repo_name"
 
-        index_file=$assets_dir/$repo_name-index.yaml
-        index_file_v2=$assets_dir/$repo_name-index-v2.yaml
+        index_file_v1=$assets_dir/$repo_name-index-v1.yaml
+        index_file_v2=$assets_dir/$repo_name-index.yaml
         index_file_test=$assets_dir/$repo_name-index-test.yaml
 
-        echo "apiVersion: v1" > $index_file
-        echo "projects:" >> $index_file
-
-        echo "apiVersion: v1" > $index_file_test
-        echo "projects:" >> $index_file_test
+        echo "apiVersion: v1" > $index_file_v1
+        echo "projects:" >> $index_file_v1
 
         echo "apiVersion: v2" > $index_file_v2
         echo "stacks:" >> $index_file_v2
+
+        echo "apiVersion: v2" > $index_file_test
+        echo "stacks:" >> $index_file_test
 
         # iterate over each stack
         for stack in $repo_dir/*/stack.yaml
@@ -84,22 +84,21 @@ do
                     echo -e "\n- SKIPPING stack: $repo_name/$stack_id"
                 fi
 
-                echo "  $stack_id:" >> $index_file
-                echo "  - updated: $(date -u +'%Y-%m-%dT%H:%M:%S%z')"  >> $index_file
-                sed 's/^/    /' $stack >> $index_file
-                [ -n "$(tail -c1 $index_file)" ] && echo >> $index_file
-                echo "    urls:" >> $index_file
-
-                echo "  $stack_id:" >> $index_file_test
-                echo "  - updated: $(date -u +'%Y-%m-%dT%H:%M:%S%z')"  >> $index_file_test
-                sed 's/^/    /' $stack >> $index_file_test
-                [ -n "$(tail -c1 $index_file_test)" ] && echo >> $index_file_test
-                echo "    urls:" >> $index_file_test
+                echo "  $stack_id:" >> $index_file_v1
+                echo "  - updated: $(date -u +'%Y-%m-%dT%H:%M:%S%z')"  >> $index_file_v1
+                sed 's/^/    /' $stack >> $index_file_v1
+                [ -n "$(tail -c1 $index_file_v1)" ] && echo >> $index_file_v1
+                echo "    urls:" >> $index_file_v1
 
                 echo "  - id: $stack_id" >> $index_file_v2
                 sed 's/^/    /' $stack >> $index_file_v2
                 [ -n "$(tail -c1 $index_file_v2)" ] && echo >> $index_file_v2
                 echo "    templates:" >> $index_file_v2
+
+                echo "  - id: $stack_id" >> $index_file_test
+                sed 's/^/    /' $stack >> $index_file_test
+                [ -n "$(tail -c1 $index_file_test)" ] && echo >> $index_file_test
+                echo "    templates:" >> $index_file_test
 
                 for template_dir in $stack_dir/templates/*/
                 do
@@ -118,10 +117,12 @@ do
                         echo "      - id: $template_id" >> $index_file_v2
                         echo "        url: $release_url/$stack_id-v$stack_version/$template_archive" >> $index_file_v2
 
+                        echo "      - id: $template_id" >> $index_file_test
+                        echo "        url: $release_url/$stack_id-v$stack_version/$template_archive" >> $index_file_test
+
                         if [ $i -eq 0 ]
                         then
-                            echo "    - $release_url/$stack_id-v$stack_version/$template_archive" >> $index_file
-                            echo "    - file://$assets_dir/$template_archive" >> $index_file_test
+                            echo "    - $release_url/$stack_id-v$stack_version/$template_archive" >> $index_file_v1
                             ((i+=1))
                         fi
                     fi
