@@ -14,16 +14,11 @@ install:
   - make get-cli
 
 script:
-<<<<<<< HEAD
-  - make test
- 
-=======
   - . ./ci/build.sh .
 
 # note before_deploy will run before each deploy provider
 before_deploy:
   - . ./ci/release.sh .
->>>>>>> upstream/master
 
 deploy:
   provider: releases
