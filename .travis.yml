@@ -26,7 +26,8 @@ get-cli: &get-cli
       - make get-cli
       - source ci/build.sh .
       - echo $STACKS_LIST
-      - export STACKSLIST=$STACKS_LIST
+      - export STACKSLIST=incubator/nodejs
+      # - export STACKSLIST=$STACKS_LIST
 
 test-template: &test-template
   stage: test
