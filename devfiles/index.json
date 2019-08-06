@@ -1,32 +1,22 @@
 [
     {
         "displayName": "Appsody Java MicroProfile template",
-        "description": "Microprofile using AdoptOpenJDK and Maven",
+        "description": "Eclipse MicroProfile using OpenJ9 and Maven",
         "language": "java",
         "projectType": "appsodyExtension",
-        "location": "https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.2/incubator.java-microprofile.templates.default.tar.gz",
+        "location": "https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.4/incubator.java-microprofile.templates.default.tar.gz",
         "links": {
             "self": "/devfiles/java-microprofile/devfile.yaml"
         }
     },
     {
         "displayName": "Appsody Spring Boot 2 template",
-        "description": "Spring Boot using IBM Java SDK and Maven",
+        "description": "Spring Boot using OpenJ9 and Maven",
         "language": "java",
         "projectType": "appsodyExtension",
         "location": "https://github.com/appsody/stacks/releases/download/java-spring-boot2-v0.3.2/incubator.java-spring-boot2.templates.default.tar.gz",
         "links": {
             "self": "/devfiles/java-spring-boot2/devfile.yaml"
-        }
-    },
-    {
-        "displayName": "Appsody Node.js template",
-        "description": "Node.js Runtime",
-        "language": "nodejs",
-        "projectType": "appsodyExtension",
-        "location": "https://github.com/appsody/stacks/releases/download/nodejs-v0.2.2/incubator.nodejs.templates.simple.tar.gz",
-        "links": {
-            "self": "/devfiles/nodejs/devfile.yaml"
         }
     },
     {
@@ -40,8 +30,18 @@
         }
     },
     {
+        "displayName": "Appsody Node.js template",
+        "description": "Runtime for Node.js applications",
+        "language": "nodejs",
+        "projectType": "appsodyExtension",
+        "location": "https://github.com/appsody/stacks/releases/download/nodejs-v0.2.2/incubator.nodejs.templates.simple.tar.gz",
+        "links": {
+            "self": "/devfiles/nodejs/devfile.yaml"
+        }
+    },
+    {
         "displayName": "Appsody Swift template",
-        "description": "Swift runtime",
+        "description": "Runtime for Swift applications",
         "language": "swift",
         "projectType": "appsodyExtension",
         "location": "https://github.com/appsody/stacks/releases/download/swift-v0.1.0/incubator.swift.templates.simple.tar.gz",
