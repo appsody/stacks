@@ -39,10 +39,10 @@ Templates are used to create your local project and start your development. When
 
 4. To try out the live reload:
 
-    # Edit ./src/main/resources/META-INF/resources/index.html
-    # Make a change to the HTML
-    # Hit save in your IDE/editor
-    # Refresh the page at http://0.0.0.0:8080/
+    - Edit ./src/main/resources/META-INF/resources/index.html
+    - Make a change to the HTML
+    - Hit save in your IDE/editor
+    - Refresh the page at http://0.0.0.0:8080/
 
 You can also edit `/src/main/java/org/acme/quickstart/GreetingResource.java` and save, the REST API will be live-reloaded on the next invocation.
 
@@ -61,4 +61,10 @@ Running the production container should give you an output similar to:
     2019-07-16 12:43:21,918 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
     ```
 
-You can verify that this worked by visiting http://0.0.0.0:8080/ and observing the welcome page. You can also visit http://0.0.0.0:8080/hello/greeting/paul to try the REST API. 
+You can verify that this worked by visiting http://0.0.0.0:8080/ and observing the welcome page. You can also visit http://0.0.0.0:8080/hello/greeting/paul to try the REST API.
+
+## Known Issues:
+
+- Currently there is a problem with `appsody test`. The tests fail due to them not being able to communicate with the Quarkus server. It seems like the 8080 port is not being exposed.
+
+- Currently there is no configuration or documentation on `appsody debug`.

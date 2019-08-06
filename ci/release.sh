@@ -19,7 +19,7 @@ mkdir -p $release_dir
 # iterate over each asset
 for asset in $assets_dir/*
 do
-    if [[ $asset != *-test.yaml ]] && [[ $asset != *-v2.yaml ]]
+    if [[ $asset != *-test.yaml ]] && [[ $asset != *-v1.yaml ]]
     then
         echo "RELEASING: $asset"
         mv $asset $release_dir
