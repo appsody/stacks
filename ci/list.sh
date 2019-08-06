@@ -10,6 +10,7 @@ fi
 
 base_dir="$(cd "$1" && pwd)"
 
+echo "THIS IS TRAVIS_PULL_REQUEST = " $TRAVIS_PULL_REQUEST
 # check if running on travis pull request or not
 if [ $TRAVIS_PULL_REQUEST ] && [ "$TRAVIS_PULL_REQUEST" != "false" ]
 then
