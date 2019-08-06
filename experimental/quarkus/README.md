@@ -51,15 +51,17 @@ Running `appsody build` will create a production image that typically boots in u
 
 To try this, run:
 
-    ```appsody build
-    docker run -i --rm -p 8080:8080 default:latest
-    ```
+```bash
+appsody build
+docker run -i --rm -p 8080:8080 default:latest
+```
 
 Running the production container should give you an output similar to:
 
-    ```2019-07-16 12:43:21,918 INFO  [io.quarkus] (main) Quarkus 0.18.0 started in 0.006s. Listening on: http://0.0.0.0:8080
-    2019-07-16 12:43:21,918 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
-    ```
+```bash
+2019-07-16 12:43:21,918 INFO  [io.quarkus] (main) Quarkus 0.18.0 started in 0.006s. Listening on: http://0.0.0.0:8080
+2019-07-16 12:43:21,918 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
+```
 
 You can verify that this worked by visiting http://0.0.0.0:8080/ and observing the welcome page. You can also visit http://0.0.0.0:8080/hello/greeting/paul to try the REST API.
 
