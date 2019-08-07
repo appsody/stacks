@@ -26,16 +26,19 @@ then
         fi
     done
 else
+
     if [ $TRAVIS_TAG ]
     then
         stack_id=`echo ${TRAVIS_TAG/-v[0-9]*/}`
         echo "Listing stacks for this release"
+    elif [ -z $STACKS_LIST ]
+    then
+        echo "You need to set a value for the following environment variables:"
     else
         echo "Listing all stacks"
     fi
 
-    repo_list="experimental incubator stable"
-    for repo_name in $repo_list
+    for repo_name in $REPO_LIST
     do
         repo_dir=$base_dir/$repo_name
         if [ -d $repo_dir ]
@@ -60,4 +63,9 @@ fi
 
 # expose environment variable for stacks
 export STACKS_LIST=${STACKS_LIST[@]}
+if [ -z $STACKS_LIST ]
+then 
+echo "STACKS_LIST"
+else
 echo "STACKS_LIST=$STACKS_LIST"
+fi

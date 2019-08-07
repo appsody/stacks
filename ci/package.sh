@@ -6,6 +6,11 @@ if [ -z "$1" ]
 then
     echo "One argument is required and must be the base directory of the repository."
     exit 1
+elif [ -z $DOCKERHUB_ORG] || [ -z $RELEASE_URL ]
+then
+    echo "You need to set a value for the following environment variables:"
+    echo "DOCKERHUB_ORG"
+    echo "RELEASE_URL"
 fi
 
 base_dir="$(cd "$1" && pwd)"
@@ -13,19 +18,12 @@ base_dir="$(cd "$1" && pwd)"
 # directory to store assets for test or release
 assets_dir=$base_dir/ci/assets
 
-# list of repositories to build indexes for
-repo_list="experimental incubator stable"
 
-# url for downloading released assets
-release_url="https://github.com/$TRAVIS_REPO_SLUG/releases/download"
-
-# dockerhub org for publishing stack
-export DOCKERHUB_ORG=appsody
 
 mkdir -p $assets_dir
 
 # iterate over each repo
-for repo_name in $repo_list
+for repo_name in $REPO_LIST
 do
     repo_dir=$base_dir/$repo_name
     if [ -d $repo_dir ]
@@ -115,14 +113,14 @@ do
                         fi
 
                         echo "      - id: $template_id" >> $index_file_v2
-                        echo "        url: $release_url/$stack_id-v$stack_version/$template_archive" >> $index_file_v2
+                        echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$template_archive" >> $index_file_v2
 
                         echo "      - id: $template_id" >> $index_file_test
-                        echo "        url: $release_url/$stack_id-v$stack_version/$template_archive" >> $index_file_test
+                        echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$template_archive" >> $index_file_test
 
                         if [ $i -eq 0 ]
                         then
-                            echo "    - $release_url/$stack_id-v$stack_version/$template_archive" >> $index_file_v1
+                            echo "    - $RELEASE_URL/$stack_id-v$stack_version/$template_archive" >> $index_file_v1
                             ((i+=1))
                         fi
                     fi
