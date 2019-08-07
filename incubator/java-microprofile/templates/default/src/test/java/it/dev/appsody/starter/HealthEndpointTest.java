@@ -16,8 +16,8 @@ import org.junit.Test;
 public class HealthEndpointTest {
     
     private static String baseUrl;
-    private static final String HEALTH_ENDPOINT = "/health";
-    
+    private static final String LIVENESS_ENDPOINT = "/health/live";
+    private static final String READINESS_ENDPOINT = "/health/ready";
     private Client client;
     private Response response;
     
@@ -41,19 +41,31 @@ public class HealthEndpointTest {
     }
 
     @Test
-    public void testHealthEndpoint() {
-        String healthURL = baseUrl + HEALTH_ENDPOINT;
-        response = this.getResponse(baseUrl + HEALTH_ENDPOINT);
+    public void testLivessEndpoint() {
+        checkHealthEndpoint(LIVENESS_ENDPOINT, "alive");
+
+    }
+    
+    @Test
+    public void testReadinessEndpoint() {
+        checkHealthEndpoint(READINESS_ENDPOINT, "ready");
+
+    }
+
+    private void checkHealthEndpoint(String endpoint, String state) {
+        String healthURL = baseUrl + endpoint;
+        response = this.getResponse(healthURL);
         this.assertResponse(healthURL, response);
         
         JsonObject healthJson = response.readEntity(JsonObject.class);
         
         String expectedOutcome = "UP";
-        String actualOutcome = healthJson.getString("outcome");
-        assertEquals("Application should be healthy", expectedOutcome, actualOutcome);
+        String actualOutcome = healthJson.getString("status");
+        assertEquals("Application should be " + state, expectedOutcome, actualOutcome);
         
-        actualOutcome = healthJson.getJsonArray("checks").getJsonObject(0).getString("state");
+        actualOutcome = healthJson.getJsonArray("checks").getJsonObject(0).getString("status");
         assertEquals("First array element was expected to be SystemResource and it wasn't healthy", expectedOutcome, actualOutcome);
+    
     }
     
     /**
