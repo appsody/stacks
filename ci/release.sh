@@ -21,15 +21,18 @@ for asset in $assets_dir/*
 do
     if [[ $asset != *-test.yaml ]] && [[ $asset != *-v1.yaml ]]
     then
-        echo "RELEASING: $asset"
+        echo "Releasing: $asset"
         mv $asset $release_dir
     fi
 done
+
+# dockerhub/docker registry login in
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $DOCKER_REGISTRY
 
 # iterate over each stack
 for repo_stack in $STACKS_LIST
 do
     stack_id=`echo ${repo_stack/*\//}`
     echo "Releasing stack images for: $stack_id"
-    echo "docker push $DOCKERHUB_ORG/$stack_id"
+    docker push $DOCKERHUB_ORG/$stack_id
 done
