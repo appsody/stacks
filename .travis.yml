@@ -26,7 +26,7 @@ get-cli: &get-cli
       - make get-cli
       - source ci/build.sh .
       - echo $STACKS_LIST
-      - export STACKSLIST=incubator/java-microprofile experimental/nodejs-functions incubator/nodejs experimental/nodejs-functions
+      - export STACKSLIST="incubator/java-microprofile experimental/nodejs-functions incubator/nodejs experimental/nodejs-functions"
       #- export STACKSLIST=incubator/nodejs
       #- export STACKSLIST=$STACKS_LIST
 
