@@ -26,7 +26,7 @@ then
     RELEASE_URL="https://github.com/$TRAVIS_REPO_SLUG/releases/download"
 fi
 
-if [ -z $STACK_LIST ]
+if [ -z $STACKS_LIST ]
 then
     . $base_dir/ci/list.sh $base_dir
 fi
