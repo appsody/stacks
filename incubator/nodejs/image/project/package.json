@@ -11,6 +11,6 @@
   "dependencies": {
   },
   "devDependencies": {
-    "appmetrics-dash": "^4.1.0"
+    "appmetrics-dash": "^5.0.0"
   }
 }
