@@ -9,7 +9,7 @@ fi
 
 base_dir="$(cd "$1" && pwd)"
 
-if [ -z $REPO_LIST ]
+if [ -z export $REPO_LIST ]
 then
     REPO_LIST="experimental incubator stable"
 fi
@@ -21,7 +21,7 @@ then
 fi
 
 # url for downloading released assets
-if [ -z $RELEASE_URL ]
+if [ -z export $RELEASE_URL ]
 then
     RELEASE_URL="https://github.com/$TRAVIS_REPO_SLUG/releases/download"
 fi
