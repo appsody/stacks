@@ -11,7 +11,7 @@ fi
 base_dir="$(cd "$1" && pwd)"
 
 # check if running on travis pull request or not
-if [ $TRAVIS_PULL_REQUEST ] && [ "$TRAVIS_PULL_REQUEST" != "false" ]
+if [ $TRAVIS_PULL_REQUEST ] && [ "$TRAVIS_PULL_REQUEST" != "false" ] || [ $TRAVIS_COMMIT_RANGE ]
 then
     # check for changed files
     echo "Listing new/updated stacks in this pull request"
