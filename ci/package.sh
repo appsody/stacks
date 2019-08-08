@@ -17,7 +17,12 @@ assets_dir=$base_dir/ci/assets
 repo_list="experimental incubator stable"
 
 # url for downloading released assets
-release_url="https://github.com/$TRAVIS_REPO_SLUG/releases/download"
+if [ -z "$RELEASE_URL" ]
+then
+  release_url="https://github.com/$TRAVIS_REPO_SLUG/releases/download"
+else
+  release_url=${RELEASE_URL}
+fi
 
 # dockerhub org for publishing stack
 export DOCKERHUB_ORG=appsody
