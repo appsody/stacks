@@ -25,10 +25,14 @@ This template only has a simple `function.js` file which implements the `/` endp
     ```bash
     mkdir my-project
     cd my-project
-    appsody init nodejs-functions
+    appsody init experimental/nodejs-functions
     ```
 
     This will initialize a Node.js Functions project using the default template.
+
+**NOTE:** If you encounter the following error, [configure the experimental repo](#Configuring-Experimental-Repo):
+
+**`[Error] Repository experimental is not in configured list of repositories`**.
 
 2. After your project has been initialized you can then run your application using the following command:
 
@@ -65,3 +69,13 @@ module.exports.get = function(req, res, next) {
 If you wish to have multiple functions as part of your project, simply create an additonal `.js` file in your folder to contain the function.
 
 Note that you can also `require` any modules that you wish to use but adding them to the `package.json` and adding a `require` statement into your function files as you would normally.
+
+## Configuring Experimental Repo
+
+Upgrade your CLI to the latest version and add the experimental repo:
+
+1. `brew upgrade appsody` or for other platforms visit the [upgrading appsody section](https://appsody.dev/docs/getting-started/installation).
+
+2. appsody repo add experimental https://github.com/appsody/stacks/releases/latest/download/experimental-index.yaml
+
+You should now be able to [initialise your application](#Getting-Started). 
