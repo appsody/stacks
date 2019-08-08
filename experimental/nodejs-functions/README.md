@@ -73,10 +73,9 @@ Note that you can also `require` any modules that you wish to use but adding the
 ## Configuring Experimental Repo
 
 Upgrade your CLI to the latest version and add the experimental repo:
-```bash
-1. brew upgrade appsody
+
+1. `brew upgrade appsody` or for other platforms visit the [upgrading appsody section](https://appsody.dev/docs/getting-started/installation).
 
 2. appsody repo add experimental https://github.com/appsody/stacks/releases/latest/download/experimental-index.yaml
 
-3. appsody init experimental/nodejs-functions
-```
+You should now be able to [initialise your application](#Getting-Started). 

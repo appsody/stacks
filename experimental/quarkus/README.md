@@ -78,10 +78,9 @@ You can verify that this worked by visiting http://0.0.0.0:8080/ and observing t
 ## Configuring Experimental Repo
 
 Upgrade your CLI to the latest version and add the experimental repo:
-```bash
-1. brew upgrade appsody
 
-2. appsody repo add experimental https://github.com/appsody/stacks/releases/latest/download/experimental-index.yaml
+1. `brew upgrade appsody` or for other platforms visit the [upgrading appsody section](https://appsody.dev/docs/getting-started/installation).
 
-3. appsody init experimental/quarkus
-```
+2. `appsody repo add experimental https://github.com/appsody/stacks/releases/latest/download/experimental-index.yaml`
+
+You should now be able to [initialise your application](#Getting-Started).
