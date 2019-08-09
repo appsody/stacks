@@ -27,7 +27,7 @@ get-cli: &get-cli
       - source ci/build.sh .
       - echo $STACKS_LIST
       - export STACKSLIST="incubator/java-microprofile experimental/nodejs-functions incubator/nodejs experimental/nodejs-functions"
-      - echo $STACKS_LIST
+      - echo $STACKSLIST
       #- export STACKSLIST=incubator/nodejs
       #- export STACKSLIST=$STACKS_LIST
 
@@ -43,13 +43,9 @@ before_deploy:
 jobs:
   include:
     - <<: *test-template
-      name: Parser Test on Linux
+      name: Stack Tests on Linux
       os: linux
-      script: make parser-test
-    - <<: *test-template
-      name: Simple Run Test on Linux
-      os: linux
-      script: make run_simple-test  
+      script: make stack-tests 
 
   # # - name: Deploy Release
   #     deploy:
