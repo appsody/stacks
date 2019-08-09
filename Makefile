@@ -57,7 +57,7 @@ get-cli: ## get cli code from repo
 	# use tnixa fork if testing locally...
 	cd vendor/github.com/appsody && git clone https://github.com/tnixa/appsody.git
 	cd vendor/github.com/appsody/appsody && git checkout testsandbox
-	
+
 	cd vendor/github.com/appsody/appsody && make install-controller
 	#unzip 0.2.5.zip -d vendor/github.com/appsody
 	#mv vendor/github.com/appsody/appsody-0.2.5 vendor/github.com/appsody/appsody
@@ -65,7 +65,7 @@ get-cli: ## get cli code from repo
 	#go test -v -count=1 -p=1 ./vendor/github.com/appsody/appsody/functest -run TestParser
 
 .PHONY: stack-tests
-run_simple-test: ## Run the all the automated tests
+stack-tests: ## Run the all the automated tests
 	#$(GO_TEST_COMMAND) ./...  #pass in parameter for which stack to test
 	#$(EXPORTVAR) && cd vendor/github.com/appsody/appsody/functest && $(GO_TEST_COMMAND) -timeout 12h -run TestRunSimple
 	cd vendor/github.com/appsody/appsody/functest && $(GO_TEST_COMMAND) -timeout 12h -run TestRunSimple
