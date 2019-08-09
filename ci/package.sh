@@ -17,7 +17,12 @@ assets_dir=$base_dir/ci/assets
 repo_list="experimental incubator stable"
 
 # url for downloading released assets
-release_url="https://github.com/$TRAVIS_REPO_SLUG/releases/download"
+if [ -z "$RELEASE_URL" ]
+then
+  release_url="https://github.com/$TRAVIS_REPO_SLUG/releases/download"
+else
+  release_url=${RELEASE_URL}
+fi
 
 # dockerhub org for publishing stack
 export DOCKERHUB_ORG=appsody
@@ -118,7 +123,7 @@ do
                         echo "        url: $release_url/$stack_id-v$stack_version/$template_archive" >> $index_file_v2
 
                         echo "      - id: $template_id" >> $index_file_test
-                        echo "        url: $release_url/$stack_id-v$stack_version/$template_archive" >> $index_file_test
+                        echo "        url: file://$assets_dir/$template_archive" >> $index_file_test
 
                         if [ $i -eq 0 ]
                         then

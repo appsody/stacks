@@ -21,9 +21,13 @@ Templates are used to create your local project and start your development. When
     ```bash
     mkdir my-project
     cd my-project
-    appsody init quarkus
+    appsody init experimental/quarkus
     ```
     This will initialize a Quarkus project using the default template.
+
+    **NOTE:** If you encounter the following error, [configure the experimental repo](#Configuring-Experimental-Repo):
+
+    **`[Error] Repository experimental is not in configured list of repositories`**.
 
 1. After your project has been initialized you can then run your application using the following command:
 
@@ -70,3 +74,13 @@ You can verify that this worked by visiting http://0.0.0.0:8080/ and observing t
 - Currently there is a problem with `appsody test`. The tests fail due to them not being able to communicate with the Quarkus server. It seems like the 8080 port is not being exposed.
 
 - Currently there is no configuration or documentation on `appsody debug`.
+
+## Configuring Experimental Repo
+
+Upgrade your CLI to the latest version and add the experimental repo:
+
+1. `brew upgrade appsody` or for other platforms visit the [upgrading appsody section](https://appsody.dev/docs/getting-started/installation).
+
+2. `appsody repo add experimental https://github.com/appsody/stacks/releases/latest/download/experimental-index.yaml`
+
+You should now be able to [initialise your application](#Getting-Started).
