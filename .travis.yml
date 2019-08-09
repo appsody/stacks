@@ -26,10 +26,9 @@ get-cli: &get-cli
       - make get-cli
       - source ci/build.sh .
       - echo $STACKS_LIST
-      - export STACKSLIST="incubator/java-microprofile experimental/nodejs-functions incubator/nodejs experimental/nodejs-functions"
-      - echo $STACKSLIST
-      #- export STACKSLIST=incubator/nodejs
-      #- export STACKSLIST=$STACKS_LIST
+      # hard code the STACKSLIST if testing locally...
+      #- export STACKSLIST="incubator/java-microprofile experimental/nodejs-functions incubator/nodejs experimental/nodejs-functions"
+      - export STACKSLIST=$STACKS_LIST
 
 test-template: &test-template
   stage: test
@@ -46,15 +45,15 @@ jobs:
       name: Stack Tests on Linux
       os: linux
       script: make stack-tests 
-
-  # # - name: Deploy Release
-  #     deploy:
-  #       provider: releases
-  #       skip_cleanup: true
-  #       api_key: $GITHUB_TOKEN
-  #       file: ci/release/*
-  #       file_glob: true
-  #       on:
-  #         tags: true
-  #         repo: appsody/stacks
-  #         # branch: master
+    - name: Deploy Release
+      deploy:
+        stage: deploy
+        provider: releases
+        skip_cleanup: true
+        api_key: $GITHUB_TOKEN
+        file: ci/release/*
+        file_glob: true
+        on:
+          tags: true
+          repo: appsody/stacks
+          branch: master
