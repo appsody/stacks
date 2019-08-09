@@ -54,9 +54,10 @@ get-cli: ## get cli code from repo
 	#wget ${CLI_BASE_URL}
 	#unzip ${CLI_ZIP}
 
-	# use tnixa fork if testing locally...
-	cd vendor/github.com/appsody && git clone https://github.com/tnixa/appsody.git
-	cd vendor/github.com/appsody/appsody && git checkout testsandbox
+	# use clone vs wget until the code gets into a release
+	cd vendor/github.com/appsody && git clone https://github.com/appsody/appsody.git
+	#cd vendor/github.com/appsody && git clone https://github.com/tnixa/appsody.git
+	#cd vendor/github.com/appsody/appsody && git checkout testsandbox
 
 	cd vendor/github.com/appsody/appsody && make install-controller
 	#unzip 0.2.5.zip -d vendor/github.com/appsody
