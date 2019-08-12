@@ -1,8 +1,13 @@
 #!/bin/bash
+
 # Get parent pom information (../pom.xml)
 args='export PARENT_GROUP_ID=${project.groupId}; export PARENT_ARTIFACT_ID=${project.artifactId}; export PARENT_VERSION=${project.version}
 export LIBERTY_GROUP_ID=${liberty.groupId}; export LIBERTY_ARTIFACT_ID=${liberty.artifactId}; export LIBERTY_VERSION=${version.openliberty-runtime}'
 eval $(mvn -q -Dexec.executable=echo -Dexec.args="${args}" --non-recursive -f ../pom.xml exec:exec 2>/dev/null)
+
+# Install parent pom
+echo "Installing parent ${PARENT_GROUP_ID}:${PARENT_ARTIFACT_ID}:${PARENT_VERSION}"
+mvn install -Dmaven.repo.local=/mvn/repository -Denforcer.skip=true -f ../pom.xml
 
 # Check child pom for required parent project
 if ! grep -Gz "<parent>.*<groupId>${PARENT_GROUP_ID}</groupId>.*</parent>" pom.xml | grep -Gz "<parent>.*<artifactId>${PARENT_ARTIFACT_ID}</artifactId>.*</parent>" | grep -Gzq "<parent>.*<version>${PARENT_VERSION}</version>.*</parent>"
