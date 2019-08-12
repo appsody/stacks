@@ -5,7 +5,7 @@
         "language": "java",
         "projectType": "appsodyExtension",
         "projectStyle": "Appsody",
-        "location": "https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.4/incubator.java-microprofile.templates.default.tar.gz",
+        "location": "https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.5/incubator.java-microprofile.templates.default.tar.gz",
         "links": {
             "self": "/devfiles/java-microprofile/devfile.yaml"
         }
