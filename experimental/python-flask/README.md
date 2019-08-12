@@ -2,7 +2,8 @@
 
 The Python Flask stack provides a consistent way of developing web applications using [Flask](http://flask.pocoo.org). "Flask is a lightweight WSGI web application framework. It is designed to make getting started quick and easy, with the ability to scale up to complex applications."
 
-This stack is based on Python 3.7 and Flask 0.11.1 and enables health checking and application metrics out of the box. The stack also provides a set of unit tests.
+This stack is based on Python 3.7 and Flask 0.11.1 and enables health checking and application metrics out of the box. The stack also provides a set of unit tests. The stack also uses [flasgger](https://github.com/rochacbruno-archive/flasgger) to auto-generate swagger ui
+documentation and specification.
 
 Remote debugging of applications is enabled during `debug` mode using `ptvsd`, which enables you to connect using the debugger in VS Code. A VS Code debug launch configuration is also provided.
 
@@ -59,5 +60,6 @@ This template only has a simple `__init__.py` file which implements the `/` endp
 1. You should be able to access the following endpoints, as they are exposed by your template application by default:
 
     - Application endpoint: http://localhost:8080/
-    - Health endpoint: http://localhost:3000/health
-    - Metrics endpoint: http://localhost:3000/metrics
+    - Health endpoint: http://localhost:8080/health
+    - Metrics endpoint: http://localhost:8080/metrics
+    - Swagger API doc: http://localhost:8080/apidocs
