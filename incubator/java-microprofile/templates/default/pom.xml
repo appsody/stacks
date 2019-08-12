@@ -20,7 +20,7 @@
         <!-- Open Liberty Features -->
         <dependency>
             <groupId>io.openliberty.features</groupId>
-            <artifactId>microProfile-2.2</artifactId>
+            <artifactId>microProfile-3.0</artifactId>
             <type>esa</type>
         </dependency>
         <!-- For tests -->
