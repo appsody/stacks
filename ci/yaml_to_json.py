@@ -5,7 +5,7 @@ import json
 import os
 
 
-with open(os.path.dirname(os.getcwd())+"/index.yaml", 'r') as s, open(os.path.dirname(os.getcwd())+"/index.json", "w") as o:
+with open(os.getcwd()+"/index.yaml", 'r') as s, open(os.getcwd()+"/index.json", "w") as o:
     try:
         doc = yaml.safe_load(s) 
         o.write(json.dumps(doc, sort_keys = True, indent = 2))
