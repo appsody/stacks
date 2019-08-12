@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+# values can also be set for env vars DOCKER_PASSWORD, DOCKER_USERNAME and DOCKER_REGISTRY
+
 if [ -z "$REPO_LIST" ]; then
     export REPO_LIST="experimental incubator stable"
 fi

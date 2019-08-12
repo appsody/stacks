@@ -6,11 +6,6 @@ if [ -z "$1" ]
 then
     echo "One argument is required and must be the base directory of the repository."
     exit 1
-elif [ -z $DOCKERHUB_ORG ] || [ -z $RELEASE_URL ]
-then
-    echo "You need to set a value for the following environment variables:"
-    echo "DOCKERHUB_ORG"
-    echo "RELEASE_URL"
 fi
 
 base_dir="$(cd "$1" && pwd)"
