@@ -7,7 +7,7 @@ import fnmatch
 
 
 # directory to store assets for test or release
-assets_dir = os.getcwd()+"/assets"
+assets_dir = os.getcwd()+"ci/assets"
 
 for file in os.listdir(assets_dir):
     if fnmatch.fnmatch(file, '*index.yaml'): 
