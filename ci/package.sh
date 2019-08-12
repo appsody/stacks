@@ -15,6 +15,8 @@ fi
 
 base_dir="$(cd "$1" && pwd)"
 
+. $base_dir/ci/env.sh
+
 # directory to store assets for test or release
 assets_dir=$base_dir/ci/assets
 

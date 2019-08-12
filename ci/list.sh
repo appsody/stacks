@@ -10,6 +10,8 @@ fi
 
 base_dir="$(cd "$1" && pwd)"
 
+. $base_dir/ci/env.sh
+
 # check if running on travis pull request or not
 if [ $TRAVIS_PULL_REQUEST ] && [ "$TRAVIS_PULL_REQUEST" != "false" ]
 then
@@ -31,9 +33,6 @@ else
     then
         stack_id=`echo ${TRAVIS_TAG/-v[0-9]*/}`
         echo "Listing stacks for this release"
-    elif [ -z $STACKS_LIST ]
-    then
-        echo "You need to set a value for the following environment variables:"
     else
         echo "Listing all stacks"
     fi
@@ -63,9 +62,4 @@ fi
 
 # expose environment variable for stacks
 export STACKS_LIST=${STACKS_LIST[@]}
-if [ -z $STACKS_LIST ]
-then 
-echo "STACKS_LIST"
-else
 echo "STACKS_LIST=$STACKS_LIST"
-fi
