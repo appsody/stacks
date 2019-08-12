@@ -8,3 +8,5 @@
 **/.settings
 **/.project
 .*.swp
+__pycache__/
+*.py[cod]
