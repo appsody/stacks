@@ -2,16 +2,15 @@ package dev.appsody.starter.health;
 
 import javax.enterprise.context.ApplicationScoped;
 
-
-import org.eclipse.microprofile.health.Health;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.Liveness;
 
-@Health
+@Liveness
 @ApplicationScoped
-public class StarterHealth implements HealthCheck {
+public class StarterLivenessCheck implements HealthCheck {
 
-    private boolean isHealthy() {
+    private boolean isAlive() {
         // perform health checks here
 
         return true;
@@ -19,8 +18,8 @@ public class StarterHealth implements HealthCheck {
 	
     @Override
     public HealthCheckResponse call() {
-        boolean up = isHealthy();
-        return HealthCheckResponse.named("StarterService").state(up).build();
+        boolean up = isAlive();
+        return HealthCheckResponse.named(this.getClass().getSimpleName()).state(up).build();
     }
     
 }
