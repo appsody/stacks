@@ -14,7 +14,7 @@
 
     <groupId>dev.appsody</groupId>
     <artifactId>java-microprofile</artifactId>
-    <version>0.2.5</version>
+    <version>0.2.6</version>
     <packaging>pom</packaging>
 
     <properties>
