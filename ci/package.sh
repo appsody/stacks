@@ -15,8 +15,6 @@ base_dir="$(cd "$1" && pwd)"
 # directory to store assets for test or release
 assets_dir=$base_dir/ci/assets
 
-
-
 mkdir -p $assets_dir
 
 # iterate over each repo
@@ -113,7 +111,7 @@ do
                         echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$template_archive" >> $index_file_v2
 
                         echo "      - id: $template_id" >> $index_file_test
-                        echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$template_archive" >> $index_file_test
+                        echo "        url: file://$assets_dir/$template_archive" >> $index_file_test
 
                         if [ $i -eq 0 ]
                         then

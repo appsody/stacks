@@ -12,13 +12,14 @@ This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open 
 
 Templates are used to create your local project and start your development. When initializing your project you will be provided with an Open Liberty template application.
 
-The default template provides a `pom.xml` file that references the parent POM defined by the stack and enables Liberty features that support [Eclipse MicroProfile 2.2](https://openliberty.io/docs/ref/feature/#microProfile-2.2.html). Specifically, this template includes:
+The default template provides a `pom.xml` file that references the parent POM defined by the stack and enables Liberty features that support [Eclipse MicroProfile 3.0](https://openliberty.io/docs/ref/feature/#microProfile-3.0.html). Specifically, this template includes:
 
 ### Health
 
-The `mpHealth` feature allows services to report their health - UP if it is available and DOWN if it is unavailable. It then publishes the status from each service along with the overall health status to a defined endpoint `/health`. A service orchestrator can then use the health statuses to make decisions.
+The `mpHealth` feature allows services to report their readiness and liveness status - UP if it is ready or alive and DOWN if it is not ready/alive. It publishes two corresponding endpoints to communicate the status of liveness and readiness. A service orchestrator can then use the health statuses to make decisions.
 
-Health endpoint: http://localhost:9080/health
+Liveness endpoint: http://localhost:9080/health/live
+Readiness endpoint: http://localhost:9080/health/ready
 
 ### Metrics
 
