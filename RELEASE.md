@@ -31,6 +31,12 @@ The Appsody stacks are made available by creating a tagged GitHub release. Follo
 1. Untick _This is a pre-release_ checkbox
 1. Click _Edit release_ button
 
+### Update v1 Index
+1. For now we are manually updating the [old appsody stacks index](https://github.com/appsody/stacks/blob/master/index.yaml)
+1. Create a pull request to update this file and update the index manually for the updated stack. Ususally, we only need to update the `version` and `url` fields for the updated stack
+1. Submit the pull request
+1. Once the pull request is approved, merge the changes
+
 
 # Releasing Dependent Stacks
 There is no fixed release schedule for Appsody stacks. Stacks should be released as we merge pull requests in this repo.
