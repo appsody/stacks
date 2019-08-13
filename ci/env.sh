@@ -1,8 +1,9 @@
 #!/bin/bash
 set -e
 
-# values can also be set for env vars DOCKER_PASSWORD, DOCKER_USERNAME and DOCKER_REGISTRY
+# You can set the following environment variables to specify your docker credentials or docker registry: DOCKER_PASSWORD, DOCKER_USERNAME and DOCKER_REGISTRY
 
+#this is the default list of repos that we need to build index for
 if [ -z "$REPO_LIST" ]; then
     export REPO_LIST="experimental incubator stable"
 fi
