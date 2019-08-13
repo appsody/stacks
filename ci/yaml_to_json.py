@@ -11,7 +11,7 @@ assets_dir = os.getcwd() + "/ci/assets"
 
 for file in os.listdir(assets_dir):
   if fnmatch.fnmatch(file, '*index.yaml'):
-    with open(assets_dir + "/" + file, 'r') as s, open(assets_dir + "/" + os.path.splitext(file)[0] + ".json", "w") as o:
+    with open(assets_dir + "/" + file, 'r') as s, open(assets_dir + "/" + os.path.splitext(file)[0] + ".json", 'w') as o:
         try:
             doc = yaml.safe_load(s)
             i = 0
