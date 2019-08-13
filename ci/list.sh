@@ -10,8 +10,10 @@ fi
 
 base_dir="$(cd "$1" && pwd)"
 
+. $base_dir/ci/env.sh
+
 # check if running on travis pull request or not
-if [ $TRAVIS_PULL_REQUEST ] && [ "$TRAVIS_PULL_REQUEST" != "false" ]
+if [ $TRAVIS_PULL_REQUEST ] && [ "$TRAVIS_PULL_REQUEST" != "false" ] || [ $TRAVIS_COMMIT_RANGE ]
 then
     # check for changed files
     echo "Listing new/updated stacks in this pull request"
@@ -26,6 +28,7 @@ then
         fi
     done
 else
+
     if [ $TRAVIS_TAG ]
     then
         stack_id=`echo ${TRAVIS_TAG/-v[0-9]*/}`
@@ -34,8 +37,7 @@ else
         echo "Listing all stacks"
     fi
 
-    repo_list="experimental incubator stable"
-    for repo_name in $repo_list
+    for repo_name in $REPO_LIST
     do
         repo_dir=$base_dir/$repo_name
         if [ -d $repo_dir ]
@@ -44,7 +46,7 @@ else
             do
                 if [ -f $stack_exists ]
                 then
-                    var=`echo $stack_exists | sed 's/.*stacks\///'`
+                    var=`echo ${stack_exists#"$base_dir/"}`
                     repo_stack=`awk '{split($1, a, "/*"); print a[1]"/"a[2]}' <<< $var`
                     if [ $TRAVIS_TAG ] && [[ $repo_stack != */$stack_id ]]
                     then

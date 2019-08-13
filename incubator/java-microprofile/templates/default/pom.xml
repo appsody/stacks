@@ -8,7 +8,7 @@
     <parent>
         <groupId>dev.appsody</groupId>
         <artifactId>java-microprofile</artifactId>
-        <version>0.2.4</version>
+        <version>0.2.5</version>
     </parent>
 
     <groupId>dev.appsody.starter.java-microprofile</groupId>
@@ -20,7 +20,7 @@
         <!-- Open Liberty Features -->
         <dependency>
             <groupId>io.openliberty.features</groupId>
-            <artifactId>microProfile-2.2</artifactId>
+            <artifactId>microProfile-3.0</artifactId>
             <type>esa</type>
         </dependency>
         <!-- For tests -->
