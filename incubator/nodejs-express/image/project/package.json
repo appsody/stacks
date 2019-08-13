@@ -22,6 +22,6 @@
     "chai": "^4.2.0",
     "mocha": "~6.1.0",
     "request": "^2.88.0",
-    "appmetrics-dash": "^4.1.0"
+    "appmetrics-dash": "^5.0.0"
   }
 }

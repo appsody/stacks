@@ -9,7 +9,11 @@ fi
 
 base_dir="$(cd "$1" && pwd)"
 
-. $base_dir/ci/list.sh $base_dir
+. $base_dir/ci/env.sh
+
+if [ -z $STACKS_LIST ]; then
+    . $base_dir/ci/list.sh $base_dir
+fi
 . $base_dir/ci/package.sh $base_dir
 python $base_dir/ci/yaml_to_json.py $base_dir
 . $base_dir/ci/test.sh $base_dir
