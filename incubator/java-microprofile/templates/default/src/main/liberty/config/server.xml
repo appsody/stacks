@@ -1,6 +1,6 @@
 <server description="Liberty server">
     <featureManager>
-        <feature>microProfile-2.2</feature>
+        <feature>microProfile-3.0</feature>
     </featureManager>
     <quickStartSecurity userName="admin" userPassword="adminpwd"/>
     <keyStore id="defaultKeyStore" location="key.jks" type="jks" password="mpKeystore"/>
