@@ -69,6 +69,12 @@ The script makes use of several Travis environment variables to determine which 
 1. In a release build, it looks at the release tag and builds only the stack with matching id.
 1. If none of these criteria is matched, it will include all stacks.
 
+### Lint
+
+This script makes use of the **STACKS_LIST** to validate the file structure of the stacks. It verifies that each stack contains the correct directories in the correct places e.g. image and template directory. It also does a check that each stack contains the necessary files e.g. Dockerfile, stack.yaml etc.
+
+If a stack does not adhere to these rules, the lint will fail and exit. Otherwise the build process will continue.
+
 ### Package
 
 `package.sh` script iterates over each repository (`experimental incubator stable`) and creates indexes for each repository. The indexes are based on `stack.yaml` file for each stack. It then iterates over the **STACKS_LIST** environment variable and for each stack does the following:
