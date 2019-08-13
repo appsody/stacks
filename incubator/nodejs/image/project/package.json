@@ -1,6 +1,6 @@
 {
   "name": "nodejs",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "Node.js Stack",
   "license": "Apache-2.0",
   "repository": {
@@ -11,6 +11,6 @@
   "dependencies": {
   },
   "devDependencies": {
-    "appmetrics-dash": "^4.1.0"
+    "appmetrics-dash": "^5.0.0"
   }
 }
