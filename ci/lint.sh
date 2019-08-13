@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+echo ""
+
 if [ -z "$1" ]
 then
     echo "One argument is required and must be the base directory of the stack."
@@ -17,7 +19,6 @@ do
     template_dir="$root_dir/templates/*"
 
     stackName=$(basename -- "$root_dir")
-    ext="${stackName##*.}"
     stackName="${stackName%.*}"
 
     echo "LINTING $stackName"
@@ -30,37 +31,48 @@ do
 
     if [ ! -f $root_dir/stack.yaml ]
     then
-        echo "Missing stack.yaml file in stack directory"
+        echo "MISSING stack.yaml file in stack directory"
         let "fail=fail+1"
 
     elif [ ! -f $root_dir/README.md ]
     then
-        echo "Missing README file in stack directory"
+        echo "MISSING README file in stack directory"
         let "fail=fail+1"
     fi
 
     if [ ! -f $image_dir/Dockerfile-stack ]
     then
-        echo "Missing Dockerfile-stack in image directory"
+        echo "MISSING Dockerfile-stack in image directory"
         let "fail=fail+1"
     fi
 
-    if [ ! -f $project_dir/Dockerfile ]
+    if [ ! -d $project_dir ]
     then
-        echo "Warning: No Dockerfile found in project directory"
+        echo "MISSING project directory (Should be in image)"
+        let "fail=fail+1"
+    else
+        if [ ! -f $project_dir/Dockerfile ]
+        then
+            echo "WARNING: No Dockerfile found in project directory"
+        fi
     fi
 
-    for templates in $template_dir
-    do
-        if [ ! -f $templates/.appsody-config.yaml ]
-        then
-            dirName=$(basename -- "$templates")
-            extension="${dirName##*.}"
-            dirName="${dirName%.*}"
-            echo "No appsody config file found in template: $dirName"
-            let "fail=fail+1"
-        fi
-    done
+    if [ ! -d "$root_dir/templates" ]
+    then
+        echo "No template directories exist (Should be in stack directory)"
+        let "fail=fail+1"
+    else
+        for templates in $template_dir
+        do
+            if [ ! -f $templates/.appsody-config.yaml ]
+            then
+                dirName=$(basename -- "$templates")
+                dirName="${dirName%.*}"
+                echo "No appsody config file found in template: $dirName"
+                let "fail=fail+1"
+            fi
+        done
+    fi
 
     if (($fail > 0));
     then
@@ -68,5 +80,6 @@ do
         exit 1
     else
         echo "LINT PASSED"
+        echo ""
     fi
 done
