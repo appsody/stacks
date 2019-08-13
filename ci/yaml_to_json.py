@@ -7,7 +7,7 @@ import fnmatch
 from collections import OrderedDict 
 
 # directory to store assets for test or release
-assets_dir = os.getcwd() + "/ci/assets"
+assets_dir = os.path.dirname(os.path.abspath("__yaml_to_json.py__")) + "/assets"
 
 for file in os.listdir(assets_dir):
   if fnmatch.fnmatch(file, '*index.yaml'):
@@ -18,13 +18,19 @@ for file in os.listdir(assets_dir):
 
             if (doc['stacks'] != None):
                 for item in doc['stacks']:
-                    res = (OrderedDict([
+                    default = item['default-template']
+
+                    for n in range (0, len(item['templates'])): 
+                        if default == item['templates'][n]['id']:
+                            url = item['templates'][n]['url']
+                    
+                        res = (OrderedDict([
                         ("displayName", item['name']),
                         ("description", item['description']),
-                        ("language", item['id']),
+                        ("language", ""),
                         ("projectType", "appsodyExtension"),
                         ("projectStyle", "Appsody"),
-                        ("location", item['templates'][0]['url']),
+                        ("location", url),
                         ("links", OrderedDict([
                                                 ("self", "/devfiles/" + item['id'] + "/devfile.yaml")
                         ]))
@@ -45,6 +51,9 @@ for file in os.listdir(assets_dir):
                             o.write(",")
 
                 print "Generated " +os.path.splitext(file)[0]+ ".json for " + file
+            
+            else:
+                o.write("None")
 
         except yaml.YAMLError as exc:
             print(exc)
