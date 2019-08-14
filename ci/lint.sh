@@ -5,81 +5,89 @@ echo ""
 
 if [ -z "$1" ]
 then
-    echo "One argument is required and must be the base directory of the stack."
+    echo "One argument is required and must be the base directory of the repository."
     exit 1
 fi
 
 fail=0
+warning=0
 
 for stack_name in $STACKS_LIST
 do
-    root_dir="$(cd "$1" && pwd)/$stack_name"
-    image_dir="$root_dir/image"
+    stack_dir="$1/$stack_name"
+    image_dir="$stack_dir/image"
     project_dir="$image_dir/project"
-    template_dir="$root_dir/templates/*"
+    template_dir="$stack_dir/templates/*"
 
-    stackName=$(basename -- "$root_dir")
+    stackName=$(basename -- "$stack_dir")
     stackName="${stackName%.*}"
 
     echo "LINTING $stackName"
-    
-    if [ ! "$(ls -A $root_dir)" ]
-        then
-            echo "This directory must contain: README, stack.yaml, image directory, and template directory"
-            let "fail=fail+1"
+
+    if [ ! -f $stack_dir/stack.yaml ]
+    then
+        echo "ERROR: Missing stack.yaml file in $stack_dir"
+        let "fail=fail+1"
     fi
 
-    if [ ! -f $root_dir/stack.yaml ]
+    if [ ! -f $stack_dir/README.md ]
     then
-        echo "MISSING stack.yaml file in stack directory"
+        echo "ERROR: Missing README file in $stack_dir"
         let "fail=fail+1"
+    fi
 
-    elif [ ! -f $root_dir/README.md ]
+    if [ ! -d $image_dir ]
     then
-        echo "MISSING README file in stack directory"
+        echo "ERROR: Missing image directory in $stack_dir"
         let "fail=fail+1"
     fi
 
     if [ ! -f $image_dir/Dockerfile-stack ]
     then
-        echo "MISSING Dockerfile-stack in image directory"
+        echo "ERROR: Missing Dockerfile-stack in $image_dir"
         let "fail=fail+1"
     fi
 
     if [ ! -d $project_dir ]
     then
-        echo "MISSING project directory (Should be in image)"
+        echo "ERROR: Missing project directory in $image_dir"
         let "fail=fail+1"
-    else
-        if [ ! -f $project_dir/Dockerfile ]
-        then
-            echo "WARNING: No Dockerfile found in project directory"
-        fi
     fi
 
-    if [ ! -d "$root_dir/templates" ]
+    if [ ! -f $project_dir/Dockerfile ]
     then
-        echo "No template directories exist (Should be in stack directory)"
-        let "fail=fail+1"
-    else
-        for templates in $template_dir
-        do
-            if [ ! -f $templates/.appsody-config.yaml ]
-            then
-                dirName=$(basename -- "$templates")
-                dirName="${dirName%.*}"
-                echo "No appsody config file found in template: $dirName"
-                let "fail=fail+1"
-            fi
-        done
+        echo "WARNING: No Dockerfile found in $project_dir"
+        let "warning=warning+1"
     fi
+
+    if [ ! -d "$stack_dir/templates" ]
+    then
+        echo "ERROR: No template directory found in $stack_dir"
+        let "fail=fail+1"
+    fi
+
+    for template_list in $template_dir
+    do
+        if [ ! -f $template_list/.appsody-config.yaml ]
+        then
+            templateName=$(basename -- "$template_list")
+            templateName="${templateName%.*}"
+            echo "No appsody config file found in template: $templateName"
+            let "fail=fail+1"
+        fi
+    done
 
     if (($fail > 0));
     then
         echo "LINT TEST FAILED"
+        echo ""
+        echo "ERRORS: $fail"
+        echo "WARNINGS: $warning"
         exit 1
     else
-        echo "LINT PASSED"
+        echo "LINT TEST PASSED"
         echo ""
     fi
 done
+
+echo "WARNINGS: $warning"
