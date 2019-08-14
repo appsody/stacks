@@ -17,7 +17,7 @@ for file in os.listdir(assets_dir):
         with open(assets_dir + "/" + file, 'r') as yamlFile, open(assets_dir + "/" + os.path.splitext(file)[0] + ".json", 'w') as jsonFile:
             try:
                 doc = yaml.safe_load(yamlFile)
-                i = 0
+                list = []
 
                 if (doc['stacks'] != None):
                     for item in doc['stacks']:
@@ -28,40 +28,23 @@ for file in os.listdir(assets_dir):
                             if default == item['templates'][n]['id']:
                                 url = item['templates'][n]['url']
 
-                            res = (OrderedDict([
-                                ("displayName", item['name']),
-                                ("description", item['description']),
-                                ("language", ""),
-                                ("projectType", "appsodyExtension"),
-                                ("projectStyle", "Appsody"),
-                                ("location", url),
-                                ("links", OrderedDict([
-                                    ("self", "/devfiles/" +
-                                     item['id'] + "/devfile.yaml")
-                                ]))
+                        # populate stack details
+                        res = (OrderedDict([
+                            ("displayName", "Appsody " + item['name'] + " template"),
+                            ("description", item['description']),
+                            ("language", ""),
+                            ("projectType", "appsodyExtension"),
+                            ("projectStyle", "Appsody"),
+                            ("location", url),
+                            ("links", OrderedDict([
+                                ("self", "/devfiles/" +
+                                    item['id'] + "/devfile.yaml")
                             ]))
+                        ]))
+                        list.append(res)
 
-                        i += 1
-
-                        # formatting output file
-                        if i == 1:
-                            jsonFile.write("[\n")
-                            jsonFile.write(json.dumps(res, indent=5,
-                                               ensure_ascii=False).encode('utf8'))
-                            jsonFile.write(",")
-                        else:
-                            jsonFile.write("\n")
-                            jsonFile.write(json.dumps(res, indent=5,
-                                               ensure_ascii=False).encode('utf8'))
-                            if i == len(doc['stacks']):
-                                jsonFile.write("\n]")
-                            else:
-                                jsonFile.write(",")
-
-                    print "Generated " + os.path.splitext(file)[0] + ".json for " + file
-
-                else:
-                    jsonFile.write("None")
+                jsonFile.write(json.dumps(list, indent=4, ensure_ascii=False).encode('utf8'))
+                print("Generated: " + os.path.splitext(file)[0] + ".json")
 
             except yaml.YAMLError as exc:
                 print(exc)
