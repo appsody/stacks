@@ -22,7 +22,7 @@ for file in os.listdir(assets_dir):
                 if (doc['stacks'] != None):
                     for item in doc['stacks']:
 
-                        # get url for current default template
+                        # get template name 
                         for n in range(0, len(item['templates'])):
                             if len(item['templates'])==1:
                                 template = ""
