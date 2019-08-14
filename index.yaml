@@ -26,7 +26,7 @@ projects:
   nodejs-express:
   - updated: 2019-08-02T23:12:19+0000
     name: Node.js Express
-    version: 0.2.3
+    version: 0.2.2
     description: Express web framework for Node.js
     license: Apache-2.0
     maintainers:
@@ -34,11 +34,11 @@ projects:
       - neeraj.laad@gmail.com
     default-template: simple
     urls:
-    - https://github.com/appsody/stacks/releases/download/nodejs-express-v0.2.3/incubator.nodejs-express.templates.simple.tar.gz
+    - https://github.com/appsody/stacks/releases/download/nodejs-express-v0.2.2/incubator.nodejs-express.templates.simple.tar.gz
   nodejs:
   - updated: 2019-08-02T23:12:19+0000
     name: Node.js
-    version: 0.2.3
+    version: 0.2.2
     description: Runtime for Node.js applications
     license: Apache-2.0
     maintainers:
@@ -46,7 +46,7 @@ projects:
       - neeraj.laad@gmail.com
     default-template: simple
     urls:
-    - https://github.com/appsody/stacks/releases/download/nodejs-v0.2.3/incubator.nodejs.templates.simple.tar.gz
+    - https://github.com/appsody/stacks/releases/download/nodejs-v0.2.2/incubator.nodejs.templates.simple.tar.gz
   swift:
   - updated: 2019-08-02T23:12:19+0000
     name: Swift
