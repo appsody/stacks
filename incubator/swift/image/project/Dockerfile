@@ -10,10 +10,10 @@ RUN apt-get update \
 # Install user-app dependencies
 WORKDIR "/project/user-app"
 COPY ./user-app ./
-RUN echo "#!/bin/bash" > run.sh
-RUN swift build -c release > output.txt
-RUN cat output.txt | awk 'END {print $NF}' >> run.sh
-RUN chmod 755 run.sh
+RUN echo "#!/bin/bash" > run.sh \
+ && swift build -c release > output.txt \
+ && cat output.txt | awk 'END {print $NF}' >> run.sh \
+ && chmod 755 run.sh
 
 FROM swift:5.0-slim
 
