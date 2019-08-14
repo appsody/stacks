@@ -21,27 +21,30 @@ for file in os.listdir(assets_dir):
 
                 if (doc['stacks'] != None):
                     for item in doc['stacks']:
-                        default = item['default-template']
 
                         # get url for current default template
                         for n in range(0, len(item['templates'])):
-                            if default == item['templates'][n]['id']:
-                                url = item['templates'][n]['url']
+                            if len(item['templates'])==1:
+                                template = ""
+                            else:
+                                template = " " + item['templates'][n]['id']
 
-                        # populate stack details
-                        res = (OrderedDict([
-                            ("displayName", "Appsody " + item['name'] + " template"),
-                            ("description", item['description']),
-                            ("language", ""),
-                            ("projectType", "appsodyExtension"),
-                            ("projectStyle", "Appsody"),
-                            ("location", url),
-                            ("links", OrderedDict([
-                                ("self", "/devfiles/" +
-                                    item['id'] + "/devfile.yaml")
+                            # populate stack details
+                            url = item['templates'][n]['url']
+
+                            res = (OrderedDict([
+                                ("displayName", "Appsody " + item['name'] + template),
+                                ("description", item['description']),
+                                ("language", ""),
+                                ("projectType", "appsodyExtension"),
+                                ("projectStyle", "Appsody"),
+                                ("location", url),
+                                ("links", OrderedDict([
+                                    ("self", "/devfiles/" +
+                                        item['id'] + "/devfile.yaml")
+                                ]))
                             ]))
-                        ]))
-                        list.append(res)
+                            list.append(res)
 
                 jsonFile.write(json.dumps(list, indent=4, ensure_ascii=False).encode('utf8'))
                 print("Generated: " + os.path.splitext(file)[0] + ".json")
