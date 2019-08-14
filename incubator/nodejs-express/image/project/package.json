@@ -1,6 +1,6 @@
 {
   "name": "nodejs-express",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "Node.js Express Stack",
   "license": "Apache-2.0",
   "repository": {
@@ -15,12 +15,13 @@
   },
   "dependencies": {
     "@cloudnative/health-connect": "^2.0.0",
-    "appmetrics-prometheus": "^2.0.0",
+    "appmetrics-prometheus": "^3.0.0",
     "express": "~4.16.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "~6.1.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "appmetrics-dash": "^5.0.0"
   }
 }
