@@ -9,7 +9,7 @@ then
     exit 1
 fi
 
-fail=0
+error=0
 warning=0
 
 for stack_name in $STACKS_LIST
@@ -27,43 +27,43 @@ do
     if [ ! -f $stack_dir/stack.yaml ]
     then
         echo "ERROR: Missing stack.yaml file in $stack_dir"
-        let "fail=fail+1"
+        let "error=error+1"
     fi
 
     if [ ! -f $stack_dir/README.md ]
     then
-        echo "ERROR: Missing README file in $stack_dir"
-        let "fail=fail+1"
+        echo "ERROR: Missing README.md file in $stack_dir"
+        let "error=error+1"
     fi
 
     if [ ! -d $image_dir ]
     then
         echo "ERROR: Missing image directory in $stack_dir"
-        let "fail=fail+1"
+        let "error=error+1"
     fi
 
     if [ ! -f $image_dir/Dockerfile-stack ]
     then
         echo "ERROR: Missing Dockerfile-stack in $image_dir"
-        let "fail=fail+1"
+        let "error=error+1"
     fi
 
     if [ ! -d $project_dir ]
     then
         echo "ERROR: Missing project directory in $image_dir"
-        let "fail=fail+1"
+        let "error=error+1"
     fi
 
     if [ ! -f $project_dir/Dockerfile ]
     then
-        echo "WARNING: No Dockerfile found in $project_dir"
+        echo "WARNING: Missing Dockerfile in $project_dir"
         let "warning=warning+1"
     fi
 
     if [ ! -d "$stack_dir/templates" ]
     then
-        echo "ERROR: No template directory found in $stack_dir"
-        let "fail=fail+1"
+        echo "ERROR: Missing template directory in $stack_dir"
+        let "error=error+1"
     fi
 
     for template_list in $template_dir
@@ -72,16 +72,16 @@ do
         then
             templateName=$(basename -- "$template_list")
             templateName="${templateName%.*}"
-            echo "No appsody config file found in template: $templateName"
-            let "fail=fail+1"
+            echo "ERROR: Missing appsody config file in template: $templateName"
+            let "error=error+1"
         fi
     done
 
-    if (($fail > 0));
+    if (($error > 0));
     then
         echo "LINT TEST FAILED"
         echo ""
-        echo "ERRORS: $fail"
+        echo "ERRORS: $error"
         echo "WARNINGS: $warning"
         exit 1
     else
