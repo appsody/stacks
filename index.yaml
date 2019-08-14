@@ -50,11 +50,11 @@ projects:
   swift:
   - updated: 2019-08-02T23:12:19+0000
     name: Swift
-    version: 0.1.0
+    version: 0.1.1
     description: Runtime for Swift applications
     license: Apache-2.0
     maintainers:
       - i.partridge@uk.ibm.com
     default-template: simple
     urls:
-    - https://github.com/appsody/stacks/releases/download/swift-v0.1.0/incubator.swift.templates.simple.tar.gz
+    - https://github.com/appsody/stacks/releases/download/swift-v0.1.1/incubator.swift.templates.simple.tar.gz
