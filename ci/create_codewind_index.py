@@ -10,11 +10,11 @@ from collections import OrderedDict
 base_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
 
 # directory to store assets for test or release
-assets_dir = base_dir + "/assets"
+assets_dir = base_dir + "/assets/"
 
 for file in os.listdir(assets_dir):
     if fnmatch.fnmatch(file, '*index.yaml'):
-        with open(assets_dir + "/" + file, 'r') as yamlFile, open(assets_dir + "/" + os.path.splitext(file)[0] + ".json", 'w') as jsonFile:
+        with open(assets_dir + file, 'r') as yamlFile, open(assets_dir + os.path.splitext(file)[0] + ".json", 'w') as jsonFile:
             try:
                 doc = yaml.safe_load(yamlFile)
                 list = []
@@ -30,15 +30,13 @@ for file in os.listdir(assets_dir):
                                 template = " " + item['templates'][n]['id']
 
                             # populate stack details
-                            url = item['templates'][n]['url']
-
                             res = (OrderedDict([
-                                ("displayName", "Appsody " + item['name'] + template),
+                                ("displayName", "Appsody " + item['name'] + template + " template"),
                                 ("description", item['description']),
                                 ("language", ""),
                                 ("projectType", "appsodyExtension"),
                                 ("projectStyle", "Appsody"),
-                                ("location", url),
+                                ("location", item['templates'][n]['url']),
                                 ("links", OrderedDict([
                                     ("self", "/devfiles/" +
                                         item['id'] + "/devfile.yaml")
