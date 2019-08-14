@@ -1,14 +1,63 @@
-# Stacks Release Process
+# Appsody Stacks Release Process
+A release in this repo represents a new version of a particular stack - denoted by the release tag. It will contain the following assets:
+- archives for all the templates for the released stack on [Appsody stacks GitHub releases](https://github.com/appsody/stacks/releases)
+- latest indexes for each of the repos (`incubator`, `experimental`, `stable`) on [Appsody stacks GitHub releases](https://github.com/appsody/stacks/releases)
+- updated docker images with appropriate tags on [Appsody DockerHub](https://hub.docker.com/u/appsody)
 
-This document outlines the process for building, testing and releasing Appsody stacks. 
+## Steps to create a new stack release
+The Appsody stacks are made available by creating a tagged GitHub release. Follow these steps to create a new release of an Appsody stack:
 
-`appsody/stacks` contains multiple stacks repos such as `experimental`, `incubator` and `stable`. Each repo includes several stacks. The build process allows you to build and release each stack and the indexes for each stack repo. 
+### Trigger the release on GitHub
+1. Navigate to https://github.com/appsody/stacks/releases
+1. Click __Draft a new release__ button
+1. Ensure the target branch is __master__
+1. Define a tag in the format `<stack-id>-v<version>` (example: java-microprofile-v0.2.4)
+1. Set a title in the format `<stack-id> v<version>` (example: java-microprofile v0.2.4)
+1. Describe the notable changes to the stack as release notes
+1. Tick __This is a pre-release__ checkbox
+1. Click __Publish release__ button
 
-[Travis-CI](https://travis-ci.org) is configured to build and test the stacks and indexes on GitHub pull requests. When a GitHub release is created manually, the built and tested stacks and indexes are published on DockerHub and GitHub releases. 
+### Monitor the Travis build
+1. Watch the [Travis build](https://travis-ci.com/appsody/stacks) for the release and ensure it passes
+1. Check the release artefacts to ensure these all exist:
+    - archives for all the templates for the released stack on [GitHub releases](https://github.com/appsody/stacks/releases)
+    - latest indexes for each of the repos (`incubator`, `experimental`, `stable`) on [GitHub releases](https://github.com/appsody/stacks/releases)
+    - updated docker images with appropriate tags on [Appsody DockerHub](https://hub.docker.com/u/appsody)
 
-## Build
+### Update the pre-release
+1. Navigate to https://github.com/appsody/stacks/releases
+1. Click on the title of the pre-release you have just created
+1. Click __Edit release__ button
+1. Untick __This is a pre-release__ checkbox
+1. Click __Update release__ button
 
-The `build.sh` script is a wrapper created for convenience and covers the process of identifying which stacks need to be built, builds stack images and templates, generates all repo indexes and then tests the stacks and indexes locally. 
+### Update v1 Index
+1. For now we are manually updating the [old appsody stacks index](https://github.com/appsody/stacks/blob/master/index.yaml)
+1. Create a pull request to update this file and update the index manually for the updated stack. Usually, we only need to update the `version` and `url` fields for the updated stack
+1. Submit the pull request
+1. Once the pull request is approved, merge the changes
+
+
+# Releasing Dependent Stacks
+There is no fixed release schedule for Appsody stacks. Stacks should be released as we merge pull requests in this repo.
+
+If a stack is extended by another stack, then each new version of the base stack must also result in a new version of the dependent stack. For example, a change to `nodejs` stack will need a new release of `nodejs`, followed by a new release of `nodejs-express` stack.
+
+# Appsody Stacks Release Process - Technical Overview
+
+This document outlines the process for building, testing and releasing Appsody stacks.
+
+`appsody/stacks` contains multiple stacks repos such as `experimental`, `incubator` and `stable`. Each repo includes several stacks. The build process allows you to build and release each stack and the indexes for each stack repo.
+
+[Travis-CI](https://travis-ci.com) is configured to build and test the stacks and indexes on GitHub pull requests. When a GitHub release is created manually, the built and tested stacks and indexes are published on DockerHub and GitHub releases.
+
+## Build Phase
+
+The `build.sh` script is a wrapper created for convenience and covers the process of identifying which stacks need to be built, builds stack images and templates, generates all repo indexes and then tests the stacks and indexes locally.
+
+### Env
+
+The `env.sh` script holds the environment variables that the user can override before running the `build.sh` script. The script uses the default values for the environment variables, if no preset values have been set by the user.
 
 ### List
 
@@ -35,8 +84,10 @@ The script makes use of several Travis environment variables to determine which 
 
 `test.sh` script is currently being implemented. It will run tests for each stack using the assets created by the `package.sh` script.
 
-## Release
+### Create Codewind Index
 
- The release process is invoked when a GitHub release is created with a tag manually. The tag must follow the `<name>-v<version>` format, for example: `java-microprofile-v0.2.1`. Currently, we create a release for each stack version. This triggers a Travis that builds, tests and publishes the stack being released. 
+The `create_codewind_index.py` script generates the `index.json` files from the built stacks' `index.yaml` files, for Codewind to consume Appsody projects.
 
-`release.sh` script iterates over the **STACKS_LIST** environment variable to determine which stack need to be released and then publishes the template archives for that stack as GitHub release assets and publishes the stack images on [Appsody dockerhub](https://hub.docker.com/u/appsody). It also publishes all repo indexes as GitHub release assets.
+## Release Phase
+
+`release.sh` is invoked when a GitHub release is created with a tag manually. This script iterates over the **STACKS_LIST** environment variable to determine which stack(s) need to be released. It then publishes the template archives for those stacks as GitHub release assets and publishes the stack images on [Appsody DockerHub](https://hub.docker.com/u/appsody). It also publishes all repo indexes as GitHub release assets.
