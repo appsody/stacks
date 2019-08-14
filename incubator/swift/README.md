@@ -39,7 +39,7 @@ Templates are used to create your local project and start your development. When
 
 ## Enabling an existing Project
 
-The Swift stack can be used with an existing server-side Swift project in order to provide an interative containerized development and test environment, and to "cloud package" it into an optimized production Docker container.
+The Swift stack can be used with an existing server-side Swift project in order to provide an iterative containerized development and test environment, and to "cloud package" it into an optimized production Docker container.
 
 You can enable an existing project as follows:
 
@@ -49,7 +49,7 @@ You can enable an existing project as follows:
     cd my-project
     ```
     
-2. Initialise your an Appsody project with the Swift stack, but without a template:
+2. Initialize your Appsody project with the Swift stack, but without a template:
 
     ```bash
     appsody init swift --no-template
@@ -65,4 +65,4 @@ You can enable an existing project as follows:
 
     You can continue to edit the application in your preferred IDE (VSCode or other) and your changes will be reflected in the running container within a few seconds.
 
-3. You should see your application run, with logs writtent to the console.
+3. You should see your application run, with logs written to the console.
