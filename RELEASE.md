@@ -2,7 +2,7 @@
 A release in this repo represents a new version of a particular stack - denoted by the release tag. It will contain the following assets:
 - archives for all the templates for the released stack on [Appsody stacks GitHub releases](https://github.com/appsody/stacks/releases)
 - latest indexes for each of the repos (`incubator`, `experimental`, `stable`) on [Appsody stacks GitHub releases](https://github.com/appsody/stacks/releases)
-- updated DockerHub images with appropriate tags on [Appsody DockerHub](https://hub.docker.com/u/appsody)
+- updated docker images with appropriate tags on [Appsody DockerHub](https://hub.docker.com/u/appsody)
 
 ## Steps to create a new stack release
 The Appsody stacks are made available by creating a tagged GitHub release. Follow these steps to create a new release of an Appsody stack:
