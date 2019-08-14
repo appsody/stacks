@@ -14,9 +14,9 @@ assets_dir = base_dir + "/assets"
 
 for file in os.listdir(assets_dir):
     if fnmatch.fnmatch(file, '*index.yaml'):
-        with open(assets_dir + "/" + file, 'r') as s, open(assets_dir + "/" + os.path.splitext(file)[0] + ".json", 'w') as o:
+        with open(assets_dir + "/" + file, 'r') as yamlFile, open(assets_dir + "/" + os.path.splitext(file)[0] + ".json", 'w') as jsonFile:
             try:
-                doc = yaml.safe_load(s)
+                doc = yaml.safe_load(yamlFile)
                 i = 0
 
                 if (doc['stacks'] != None):
@@ -45,23 +45,23 @@ for file in os.listdir(assets_dir):
 
                         # formatting output file
                         if i == 1:
-                            o.write("[\n")
-                            o.write(json.dumps(res, indent=5,
+                            jsonFile.write("[\n")
+                            jsonFile.write(json.dumps(res, indent=5,
                                                ensure_ascii=False).encode('utf8'))
-                            o.write(",")
+                            jsonFile.write(",")
                         else:
-                            o.write("\n")
-                            o.write(json.dumps(res, indent=5,
+                            jsonFile.write("\n")
+                            jsonFile.write(json.dumps(res, indent=5,
                                                ensure_ascii=False).encode('utf8'))
                             if i == len(doc['stacks']):
-                                o.write("\n]")
+                                jsonFile.write("\n]")
                             else:
-                                o.write(",")
+                                jsonFile.write(",")
 
                     print "Generated " + os.path.splitext(file)[0] + ".json for " + file
 
                 else:
-                    o.write("None")
+                    jsonFile.write("None")
 
             except yaml.YAMLError as exc:
                 print(exc)
