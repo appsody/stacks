@@ -1,2 +1,2 @@
 # config file for application development
-stack: appsody/java-quarkus:0.1
+stack: appsody/quarkus:0.1
