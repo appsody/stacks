@@ -55,6 +55,10 @@ This document outlines the process for building, testing and releasing Appsody s
 
 The `build.sh` script is a wrapper created for convenience and covers the process of identifying which stacks need to be built, builds stack images and templates, generates all repo indexes and then tests the stacks and indexes locally.
 
+### Env
+
+The `env.sh` script holds the environment variables that the user can override before running the `build.sh` script. The script uses the default values for the environment variables, if no preset values have been set by the user.
+
 ### List
 
 This script decides which stacks need to be built and exposes that list as an environment variable called **STACKS_LIST** which contains a space-separated list of `repo/stack`.
@@ -79,6 +83,10 @@ The script makes use of several Travis environment variables to determine which 
 ### Test
 
 `test.sh` script is currently being implemented. It will run tests for each stack using the assets created by the `package.sh` script.
+
+### Create Codewind Index
+
+The `create_codewind_index.py` script generates the `index.json` files from the built stacks' `index.yaml` files, for Codewind to consume Appsody projects.
 
 ## Release Phase
 
