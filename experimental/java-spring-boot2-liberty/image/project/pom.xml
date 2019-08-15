@@ -94,7 +94,7 @@
                         <configuration>
                             <rules>
                                 <requireJavaVersion>
-                                    <version>[1.8.0-212]</version>
+                                    <version>[1.8,1.9)</version>
                                 </requireJavaVersion>
                                 <requireProperty>
                                     <property>version.openliberty-runtime</property>
