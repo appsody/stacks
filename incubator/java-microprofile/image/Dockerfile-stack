@@ -20,7 +20,7 @@ ENV APPSODY_DEPS=
 
 # ENV APPSODY_WATCH_DIR=/project/src
 # ENV APPSODY_WATCH_IGNORE_DIR=
-# ENV APPSODY_WATCH_REGEX=""
+ENV APPSODY_WATCH_REGEX="^.*(.xml|.java)$"
 
 ENV APPSODY_INSTALL="../validate.sh && mvn -Dmaven.repo.local=/mvn/repository install -DskipTests"
 
