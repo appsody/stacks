@@ -11,6 +11,8 @@ fi
 
 error=0
 warning=0
+totalError=0
+totalWarn=0
 
 for stack_name in $STACKS_LIST
 do
@@ -62,7 +64,7 @@ do
 
     if [ ! -d "$stack_dir/templates" ]
     then
-        echo "ERROR: Missing template directory in $stack_dir"
+        echo "ERROR: Missing templates directory in $stack_dir"
         let "error=error+1"
     fi
 
@@ -72,7 +74,7 @@ do
         then
             templateName=$(basename -- "$template_list")
             templateName="${templateName%.*}"
-            echo "ERROR: Missing appsody config file in template: $templateName"
+            echo "ERROR: Missing appsody config file in template: $project_dir/templates/$templateName"
             let "error=error+1"
         fi
     done
@@ -80,14 +82,27 @@ do
     if (($error > 0));
     then
         echo "LINT TEST FAILED"
-        echo ""
         echo "ERRORS: $error"
         echo "WARNINGS: $warning"
-        exit 1
+        echo ""
+        let "totalError=error+totalError"
+        let "totalWarn=warning+totalWarn"
+        error=0
+        warning=0
     else
         echo "LINT TEST PASSED"
+        echo "WARNINGS: $warning"
         echo ""
+        let "totalWarn=warning+totalWarn"
+        warning=0
     fi
 done
 
-echo "WARNINGS: $warning"
+echo "TOTAL ERRORS: $totalError"
+echo "TOTAL WARNINGS: $totalWarn"
+
+if (($totalError > 0))
+then
+    echo "LINT TEST FAILED: FIX ERRORS"
+    exit 1
+fi
