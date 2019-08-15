@@ -1,0 +1,13 @@
+id: java-spring-boot2-liberty
+name: Java Spring Boot2 application built using Maven on OpenLiberty
+version: 0.1.0
+description:  Sample Java Spring Boot2 application built using Maven on OpenLiberty
+icon: https://
+keywords:
+- Java
+- Spring Boot 2
+- Maven
+- Open Liberty
+maintainer: Ozzy <ozzy@ca.ibm.com>
+default-template: default
+license: Apache-2.0
