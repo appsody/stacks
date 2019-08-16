@@ -1,7 +1,8 @@
 name: Eclipse MicroProfile®
-version: 0.2.5
+version: 0.2.6
 description: Eclipse MicroProfile using OpenJ9 and Maven
 license: Apache-2.0
+language: java
 maintainers:
   - name: Emily Jiang
     email: emijiang6@googlemail.com
