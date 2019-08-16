@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-printf "\n\n"
-
 if [ -z "$1" ]
 then
     echo "One argument is required and must be the base directory of the repository."
@@ -24,7 +22,7 @@ do
     stackName=$(basename -- "$stack_dir")
     stackName="${stackName%.*}"
 
-    echo "LINTING $stackName"
+    echo -e "\nLINTING $stackName"
 
     if [ ! -f $stack_dir/stack.yaml ]
     then
@@ -81,26 +79,28 @@ do
 
     if (($error > 0));
     then
-        echo "LINT TEST FAILED"
-        echo "ERRORS: $error"
-        printf "WARNINGS: $warning\n\n"
         let "totalError=error+totalError"
-        let "totalWarn=warning+totalWarn"
-        error=0
-        warning=0
+        echo "LINT FAILED"
+        echo "ERRORS: $error"
     else
-        echo "LINT TEST PASSED"
-        printf "WARNINGS: $warning\n\n"
-        let "totalWarn=warning+totalWarn"
-        warning=0
+        echo "LINT PASSED"
     fi
+
+    if (($warning > 0))
+    then
+        let "totalWarn=warning+totalWarn"
+        echo "WARNINGS: $warning"
+    fi
+
+    warning=0
+    error=0
 done
 
-echo "TOTAL ERRORS: $totalError"
+echo -e "\nTOTAL ERRORS: $totalError"
 echo "TOTAL WARNINGS: $totalWarn"
 
 if (($totalError > 0))
 then
-    echo "LINT TEST FAILED: FIX ERRORS"
+    echo "LINT FAILED: FIX ERRORS"
     exit 1
 fi
