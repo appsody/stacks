@@ -3,7 +3,7 @@ projects:
   java-microprofile:
   - updated: 2019-08-02T23:12:19+0000
     name: Eclipse MicroProfile®
-    version: 0.2.5
+    version: 0.2.6
     description: Eclipse MicroProfile using OpenJ9 and Maven
     license: Apache-2.0
     maintainers:
@@ -11,7 +11,7 @@ projects:
       - neeraj.laad@gmail.com
     default-template: default
     urls:
-    - https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.5/incubator.java-microprofile.templates.default.tar.gz
+    - https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.6/incubator.java-microprofile.templates.default.tar.gz
   java-spring-boot2:
   - updated: 2019-08-02T23:12:19+0000
     name: Spring Boot®

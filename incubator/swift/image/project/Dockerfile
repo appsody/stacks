@@ -3,7 +3,7 @@ FROM swift:5.0 as builder
 
 # Install OS updates
 RUN apt-get update \
- && apt-get install -y libcurl4-openssl-dev libssl-dev \
+ && apt-get install -y zlib1g-dev libcurl4-openssl-dev libssl-dev \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 
@@ -11,7 +11,7 @@ RUN apt-get update \
 WORKDIR "/project/user-app"
 COPY ./user-app ./
 RUN echo "#!/bin/bash" > run.sh \
- && swift build -c release > output.txt \
+ && swift build -c release | tee output.txt \
  && cat output.txt | awk 'END {print $NF}' >> run.sh \
  && chmod 755 run.sh
 
@@ -19,7 +19,6 @@ FROM swift:5.0-slim
 
 # Install OS updates
 RUN apt-get update \
- && apt-get install -y libcurl4-openssl-dev libssl-dev \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 
