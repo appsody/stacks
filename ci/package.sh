@@ -68,6 +68,11 @@ do
                             -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
                             -f $stack_dir/image/Dockerfile-stack $stack_dir/image
                     fi
+
+                    echo "  - id: $stack_id" >> $index_file_local
+                    sed 's/^/    /' $stack >> $index_file_local
+                    [ -n "$(tail -c1 $index_file_local)" ] && echo >> $index_file_local
+                    echo "    templates:" >> $index_file_local
                 else
                     echo -e "\n- SKIPPING stack: $repo_name/$stack_id"
                 fi
@@ -76,11 +81,6 @@ do
                 sed 's/^/    /' $stack >> $index_file
                 [ -n "$(tail -c1 $index_file)" ] && echo >> $index_file
                 echo "    templates:" >> $index_file
-
-                echo "  - id: $stack_id" >> $index_file_local
-                sed 's/^/    /' $stack >> $index_file_local
-                [ -n "$(tail -c1 $index_file_local)" ] && echo >> $index_file_local
-                echo "    templates:" >> $index_file_local
 
                 for template_dir in $stack_dir/templates/*/
                 do
@@ -94,13 +94,13 @@ do
                             # build template archives
                             tar -cz -f $assets_dir/$template_archive -C $template_dir .
                             echo -e "--- Created template archive: $template_archive"
+
+                            echo "      - id: $template_id" >> $index_file_local
+                            echo "        url: file://$assets_dir/$template_archive" >> $index_file_local
                         fi
 
                         echo "      - id: $template_id" >> $index_file
                         echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$template_archive" >> $index_file
-
-                        echo "      - id: $template_id" >> $index_file_local
-                        echo "        url: file://$assets_dir/$template_archive" >> $index_file_local
                     fi
                 done
             fi
