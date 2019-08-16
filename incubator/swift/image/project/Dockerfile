@@ -3,7 +3,8 @@ FROM swift:5.0 as builder
 
 # Install OS updates
 RUN apt-get update \
- && apt-get install -y libcurl4-openssl-dev libssl-dev \
+ && apt-get dist-upgrade -y \
+ && apt-get install -y zlib1g-dev libcurl4-openssl-dev libssl-dev \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 
@@ -19,7 +20,8 @@ FROM swift:5.0-slim
 
 # Install OS updates
 RUN apt-get update \
- && apt-get install -y libcurl4-openssl-dev libssl-dev \
+ && apt-get dist-upgrade -y \
+ && apt-get install -y zlib1g-dev libcurl4-openssl-dev libssl-dev \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 
