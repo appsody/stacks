@@ -12,7 +12,7 @@ RUN apt-get update \
 WORKDIR "/project/user-app"
 COPY ./user-app ./
 RUN echo "#!/bin/bash" > run.sh \
- && swift build -c release > output.txt \
+ && swift build -c release | tee output.txt \
  && cat output.txt | awk 'END {print $NF}' >> run.sh \
  && chmod 755 run.sh
 
