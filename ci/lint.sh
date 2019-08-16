@@ -77,7 +77,7 @@ do
         fi
     done
 
-    if (($error > 0));
+    if (($error > 0))
     then
         let "totalError=error+totalError"
         echo "LINT FAILED"
