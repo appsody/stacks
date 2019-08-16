@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo ""
+printf "\n\n"
 
 if [ -z "$1" ]
 then
@@ -83,16 +83,14 @@ do
     then
         echo "LINT TEST FAILED"
         echo "ERRORS: $error"
-        echo "WARNINGS: $warning"
-        echo ""
+        printf "WARNINGS: $warning\n\n"
         let "totalError=error+totalError"
         let "totalWarn=warning+totalWarn"
         error=0
         warning=0
     else
         echo "LINT TEST PASSED"
-        echo "WARNINGS: $warning"
-        echo ""
+        printf "WARNINGS: $warning\n\n"
         let "totalWarn=warning+totalWarn"
         warning=0
     fi
