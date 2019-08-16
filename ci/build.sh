@@ -17,6 +17,6 @@ fi
 . $base_dir/ci/package.sh $base_dir
 . $base_dir/ci/test.sh $base_dir
 
-if [ "$CODEWIND_JSON" == "true" ]; then
+if [ "$CODEWIND_INDEX" == "true" ]; then
     python $base_dir/ci/create_codewind_index.py $base_dir
 fi
