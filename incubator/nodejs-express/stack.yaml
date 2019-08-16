@@ -2,6 +2,7 @@ name: Node.js Express
 version: 0.2.3
 description: Express web framework for Node.js
 license: Apache-2.0
+language: nodejs
 maintainers:
   - name: Chris Bailey
     email: cnbailey@gmail.com

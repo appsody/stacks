@@ -2,6 +2,7 @@ name: Swift
 version: 0.1.2
 description: Runtime for Swift applications
 license: Apache-2.0
+language: swift
 maintainers:
   - name: Ian Partridge
     email: i.partridge@uk.ibm.com

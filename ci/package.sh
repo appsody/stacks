@@ -25,18 +25,14 @@ do
     then
         echo -e "\nProcessing repo: $repo_name"
 
-        index_file_v1=$assets_dir/$repo_name-index-v1.yaml
-        index_file_v2=$assets_dir/$repo_name-index.yaml
-        index_file_test=$assets_dir/$repo_name-index-test.yaml
+        index_file=$assets_dir/$repo_name-index.yaml
+        index_file_local=$assets_dir/$repo_name-index-local.yaml
 
-        echo "apiVersion: v1" > $index_file_v1
-        echo "projects:" >> $index_file_v1
+        echo "apiVersion: v2" > $index_file
+        echo "stacks:" >> $index_file
 
-        echo "apiVersion: v2" > $index_file_v2
-        echo "stacks:" >> $index_file_v2
-
-        echo "apiVersion: v2" > $index_file_test
-        echo "stacks:" >> $index_file_test
+        echo "apiVersion: v2" > $index_file_local
+        echo "stacks:" >> $index_file_local
 
         # iterate over each stack
         for stack in $repo_dir/*/stack.yaml
@@ -44,7 +40,6 @@ do
             stack_dir=$(dirname $stack)
             if [ -d $stack_dir ]
             then
-                i=0
                 stack_id=$(basename $stack_dir)
                 stack_version=$(awk '/^version *:/ { gsub("version:","",$NF); gsub("\"","",$NF); print $NF}' $stack)
 
@@ -73,25 +68,19 @@ do
                             -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
                             -f $stack_dir/image/Dockerfile-stack $stack_dir/image
                     fi
+
+                    echo "  - id: $stack_id" >> $index_file_local
+                    sed 's/^/    /' $stack >> $index_file_local
+                    [ -n "$(tail -c1 $index_file_local)" ] && echo >> $index_file_local
+                    echo "    templates:" >> $index_file_local
                 else
                     echo -e "\n- SKIPPING stack: $repo_name/$stack_id"
                 fi
 
-                echo "  $stack_id:" >> $index_file_v1
-                echo "  - updated: $(date -u +'%Y-%m-%dT%H:%M:%S%z')"  >> $index_file_v1
-                sed 's/^/    /' $stack >> $index_file_v1
-                [ -n "$(tail -c1 $index_file_v1)" ] && echo >> $index_file_v1
-                echo "    urls:" >> $index_file_v1
-
-                echo "  - id: $stack_id" >> $index_file_v2
-                sed 's/^/    /' $stack >> $index_file_v2
-                [ -n "$(tail -c1 $index_file_v2)" ] && echo >> $index_file_v2
-                echo "    templates:" >> $index_file_v2
-
-                echo "  - id: $stack_id" >> $index_file_test
-                sed 's/^/    /' $stack >> $index_file_test
-                [ -n "$(tail -c1 $index_file_test)" ] && echo >> $index_file_test
-                echo "    templates:" >> $index_file_test
+                echo "  - id: $stack_id" >> $index_file
+                sed 's/^/    /' $stack >> $index_file
+                [ -n "$(tail -c1 $index_file)" ] && echo >> $index_file
+                echo "    templates:" >> $index_file
 
                 for template_dir in $stack_dir/templates/*/
                 do
@@ -105,19 +94,13 @@ do
                             # build template archives
                             tar -cz -f $assets_dir/$template_archive -C $template_dir .
                             echo -e "--- Created template archive: $template_archive"
+
+                            echo "      - id: $template_id" >> $index_file_local
+                            echo "        url: file://$assets_dir/$template_archive" >> $index_file_local
                         fi
 
-                        echo "      - id: $template_id" >> $index_file_v2
-                        echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$template_archive" >> $index_file_v2
-
-                        echo "      - id: $template_id" >> $index_file_test
-                        echo "        url: file://$assets_dir/$template_archive" >> $index_file_test
-
-                        if [ $i -eq 0 ]
-                        then
-                            echo "    - $RELEASE_URL/$stack_id-v$stack_version/$template_archive" >> $index_file_v1
-                            ((i+=1))
-                        fi
+                        echo "      - id: $template_id" >> $index_file
+                        echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$template_archive" >> $index_file
                     fi
                 done
             fi
