@@ -1,6 +1,9 @@
 FROM swift:5.0
 
-RUN apt-get update && apt-get install -y libcurl4-openssl-dev libssl-dev
+RUN apt-get update \
+ && apt-get install -y zlib1g-dev libcurl4-openssl-dev libssl-dev \
+ && apt-get clean \
+ && echo 'Finished installing dependencies'
 
 ENV APPSODY_MOUNTS=/:/project/user-app
 ENV APPSODY_DEPS=/project/user-app/.build
