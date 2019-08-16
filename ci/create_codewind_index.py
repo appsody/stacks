@@ -33,7 +33,7 @@ for file in os.listdir(assets_dir):
                             res = (OrderedDict([
                                 ("displayName", "Appsody " + item['name'] + template + " template"),
                                 ("description", item['description']),
-                                ("language", ""),
+                                ("language", item['language']),
                                 ("projectType", "appsodyExtension"),
                                 ("projectStyle", "Appsody"),
                                 ("location", item['templates'][n]['url']),
