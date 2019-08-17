@@ -20,7 +20,7 @@ ENV APPSODY_DEBUG="python -m ptvsd --host 0.0.0.0 --port 5678 -m flask run --hos
 ENV APPSODY_DEBUG_ON_CHANGE="python -m ptvsd --host 0.0.0.0 --port 5678 -m flask run --host=0.0.0.0 --port=8080"
 ENV APPSODY_DEBUG_KILL=true
 
-ENV APPSODY_TEST="python -m unittest discover -s tests -p "*.py"'"
+ENV APPSODY_TEST="python -m unittest discover -s test -p *.py"
 ENV APPSODY_TEST_ON_CHANGE=""
 ENV APPSODY_TEST_KILL=false
 

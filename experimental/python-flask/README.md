@@ -33,7 +33,7 @@ This stack also comes with Prometheus metrics, which has been preconfigured to w
 
 Templates are used to create your local project and start your development. When initializing your project you will be provided with the simplest Node.js Express application you can write.
 
-This template only has a simple `__init__.py` file which implements the `/` endpoint and returns "Hello from Appsody!".
+This template only has a simple `__init__.py` file which implements the `/hello` endpoint and returns "Hello from Appsody!".
 
 ## Getting Started
 
@@ -59,7 +59,8 @@ This template only has a simple `__init__.py` file which implements the `/` endp
 
 1. You should be able to access the following endpoints, as they are exposed by your template application by default:
 
-    - Application endpoint: http://localhost:8080/
+    - Application root endpoint (will redirect to apidocs): http://localhost:8080/
+    - Application endpoint: http://localhost:8080/hello
     - Health endpoint: http://localhost:8080/health
     - Metrics endpoint: http://localhost:8080/metrics
     - Swagger API doc: http://localhost:8080/apidocs

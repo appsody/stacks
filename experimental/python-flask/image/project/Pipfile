@@ -7,9 +7,8 @@ verify_ssl = true
 
 [packages]
 gunicorn = "==19.7.1"
-ibmcloudenv = "*"
-livereload = "*"
 Flask = "==0.11.1"
+flasgger = "==0.9.3"
 prometheus_client = "*"
 
 [requires]

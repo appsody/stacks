@@ -44,7 +44,7 @@ def HelloWorld():
     """
     return 'hello world'
 
-# It is considerd bad form to return an error for '/', so let's redirect to the apidocs
+# It is considered bad form to return an error for '/', so let's redirect to the apidocs
 @app.route('/')
 def index():
     return redirect('/apidocs')
