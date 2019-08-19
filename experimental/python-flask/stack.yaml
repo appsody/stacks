@@ -1,4 +1,3 @@
-id: python-flask
 name: Python Flask application
 version: 0.2.0
 description: Simple Python Flask application with health checks and application metrics for Prometheus.
