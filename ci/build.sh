@@ -16,6 +16,13 @@ if [ -z $STACKS_LIST ]; then
 fi
 . $base_dir/ci/lint.sh $base_dir
 . $base_dir/ci/package.sh $base_dir
+
+#expose an extension point for build.sh
+if [ -f $base_dir/ci/ext/build.sh ]
+then
+    . $base_dir/ci/ext/build.sh $base_dir
+fi
+
 . $base_dir/ci/test.sh $base_dir
 
 if [ "$CODEWIND_INDEX" == "true" ]; then

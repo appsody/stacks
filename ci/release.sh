@@ -18,6 +18,13 @@ release_dir=$base_dir/ci/release
 
 mkdir -p $release_dir
 
+# expose an extension point for release.sh
+# called prior to processing any of the release assets
+if [ -f $base_dir/ci/ext/release.sh ]
+then
+    . $base_dir/ci/ext/release.sh $base_dir
+fi
+
 # iterate over each asset
 for asset in $assets_dir/*
 do

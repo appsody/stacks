@@ -63,3 +63,9 @@ fi
 # expose environment variable for stacks
 export STACKS_LIST=${STACKS_LIST[@]}
 echo "STACKS_LIST=$STACKS_LIST"
+
+# expose an extension point for list.sh
+if [ -f $base_dir/ci/ext/list.sh ]
+then
+    . $base_dir/ci/ext/list.sh 
+fi
