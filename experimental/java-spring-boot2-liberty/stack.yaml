@@ -1,0 +1,10 @@
+name: Spring Boot® on OpenLiberty
+version: 0.1.0
+description: Spring Boot using OpenJ9, Maven and OpenLiberty
+license: Apache-2.0
+language: java
+maintainers: 
+ - name: Ozzy 
+   email: ozzy@ca.ibm.com
+   github-id: bardweller
+default-template: default
