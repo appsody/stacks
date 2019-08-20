@@ -9,20 +9,13 @@ fi
 
 base_dir="$(cd "$1" && pwd)"
 
-. $base_dir/ci/env.sh
+. $base_dir/ci/env.sh $base_dir
 
 if [ -z $STACKS_LIST ]; then
     . $base_dir/ci/list.sh $base_dir
 fi
 . $base_dir/ci/lint.sh $base_dir
 . $base_dir/ci/package.sh $base_dir
-
-#expose an extension point for build.sh
-if [ -f $base_dir/ci/ext/build.sh ]
-then
-    . $base_dir/ci/ext/build.sh $base_dir
-fi
-
 . $base_dir/ci/test.sh $base_dir
 
 if [ "$CODEWIND_INDEX" == "true" ]; then

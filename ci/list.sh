@@ -10,7 +10,13 @@ fi
 
 base_dir="$(cd "$1" && pwd)"
 
-. $base_dir/ci/env.sh
+. $base_dir/ci/env.sh $base_dir
+
+# expose an extension point for running beforer main 'list' processing
+if [ -f $base_dir/ci/ext/pre_list.sh ]
+then
+    . $base_dir/ci/ext/pre_list.sh $base_dir
+fi
 
 # check if running on travis pull request or not
 if [ $TRAVIS_PULL_REQUEST ] && [ "$TRAVIS_PULL_REQUEST" != "false" ] || [ $TRAVIS_COMMIT_RANGE ]
@@ -64,8 +70,8 @@ fi
 export STACKS_LIST=${STACKS_LIST[@]}
 echo "STACKS_LIST=$STACKS_LIST"
 
-# expose an extension point for list.sh
-if [ -f $base_dir/ci/ext/list.sh ]
+# expose an extension point for running after main 'list' processing
+if [ -f $base_dir/ci/ext/post_list.sh ]
 then
-    . $base_dir/ci/ext/list.sh 
+    . $base_dir/ci/ext/post_list.sh $base_dir 
 fi
