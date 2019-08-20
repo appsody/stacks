@@ -1,0 +1,12 @@
+name: Bazif Stack
+version: 0.2.4
+description: Express web framework for Node.js
+license: Apache-2.0
+maintainers:
+  - name: Chris Bailey
+    email: cnbailey@gmail.com
+    github-id: seabaylea
+  - name: Neeraj Laad
+    email: neeraj.laad@gmail.com
+    github-id: neeraj-laad
+default-template: simple

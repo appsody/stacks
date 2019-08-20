@@ -1,0 +1,20 @@
+{
+  "name": "nodejs-express-simple",
+  "version": "0.1.0",
+  "description": "Simple Node.js Express application",
+  "license": "Apache-2.0",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/appsody/stacks.git",
+    "directory": "incubator/nodejs-express/templates/simple"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "~6.1.0",
+    "request": "^2.88.0"
+  }
+}
