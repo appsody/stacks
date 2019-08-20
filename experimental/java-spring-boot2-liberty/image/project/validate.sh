@@ -23,7 +23,7 @@ fi
 # Check child pom for required liberty version, groupID and artifactId
 if ! grep -Gz "<plugin>.*<artifactId>liberty-maven-plugin</artifactId>.*<groupId>${LIBERTY_GROUP_ID}</groupId>\|<groupId>\${liberty.groupId}</groupId>.*</plugin>" pom.xml | grep -Gz "<plugin>.*<artifactId>liberty-maven-plugin</artifactId>.*<artifactId>${LIBERTY_ARTIFACT_ID}</artifactId>\|<artifactId>\${liberty.artifactId}</artifactId>.*</plugin>" | grep -Gzq "<plugin>.*<artifactId>liberty-maven-plugin</artifactId>.*<version>${LIBERTY_VERSION}</version>\|<version>\${version.openliberty-runtime}</version>.*</plugin>"
 then
-  echo "Project is not using the right OpenLiberty assembly artifact:
+  echo "Project is not using the right Open Liberty assembly artifact:
   <assemblyArtifact>
     <groupId>${LIBERTY_GROUP_ID}</groupId>
     <artifactId>${LIBERTY_ARTIFACT_ID}</artifactId>
