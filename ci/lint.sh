@@ -7,6 +7,14 @@ then
     exit 1
 fi
 
+base_dir="$(cd "$1" && pwd)"
+
+#expose an extension point for running before main 'lint' processing
+if [ -f $base_dir/ci/ext/pre_lint.sh ]
+then
+    . $base_dir/ci/ext/pre_lint.sh $base_dir
+fi
+
 error=0
 warning=0
 totalError=0
@@ -14,7 +22,7 @@ totalWarn=0
 
 for stack_name in $STACKS_LIST
 do
-    stack_dir="$1/$stack_name"
+    stack_dir="$base_dir/$stack_name"
     echo -e "\nLINTING: $stack_name"
 
     if [ ! -d $stack_dir ]
@@ -106,4 +114,10 @@ if (($totalError > 0))
 then
     echo "LINT FAILED: FIX ERRORS"
     exit 1
+fi
+
+#expose an extension point for running after main 'lint' processing
+if [ -f $base_dir/ci/ext/post_lint.sh ]
+then
+    . $base_dir/ci/ext/post_lint.sh $base_dir
 fi
