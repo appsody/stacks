@@ -14,7 +14,7 @@ then
   export STACKS_LIST="$2"
 fi
 
-. $base_dir/ci/env.sh. $base_dir
+. $base_dir/ci/env.sh $base_dir
 
 if [ -z "$STACKS_LIST" ]
 then
