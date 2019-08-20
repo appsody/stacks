@@ -9,11 +9,15 @@ fi
 
 base_dir="$(cd "$1" && pwd)"
 
-export STACKS_LIST="$2"
+if [ -z "$STACKS_LIST" ]
+then
+  export STACKS_LIST="$2"
+fi
 
 . $base_dir/ci/env.sh
 
-if [ -z $STACKS_LIST ]; then
+if [ -z "$STACKS_LIST" ]
+then
   . $base_dir/ci/list.sh $base_dir
 else
   echo "STACKS_LIST=$STACKS_LIST"
