@@ -114,7 +114,7 @@ then
 fi
 
 #expose an extension point for running after main 'lint' processing
-if [ -f $1/ci/ext/post_lint.sh ]
+if [ -f $base_dir/ci/ext/post_lint.sh ]
 then
     . $base_dir/ci/ext/post_lint.sh $base_dir
 fi
