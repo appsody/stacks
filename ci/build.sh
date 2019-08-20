@@ -14,7 +14,7 @@ export STACKS_LIST="$2"
 . $base_dir/ci/env.sh
 
 if [ -z $STACKS_LIST ]; then
-    . $base_dir/ci/list.sh $base_dir
+  . $base_dir/ci/list.sh $base_dir
 else
   echo "STACKS_LIST=$STACKS_LIST"
 fi
