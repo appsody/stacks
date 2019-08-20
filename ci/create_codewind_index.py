@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import yaml
 import json
@@ -14,7 +14,7 @@ assets_dir = base_dir + "/assets/"
 
 for file in os.listdir(assets_dir):
     if fnmatch.fnmatch(file, '*index.yaml'):
-        with open(assets_dir + file, 'r') as yamlFile, open(assets_dir + os.path.splitext(file)[0] + ".json", 'w') as jsonFile:
+        with open(assets_dir + file, 'r') as yamlFile, open(assets_dir + os.path.splitext(file)[0] + ".json", 'wb') as jsonFile:
             try:
                 doc = yaml.safe_load(yamlFile)
                 list = []
