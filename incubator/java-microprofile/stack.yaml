@@ -1,6 +1,6 @@
 name: Eclipse MicroProfile®
 version: 0.2.6
-description: Eclipse MicroProfile using OpenJ9 and Maven
+description: Eclipse MicroProfile on Open Liberty & OpenJ9 using Maven
 license: Apache-2.0
 language: java
 maintainers:
