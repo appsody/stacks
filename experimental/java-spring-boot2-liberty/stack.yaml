@@ -1,6 +1,6 @@
-name: Spring Boot® on OpenLiberty
+name: Spring Boot® on Open Liberty
 version: 0.1.0
-description: Spring Boot using OpenJ9, Maven and OpenLiberty
+description: Spring Boot using OpenJ9, Maven and Open Liberty
 license: Apache-2.0
 language: java
 maintainers: 
