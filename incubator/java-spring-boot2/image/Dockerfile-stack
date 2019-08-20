@@ -18,6 +18,7 @@ RUN cd /usr/lib && \
     rm -f kotlinc/bin/*.bat  
 
 COPY ./project /project
+COPY ./config /config
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 COPY ./mvn-stack-settings.xml /project/.mvn-stack-settings.xml
 

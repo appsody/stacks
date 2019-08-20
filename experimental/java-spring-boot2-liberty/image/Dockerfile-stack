@@ -17,6 +17,7 @@ RUN cd /usr/lib && \
     rm -f kotlinc/bin/*.bat  
 
 COPY ./project /project
+COPY ./config /config
 WORKDIR /project/
 
 RUN mkdir -p /mvn/repository
