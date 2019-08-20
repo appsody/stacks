@@ -11,7 +11,7 @@ RUN  apt-get -qq update \
 
 #setup project folder for java build step
 COPY . /project
-COPY ./.mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
+COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 
 WORKDIR /project/user-app
 
