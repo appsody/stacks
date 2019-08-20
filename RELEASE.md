@@ -31,7 +31,7 @@ The Appsody stacks are made available by creating a tagged GitHub release. Follo
 1. Untick __This is a pre-release__ checkbox
 1. Click __Update release__ button
 
-### Update v1 Index
+### Update v1 Index (Incubator stacks only)
 1. For now we are manually updating the [old appsody stacks index](https://github.com/appsody/stacks/blob/master/index.yaml)
 1. Create a pull request to update this file and update the index manually for the updated stack. Usually, we only need to update the `version` and `url` fields for the updated stack
 1. Submit the pull request

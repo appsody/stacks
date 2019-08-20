@@ -58,3 +58,15 @@ projects:
     default-template: simple
     urls:
     - https://github.com/appsody/stacks/releases/download/swift-v0.1.2/incubator.swift.templates.simple.tar.gz
+  nodejs-loopback:
+  - created: 2019-07-26T21:00:00+00:00
+    name: nodejs-loopback
+    version: 0.1.0
+    description: LoopBack API framework for Node.js
+    keywords:
+    - Node.js
+    - LoopBack
+    maintainers:
+    - enjoyjava@gmail.com
+    urls:
+    - https://github.com/appsody/stacks/releases/download/nodejs-loopback-v0.1.0/incubator.nodejs-loopback.templates.scaffold.tar.gz

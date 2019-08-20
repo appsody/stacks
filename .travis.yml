@@ -10,6 +10,8 @@ services:
   - docker
 
 script:
+  - pyenv global 3.6
+  - pip3 install pyyaml
   - . ./ci/build.sh .
 
 # note before_deploy will run before each deploy provider
