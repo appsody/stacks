@@ -7,7 +7,7 @@ documentation and specification.
 
 Remote debugging of applications is enabled during `debug` mode using `ptvsd`, which enables you to connect using the debugger in VS Code. A VS Code debug launch configuration is also provided.
 
-Note that the use of the Python Flash stack requires that `pipenv` is installed, which is uses for both version management of Python versions (ensuring you are using the same version locally as used in the stack), and to allow you to specify your own dependencies in a Pipfile.
+Note that the use of the Python Flask stack requires that `pipenv` is installed, which is used for both version management of Python versions (ensuring you are using the same version locally as used in the stack), and to allow you to specify your own dependencies in a Pipfile.
 
 ## Health checking
 

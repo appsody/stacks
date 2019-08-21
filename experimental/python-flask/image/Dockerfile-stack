@@ -10,7 +10,7 @@ ENV APPSODY_WATCH_DIR=/project/userapp
 ENV APPSODY_WATCH_IGNORE_DIR=/project/userapp/dependencies
 ENV APPSODY_WATCH_REGEX="^.*.py$"
 
-ENV APPSODY_INSTALL="cd /project/userapp;pipenv lock -r > requirements.txt;python -m pip install -r requirements.txt -t /project/deps;python -m pip install ptvsd -t /project/deps;mkdir -p /project/userapp/dependencies;cp -rf /project/deps/* /project/userapp/dependencies"
+ENV APPSODY_INSTALL="cd /project/userapp;pipenv lock -r > requirements.txt;python -m pip install -r requirements.txt -t /project/deps"
 
 ENV APPSODY_RUN="python -m flask run --host=0.0.0.0 --port=8080"
 ENV APPSODY_RUN_ON_CHANGE="python -m flask run --host=0.0.0.0 --port=8080"
@@ -29,6 +29,7 @@ WORKDIR /project
 RUN pipenv install
 RUN pipenv lock -r > requirements.txt
 RUN python -m pip install -r requirements.txt -t /project/deps
+RUN python -m pip install ptvsd -t /project/deps
 
 # The next line gets round a problem with flasgger in that it has an unnecessary requirement on
 # jsonscheme of < 3.0.0, while other compoenents here need > 3.0.0. This is fixed in flasgger

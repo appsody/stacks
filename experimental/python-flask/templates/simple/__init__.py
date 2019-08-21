@@ -33,16 +33,16 @@ swagger = Swagger(app, template=swagger_template)
 def HelloWorld():
     # To include an endpoint in the swagger ui and specification, we include a docstring that
     # defines the attributes of this endpoint.
-    """A hello world message
-    Example endpoint returning a hello world message
+    """A hello message
+    Example endpoint returning a hello message
     ---
     responses:
       200:
         description: A successful reply
         examples:
-          text/plain: hello world
+          text/plain: Hello from Appsody!
     """
-    return 'hello world'
+    return 'Hello from Appsody!'
 
 # It is considered bad form to return an error for '/', so let's redirect to the apidocs
 @app.route('/')
