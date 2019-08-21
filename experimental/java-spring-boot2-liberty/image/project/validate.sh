@@ -1,4 +1,17 @@
 #!/bin/bash
+
+# Test pom.xml is present and a file.
+if [ ! -f ./pom.xml ]; then
+  echo "Error: Could not find Maven pom.xml
+
+  * The project directory (containing an .appsody-conf.yaml file) must contain a pom.xml file.
+  * On Windows and MacOS, the project directory should also be shared with Docker: 
+    - Win: https://docs.docker.com/docker-for-windows/#shared-drives
+    - Mac: https://docs.docker.com/docker-for-mac/#file-sharing
+  "
+  exit 1   
+fi
+
 # Get parent pom information (../pom.xml)
 args='export PARENT_GROUP_ID=${project.groupId}; export PARENT_ARTIFACT_ID=${project.artifactId}; export PARENT_VERSION=${project.version}
 export LIBERTY_GROUP_ID=${liberty.groupId}; export LIBERTY_ARTIFACT_ID=${liberty.artifactId}; export LIBERTY_VERSION=${version.openliberty-runtime}'
@@ -23,7 +36,7 @@ fi
 # Check child pom for required liberty version, groupID and artifactId
 if ! grep -Gz "<plugin>.*<artifactId>liberty-maven-plugin</artifactId>.*<groupId>${LIBERTY_GROUP_ID}</groupId>\|<groupId>\${liberty.groupId}</groupId>.*</plugin>" pom.xml | grep -Gz "<plugin>.*<artifactId>liberty-maven-plugin</artifactId>.*<artifactId>${LIBERTY_ARTIFACT_ID}</artifactId>\|<artifactId>\${liberty.artifactId}</artifactId>.*</plugin>" | grep -Gzq "<plugin>.*<artifactId>liberty-maven-plugin</artifactId>.*<version>${LIBERTY_VERSION}</version>\|<version>\${version.openliberty-runtime}</version>.*</plugin>"
 then
-  echo "Project is not using the right OpenLiberty assembly artifact:
+  echo "Project is not using the right Open Liberty assembly artifact:
   <assemblyArtifact>
     <groupId>${LIBERTY_GROUP_ID}</groupId>
     <artifactId>${LIBERTY_ARTIFACT_ID}</artifactId>
