@@ -63,7 +63,7 @@ projects:
     name: nodejs-loopback
     version: 0.1.0
     description: LoopBack API framework for Node.js
-    klicense: Apache-2.0
+    license: Apache-2.0
     maintainers:
     - enjoyjava@gmail.com
     default-template: scaffold
