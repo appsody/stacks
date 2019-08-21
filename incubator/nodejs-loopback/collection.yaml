@@ -1,0 +1,5 @@
+default-image: nodejs-loopback
+default-pipeline: default
+images:
+- id: nodejs-loopback
+  image: kabanero/nodejs-loopback:0.1

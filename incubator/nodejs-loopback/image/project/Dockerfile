@@ -1,10 +1,10 @@
-# Install the app dependencies in a full Node docker image
-FROM node:10
+FROM registry.access.redhat.com/ubi8/nodejs-10
+
+USER root
 
 # Install OS updates
-RUN apt-get update \
- && apt-get dist-upgrade -y \
- && apt-get clean \
+RUN yum upgrade -y \
+ && yum clean packages \
  && echo 'Finished installing dependencies'
 
 # Install stack dependencies
@@ -18,14 +18,21 @@ COPY ./user-app/package*.json ./
 RUN npm install --production
 WORKDIR /project/user-app/node_modules
 
-# Copy the dependencies into a slim Node docker image
-FROM node:10-slim
+FROM registry.access.redhat.com/ubi8/nodejs-10
+
+USER root
 
 # Install OS updates
-RUN apt-get update \
- && apt-get dist-upgrade -y \
- && apt-get clean \
+RUN yum upgrade -y \
+ && yum clean packages \
  && echo 'Finished installing dependencies'
+
+RUN groupadd --gid 1000 node \
+  && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
+
+RUN mkdir ~/.npm-global
+
+ENV NPM_CONFIG_PREFIX=~/.npm-global
 
 # Copy the project
 COPY --chown=node:node . /project
