@@ -1,25 +1,65 @@
 FROM maven:3.6-ibmjava-8
-LABEL maintainer="IBM Java Engineering at IBM Cloud"
+
+# passed in via package script
+ARG GIT_ORG_REPO=appsody/stacks
+ARG IMAGE_REGISTRY_ORG=appsody
+ARG STACK_ID=java-spring-boot2
+ARG MAJOR_VERSION=0
+ARG MINOR_VERSION=1
+ARG PATCH_VERSION=0
 
 # Ensure up to date / patched OS
-RUN  apt-get -qq update \
-  && apt-get -qq install -y curl wget xmlstarlet unzip \
-  && DEBIAN_FRONTEND=noninteractive apt-get -qq upgrade -y \
-  && apt-get -qq clean \
-  && rm -rf /tmp/* /var/lib/apt/lists/*
+RUN apt-get -qq update \
+ && apt-get -qq install -y curl wget xmlstarlet unzip \
+ && DEBIAN_FRONTEND=noninteractive apt-get -qq upgrade -y \
+ && apt-get -qq clean \
+ && rm -rf /tmp/* /var/lib/apt/lists/*
 
 COPY ./LICENSE /licenses/
 
+ENV APPSODY_STACK=${IMAGE_REGISTRY_ORG}/${STACK_ID}:${MAJOR_VERSION}.${MINOR_VERSION}
+LABEL appsody.stack="${APPSODY_STACK}"
+
 COPY ./project /project
 COPY ./config /config
+COPY ./templates /templates
+
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 COPY ./mvn-stack-settings.xml /project/mvn-stack-settings.xml
 
-# OSGI core for version range processing
-RUN  /project/util/check_version build
-
+# Resolve templated values in pom and config files
+# For the parent pom:
+# Use the git repository slug as the maven group: appsody/stacks --> dev.appsody.stacks
+# Use the stack id as the maven artifact id: java-spring-boot2
+# Use the passed in version as the mvn artifact version
 WORKDIR /project
-RUN mvn --no-transfer-progress -B -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
+RUN mvn --no-transfer-progress -B -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout) \
+ && export MAVEN_GROUP_ID="dev.$(echo $GIT_ORG_REPO | sed 's|/|.|')" \
+ && export MAVEN_ARTIFACT_ID="${STACK_ID}" \
+ && export MAVEN_ARTIFACT_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" \
+ && export MAVEN_VERSION_RANGE=$(/project/java-spring-boot2-build.sh range "${MAJOR_VERSION}.${MINOR_VERSION}") \
+ && echo ${MAVEN_GROUP_ID}:${MAVEN_ARTIFACT_ID}:${MAVEN_ARTIFACT_VERSION} - ${MAVEN_VERSION_RANGE} \
+ && find /project /templates -name '*pom.xml' -exec \
+      sed -i -e "s|{{MAVEN_GROUP_ID}}|${MAVEN_GROUP_ID}|" \
+             -e "s|{{MAVEN_ARTIFACT_ID}}|${MAVEN_ARTIFACT_ID}|" \
+             -e "s|{{MAVEN_ARTIFACT_VERSION}}|${MAVEN_ARTIFACT_VERSION}|" \
+             -e "s|{{MAVEN_VERSION_RANGE}}|${MAVEN_VERSION_RANGE}|" {} \; \
+ && sed -i -e "s|{{APPSODY_STACK}}|${APPSODY_STACK}|" /project/Dockerfile
+
+# Package templates
+RUN if [ ${MAJOR_VERSION} -eq 0 ]; then \
+      export CONFIG_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}; \
+    else \
+      export CONFIG_VERSION=${MAJOR_VERSION}; \
+    fi \
+ && for x in /templates/*; do \
+      cd $x; \
+      name=$(basename $x); \
+      echo "stack: ${IMAGE_REGISTRY_ORG}/${STACK_ID}:${CONFIG_VERSION}" > .appsody-config.yaml; \
+      tar -czf /templates/${name}.tar.gz --exclude-from=.gitignore .; \
+      cd /templates; \
+      rm -rf $x; \
+      done
 
 WORKDIR /project/user-app
 
@@ -50,4 +90,5 @@ ENV PORT=8080
 EXPOSE 8080
 EXPOSE 5005
 EXPOSE 35729
+
 ENTRYPOINT ["/project/java-spring-boot2-build.sh", "run"]

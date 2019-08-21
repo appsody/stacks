@@ -23,7 +23,11 @@ do
     else
         image_dir="$stack_dir/image"
         project_dir="$image_dir/project"
-        template_dir="$stack_dir/templates/*"
+        templates_dir="$stack_dir/templates/*"
+        if [ -d $stack_dir/image/templates ]
+        then
+            templates_dir=$stack_dir/image/templates
+        fi
 
         if [ ! -f $stack_dir/stack.yaml ]
         then
@@ -67,13 +71,13 @@ do
             let "warning=warning+1"
         fi
 
-        if [ ! -d "$stack_dir/templates" ]
+        if [ ! -d "$templates_dir" ]
         then
             stderr "ERROR: Missing templates directory in $stack_dir"
             let "error=error+1"
         fi
 
-        for template_list in $template_dir
+        for template in "$templates_dir/*"
         do
             if [ -f $template_list/.appsody-config.yaml ]
             then

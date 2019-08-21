@@ -35,11 +35,23 @@ run_mvn () {
   mvn --no-transfer-progress "$@"
 }
 
+mvn_range() {
+  local version=$1
+  local version_major=`echo $version | cut -d. -f1`
+  if [ ${version_major} -gt 0 ]; then
+    ((next=version_major+1))
+    echo "[${version_major},${next})"
+  else
+    local version_minor=`echo $version | cut -d. -f2`
+    ((next=version_minor+1))
+    echo "[${version_major}.${version_minor},${version_major}.${next})"
+  fi
+}
+
 common() {
   # Test pom.xml is present and a file.
   if [ ! -f ./pom.xml ]; then
     error "Could not find Maven pom.xml
-
     * The project directory (containing an .appsody-conf.yaml file) must contain a pom.xml file.
     * On Windows and MacOS, the project directory should also be shared with Docker:
       - Win: https://docs.docker.com/docker-for-windows/#shared-drives
@@ -62,10 +74,7 @@ common() {
   local a_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:groupId" /project/appsody-boot2-pom.xml)
   local a_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:artifactId" /project/appsody-boot2-pom.xml)
   local a_version=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:version" /project/appsody-boot2-pom.xml)
-  local a_major=$(echo ${a_version} | cut -d'.' -f1)
-  local a_minor=$(echo ${a_version} | cut -d'.' -f2)
-  ((next=a_minor+1))
-  local a_range="[${a_major}.${a_minor},${a_major}.${next})"
+  local a_range=$(mvn_range $a_version)
 
   if ! $(mvn -N dependency:get -q -o -Dartifact=${a_groupId}:${a_artifactId}:${a_version} -Dpackaging=pom >/dev/null)
   then
@@ -76,11 +85,14 @@ common() {
 
   local p_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:groupId" pom.xml)
   local p_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:artifactId" pom.xml)
-  local p_version_range=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:version" pom.xml)
+  local p_version=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:version" pom.xml)
 
   # Require parent in pom.xml
-  if [ "${p_groupId}" != "${a_groupId}" ] || [ "${p_artifactId}" != "${a_artifactId}" ]; then
-    error "Project pom.xml is missing the required parent:
+  if [ "${p_groupId}" != "${a_groupId}" ] || [ "${p_artifactId}" != "${a_artifactId}" ] || [ "${p_version}" != "${a_range}" ]; then
+    error "Project is either missing the required parent, or specifies an incompatible version:
+    Current pom.xml specifies parent: $p_groupId:$p_artifactId:$p_version
+
+    Please update the parent declaration in the pom.xml file:
 
     <parent>
       <groupId>${a_groupId}</groupId>
@@ -88,23 +100,7 @@ common() {
       <version>${a_range}</version>
       <relativePath/>
     </parent>
-    "
-    exit 1
-  fi
 
-  if ! /project/util/check_version contains "$p_version_range" "$a_version";  then
-    error "Version mismatch
-
-The version of the appsody stack '${a_version}' does not match the
-parent version specified in pom.xml '${p_version_range}'. Please update
-the parent version in pom.xml, and test your changes.
-
-    <parent>
-      <groupId>${a_groupId}</groupId>
-      <artifactId>${a_artifactId}</artifactId>
-      <version>${a_range}</version>
-      <relativePath/>
-    </parent>
     "
     exit 1
   fi
@@ -161,6 +157,9 @@ case "${ACTION}" in
   test)
     common
     test
+  ;;
+  range)
+    mvn_range $1
   ;;
   *)
     error "Unexpected script usage, expected one of recompile, package, debug, run, test"

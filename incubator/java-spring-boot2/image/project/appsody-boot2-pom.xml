@@ -3,9 +3,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>dev.appsody</groupId>
-  <artifactId>spring-boot2-stack</artifactId>
-  <version>0.3.10</version>
+  <!-- Variables set by Dockerfile-stack -->
+  <groupId>{{MAVEN_GROUP_ID}}</groupId>
+  <artifactId>{{MAVEN_ARTIFACT_ID}}</artifactId>
+  <version>{{MAVEN_ARTIFACT_VERSION}}</version>
+
   <packaging>pom</packaging>
 
   <name>Appsody Spring Boot2 stack</name>
@@ -158,6 +160,7 @@
   <profiles>
     <!-- Activate Spring developer tools when using appsody -->
     <profile>
+<<<<<<< HEAD
         <id>dev</id>
         <activation>
           <property>
@@ -195,7 +198,23 @@
             </plugin>      
           </plugins>          
         </build>
+=======
+      <id>dev</id>
+      <activation>
+        <property>
+          <name>env.APPSODY_RUN</name>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-devtools</artifactId>
+          <optional>true</optional>
+        </dependency>
+      </dependencies>
+>>>>>>> Use the Docker stack image to build templates
     </profile>
+
   </profiles>
 
 </project>

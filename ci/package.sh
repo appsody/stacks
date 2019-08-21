@@ -106,7 +106,15 @@ do
                 [ -n "$(tail -c1 $index_file)" ] && echo >> $index_file
                 echo "    templates:" >> $index_file
 
-                for template_dir in $stack_dir/templates/*/
+                templates_dir=$stack_dir/templates
+                build_mode=tar
+                if [ -d $stack_dir/image/templates ]
+                then
+                    templates_dir=$stack_dir/image/templates
+                    build_mode=extract
+                fi
+
+                for template_dir in $templates_dir/*/
                 do
                     if [ -d $template_dir ]
                     then
@@ -127,16 +135,30 @@ do
                         if [ $build = true ]
                         then
                             # build template archive; include version in the file name
-                            if [ $stack_version_major -gt 0 ]
-                            then
-                                echo "stack: "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major > $template_dir/.appsody-config.yaml
-                            else
-                                echo "stack: "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor > $template_dir/.appsody-config.yaml
-                            fi
+                            case "$build_mode" in
+                              tar)
+                                if [ $stack_version_major -gt 0 ]
+                                then
+                                    echo "stack: "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major > $template_dir/.appsody-config.yaml
+                                else
+                                    echo "stack: "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor > $template_dir/.appsody-config.yaml
+                                fi
+                                tar -cz -f $assets_dir/$versioned_archive -C $template_dir .
+                                rm $template_dir/.appsody-config.yaml
 
-                            tar -cz -f $assets_dir/$versioned_archive -C $template_dir .
-                            rm $template_dir/.appsody-config.yaml
-                            echo -e "--- Created template archive: $versioned_archive"
+                                echo -e "--- Created template archive: $versioned_archive"
+                              ;;
+                              extract)
+                                # extract template archive from image
+                                docker run --rm --entrypoint "" \
+                                    -iv$assets_dir:/host-volume \
+                                    $IMAGE_REGISTRY_ORG/$stack_id sh -c \
+                                     "cp /templates/$template_id.tar.gz /host-volume/$versioned_archive; \
+                                      chown $(id -u):$(id -g) /host-volume/$versioned_archive"
+
+                                echo -e "--- Extracted template archive: $assets_dir/$versioned_archive"
+                              ;;
+                            esac
 
                             # clean up prefetched resources if they exist
                             rm -f $build_dir/prefetch/${old_archive%.tar.gz}*
