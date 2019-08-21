@@ -9,7 +9,7 @@ os:
 services:
   - docker
 
-# skip the default language's install and script steps, we implement job stages instead
+#  skip the default language's install and script steps, we implement job stages instead
 install: skip
 script: skip
 
