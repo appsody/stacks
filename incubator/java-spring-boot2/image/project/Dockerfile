@@ -1,16 +1,16 @@
 FROM registry.access.redhat.com/ubi8/ubi as compile
 
-RUN yum upgrade -y \
-   && yum clean packages \
+RUN yum upgrade --disableplugin=subscription-manager -y \
+   && yum clean --disableplugin=subscription-manager packages \
    && mkdir -p /mvn/repository \
    && echo 'Finished installing dependencies'
 
 # Dependency install
-RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
-   && yum install -y curl unzip xmlstarlet
+RUN yum install --disableplugin=subscription-manager -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+   && yum install --disableplugin=subscription-manager -y curl unzip xmlstarlet
 
 # java8 install
-RUN yum install -y wget ca-certificates
+RUN yum install --disableplugin=subscription-manager -y wget ca-certificates
 ENV JAVA_VERSION 1.8.0_sr5fp37
 
 RUN set -eux; \
@@ -75,10 +75,10 @@ ENV JVM_ARGS=""
 
 #Install openj9 v8
 
-RUN yum upgrade -y \
-   && yum clean packages
+RUN yum upgrade --disableplugin=subscription-manager -y \
+   && yum clean --disableplugin=subscription-manager packages
 
-RUN yum install -y curl ca-certificates
+RUN yum install --disableplugin=subscription-manager -y curl ca-certificates
 
 ENV JAVA_VERSION jdk8u222-b10_openj9-0.15.1
 

@@ -1,11 +1,11 @@
 FROM registry.access.redhat.com/ubi7/ubi
 
-RUN yum upgrade -y \
-   && yum clean packages \
+RUN yum upgrade --disableplugin=subscription-manager -y \
+   && yum clean --disableplugin=subscription-manager packages \
    && echo 'Finished installing dependencies'
 
 USER root
-RUN yum install -y curl
+RUN yum install --disableplugin=subscription-manager -y curl
 
 COPY ./project /project
 WORKDIR /project/

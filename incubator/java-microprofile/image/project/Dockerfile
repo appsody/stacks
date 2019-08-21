@@ -1,12 +1,12 @@
 FROM registry.access.redhat.com/ubi7/ubi
 
-RUN yum upgrade -y \
-   && yum clean packages \
+RUN yum upgrade --disableplugin=subscription-manager -y \
+   && yum clean --disableplugin=subscription-manager packages \
    && mkdir -p /mvn/repository \
    && echo 'Finished installing dependencies'
 
 USER root
-RUN yum install -y unzip curl ca-certificates
+RUN yum install --disableplugin=subscription-manager -y unzip curl ca-certificates
 
 #Install openjdk
 ENV JAVA_VERSION jdk8u222-b10_openj9-0.15.1
