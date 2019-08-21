@@ -1,4 +1,17 @@
 #!/bin/bash
+
+# Test pom.xml is present and a file.
+if [ ! -f ./pom.xml ]; then
+  echo "Error: Could not find Maven pom.xml
+
+  * The project directory (containing an .appsody-conf.yaml file) must contain a pom.xml file.
+  * On Windows and MacOS, the project directory should also be shared with Docker: 
+    - Win: https://docs.docker.com/docker-for-windows/#shared-drives
+    - Mac: https://docs.docker.com/docker-for-mac/#file-sharing
+  "
+  exit 1   
+fi
+
 # Get parent pom information (../pom.xml)
 args='export PARENT_GROUP_ID=${project.groupId}; export PARENT_ARTIFACT_ID=${project.artifactId}; export PARENT_VERSION=${project.version}
 export LIBERTY_GROUP_ID=${liberty.groupId}; export LIBERTY_ARTIFACT_ID=${liberty.artifactId}; export LIBERTY_VERSION=${version.openliberty-runtime}'
