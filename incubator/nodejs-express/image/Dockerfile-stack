@@ -1,4 +1,8 @@
-FROM appsody/nodejs:0.2
+FROM registry.access.redhat.com/ubi8/nodejs-10
+
+USER root
+RUN yum install python2 -y
+RUN ln -s /usr/bin/python2 /usr/bin/python
 
 ENV APPSODY_MOUNTS=/:/project/user-app
 ENV APPSODY_DEPS=/project/user-app/node_modules
@@ -7,7 +11,7 @@ ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/node_modules
 ENV APPSODY_WATCH_REGEX="^.*.js$"
 
-ENV APPSODY_INSTALL="npm install --prefix user-app && npm audit fix --prefix user-app"
+ENV APPSODY_INSTALL="npm install --prefix user-app"
 
 ENV APPSODY_RUN="npm start"
 ENV APPSODY_RUN_ON_CHANGE="npm start"
@@ -23,7 +27,7 @@ ENV APPSODY_TEST_KILL=false
 
 COPY ./project /project
 WORKDIR /project
-RUN npm install && npm audit fix
+RUN npm install
 
 ENV PORT=3000
 ENV NODE_PATH=/project/user-app/node_modules

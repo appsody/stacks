@@ -1,0 +1,67 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: nodejs-appsody-build-task
+spec:
+  inputs:
+    resources:
+      - name: git-source
+        type: git
+    params:
+      - name: pathToDockerFile
+        default: /workspace/extracted/Dockerfile
+      - name: pathToContext
+        default: /workspace/extracted
+      - name: appsody-deploy-file-name
+  outputs:
+    resources:
+      - name: docker-image
+        type: image
+  steps:
+    - name: assemble-extract-step
+      securityContext:
+        privileged: true
+      image: appsody/appsody-docker
+      command: ["/bin/bash"]
+      args:
+        - -c
+        - "/setupAndRunExtract.sh"
+      env:
+        - name: gitsource
+          value: git-source
+      volumeMounts:
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+    - name: build-push-step
+      env:
+      - name: DOCKER_CONFIG
+        value: /builder/home/.docker
+      image: gcr.io/kaniko-project/executor
+      command:
+        - /kaniko/executor
+      args:
+        - --dockerfile=${inputs.params.pathToDockerFile}
+        - --destination=${outputs.resources.docker-image.url}
+        - --context=${inputs.params.pathToContext}
+        - --skip-tls-verify
+    - name: modify-yaml
+      image: ubuntu
+      command: ['/bin/bash']
+      args: ['-c', 'find /workspace/git-source -name ${YAMLFILE} -type f -exec sed -i -e s!"image: .*$"!"image: ${IMG}"!g {} \;']
+      env:
+        - name: IMG
+          value: ${outputs.resources.docker-image.url}
+        - name: YAMLFILE
+          value: ${inputs.params.appsody-deploy-file-name}
+    - name: install-knative
+      image: lachlanevenson/k8s-kubectl
+      command: ['/bin/sh']
+      args: ['-c', 'find /workspace/git-source -name ${YAMLFILE} -type f|xargs kubectl apply -f']
+      env:
+        - name: YAMLFILE
+          value: ${inputs.params.appsody-deploy-file-name}
+  volumes:
+    - name: docker-socket
+      hostPath:
+        path: /var/run/docker.sock
+        type: Socket

@@ -1,0 +1,5 @@
+default-image: java-microprofile
+default-pipeline: default
+images:
+- id: java-microprofile
+  image: kabanero/java-microprofile:0.2

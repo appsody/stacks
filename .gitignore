@@ -1,6 +1,7 @@
 /ci/assets
 /ci/package
 /ci/build
+/ci/release
 **/.DS_Store
 **/node_modules
 **/*.log

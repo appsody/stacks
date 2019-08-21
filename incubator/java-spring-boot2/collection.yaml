@@ -1,0 +1,5 @@
+default-image: java-spring-boot2
+default-pipeline: default
+images:
+- id: java-spring-boot2
+  image: kabanero/java-spring-boot2:0.3

@@ -10,12 +10,18 @@ fi
 
 base_dir="$(cd "$1" && pwd)"
 
-. $base_dir/ci/env.sh
+. $base_dir/ci/env.sh $base_dir
 
 # directory to store assets for test or release
 assets_dir=$base_dir/ci/assets
 
 mkdir -p $assets_dir
+
+#expose an extension point for running before main 'package' processing
+if [ -f $base_dir/ci/ext/pre_package.sh ]
+then
+    . $base_dir/ci/ext/pre_package.sh $base_dir
+fi
 
 # iterate over each repo
 for repo_name in $REPO_LIST
@@ -87,7 +93,7 @@ do
                     if [ -d $template_dir ]
                     then
                         template_id=$(basename $template_dir)
-                        template_archive=$repo_name.$stack_id.templates.$template_id.tar.gz
+                        template_archive=$repo_name.$stack_id.v$stack_version.templates.$template_id.tar.gz
 
                         if [ $build = true ]
                         then
@@ -100,7 +106,8 @@ do
                         fi
 
                         echo "      - id: $template_id" >> $index_file
-                        echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$template_archive" >> $index_file
+                        echo "        url: $RELEASE_URL/$RELEASE_NAME/$template_archive" >> $index_file
+
                     fi
                 done
             fi
@@ -109,3 +116,11 @@ do
         echo "SKIPPING: $repo_dir"
     fi
 done
+
+
+#expose an extension point for running after main 'package' processing
+if [ -f $base_dir/ci/ext/post_package.sh ]
+then
+    . $base_dir/ci/ext/post_package.sh $base_dir
+fi
+

@@ -1,0 +1,5 @@
+default-image: nodejs
+default-pipeline: default
+images:
+- id: nodejs
+  image: kabanero/nodejs:0.2
