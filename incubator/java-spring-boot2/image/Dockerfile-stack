@@ -1,4 +1,5 @@
 FROM registry.access.redhat.com/ubi8/ubi
+LABEL maintainer="IBM Java Engineering at IBM Cloud"
 
 RUN yum upgrade -y \
    && yum clean packages \
@@ -50,18 +51,9 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 
-# Kotlin support
-COPY ./project/stack.properties /project/stack.properties
-RUN cd /usr/lib && \
-    KVER=$(cat /project/stack.properties | grep kotlin.version | sed 's/kotlin.version=//') && \
-    wget -q https://github.com/JetBrains/kotlin/releases/download/v$KVER/kotlin-compiler-$KVER.zip && \
-    unzip kotlin-compiler-*.zip && \
-    rm kotlin-compiler-*.zip && \
-    rm -f kotlinc/bin/*.bat
-
 COPY ./project /project
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
-COPY ./mvn-stack-settings.xml /project/.mvn-stack-settings.xml
+COPY ./mvn-stack-settings.xml /project/mvn-stack-settings.xml
 
 WORKDIR /project/user-app
 

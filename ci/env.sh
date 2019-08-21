@@ -34,7 +34,6 @@ fi
 # url for downloading released assets
 if [ -z $RELEASE_URL ]; then
     export RELEASE_URL="https://github.com/$TRAVIS_REPO_SLUG/releases/download"
-
 fi
 
 #expose an extension point for running after main 'env' processing
