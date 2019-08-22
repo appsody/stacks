@@ -8,6 +8,7 @@ USER root
 RUN yum install --disableplugin=subscription-manager -y curl
 
 COPY ./project /project
+COPY ./config /config
 WORKDIR /project/
 
 #Install openjdk

@@ -60,7 +60,8 @@ OpenAPI endpoints:
 
 1. You should be able to access the following endpoints, as they are exposed by your template application by default:
 
-    - Health endpoint: http://localhost:9080/health
+    - Readiness endpoint: http://localhost:9080/health/ready
+    - Liveness endpoint: http://localhost:9080/health/live
     - Metrics endpoint: http://localhost:9080/metrics (login as `admin` user with `adminpwd` password)
     - OpenAPI endpoint: http://localhost:9080/openapi
     - Swagger UI endpoint: http://localhost:9080/openapi/ui

@@ -50,6 +50,17 @@ version() {
 }
 
 common() {
+  # Test pom.xml is present and a file.
+  if [ ! -f ./pom.xml ]; then
+    error "Could not find Maven pom.xml
+
+    * The project directory (containing an .appsody-conf.yaml file) must contain a pom.xml file.
+    * On Windows and MacOS, the project directory should also be shared with Docker: 
+      - Win: https://docs.docker.com/docker-for-windows/#shared-drives
+      - Mac: https://docs.docker.com/docker-for-mac/#file-sharing
+    "
+    exit 1   
+  fi
   # workaround: exit with error if repository does not exist
   if [ ! -d /mvn/repository ]; then
     error "Could not find local Maven repository

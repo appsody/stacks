@@ -2,6 +2,7 @@
 FROM quay.io/quarkus/centos-quarkus-maven:19.0.2
 
 COPY ./project /project
+COPY ./config /config
 WORKDIR /project
 
 USER root
