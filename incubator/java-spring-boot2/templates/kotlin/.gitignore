@@ -22,3 +22,6 @@
 /nbdist/
 /.nb-gradle/
 /build/
+
+### VS Code ###
+.vscode/
