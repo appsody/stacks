@@ -6,7 +6,7 @@
     <name>Appsody Spring Boot2 on Open Liberty stack</name>
     <description>Parent POM file for Kabanero project to facilitate usage of Spring Boot on OpenShift.</description>
     <url>https://appsody.dev</url>
-  
+
     <licenses>
       <license>
         <name>Apache License, Version 2.0</name>
@@ -26,7 +26,7 @@
 
     <groupId>dev.appsody</groupId>
     <artifactId>java-spring-boot2-liberty</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -36,7 +36,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>    
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- Plugins -->
         <version.maven-war-plugin>3.2.2</version.maven-war-plugin>
         <version.dockerfile-maven-plugin>1.4.10</version.dockerfile-maven-plugin>
@@ -77,10 +77,10 @@
                     </goals>
                     <configuration>
                             <classifier>exec</classifier>
-                    </configuration>                    
+                    </configuration>
                     </execution>
                 </executions>
-             </plugin>              
+             </plugin>
             <!-- Enforcing Open Liberty and JDK Version -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -124,7 +124,7 @@
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
-                <scope>import</scope>                
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -147,7 +147,7 @@
           <artifactId>spring-boot-starter-test</artifactId>
           <scope>test</scope>
         </dependency>
-    
+
         <!--Monitoring -->
         <dependency>
           <groupId>org.springframework.boot</groupId>
@@ -157,12 +157,12 @@
           <groupId>io.micrometer</groupId>
           <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
-    
+
         <!-- Distributed tracing with OpenTracing -->
         <dependency>
           <groupId>io.opentracing.contrib</groupId>
           <artifactId>opentracing-spring-jaeger-web-starter</artifactId>
           <version>${opentracing-spring-jaeger-web-starter.version}</version>
         </dependency>
-      </dependencies>    
+      </dependencies>
 </project>
