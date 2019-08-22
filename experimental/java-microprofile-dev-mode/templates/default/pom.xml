@@ -93,6 +93,7 @@
                 <artifactId>liberty-maven-plugin</artifactId>
                 <version>3.0.M1</version>
                 <configuration>
+                    <verifyTimeout>120</verifyTimeout>
                     <assemblyArtifact>
                         <groupId>${liberty.groupId}</groupId>
                         <artifactId>${liberty.artifactId}</artifactId>
