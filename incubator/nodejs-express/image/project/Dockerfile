@@ -23,6 +23,9 @@ WORKDIR /project/user-app
 COPY ./user-app/package*.json ./
 RUN npm install --production
 
+COPY . /project
+RUN chown -hR node:node /project
+
 WORKDIR /project
 
 ENV NODE_ENV production
