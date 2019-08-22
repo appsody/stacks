@@ -1,7 +1,7 @@
 FROM registry.access.redhat.com/ubi8/nodejs-10
 
 USER root
-RUN yum install python2 -y
+RUN yum install --disableplugin=subscription-manager python2 -y
 RUN ln -s /usr/bin/python2 /usr/bin/python
 
 ENV APPSODY_MOUNTS=/:/project/user-app

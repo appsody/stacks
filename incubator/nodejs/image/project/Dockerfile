@@ -3,8 +3,8 @@ FROM registry.access.redhat.com/ubi8/nodejs-10
 USER root
 
 # Install OS updates
-RUN yum upgrade -y \
- && yum clean packages \
+RUN yum upgrade --disableplugin=subscription-manager -y \
+ && yum clean --disableplugin=subscription-manager packages \
  && echo 'Finished installing dependencies'
 
  RUN groupadd --gid 1000 node \
