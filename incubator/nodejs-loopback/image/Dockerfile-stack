@@ -24,8 +24,7 @@ ENV APPSODY_TEST_KILL=false
 
 COPY ./project /project
 WORKDIR /project
-RUN npm install
-RUN npm run build
+RUN npm install && npm run build
 
 ENV PORT=3000
 ENV NODE_PATH=/project/user-app/node_modules
