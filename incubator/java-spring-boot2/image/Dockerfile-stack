@@ -9,6 +9,11 @@ RUN  apt-get -qq update \
   && rm -rf /tmp/* /var/lib/apt/lists/*
 
 COPY ./LICENSE /licenses/
+
+# OSGI core for version range processing
+COPY ./util /util
+RUN  /util/check_version build
+
 COPY ./project /project
 COPY ./config /config
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
