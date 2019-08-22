@@ -71,7 +71,6 @@ fi
 export STACKS_LIST=${STACKS_LIST[@]}
 echo "STACKS_LIST=$STACKS_LIST"
 
-
 # expose an extension point for running after main 'list' processing
 if [ -f $base_dir/ci/ext/post_list.sh ]
 then

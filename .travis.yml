@@ -11,6 +11,10 @@ matrix:
 services:
   - docker
 
+branches:
+  except:
+  - update-from-appsody
+
 before_install:
     - sudo snap install yq
 
@@ -30,4 +34,3 @@ deploy:
   on:
     tags: true
     repo: kabanero-io/collections
-    #    branch: master

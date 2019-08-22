@@ -51,18 +51,9 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 
-# Kotlin support
-COPY ./stack.properties /project/stack.properties
-RUN cd /usr/lib && \
-    KVER=$(cat /project/stack.properties | grep kotlin.version | sed 's/kotlin.version=//') && \
-    wget -q https://github.com/JetBrains/kotlin/releases/download/v$KVER/kotlin-compiler-$KVER.zip && \
-    unzip kotlin-compiler-*.zip && \
-    rm kotlin-compiler-*.zip && \
-    rm -f kotlinc/bin/*.bat
-
 #setup project folder for java build step
 COPY . /project
-COPY ./.mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
+COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 
 WORKDIR /project/user-app
 
@@ -71,7 +62,13 @@ RUN /project/java-spring-boot2-build.sh package
 ####
 FROM registry.access.redhat.com/ubi8/ubi
 
+ARG artifactId=appsody-spring
+ARG version=1.0-SNAPSHOT
 ENV JVM_ARGS=""
+
+LABEL maintainer="IBM Java Engineering at IBM Cloud"
+LABEL org.opencontainers.image.version=${version}
+LABEL org.opencontainers.image.title=${artifactId}
 
 #Install openj9 v8
 
