@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: nodejs-build-task
+  name: nodejs-loopback-build-task
 spec:
   inputs:
     resources:
