@@ -76,7 +76,6 @@ do
             let "error=error+1"
         fi
 
-
         for template_list in $template_dir
         do
             if [ -f $template_list/.appsody-config.yaml ]
