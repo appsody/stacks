@@ -6,42 +6,42 @@
         {
             "label": "Appsody: run",
             "type": "shell",
-            "command": "knapp run",
+            "command": "appsody run",
             "group": "build",
             "problemMatcher": []
         },
         {
             "label": "Appsody: debug",
             "type": "shell",
-            "command": "knapp debug",
+            "command": "appsody debug",
             "group": "build",
             "problemMatcher": []
         },
         {
             "label": "Appsody: test",
             "type": "shell",
-            "command": "knapp test",
+            "command": "appsody test",
             "group": "test",
             "problemMatcher": []
         },
         {
             "label": "Appsody: build",
             "type": "shell",
-            "command": "knapp build",
+            "command": "appsody build",
             "group": "build",
             "problemMatcher": []
         },
         {
             "label": "Appsody: deploy",
             "type": "shell",
-            "command": "knapp deploy",
+            "command": "appsody deploy",
             "group": "build",
             "problemMatcher": []
         },
         {
             "label": "Appsody: stop",
             "type": "shell",
-            "command": "knapp stop",
+            "command": "appsody stop",
             "group": "build",
             "problemMatcher": []
         },
