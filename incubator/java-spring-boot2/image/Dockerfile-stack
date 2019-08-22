@@ -9,6 +9,7 @@ RUN  apt-get -qq update \
   && rm -rf /tmp/* /var/lib/apt/lists/*
 
 COPY ./project /project
+COPY ./config /config
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 COPY ./mvn-stack-settings.xml /project/mvn-stack-settings.xml
 
