@@ -16,7 +16,7 @@ spec:
         default: app-deploy.yaml
   steps:
     - name: modify-app-deploy-yaml-step
-      image: ubuntu
+      image: registry.access.redhat.com/ubi8/ubi:latest
       command: ['/bin/bash']
       args: ['-c', 'find /workspace/git-source -name ${YAMLFILE} -type f -exec sed -i -e s!"applicationImage: .*$"!"applicationImage: ${IMG}"!g {} \; -exec sed -i -e s!"REPLACE-NAME"!"${REPO}"!g {} \;']
       env:
