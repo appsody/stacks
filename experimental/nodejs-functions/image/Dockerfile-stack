@@ -11,6 +11,7 @@ ENV APPSODY_INSTALL="npm install --prefix user-app/functions && npm audit fix --
 ENV APPSODY_TEST="npm test && npm test --prefix user-app/functions"
 
 COPY ./project /project/user-app
+COPY ./config /config
 WORKDIR /project
 RUN npm install && npm audit fix
 

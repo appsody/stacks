@@ -78,11 +78,11 @@ do
 
         for template_list in $template_dir
         do
-            if [ ! -f $template_list/.appsody-config.yaml ]
+            if [ -f $template_list/.appsody-config.yaml ]
             then
                 templateName=$(basename -- "$template_list")
                 templateName="${templateName%.*}"
-                echo "ERROR: Missing appsody config file in template: $project_dir/templates/$templateName"
+                echo "ERROR: Unexpected appsody config file in template: $project_dir/templates/$templateName"
                 let "error=error+1"
             fi
         done

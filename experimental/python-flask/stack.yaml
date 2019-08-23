@@ -1,0 +1,13 @@
+name: Python Flask application
+version: 0.1.1
+description: Simple Python Flask application with health checks and application metrics for Prometheus.
+language: python
+maintainers:
+  - name: Chris Bailey
+    email: cnbailey@gmail.com
+    github-id: seabaylea
+  - name: Henry Nash
+    email: henry.nash@uk.ibm.com
+    github-id: henrynash
+default-template: simple
+license: Apache-2.0
