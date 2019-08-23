@@ -1,5 +1,5 @@
 name: Quarkus
-version: 0.1.2
+version: 0.1.3
 description: Quarkus runtime for running Java applications
 license: Apache-2.0
 language: java
