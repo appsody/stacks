@@ -13,6 +13,9 @@ COPY ./config /config
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 COPY ./mvn-stack-settings.xml /project/mvn-stack-settings.xml
 
+WORKDIR /project
+RUN mvn -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
+
 WORKDIR /project/user-app
 
 ENV APPSODY_USER_RUN_AS_LOCAL=true
