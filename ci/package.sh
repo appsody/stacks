@@ -97,8 +97,15 @@ do
 
                         if [ $build = true ]
                         then
+                            if [ $stack_version_major -gt 0 ]
+                            then
+                                echo "stack: "$DOCKERHUB_ORG/$stack_id:$stack_version_major > $template_dir/.appsody-config.yaml
+                            else
+                                echo "stack: "$DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor > $template_dir/.appsody-config.yaml
+                            fi
                             # build template archives
                             tar -cz -f $assets_dir/$template_archive -C $template_dir .
+                            rm $template_dir/.appsody-config.yaml
                             echo -e "--- Created template archive: $template_archive"
 
                             echo "      - id: $template_id" >> $index_file_local
@@ -121,4 +128,3 @@ if [ -f $base_dir/ci/ext/post_package.sh ]
 then
     . $base_dir/ci/ext/post_package.sh $base_dir
 fi
-
