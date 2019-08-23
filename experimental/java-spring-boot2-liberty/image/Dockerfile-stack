@@ -8,6 +8,7 @@ RUN  apt-get -qq update \
   && rm -rf /tmp/* /var/lib/apt/lists/*
 
 COPY ./project /project
+COPY ./config /config
 WORKDIR /project/
 
 RUN mkdir -p /mvn/repository

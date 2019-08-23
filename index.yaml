@@ -3,7 +3,7 @@ projects:
   java-microprofile:
   - updated: 2019-08-02T23:12:19+0000
     name: Eclipse MicroProfile®
-    version: 0.2.7
+    version: 0.2.9
     description: Eclipse MicroProfile using OpenJ9 and Maven
     license: Apache-2.0
     maintainers:
@@ -11,22 +11,22 @@ projects:
       - neeraj.laad@gmail.com
     default-template: default
     urls:
-    - https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.7/incubator.java-microprofile.templates.default.tar.gz
+    - https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.9/incubator.java-microprofile.templates.default.tar.gz
   java-spring-boot2:
   - updated: 2019-08-02T23:12:19+0000
     name: Spring Boot®
-    version: 0.3.4
+    version: 0.3.6
     description: Spring Boot using OpenJ9 and Maven
     license: Apache-2.0
     maintainers:
       - schnabel@us.ibm.com
     default-template: default
     urls:
-    - https://github.com/appsody/stacks/releases/download/java-spring-boot2-v0.3.4/incubator.java-spring-boot2.templates.default.tar.gz
+    - https://github.com/appsody/stacks/releases/download/java-spring-boot2-v0.3.6/incubator.java-spring-boot2.templates.default.tar.gz
   nodejs-express:
   - updated: 2019-08-02T23:12:19+0000
     name: Node.js Express
-    version: 0.2.3
+    version: 0.2.5
     description: Express web framework for Node.js
     license: Apache-2.0
     maintainers:
@@ -34,11 +34,11 @@ projects:
       - neeraj.laad@gmail.com
     default-template: simple
     urls:
-    - https://github.com/appsody/stacks/releases/download/nodejs-express-v0.2.3/incubator.nodejs-express.templates.simple.tar.gz
+    - https://github.com/appsody/stacks/releases/download/nodejs-express-v0.2.5/incubator.nodejs-express.templates.simple.tar.gz
   nodejs:
   - updated: 2019-08-02T23:12:19+0000
     name: Node.js
-    version: 0.2.3
+    version: 0.2.5
     description: Runtime for Node.js applications
     license: Apache-2.0
     maintainers:
@@ -46,26 +46,26 @@ projects:
       - neeraj.laad@gmail.com
     default-template: simple
     urls:
-    - https://github.com/appsody/stacks/releases/download/nodejs-v0.2.3/incubator.nodejs.templates.simple.tar.gz
+    - https://github.com/appsody/stacks/releases/download/nodejs-v0.2.5/incubator.nodejs.templates.simple.tar.gz
   swift:
   - updated: 2019-08-02T23:12:19+0000
     name: Swift
-    version: 0.1.2
+    version: 0.1.4
     description: Runtime for Swift applications
     license: Apache-2.0
     maintainers:
       - i.partridge@uk.ibm.com
     default-template: simple
     urls:
-    - https://github.com/appsody/stacks/releases/download/swift-v0.1.2/incubator.swift.templates.simple.tar.gz
+    - https://github.com/appsody/stacks/releases/download/swift-v0.1.4/incubator.swift.templates.simple.tar.gz
   nodejs-loopback:
   - updated: 2019-07-26T21:00:00+00:00
     name: nodejs-loopback
-    version: 0.1.1
+    version: 0.1.3
     description: LoopBack API framework for Node.js
     license: Apache-2.0
     maintainers:
     - enjoyjava@gmail.com
     default-template: scaffold
     urls:
-    - https://github.com/appsody/stacks/releases/download/nodejs-loopback-v0.1.1/incubator.nodejs-loopback.templates.scaffold.tar.gz
+    - https://github.com/appsody/stacks/releases/download/nodejs-loopback-v0.1.3/incubator.nodejs-loopback.templates.scaffold.tar.gz

@@ -1,0 +1,30 @@
+apiVersion: appsody.dev/v1beta1
+kind: AppsodyApplication
+metadata:
+  name: APPSODY_PROJECT_NAME
+spec:
+  # Add fields here
+  version: 1.0.0
+  applicationImage: APPSODY_DOCKER_IMAGE 
+  stack: APPSODY_STACK
+  service:
+    type: NodePort
+    port: APPSODY_PORT
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: '/actuator/prometheus'
+  readinessProbe:
+    failureThreshold: 12
+    httpGet:
+      path: /actuator/health
+      port: APPSODY_PORT
+    initialDelaySeconds: 5
+    periodSeconds: 2
+  livenessProbe:
+    failureThreshold: 12
+    httpGet:
+      path: /actuator/liveness
+      port: APPSODY_PORT
+    initialDelaySeconds: 5
+    periodSeconds: 2
+  expose: true
