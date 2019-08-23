@@ -1,6 +1,6 @@
 name: Python Flask
 version: 0.1.2
-description: Simple Flask Framework for Python
+description: Flask web Framework for Python
 language: python
 maintainers:
   - name: Chris Bailey
