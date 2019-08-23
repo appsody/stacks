@@ -16,5 +16,9 @@ base_dir="$(cd "$1" && pwd)"
 assets_dir=$base_dir/ci/assets
 
 if [ -f $assets_dir/incubator-index.yaml ]; then
-    mv $assets_dir/incubator-index.yaml $assets_dir/kabanero.yaml
+    mv $assets_dir/incubator-index.yaml $assets_dir/kabanero-index.yaml
+fi
+
+if [ -f $assets_dir/incubator-index.json ]; then
+    mv $assets_dir/incubator-index.json $assets_dir/kabanero-index.json
 fi

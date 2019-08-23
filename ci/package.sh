@@ -93,6 +93,8 @@ do
                     if [ -d $template_dir ]
                     then
                         template_id=$(basename $template_dir)
+                        template_archive=$repo_name.$stack_id.templates.$template_id.tar.gz
+                        # Kabanero override (separate entry to stop merge conflicts)
                         template_archive=$repo_name.$stack_id.v$stack_version.templates.$template_id.tar.gz
 
                         if [ $build = true ]
@@ -106,8 +108,7 @@ do
                         fi
 
                         echo "      - id: $template_id" >> $index_file
-                        echo "        url: $RELEASE_URL/$RELEASE_NAME/$template_archive" >> $index_file
-
+                        echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$template_archive" >> $index_file
                     fi
                 done
             fi

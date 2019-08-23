@@ -85,7 +85,7 @@ process_assets () {
 
                     # Add details of the asset tar.gz into the index file
                     echo "- id: $asset_id" >> $index_file
-                    echo "  url: $RELEASE_URL/$RELEASE_NAME/$asset_archive" >> $index_file
+                    echo "  url: $RELEASE_URL/$stack_id-v$stack_version/$asset_archive" >> $index_file
                     if [ -f $assets_dir/$asset_archive ]
                     then
                         sha256=$(cat $assets_dir/$asset_archive | $sha256cmd | awk '{print $1}')
@@ -115,7 +115,7 @@ process_assets () {
 
                     # Add details of the asset tar.gz into the index file
                     echo "- id: $asset_id" >> $index_file
-                    echo "  url: $RELEASE_URL/$RELEASE_NAME/$asset_archive" >> $index_file
+                    echo "  url: $RELEASE_URL/$stack_id-v$stack_version/$asset_archive" >> $index_file
                     if [ -f $assets_dir/$asset_archive ]
                     then
                         sha256=$(cat $assets_dir/$asset_archive | $sha256cmd | awk '{print $1}')

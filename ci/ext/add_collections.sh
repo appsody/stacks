@@ -26,6 +26,7 @@ do
         echo -e "\nProcessing collections repo: $repo_name"
 
         index_file_v2=$assets_dir/$repo_name-index.yaml
+        index_file_local_v2=$assets_dir/$repo_name-index-local.yaml
         index_file_v2_temp=$assets_dir/$repo_name-index-temp.yaml
         all_stacks=$assets_dir/all_stacks.yaml
         one_stack=$assets_dir/one_stack.yaml
@@ -93,7 +94,12 @@ do
                 fi
             fi
         done
-        mv $index_file_v2_temp $index_file_v2
+        if [ -f $index_file_temp ]; then
+            # Resolve external URL for local / github release
+            sed -e "s|${RELEASE_URL}/.*/|file://$assets_dir/|" $index_file_v2_temp > $index_file_local_v2
+            sed -e "s|${RELEASE_URL}/.*/|${RELEASE_URL}/${RELEASE_NAME}/|" $index_file_v2_temp > $index_file_v2
+            rm -f $index_file_v2_temp
+       fi
     else
         echo "SKIPPING: $repo_dir"
     fi
