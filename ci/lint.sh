@@ -87,10 +87,8 @@ do
             fi
         done
       fi
-      
-      go build stack_yaml_lint.go
-      chmod +x stack_yaml_lint.go
-      ./stack_yaml_lint $stack_dir/stack.yaml
+    
+      go run . $stack_dir/stack.yaml
 
       if (($error > 0))
       then
