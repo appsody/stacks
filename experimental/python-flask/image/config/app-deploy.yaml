@@ -12,4 +12,11 @@ spec:
     port: APPSODY_PORT
     annotations:
       prometheus.io/scrape: 'true'
+  livenessProbe:
+    failureThreshold: 12
+    httpGet:
+      path: /health
+      port: APPSODY_PORT
+    initialDelaySeconds: 5
+    periodSeconds: 2
   expose: true
