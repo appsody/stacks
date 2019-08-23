@@ -1,6 +1,6 @@
-name: Python Flask application
-version: 0.1.1
-description: Simple Python Flask application with health checks and application metrics for Prometheus.
+name: Python Flask
+version: 0.1.2
+description: Simple Flask Framework for Python
 language: python
 maintainers:
   - name: Chris Bailey
