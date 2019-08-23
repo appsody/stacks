@@ -93,12 +93,21 @@ do
                     if [ -d $template_dir ]
                     then
                         template_id=$(basename $template_dir)
+                        template_archive=$repo_name.$stack_id.templates.$template_id.tar.gz
+                        # Kabanero override (separate entry to stop merge conflicts)
                         template_archive=$repo_name.$stack_id.v$stack_version.templates.$template_id.tar.gz
 
                         if [ $build = true ]
                         then
+                            if [ $stack_version_major -gt 0 ]
+                            then
+                                echo "stack: "$DOCKERHUB_ORG/$stack_id:$stack_version_major > $template_dir/.appsody-config.yaml
+                            else
+                                echo "stack: "$DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor > $template_dir/.appsody-config.yaml
+                            fi
                             # build template archives
                             tar -cz -f $assets_dir/$template_archive -C $template_dir .
+                            rm $template_dir/.appsody-config.yaml
                             echo -e "--- Created template archive: $template_archive"
 
                             echo "      - id: $template_id" >> $index_file_local
@@ -106,8 +115,7 @@ do
                         fi
 
                         echo "      - id: $template_id" >> $index_file
-                        echo "        url: $RELEASE_URL/$RELEASE_NAME/$template_archive" >> $index_file
-
+                        echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$template_archive" >> $index_file
                     fi
                 done
             fi
@@ -122,4 +130,3 @@ if [ -f $base_dir/ci/ext/post_package.sh ]
 then
     . $base_dir/ci/ext/post_package.sh $base_dir
 fi
-
