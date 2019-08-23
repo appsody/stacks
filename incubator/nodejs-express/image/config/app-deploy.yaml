@@ -1,4 +1,4 @@
-apiVersion: appsody.dev/v1alpha1
+apiVersion: appsody.dev/v1beta1
 kind: AppsodyApplication
 metadata:
   name: APPSODY_PROJECT_NAME

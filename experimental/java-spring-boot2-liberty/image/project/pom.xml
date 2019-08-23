@@ -26,7 +26,7 @@
 
     <groupId>dev.appsody</groupId>
     <artifactId>java-spring-boot2-liberty</artifactId>
-    <version>0.1.2</version>
+    <version>0.1.4</version>
     <packaging>pom</packaging>
 
     <properties>

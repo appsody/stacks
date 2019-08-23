@@ -8,7 +8,7 @@
     <parent>
         <groupId>dev.appsody</groupId>
         <artifactId>java-spring-boot2-liberty</artifactId>
-        <version>0.1.2</version>
+        <version>0.1.4</version>
     </parent>
 
     <groupId>dev.appsody.starter.java-spring-boot2-liberty</groupId>
