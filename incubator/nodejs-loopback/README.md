@@ -9,7 +9,7 @@ based on [LoopBack 4](https://github.com/strongloop/loopback-next).
 
 The image contains the main code that loads the user application and configures
 with cloud native components such as `@loopback/extension-health` which exposes
-`/health` endpoint for health checks.
+`/health` endpoint for health checks including with `/ready` for readiness and `/live` for liveness checks.
 
 The project layout is structured as follows:
 
@@ -53,28 +53,18 @@ The project layout is structured as follows:
    This launches a Docker container that continuously re-builds and re-runs your
    project, exposing it on port 3000.
 
+   You should now be able to access the following endpoints, as they are exposed by your application by default:
+
+      - Application endpoint: http://localhost:3000/
+      - API explorer: http://localhost:3000/explorer
+      - Open API Spec: http://localhost:3000/openapi.json
+      - API endpoint: http://localhost:3000/ping
+      - Health endpoint: http://localhost:3000/health
+      - Liveness endpoint: http://localhost:3000/live
+      - Readiness endpoint: http://localhost:3000/ready
+
    You can continue to edit the application in your preferred IDE (VSCode or
    others) and your changes will be reflected in the running container within a
    few seconds.
-
-## Test the stack locally
-
-```sh
-cd nodejs-loopback
-cd image
-
-# Choose org-name (such as appsody) and version (such as 0.1.0)
-docker build -t <org-name>/nodejs-loopback:<version> -f Dockerfile-stack .
-
-cd ../templates/scaffold
-# Make sure `.appsody-config.yaml` to use your built stack, such as:
-# stack: appsody/nodejs-loopback:0.1.0
-
-# Run the tests
-appsody test
-
-# Create and run an application from the stack
-appsody run
-```
 
 See https://appsody.dev/docs/stacks/modify for more details.

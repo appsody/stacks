@@ -1,0 +1,4 @@
+# Remove this file when the the next flasgger release comes out that fixes the
+# issue that the current requireent is incorrectly set at < 3.0.0. At that point we
+# can add flasgger back into the regular xx and remove the specific install in Dockerfile-stack
+jsonschema>3.0.0
