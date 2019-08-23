@@ -66,6 +66,10 @@ cd image
 # Choose org-name (such as appsody) and version (such as 0.1.0)
 docker build -t <org-name>/nodejs-loopback:<version> -f Dockerfile-stack .
 
+cd ../templates/scaffold
+# Make sure `.appsody-config.yaml` to use your built stack, such as:
+# stack: appsody/nodejs-loopback:0.1.0
+
 # Run the tests
 appsody test
 
