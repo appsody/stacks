@@ -17,8 +17,10 @@ assets_dir=$base_dir/ci/assets
 build_dir=$base_dir/ci/build
 
 mkdir -p $build_dir/index-src
+# remember images to push
+> $build_dir/image_list
 
-#expose an extension point for running before main 'package' processing
+# expose an extension point for running before main 'package' processing
 if [ -f $base_dir/ci/ext/pre_package.sh ]
 then
     . $base_dir/ci/ext/pre_package.sh $base_dir
@@ -88,6 +90,11 @@ do
                             -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor \
                             -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
                             -f $stack_dir/image/Dockerfile-stack $stack_dir/image
+
+                        echo "$DOCKERHUB_ORG/$stack_id" >> $build_dir/image_list
+                        echo "$DOCKERHUB_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
+                        echo "$DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
+                        echo "$DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch" >> $build_dir/image_list
                     fi
                 else
                     echo -e "\n- SKIPPING stack image: $repo_name/$stack_id"
@@ -207,3 +214,6 @@ docker build $nginx_arg \
  -t $DOCKERHUB_ORG/appsody-index:${GIT_BRANCH}-${INDEX_VERSION} \
  -f $base_dir/ci/nginx/Dockerfile $base_dir/ci
 
+echo "$DOCKERHUB_ORG/appsody-index" >> $build_dir/image_list
+echo "$DOCKERHUB_ORG/appsody-index:${GIT_BRANCH}" >> $build_dir/image_list
+echo "$DOCKERHUB_ORG/appsody-index:${GIT_BRANCH}-${INDEX_VERSION}" >> $build_dir/image_list

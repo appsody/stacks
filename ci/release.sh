@@ -14,6 +14,7 @@ base_dir="$(cd "$1" && pwd)"
 
 # directory to store assets for test or release
 assets_dir=$base_dir/ci/assets
+build_dir=$base_dir/ci/build
 release_dir=$base_dir/ci/release
 
 mkdir -p $release_dir
@@ -37,13 +38,28 @@ done
 # dockerhub/docker registry login in
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $DOCKER_REGISTRY
 
-# iterate over each stack
-for repo_stack in $STACKS_LIST
-do
-    stack_id=`echo ${repo_stack/*\//}`
-    echo "Releasing stack images for: $stack_id"
-    docker push $DOCKERHUB_ORG/$stack_id
-done
+if [ -f $build_dir/image_list ]
+then
+    while read line
+    do
+        if [ "$line" != "" ]
+        then
+            echo "Pushing image $line"
+            docker push $line
+        fi
+    done < $build_dir/image_list
+else
+    # iterate over each stack
+    for repo_stack in $STACKS_LIST
+    do
+        stack_id=`echo ${repo_stack/*\//}`
+        echo "Releasing stack images for: $stack_id"
+        docker push $DOCKERHUB_ORG/$stack_id
+    done
+
+    echo "Releasing stack index"
+    docker push $DOCKERHUB_ORG/appsody_index
+fi
 
 # expose an extension point for running after main 'release' processing
 if [ -f $base_dir/ci/ext/post_release.sh ]
