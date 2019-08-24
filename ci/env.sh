@@ -1,16 +1,13 @@
 #!/bin/bash
 set -e
 
-# first argument of this script must be the base dir of the repository
-if [ -z "$1" ]
-then
-    echo "One argument is required and must be the base directory of the repository."
-    exit 1
-fi
+export script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+export base_dir=$(cd "${script_dir}/.." && pwd)
+export assets_dir="${script_dir}/assets"
+export build_dir="${script_dir}/build"
 
-base_dir="$(cd "$1" && pwd)"
-
-# ENVIRONMENT VARIABLES (shown with defaults)
+mkdir -p $assets_dir
+mkdir -p $build_dir
 
 # Docker credentials for publishing images:
 # export DOCKER_USERNAME
@@ -44,9 +41,9 @@ base_dir="$(cd "$1" && pwd)"
 
 
 #expose an extension point for running before main 'env' processing
-if [ -f $base_dir/ci/ext/pre_env.sh ]
+if [ -f $script_dir/ext/pre_env.sh ]
 then
-    . $base_dir/ci/ext/pre_env.sh
+    . $script_dir/ext/pre_env.sh
 fi
 
 #this is the default list of repos that we need to build index for
@@ -77,7 +74,7 @@ then
     then
         # Find git organization for the current branch
         git_remote=$(git for-each-ref --format='%(upstream:remotename)' "$(git symbolic-ref -q HEAD)")
-	git_remote=${git_remote:-origin}
+        git_remote=${git_remote:-origin}
 
         git_remote_url=$(git remote get-url $git_remote)
         git_remote_url=${git_remote_url:-https://github.com/appsody/stacks.git}
@@ -117,7 +114,7 @@ then
 fi
 
 #expose an extension point for running after main 'env' processing
-if [ -f $base_dir/ci/ext/post_env.sh ]
+if [ -f $script_dir/ext/post_env.sh ]
 then
-    . $base_dir/ci/ext/post_env.sh
+    . $script_dir/ext/post_env.sh
 fi

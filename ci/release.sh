@@ -1,28 +1,17 @@
 #!/bin/bash
 set -e
 
-# first argument of this script must be the base dir of the repository
-if [ -z "$1" ]
-then
-    echo "One argument is required and must be the base directory of the repository."
-    exit 1
-fi
-
-base_dir="$(cd "$1" && pwd)"
-
-. $base_dir/ci/env.sh $base_dir
+# setup environment
+. $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
 
 # directory to store assets for test or release
-assets_dir=$base_dir/ci/assets
-build_dir=$base_dir/ci/build
-release_dir=$base_dir/ci/release
-
+release_dir=$script_dir/release
 mkdir -p $release_dir
 
 # expose an extension point for running before main 'release' processing
-if [ -f $base_dir/ci/ext/pre_release.sh ]
+if [ -f $script_dir/ext/pre_release.sh ]
 then
-    . $base_dir/ci/ext/pre_release.sh $base_dir
+    . $script_dir/ext/pre_release.sh $base_dir
 fi
 
 # iterate over each asset
@@ -62,7 +51,7 @@ else
 fi
 
 # expose an extension point for running after main 'release' processing
-if [ -f $base_dir/ci/ext/post_release.sh ]
+if [ -f $script_dir/ext/post_release.sh ]
 then
-    . $base_dir/ci/ext/post_release.sh $base_dir
+    . $script_dir/ext/post_release.sh $base_dir
 fi

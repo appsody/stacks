@@ -3,12 +3,9 @@
 # If provided with a URL for an existing index.yaml file, pre-fetch
 # all referenced template archives.
 #
-cd "$( dirname "${BASH_SOURCE[0]}" )"
-assets_dir=${PWD}/assets
-build_dir=${PWD}/build
 
-mkdir -p $assets_dir
-mkdir -p $build_dir
+# setup environment
+. $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
 
 create="1>/dev/null echo"
 verify="1>/dev/null echo"
@@ -48,7 +45,7 @@ then
 
                     # Create a script that can compare a pre-fetched template version
                     # to the current stack version (read from stack.yaml), e.g.:
-                    # ./ci/assets/prefetch-stack_id-template_id 0.3.2
+                    # ./ci/build/prefetch-stack_id-template_id 0.3.2
                     echo '#!/bin/bash
 
 cd "'${assets_dir}'"

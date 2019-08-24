@@ -1,29 +1,18 @@
 #!/bin/bash
 set -e
 
-# first argument of this script must be the base dir of the repository
-if [ -z "$1" ]
-then
-    echo "One argument is required and must be the base directory of the repository."
-    exit 1
-fi
-
-base_dir="$(cd "$1" && pwd)"
-
-. $base_dir/ci/env.sh $base_dir
-
-# directory to store assets for test or release
-assets_dir=$base_dir/ci/assets
-build_dir=$base_dir/ci/build
+# setup environment
+. $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
 
 mkdir -p $build_dir/index-src
+
 # remember images to push
 > $build_dir/image_list
 
 # expose an extension point for running before main 'package' processing
-if [ -f $base_dir/ci/ext/pre_package.sh ]
+if [ -f $script_dir/ext/pre_package.sh ]
 then
-    . $base_dir/ci/ext/pre_package.sh $base_dir
+    . $script_dir/ext/pre_package.sh $base_dir
 fi
 
 # iterate over each repo
@@ -158,8 +147,8 @@ do
                                 result=$($build_dir/prefetch-${stack_id}-${template_id} ${stack_version})
                                 if [ "$result" == "ok" ]
                                 then
-				    echo "template ok"
-				else
+                                    echo "template ok"
+                                else
                                     if [ "$result" == "nomatch" ]
                                     then
                                         >&2 echo "WARNING: checksum for $old_archive doesn't match."
@@ -196,9 +185,9 @@ do
 done
 
 #expose an extension point for running after main 'package' processing
-if [ -f $base_dir/ci/ext/post_package.sh ]
+if [ -f $script_dir/ext/post_package.sh ]
 then
-    . $base_dir/ci/ext/post_package.sh $base_dir
+    . $script_dir/ext/post_package.sh $base_dir
 fi
 
 # create appsody-index from contents of assets directory after post-processing
@@ -212,7 +201,7 @@ docker build $nginx_arg \
  -t $DOCKERHUB_ORG/appsody-index \
  -t $DOCKERHUB_ORG/appsody-index:${GIT_BRANCH} \
  -t $DOCKERHUB_ORG/appsody-index:${GIT_BRANCH}-${INDEX_VERSION} \
- -f $base_dir/ci/nginx/Dockerfile $base_dir/ci
+ -f $script_dir/nginx/Dockerfile $script_dir
 
 echo "$DOCKERHUB_ORG/appsody-index" >> $build_dir/image_list
 echo "$DOCKERHUB_ORG/appsody-index:${GIT_BRANCH}" >> $build_dir/image_list
