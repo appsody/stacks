@@ -66,7 +66,7 @@ do
                     stack_version_minor=`echo $stack_version | cut -d. -f2`
                     stack_version_patch=`echo $stack_version | cut -d. -f3`
 
-                    if [ -d $stack_dir/image ]
+                    if [ -d $stack_dir/image ] && [ "$DOCKER_BUILD" == "true" ]
                     then
                         docker build -t $DOCKERHUB_ORG/$stack_id \
                             -t $DOCKERHUB_ORG/$stack_id:$stack_version_major \

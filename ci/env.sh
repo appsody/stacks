@@ -26,6 +26,11 @@ if [ -z "$REPO_LIST" ]; then
     export REPO_LIST="experimental incubator stable"
 fi
 
+# build docker images, publish them
+if [ -z $DOCKER_BUILD ]; then
+    export DOCKER_BUILD=true
+fi
+
 # dockerhub org for publishing stack
 if [ -z $DOCKERHUB_ORG ]; then
     export DOCKERHUB_ORG=appsody
