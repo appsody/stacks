@@ -17,3 +17,5 @@ if [ ! -d ~/.m2/repository ]; then
   echo -e "${BLUE}Creating local maven repository:  ~/.m2/repository${NO_COLOR}"
   mkdir -p ~/.m2/repository
 fi
+
+./mvnw install -q -f /project/appsody-boot2-pom.xml
