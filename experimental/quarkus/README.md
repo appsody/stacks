@@ -39,7 +39,7 @@ Templates are used to create your local project and start your development. When
 
     You can continue to edit the application in your preferred IDE/editor and your changes will be reflected in the running container instantly.
 
-3. You can try your application by visiting http://0.0.0.0:8080/ and observing the welcome page. You can also visit http://0.0.0.0:8080/hello/greeting/paul to try the REST API. 
+3. You can try your application by visiting http://0.0.0.0:8080/ and observing the welcome page. You can also visit http://0.0.0.0:8080/hello/greeting/paul to try the REST API.
 
 4. To try out the live reload:
 
@@ -69,9 +69,7 @@ Running the production container should give you an output similar to:
 
 You can verify that this worked by visiting http://0.0.0.0:8080/ and observing the welcome page. You can also visit http://0.0.0.0:8080/hello/greeting/paul to try the REST API.
 
-## Known Issues:
-
-- Currently there is a problem with `appsody test`. The tests fail due to them not being able to communicate with the Quarkus server. It seems like the 8080 port is not being exposed.
+## Known Issue:
 
 - Currently there is no configuration or documentation on `appsody debug`.
 
