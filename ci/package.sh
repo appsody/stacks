@@ -68,6 +68,9 @@ do
 
                     if [ -d $stack_dir/image ]
                     then
+                        # Make license file available during image BUILDING
+                        cp $stack_dir/LICENSE $stack_dir/image/
+
                         docker build -t $DOCKERHUB_ORG/$stack_id \
                             -t $DOCKERHUB_ORG/$stack_id:$stack_version_major \
                             -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor \
