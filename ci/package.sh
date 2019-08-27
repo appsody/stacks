@@ -216,6 +216,10 @@ do
 
 done
 
+if [ "$CODEWIND_INDEX" == "true" ]; then
+  python3 $script_dir/create_codewind_index.py
+fi
+
 #expose an extension point for running after main 'package' processing
 if [ -f $script_dir/ext/post_package.sh ]
 then
