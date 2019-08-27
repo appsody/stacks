@@ -52,16 +52,16 @@ do
                 stack_version_patch=`echo $stack_version | cut -d. -f3`
 
                 # check if the stack needs to be built
-                build=false
+                rebuild_local=false
                 for repo_stack in $STACKS_LIST
                 do
                     if [ $repo_stack = $repo_name/$stack_id ]
                     then
-                        build=true
+                        rebuild_local=true
                     fi
                 done
 
-                if [ $build = true ]
+                if [ $rebuild_local = true ]
                 then
                     echo -e "\n- BUILDING stack: $repo_name/$stack_id"
 
@@ -97,7 +97,7 @@ do
                 [ -n "$(tail -c1 $index_src)" ] && echo >> $index_src
                 echo "    templates:" >> $index_src
 
-                if [ $build = true ]
+                if [ $rebuild_local = true ]
                 then
                     echo "  - id: $stack_id" >> $index_file_local
                     sed 's/^/    /' $stack >> $index_file_local
@@ -118,8 +118,14 @@ do
                         old_archive=$repo_name.$stack_id.templates.$template_id.tar.gz
                         versioned_archive=$repo_name.$stack_id.v$stack_version.templates.$template_id.tar.gz
 
-                        # build archive if it doesn't exist
+                        build=$rebuild_local
                         if [ "$PACKAGE_WHEN_MISSING" = "true" ] && [ ! -f $assets_dir/$old_archive ] && [ ! -f $assets_dir/$versioned_archive ]
+                        then
+                            # force build of template archive if it doesn't exist
+                            build=true
+                        fi
+
+                        if [ $build = true ]
                         then
                             # build template archive; include version in the file name
                             if [ $stack_version_major -gt 0 ]
@@ -140,7 +146,7 @@ do
                             echo "      - id: $template_id" >> $index_src
                             echo "        url: {{EXTERNAL_URL}}/$versioned_archive" >> $index_src
 
-                            if [ $build = true ]
+                            if [ $rebuild_local = true ]
                             then
                                 echo "      - id: $template_id" >> $index_file_local
                                 echo "        url: file://$assets_dir/$versioned_archive" >> $index_file_local
@@ -173,17 +179,14 @@ do
                                 fi
                             fi
 
+                            # Add references to existing/old template archives.
+
                             echo "      - id: $template_id" >> $index_src
                             echo "        url: {{EXTERNAL_URL}}/$old_archive" >> $index_src
 
-                            if [ $build = true ]
-                            then
-                                echo "      - id: $template_id" >> $index_file_local
-                                echo "        url: file://$assets_dir/$old_archive" >> $index_file_local
-                            fi
-
                             echo "      - id: $template_id" >> $index_file
                             echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$old_archive" >> $index_file
+
                         else
                             >&2 echo "ERROR: could not find an archive for $stack_id/$template_id:"
                             >&2 echo "       $versioned_archive not found."
