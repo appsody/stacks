@@ -19,7 +19,9 @@ then
     verify="shasum --status -c -"
 fi
 
-cd $assets_dir
+mkdir -p $build_dir/prefetch
+cd $build_dir/prefetch
+
 if [ -n "${INDEX_LIST}" ]
 then
     for url in ${INDEX_LIST}
@@ -48,7 +50,7 @@ then
                     # ./ci/build/prefetch-stack_id-template_id 0.3.2
                     echo '#!/bin/bash
 
-cd "'${assets_dir}'"
+cd "'${build_dir}'/prefetch"
 # Fetched from '${url}' on '$(date)'
 # '${x}'
 checksum="'$($create $filename)'"

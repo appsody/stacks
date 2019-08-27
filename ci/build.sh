@@ -7,8 +7,8 @@ set -e
 if [ $# -gt 0 ]
 then
     # ignore the old basedir argument
-    dir=$(cd "$1" && pwd)
-    if [ -f $dir/RELEASE.md ]
+    dir=$1
+    if [ -d $dir ] && [ -f $dir/RELEASE.md ]
     then
         shift
     fi
