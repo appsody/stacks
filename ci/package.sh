@@ -119,7 +119,10 @@ do
                         versioned_archive=$repo_name.$stack_id.v$stack_version.templates.$template_id.tar.gz
 
                         build=$rebuild_local
-                        if [ "$PACKAGE_WHEN_MISSING" = "true" ] && [ ! -f $assets_dir/$old_archive ] && [ ! -f $assets_dir/$versioned_archive ]
+                        if [ "$PACKAGE_WHEN_MISSING" = "true" ] &&
+                            [ ! -f $assets_dir/$versioned_archive ] &&
+                            [ ! -f $build_dir/prefetch/$old_archive ] &&
+                            [ ! -f $build_dir/prefetch/$versioned_archive ]
                         then
                             # force build of template archive if it doesn't exist
                             build=true
@@ -138,6 +141,9 @@ do
                             tar -cz -f $assets_dir/$versioned_archive -C $template_dir .
                             rm $template_dir/.appsody-config.yaml
                             echo -e "--- Created template archive: $versioned_archive"
+
+                            # clean up prefetched resources if they exist
+                            rm -f $build_dir/prefetch/${old_archive%.tar.gz}*
                         fi
 
                         # Update index yaml based on archive file name (prefer versioned archives)
@@ -154,7 +160,15 @@ do
 
                             echo "      - id: $template_id" >> $index_file
                             echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file
-                        elif [ -f $assets_dir/$old_archive ]
+                        elif [ -f $build_dir/prefetch/$versioned_archive ]
+                        then
+                            # Add references to existing template archive.
+                            echo "      - id: $template_id" >> $index_src
+                            echo "        url: {{EXTERNAL_URL}}/$versioned_archive" >> $index_src
+
+                            echo "      - id: $template_id" >> $index_file
+                            echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file
+                        elif [ -f $build_dir/prefetch/$old_archive ]
                         then
                             # If an archive exists with no version in the name,
                             # check for a prefetch script that can verify it
