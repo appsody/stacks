@@ -121,12 +121,7 @@ do
                         # build archive if it doesn't exist
                         if [ "$PACKAGE_WHEN_MISSING" = "true" ] && [ ! -f $assets_dir/$old_archive ] && [ ! -f $assets_dir/$versioned_archive ]
                         then
-                        #     build=true
-                        # fi
-
-                        # build template archive; include version in the file name
-                        # if [ $build = true ]
-                        # then
+                            # build template archive; include version in the file name
                             if [ $stack_version_major -gt 0 ]
                             then
                                 echo "stack: "$DOCKERHUB_ORG/$stack_id:$stack_version_major > $template_dir/.appsody-config.yaml
