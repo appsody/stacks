@@ -29,7 +29,3 @@ fi
 . $script_dir/lint.sh
 . $script_dir/package.sh
 . $script_dir/test.sh
-
-if [ "$CODEWIND_INDEX" == "true" ]; then
-  python3 $script_dir/create_codewind_index.py
-fi
