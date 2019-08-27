@@ -30,6 +30,9 @@ mkdir -p $build_dir
 # Create template archive if it is missing
 # export PACKAGE_WHEN_MISSING=true
 
+# Name of appsody-index image (ci/package.sh)
+# export INDEX_NAME=appsody-index
+
 # Version or snapshot identifier for appsody-index (ci/package.sh)
 # export INDEX_VERSION=SNAPSHOT
 
@@ -98,9 +101,14 @@ then
     export RELEASE_URL="https://github.com/$GIT_ORG_REPO/releases/download"
 fi
 
-if [ -z "$PACKAGE_WHEN_MISSING" ] 
+if [ -z "$PACKAGE_WHEN_MISSING" ]
 then
     export PACKAGE_WHEN_MISSING=true
+fi
+
+if [ -z $INDEX_NAME ]
+then
+    export INDEX_NAME=appsody-index
 fi
 
 if [ -z $INDEX_VERSION ]

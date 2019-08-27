@@ -138,7 +138,7 @@ do
                             echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file
                         elif [ -f $assets_dir/$old_archive ]
                         then
-                            # If an archive exists with no version in the name, 
+                            # If an archive exists with no version in the name,
                             # check for a prefetch script that can verify it
                             # matches this stack. This helps ensure that the new
                             # stack image
@@ -167,9 +167,9 @@ do
                             echo "      - id: $template_id" >> $index_file
                             echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$old_archive" >> $index_file
                         else
-                            >&2 echo "ERROR: could not find an archive for $stack_id/$template_id:" 
-                            >&2 echo "       $versioned_archive not found." 
-                            >&2 echo "       $old_archive not found." 
+                            >&2 echo "ERROR: could not find an archive for $stack_id/$template_id:"
+                            >&2 echo "       $versioned_archive not found."
+                            >&2 echo "       $old_archive not found."
                         fi
                     fi
                 done
@@ -198,11 +198,11 @@ then
 fi
 
 docker build $nginx_arg \
- -t $DOCKERHUB_ORG/appsody-index \
- -t $DOCKERHUB_ORG/appsody-index:${GIT_BRANCH} \
- -t $DOCKERHUB_ORG/appsody-index:${GIT_BRANCH}-${INDEX_VERSION} \
+ -t $DOCKERHUB_ORG/$INDEX_NAME \
+ -t $DOCKERHUB_ORG/$INDEX_NAME:${GIT_BRANCH} \
+ -t $DOCKERHUB_ORG/$INDEX_NAME:${GIT_BRANCH}-${INDEX_VERSION} \
  -f $script_dir/nginx/Dockerfile $script_dir
 
-echo "$DOCKERHUB_ORG/appsody-index" >> $build_dir/image_list
-echo "$DOCKERHUB_ORG/appsody-index:${GIT_BRANCH}" >> $build_dir/image_list
-echo "$DOCKERHUB_ORG/appsody-index:${GIT_BRANCH}-${INDEX_VERSION}" >> $build_dir/image_list
+echo "$DOCKERHUB_ORG/$INDEX_NAME" >> $build_dir/image_list
+echo "$DOCKERHUB_ORG/$INDEX_NAME:${GIT_BRANCH}" >> $build_dir/image_list
+echo "$DOCKERHUB_ORG/$INDEX_NAME:${GIT_BRANCH}-${INDEX_VERSION}" >> $build_dir/image_list
