@@ -31,10 +31,13 @@ mkdir -p $build_dir
 # export PACKAGE_WHEN_MISSING=true
 
 # Name of appsody-index image (ci/package.sh)
-# export INDEX_NAME=appsody-index
+# export INDEX_IMAGE=appsody-index
 
 # Version or snapshot identifier for appsody-index (ci/package.sh)
 # export INDEX_VERSION=SNAPSHOT
+
+# List of current appsody index urls (space separated)
+# export INDEX_LIST=https://github.com/appsody/stacks/releases/latest/download/incubator-index.yaml
 
 # Base nginx image for appsody-index (ci/nginx/Dockerfile)
 # export NGINX_IMAGE=nginx:stable-alpine
@@ -106,12 +109,12 @@ then
     export PACKAGE_WHEN_MISSING=true
 fi
 
-if [ -z $INDEX_NAME ]
+if [ -z "$INDEX_IMAGE" ]
 then
-    export INDEX_NAME=appsody-index
+    export INDEX_IMAGE=appsody-index
 fi
 
-if [ -z $INDEX_VERSION ]
+if [ -z "$INDEX_VERSION" ]
 then
     if [ -z $TRAVIS_BUILD_NUMBER ]
     then
@@ -119,6 +122,15 @@ then
     else
         export INDEX_VERSION=${TRAVIS_BUILD_NUMBER}
     fi
+fi
+
+if [ -z "$INDEX_LIST" ]
+then
+    for repo_name in $REPO_LIST
+    do
+        INDEX_LIST+=("https://github.com/appsody/stacks/releases/latest/download/$repo_name-index.yaml")
+    done
+    export INDEX_LIST=${INDEX_LIST[@]}
 fi
 
 #expose an extension point for running after main 'env' processing
