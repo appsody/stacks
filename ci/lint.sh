@@ -1,18 +1,13 @@
 #!/bin/bash
 set -e
 
-if [ -z "$1" ]
-then
-    echo "One argument is required and must be the base directory of the repository."
-    exit 1
-fi
-
-base_dir="$(cd "$1" && pwd)"
+# setup environment
+. $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
 
 #expose an extension point for running before main 'lint' processing
-if [ -f $base_dir/ci/ext/pre_lint.sh ]
+if [ -f $script_dir/ext/pre_lint.sh ]
 then
-    . $base_dir/ci/ext/pre_lint.sh $base_dir
+    . $script_dir/ext/pre_lint.sh $base_dir
 fi
 
 error=0
@@ -117,7 +112,7 @@ then
 fi
 
 #expose an extension point for running after main 'lint' processing
-if [ -f $base_dir/ci/ext/post_lint.sh ]
+if [ -f $script_dir/ext/post_lint.sh ]
 then
-    . $base_dir/ci/ext/post_lint.sh $base_dir
+    . $script_dir/ext/post_lint.sh $base_dir
 fi

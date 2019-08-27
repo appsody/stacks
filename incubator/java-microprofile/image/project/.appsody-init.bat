@@ -1,1 +1,1 @@
-mvn install -Denforcer.skip=true
+mvnw install -Denforcer.skip=true
