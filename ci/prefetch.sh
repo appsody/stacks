@@ -20,9 +20,9 @@ then
 fi
 
 cd $assets_dir
-if [ -n "${PREFETCH_INDEX_YAML}" ]
+if [ -n "${INDEX_LIST}" ]
 then
-    for url in ${PREFETCH_INDEX_YAML}
+    for url in ${INDEX_LIST}
     do
         echo "== $url"
         index=$(curl -s -L ${url})
@@ -70,4 +70,3 @@ fi
         done
     done
 fi
-

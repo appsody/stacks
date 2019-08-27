@@ -33,6 +33,9 @@ do
         echo "apiVersion: v2" > $index_src
         echo "stacks:" >> $index_src
 
+        echo "apiVersion: v2" > $index_file_local
+        echo "stacks:" >> $index_file_local
+
         echo "apiVersion: v2" > $index_file
         echo "stacks:" >> $index_file
 
@@ -94,6 +97,14 @@ do
                 [ -n "$(tail -c1 $index_src)" ] && echo >> $index_src
                 echo "    templates:" >> $index_src
 
+                if [ $build = true ]
+                then
+                    echo "  - id: $stack_id" >> $index_file_local
+                    sed 's/^/    /' $stack >> $index_file_local
+                    [ -n "$(tail -c1 $index_file_local)" ] && echo >> $index_file_local
+                    echo "    templates:" >> $index_file_local
+                fi
+
                 echo "  - id: $stack_id" >> $index_file
                 sed 's/^/    /' $stack >> $index_file
                 [ -n "$(tail -c1 $index_file)" ] && echo >> $index_file
@@ -110,12 +121,7 @@ do
                         # build archive if it doesn't exist
                         if [ "$PACKAGE_WHEN_MISSING" = "true" ] && [ ! -f $assets_dir/$old_archive ] && [ ! -f $assets_dir/$versioned_archive ]
                         then
-                            build=true
-                        fi
-
-                        # build template archive; include version in the file name
-                        if [ $build = true ]
-                        then
+                            # build template archive; include version in the file name
                             if [ $stack_version_major -gt 0 ]
                             then
                                 echo "stack: "$DOCKERHUB_ORG/$stack_id:$stack_version_major > $template_dir/.appsody-config.yaml
@@ -133,6 +139,12 @@ do
                         then
                             echo "      - id: $template_id" >> $index_src
                             echo "        url: {{EXTERNAL_URL}}/$versioned_archive" >> $index_src
+
+                            if [ $build = true ]
+                            then
+                                echo "      - id: $template_id" >> $index_file_local
+                                echo "        url: file://$assets_dir/$versioned_archive" >> $index_file_local
+                            fi
 
                             echo "      - id: $template_id" >> $index_file
                             echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file
@@ -164,6 +176,12 @@ do
                             echo "      - id: $template_id" >> $index_src
                             echo "        url: {{EXTERNAL_URL}}/$old_archive" >> $index_src
 
+                            if [ $build = true ]
+                            then
+                                echo "      - id: $template_id" >> $index_file_local
+                                echo "        url: file://$assets_dir/$old_archive" >> $index_file_local
+                            fi
+
                             echo "      - id: $template_id" >> $index_file
                             echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$old_archive" >> $index_file
                         else
@@ -175,9 +193,6 @@ do
                 done
             fi
         done
-
-        # Resolve external URL for local / github release
-        sed -e "s|{{EXTERNAL_URL}}|file://$assets_dir|" $index_src > $index_file_local
     else
         echo "SKIPPING: $repo_dir"
     fi
@@ -191,6 +206,8 @@ then
 fi
 
 # create appsody-index from contents of assets directory after post-processing
+echo -e "\nBUILDING: $DOCKERHUB_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
+
 nginx_arg=
 if [ -n "$NGINX_IMAGE" ]
 then
@@ -198,11 +215,9 @@ then
 fi
 
 docker build $nginx_arg \
- -t $DOCKERHUB_ORG/$INDEX_NAME \
- -t $DOCKERHUB_ORG/$INDEX_NAME:${GIT_BRANCH} \
- -t $DOCKERHUB_ORG/$INDEX_NAME:${GIT_BRANCH}-${INDEX_VERSION} \
+ -t $DOCKERHUB_ORG/$INDEX_IMAGE \
+ -t $DOCKERHUB_ORG/$INDEX_IMAGE:${INDEX_VERSION} \
  -f $script_dir/nginx/Dockerfile $script_dir
 
-echo "$DOCKERHUB_ORG/$INDEX_NAME" >> $build_dir/image_list
-echo "$DOCKERHUB_ORG/$INDEX_NAME:${GIT_BRANCH}" >> $build_dir/image_list
-echo "$DOCKERHUB_ORG/$INDEX_NAME:${GIT_BRANCH}-${INDEX_VERSION}" >> $build_dir/image_list
+echo "$DOCKERHUB_ORG/$INDEX_IMAGE" >> $build_dir/image_list
+echo "$DOCKERHUB_ORG/$INDEX_IMAGE:${INDEX_VERSION}" >> $build_dir/image_list
