@@ -23,6 +23,7 @@ ENV APPSODY_TEST="npm test && npm test --prefix user-app"
 ENV APPSODY_TEST_ON_CHANGE=""
 ENV APPSODY_TEST_KILL=false
 
+COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
 WORKDIR /project

@@ -68,3 +68,7 @@ The project layout is structured as follows:
    few seconds.
 
 See https://appsody.dev/docs/stacks/modify for more details.
+
+## License
+
+This stack is licensed under the [Apache 2.0](./image/LICENSE) license

@@ -2,7 +2,7 @@
 
 The Node.js stack provides a consistent way of developing [Node.js](https://nodejs.org/) applications. As an asynchronous event-driven JavaScript runtime, Node is designed to build scalable network applications.
 
-This stack is based on the `Node.js v10` runtime and allows you to develop new or existing Node.js application using Appsody. 
+This stack is based on the `Node.js v10` runtime and allows you to develop new or existing Node.js application using Appsody.
 
 Additionally, if you are developing an applicaton that includes a HTTP server or a web framework such as Express.js,the stack provides a built-in application performance dashboard using the [appmetrics-dash](https://github.com/runtimetools/appmetrics-dash) module. This makes it easy to see the resource usage and HTTP endpoint performance of your application as it is developed.
 
@@ -38,3 +38,7 @@ Templates are used to create your local project and start your development. When
     ```Hello from Node.js 10!```
 
     **NOTE:** Currently the `appsody deploy` command only works for deploying web applications.
+
+## License
+
+This stack is licensed under the [Apache 2.0](./image/LICENSE) license

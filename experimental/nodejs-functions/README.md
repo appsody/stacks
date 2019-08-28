@@ -61,7 +61,7 @@ In the following example, the function is registered for `get` requests on `/`
 
 ```js
 module.exports.url = '/'
-module.exports.get = function(req, res, next) { 
+module.exports.get = function(req, res, next) {
     res.send('Hello from Appsody!')
 }
 ```
@@ -78,4 +78,8 @@ Upgrade your CLI to the latest version and add the experimental repo:
 
 2. appsody repo add experimental https://github.com/appsody/stacks/releases/latest/download/experimental-index.yaml
 
-You should now be able to [initialise your application](#Getting-Started). 
+You should now be able to [initialise your application](#Getting-Started).
+
+## License
+
+This stack is licensed under the [Apache 2.0](./image/LICENSE) license
