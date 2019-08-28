@@ -9,10 +9,7 @@ release_dir=$script_dir/release
 mkdir -p $release_dir
 
 # expose an extension point for running before main 'release' processing
-if [ -f $script_dir/ext/pre_release.sh ]
-then
-    . $script_dir/ext/pre_release.sh $base_dir
-fi
+exec_hooks $script_dir/ext/pre_release.d
 
 # iterate over each asset
 for asset in $assets_dir/*
@@ -51,7 +48,4 @@ else
 fi
 
 # expose an extension point for running after main 'release' processing
-if [ -f $script_dir/ext/post_release.sh ]
-then
-    . $script_dir/ext/post_release.sh $base_dir
-fi
+exec_hooks $script_dir/ext/post_release.d

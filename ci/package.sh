@@ -10,10 +10,7 @@ mkdir -p $build_dir/index-src
 > $build_dir/image_list
 
 # expose an extension point for running before main 'package' processing
-if [ -f $script_dir/ext/pre_package.sh ]
-then
-    . $script_dir/ext/pre_package.sh $base_dir
-fi
+exec_hooks $script_dir/ext/pre_package.d
 
 # iterate over each repo
 for repo_name in $REPO_LIST
@@ -220,11 +217,8 @@ if [ "$CODEWIND_INDEX" == "true" ]; then
   python3 $script_dir/create_codewind_index.py
 fi
 
-#expose an extension point for running after main 'package' processing
-if [ -f $script_dir/ext/post_package.sh ]
-then
-    . $script_dir/ext/post_package.sh $base_dir
-fi
+# expose an extension point for running after main 'package' processing
+exec_hooks $script_dir/ext/post_package.d
 
 # create appsody-index from contents of assets directory after post-processing
 echo -e "\nBUILDING: $DOCKERHUB_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
