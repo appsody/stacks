@@ -11,7 +11,7 @@ projects:
       - neeraj.laad@gmail.com
     default-template: default
     urls:
-    - https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.10/incubator.java-microprofile.templates.default.tar.gz
+    - https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.10/incubator.java-microprofile.v0.2.10.templates.default.tar.gz
   java-spring-boot2:
   - updated: 2019-08-02T23:12:19+0000
     name: Spring Boot®
@@ -22,7 +22,7 @@ projects:
       - schnabel@us.ibm.com
     default-template: default
     urls:
-    - https://github.com/appsody/stacks/releases/download/java-spring-boot2-v0.3.7/incubator.java-spring-boot2.templates.default.tar.gz
+    - https://github.com/appsody/stacks/releases/download/java-spring-boot2-v0.3.7/incubator.java-spring-boot2.v0.3.7.templates.default.tar.gz
   nodejs-express:
   - updated: 2019-08-02T23:12:19+0000
     name: Node.js Express
