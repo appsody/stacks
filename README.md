@@ -59,9 +59,7 @@ Click here to find out more about [Appsody stacks](https://github.com/appsody/we
    export DOCKERHUB_ORG=<org_name>
 
 4. Build collections
-   From the base directory:
-
-   Run build script and specify the desired stack as a parameter, for example:
+   From the base directory, run the build script, for example:
    ```
    ./ci/build.sh
    ```
