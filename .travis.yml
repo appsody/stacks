@@ -19,11 +19,12 @@ before_install:
     - sudo snap install yq
 
 script:
+  - ./ci/prefetch.sh
   - . ./ci/build.sh .
 
 # note before_deploy will run before each deploy provider
 before_deploy:
-  - . ./ci/release.sh .
+  - . ./ci/release.sh
 
 deploy:
   provider: releases

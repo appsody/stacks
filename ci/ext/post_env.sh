@@ -15,3 +15,5 @@ else
         export RELEASE_NAME=$TRAVIS_TAG
     fi
 fi
+
+unset INDEX_LIST
