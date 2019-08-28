@@ -37,15 +37,17 @@ Click here to find out more about [Appsody stacks](https://github.com/appsody/we
    ```
 
 2. Create / Modify the collections (stacks) if required.
+
    Click here to find out more about [creating or modifying collections](https://github.com/appsody/website/blob/master/content/docs/stacks/create.md)
 
 3. Setup environment
+
    There are several tools that are used to build
    ```
-   yq - command-line YAML processor  (sudo snap install yq)
-   python3
-   pyyaml - YAML parser and emitter for python (pip3 install pyyaml)
-   docker
+   * yq - command-line YAML processor  (sudo snap install yq)
+   * python3
+   * pyyaml - YAML parser and emitter for python (pip3 install pyyaml)
+   * docker
    ```
 
    There are several environment variable that needs to be setup in order to correctly build the collections.
@@ -59,6 +61,7 @@ Click here to find out more about [Appsody stacks](https://github.com/appsody/we
    export DOCKERHUB_ORG=<org_name>
 
 4. Build collections
+
    From the base directory, run the build script, for example:
    ```
    ./ci/build.sh
@@ -70,6 +73,7 @@ Click here to find out more about [Appsody stacks](https://github.com/appsody/we
    images will have been created in your local docker registry.
    
 5. Test the collections
+
    To test the collections you can add the kabanero-index.yaml to Appsody using the Appsody CLI 
    ```
    appsody repo add kabanero file://$PWD/ci/assets/kabanero-index-local.yaml
