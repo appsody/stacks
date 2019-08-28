@@ -65,3 +65,7 @@ OpenAPI endpoints:
     - Metrics endpoint: http://localhost:9080/metrics (login as `admin` user with `adminpwd` password)
     - OpenAPI endpoint: http://localhost:9080/openapi
     - Swagger UI endpoint: http://localhost:9080/openapi/ui
+
+## License
+
+This stack is licensed under the [Apache 2.0](./image/LICENSE) license
