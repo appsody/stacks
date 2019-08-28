@@ -7,6 +7,7 @@ RUN  apt-get -qq update \
   && apt-get -qq clean \
   && rm -rf /tmp/* /var/lib/apt/lists/*
 
+COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
 WORKDIR /project/

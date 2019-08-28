@@ -64,3 +64,7 @@ This template only has a simple `__init__.py` file which implements the `/hello`
     - Health endpoint: http://localhost:8080/health
     - Metrics endpoint: http://localhost:8080/metrics
     - Swagger API doc: http://localhost:8080/apidocs
+
+## License
+
+This stack is licensed under the [Apache 2.0](./image/LICENSE) license
