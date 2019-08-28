@@ -1,6 +1,7 @@
 # Dockerfile for building the stack
 FROM quay.io/quarkus/centos-quarkus-maven:19.0.2
 
+COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
 WORKDIR /project
@@ -30,4 +31,3 @@ ENV PORT=8080
 
 EXPOSE 8080
 EXPOSE 5005
-
