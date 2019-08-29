@@ -1,8 +1,8 @@
 FROM registry.access.redhat.com/ubi7/ubi
 
 LABEL vendor="Kabanero" \
-    name="Kabanero java-microprofile" \
-    version="0.1.0" \
+    name="kabanero/java-microprofile" \
+    version="0.2.10" \
     summary="Image for Kabanero java-microprofile development" \
     description="This image contains the Kabanero development stack for the java-microprofile collection"
 
