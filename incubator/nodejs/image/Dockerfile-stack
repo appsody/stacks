@@ -38,10 +38,7 @@ COPY ./config /config
 RUN chown -R default:root /project
 WORKDIR /project
 USER default
-RUN mkdir ~/.node \
-  && npm config set prefix ~/.node \
-ENV PATH="$HOME/.node/bin:$PATH"
-ENV NODE_PATH="$HOME/.node/lib/node_modules:$NODE_PATH"
+RUN mkdir -p /project/user-app/node_modules
 RUN npm install
 
 WORKDIR /project/user-app
