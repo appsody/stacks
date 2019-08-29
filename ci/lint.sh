@@ -53,6 +53,12 @@ do
             let "error=error+1"
         fi
 
+        if [ ! -f $image_dir/LICENSE ]
+        then
+            echo "ERROR: Missing LICENSE in $image_dir"
+            let "error=error+1"
+        fi
+
         if [ ! -d $project_dir ]
         then
             echo "ERROR: Missing project directory in $image_dir"
