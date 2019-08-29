@@ -1,5 +1,11 @@
 FROM registry.access.redhat.com/ubi8/nodejs-10
 
+LABEL vendor="Kabanero" \
+    name="kabanero/nodejs-loopback" \
+    version="0.1.4" \
+    summary="Image for Kabanero Node.js Loopback development" \
+    description="This image contains the Kabanero development stack for the Nodejs Loopback collection"
+
 USER root
 ENV APPSODY_MOUNTS=/:/project/user-app
 ENV APPSODY_DEPS=/project/user-app/node_modules
@@ -26,7 +32,11 @@ ENV APPSODY_TEST_KILL=false
 COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
+
+RUN chown -R default:root /project
 WORKDIR /project
+USER default
+RUN mkdir -p /project/user-app/node_modules
 RUN npm install && npm run pretest
 
 ENV PORT=3000
