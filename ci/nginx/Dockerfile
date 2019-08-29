@@ -2,16 +2,17 @@ ARG NGINX_IMAGE=registry.access.redhat.com/ubi7/ubi-minimal
 FROM $NGINX_IMAGE
 
 LABEL name="collections-host" \
-      vendor="Kabanero" \
+      vendor="Appsody" \
       version="0.1.0" \
       release="1" \
-      summary="Nginx host for collections" \
-      description="Nginx container to host collections"
+      summary="Nginx host for stack" \
+      description="Nginx container to host stack"
 
 COPY nginx/nginx.repo  /etc/yum.repos.d/nginx.repo
 
 RUN microdnf install nginx
 
+COPY nginx/LICENSE     /licenses/
 COPY nginx/nginx.conf  /etc/nginx/nginx.conf
 COPY nginx/startup.sh  /opt/startup.sh
 COPY assets            /opt/www/public
