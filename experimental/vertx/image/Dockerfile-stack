@@ -9,7 +9,9 @@ RUN  apt-get -qq update \
   && rm -rf /tmp/* /var/lib/apt/lists/*
 RUN mkdir -p /.m2/repository
 
+COPY ./LICENSE /licenses/
 COPY ./project /project
+COPY ./config /config
 WORKDIR /project/
 RUN mvn install dependency:go-offline -DskipTests
 
