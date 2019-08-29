@@ -1,6 +1,6 @@
 name: LoopBack 4
 version: 0.1.4
-description: LoopBack 4 API Framework for Node.j
+description: LoopBack 4 API Framework for Node.js
 maintainers:
   - name: Raymond Feng
     email: enjoyjava@gmail.com
