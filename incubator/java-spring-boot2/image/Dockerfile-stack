@@ -1,5 +1,15 @@
 FROM registry.access.redhat.com/ubi8/ubi
-LABEL maintainer="IBM Java Engineering at IBM Cloud"
+
+LABEL vendor="Kabanero" \
+    name="kabanero/java-spring-boot2" \
+    version="0.2.10" \
+    summary="Image for Kabanero java-spring-boot2 development" \
+    description="This image contains the Kabanero development stack for the java-spring-boot2 collection"
+
+USER root
+
+RUN groupadd --gid 1000 java_group \
+  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user
 
 RUN yum upgrade --disableplugin=subscription-manager -y \
    && yum clean --disableplugin=subscription-manager packages \
@@ -61,6 +71,11 @@ WORKDIR /project
 RUN mvn -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 
 WORKDIR /project/user-app
+RUN chown -R java_user:java_group /project
+RUN chown -R java_user:java_group /config
+
+USER java_user
+ENV MAVEN_CONFIG "~/.m2"
 
 ENV APPSODY_USER_RUN_AS_LOCAL=true
 
