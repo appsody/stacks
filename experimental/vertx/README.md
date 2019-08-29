@@ -67,11 +67,9 @@ Running the production container should give you an output similar to:
 2019-07-16 12:43:21,918 INFO  [io.vertx] (main) Installed features: [cdi, resteasy]
 ```
 
-You can verify that this worked by visiting http://0.0.0.0:8080/ and observing the welcome page. You can also visit http://0.0.0.0:8080/hello/greeting/paul to try the REST API.
+You can verify that this worked by visiting http://0.0.0.0:8080/ and observing the welcome page. You can also visit http://0.0.0.0:8080/api/greeting?name=erik to try the REST API.
 
 ## Known Issues:
-
-- Currently there is a problem with `appsody test`. The tests fail due to them not being able to communicate with the Eclipse Vert.x server. It seems like the 8080 port is not being exposed.
 
 - Currently there is no configuration or documentation on `appsody debug`.
 
