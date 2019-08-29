@@ -52,3 +52,7 @@ Kubernetes defines two integral mechanisms for checking the health of a containe
 The Spring Boot 2 Actuator defines an `/actuator/health` endpoint, which returns a {"status": "UP"} payload when all is well. This endpoint is enabled by default, and requires no application code. This actuator works well as a Kubernetes readiness probe, as it automatically includes the status of required resources.
 
 The health endpoint is less useful as a liveness check. In Spring Boot 2, the Actuator framework can be trivially extended with custom endpoints. Your application will include a trivial endpoint to be used as a Kubernetes liveness probe.
+
+## License
+
+This stack is licensed under the [Apache 2.0](./image/LICENSE) license
