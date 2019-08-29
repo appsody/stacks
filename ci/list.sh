@@ -1,16 +1,14 @@
 #!/bin/bash
 set -e
 
-# first argument of this script must be the base dir of the repository
-if [ -z "$1" ]
+# setup environment
+. $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
+
+# expose an extension point for running beforer main 'list' processing
+if [ -f $script_dir/ext/pre_list.sh ]
 then
-    echo "One argument is required and must be the base directory of the repository."
-    exit 1
+    . $script_dir/ext/pre_list.sh $base_dir
 fi
-
-base_dir="$(cd "$1" && pwd)"
-
-. $base_dir/ci/env.sh
 
 # check if running on travis pull request or not
 if [ $TRAVIS_PULL_REQUEST ] && [ "$TRAVIS_PULL_REQUEST" != "false" ] || [ $TRAVIS_COMMIT_RANGE ]
@@ -63,3 +61,9 @@ fi
 # expose environment variable for stacks
 export STACKS_LIST=${STACKS_LIST[@]}
 echo "STACKS_LIST=$STACKS_LIST"
+
+# expose an extension point for running after main 'list' processing
+if [ -f $script_dir/ext/post_list.sh ]
+then
+    . $script_dir/ext/post_list.sh $base_dir 
+fi

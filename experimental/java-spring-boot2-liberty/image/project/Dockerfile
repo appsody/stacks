@@ -3,15 +3,6 @@ FROM adoptopenjdk/openjdk8-openj9
 RUN apt-get update && \
     apt-get install -y maven unzip wget
 
-# Kotlin support
-COPY ./stack.properties /project/stack.properties
-RUN cd /usr/lib && \
-    KVER=$(cat /project/stack.properties | grep kotlin.version | sed 's/kotlin.version=//') && \
-    wget -q https://github.com/JetBrains/kotlin/releases/download/v$KVER/kotlin-compiler-$KVER.zip && \
-    unzip kotlin-compiler-*.zip && \
-    rm kotlin-compiler-*.zip && \
-    rm -f kotlinc/bin/*.bat  
-
 COPY . /project
 
 WORKDIR /project/user-app

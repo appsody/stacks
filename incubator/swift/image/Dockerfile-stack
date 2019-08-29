@@ -26,7 +26,9 @@ ENV APPSODY_TEST="swift test"
 ENV APPSODY_TEST_ON_CHANGE=""
 ENV APPSODY_TEST_KILL=false
 
+COPY ./LICENSE /licenses/
 COPY ./project /project
+COPY ./config /config
 WORKDIR /project/user-app
 
 ENV PORT=8080

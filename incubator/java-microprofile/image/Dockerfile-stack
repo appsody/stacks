@@ -7,10 +7,13 @@ RUN  apt-get -qq update \
   && apt-get -qq clean \
   && rm -rf /tmp/* /var/lib/apt/lists/*
 
+COPY ./LICENSE /licenses/
 COPY ./project /project
-WORKDIR /project/
+COPY ./config /config
 
+WORKDIR /project/
 RUN mkdir -p /mvn/repository
+RUN mvn -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 RUN mvn -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipTests
 
 WORKDIR /project/user-app

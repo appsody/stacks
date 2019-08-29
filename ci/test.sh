@@ -1,8 +1,20 @@
 #!/bin/bash
 set -e
 
-base_dir="$(cd "$1" && pwd)"
+# setup environment
+. $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
 
-. $base_dir/ci/env.sh
+# expose an extension point for running before main 'test' processing
+if [ -f $script_dir/ext/pre_test.sh ]
+then
+    . $script_dir/ext/pre_test.sh $base_dir
+fi
 
 echo -e "\nNo tests implemented yet"
+
+# expose an extension point for running after main 'test' processing
+if [ -f $script_dir/ext/post_test.sh ]
+then
+    . $script_dir/ext/post_test.sh $base_dir
+fi
+

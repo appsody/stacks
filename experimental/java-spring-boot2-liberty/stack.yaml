@@ -1,10 +1,14 @@
 name: Spring Boot® on Open Liberty
+<<<<<<< HEAD
 version: 0.1.0
+=======
+version: 0.1.5
+>>>>>>> 77225c2e9216dd1dff147e0e7cd2ef6a0b97af6b
 description: Spring Boot on Open Liberty & OpenJ9 using Maven
 license: Apache-2.0
 language: java
-maintainers: 
- - name: Ozzy 
+maintainers:
+ - name: Ozzy
    email: ozzy@ca.ibm.com
    github-id: bardweller
 default-template: default

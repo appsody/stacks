@@ -1,6 +1,6 @@
 # Spring® Boot 2 With Open Liberty Stack
 
-The Spring Boot 2 stack supports the development of [Spring Boot 2](https://spring.io/projects/spring-boot) applications using OpenJDK 8 and OpenJ9 from [AdoptOpenJDK](https://adoptopenjdk.net/) with OpenLiberty.
+The Spring Boot 2 stack supports the development of [Spring Boot 2](https://spring.io/projects/spring-boot) applications using OpenJDK 8 and OpenJ9 from [AdoptOpenJDK](https://adoptopenjdk.net/) with Open Liberty.
 
 The Spring Boot 2 stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins. Specifically, this stack enables [Spring Boot Actuator](https://github.com/spring-projects/spring-boot/tree/master/spring-boot-project/spring-boot-actuator), the Prometheus Micrometer reporter, and OpenTracing support for Spring using a Jaeger tracer.
 
@@ -50,3 +50,7 @@ Kubernetes defines two integral mechanisms for checking the health of a containe
 The Spring Boot 2 Actuator defines an `/actuator/health` endpoint, which returns a {"status": "UP"} payload when all is well. This endpoint is enabled by default, and requires no application code. This actuator works well as a Kubernetes readiness probe, as it automatically includes the status of required resources.
 
 The health endpoint is less useful as a liveness check. In Spring Boot 2, the Actuator framework can be trivially extended with custom endpoints. Your application will include a trivial endpoint to be used as a Kubernetes liveness probe.
+
+## License
+
+This stack is licensed under the [Apache 2.0](./image/LICENSE) license

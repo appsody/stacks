@@ -1,23 +1,32 @@
 #!/bin/bash
 set -e
 
-if [ -z "$1" ]
+# setup environment
+. $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
+
+if [ $# -gt 0 ]
 then
-    echo "One argument is required and must be the base directory of the repository."
-    exit 1
+    # ignore the old basedir argument
+    dir=$1
+    if [ -d $dir ] && [ -f $dir/RELEASE.md ]
+    then
+        shift
+    fi
 fi
 
-base_dir="$(cd "$1" && pwd)"
-
-. $base_dir/ci/env.sh
-
-if [ -z $STACKS_LIST ]; then
-    . $base_dir/ci/list.sh $base_dir
+# Allow multiple stacks to be selected
+if [ $# -gt 0 ]
+then
+  export STACKS_LIST="$@"
+  echo "STACKS_LIST=$STACKS_LIST"
 fi
-. $base_dir/ci/lint.sh $base_dir
-. $base_dir/ci/package.sh $base_dir
-. $base_dir/ci/test.sh $base_dir
 
-if [ "$CODEWIND_INDEX" == "true" ]; then
-    python3 $base_dir/ci/create_codewind_index.py $base_dir
+if [ -z "$STACKS_LIST" ]
+then
+  . $script_dir/list.sh
 fi
+
+. $script_dir/lint.sh
+. $script_dir/prefetch.sh
+. $script_dir/package.sh
+. $script_dir/test.sh
