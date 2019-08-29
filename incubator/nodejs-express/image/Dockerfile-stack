@@ -1,5 +1,11 @@
 FROM registry.access.redhat.com/ubi8/nodejs-10
 
+LABEL vendor="Kabanero" \
+    name="kabanero/nodejs-express" \
+    version="0.2.5" \
+    summary="Image for Kabanero Node.js Express development" \
+    description="This image contains the Kabanero development stack for the Nodejs Express collection"
+
 USER root
 RUN yum install --disableplugin=subscription-manager python2 -y
 RUN ln -s /usr/bin/python2 /usr/bin/python
@@ -28,7 +34,14 @@ ENV APPSODY_TEST_KILL=false
 COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
+
+RUN chown -R default:root /project
 WORKDIR /project
+USER default
+RUN mkdir ~/.node \
+  && npm config set prefix ~/.node \
+ENV PATH="$HOME/.node/bin:$PATH"
+ENV NODE_PATH="$HOME/.node/lib/node_modules:$NODE_PATH"
 RUN npm install
 
 ENV PORT=3000
