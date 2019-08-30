@@ -1,16 +1,8 @@
 #!/bin/bash
 set -e
 
-# first argument of this script must be the base dir of the repository
-if [ -z "$1" ]
-then
-    echo "One argument is required and must be the base directory of the repository."
-    exit 1
-fi
-
-base_dir="$(cd "$1" && pwd)"
-
-. $base_dir/ci/env.sh
+# setup environment
+. $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../env.sh
 
 if [ -f $base_dir/ci/ext/add_collections.sh ]
 then
@@ -30,4 +22,9 @@ fi
 
 if [ -f $assets_dir/incubator-index.json ]; then
     mv $assets_dir/incubator-index.json $assets_dir/kabanero-index.json
+fi
+
+index_src=$base_dir/ci/build/index-src
+if [ -f $index_src/incubator-index.yaml ]; then
+    mv $index_src/incubator-index.yaml $index_src/kabanero-index.yaml
 fi

@@ -6,7 +6,7 @@ COPY nginx/nginx-ssl.conf  /etc/nginx/nginx-ssl.conf
 COPY nginx/startup.sh  /opt/startup.sh
 COPY assets            /opt/www/public
 COPY build/prefetch    /opt/www/public
-COPY build/index-src   /opt/index-src
+COPY build/index-src   /opt/www/public
 
 RUN rm /opt/www/public/*-local.yaml
 
