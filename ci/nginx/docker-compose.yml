@@ -20,3 +20,9 @@ services:
     environment:
       - EXTERNAL_URL=https://localhost:8003/
       - DRY_RUN=true
+
+  registry:
+    image: "registry:2"
+    container_name: "registry"
+    ports:
+     - "5000:5000"
