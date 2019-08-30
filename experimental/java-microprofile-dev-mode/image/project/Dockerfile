@@ -3,6 +3,14 @@ FROM adoptopenjdk/openjdk8-openj9
 RUN apt-get update && \
     apt-get install -y maven unzip
 
+# Pre-cache of maven dependencies
+COPY pom.xml /project/ 
+COPY user-app/pom.xml /project/user-app/
+RUN mvn -B -f /project/pom.xml install dependency:copy-dependencies && \
+    mvn -B -f /project/pom.xml dependency:resolve-plugins -DexcludeTransitive=true && \
+    mvn -B -f /project/user-app/pom.xml install dependency:copy-dependencies && \
+    mvn -B -f /project/user-app/pom.xml dependency:resolve-plugins -DexcludeTransitive=true
+
 COPY . /project
 
 WORKDIR /project/user-app
