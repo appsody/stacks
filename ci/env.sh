@@ -45,12 +45,26 @@ mkdir -p $build_dir
 # Build the Codewind index when the value is 'true' (requires PyYaml)
 # export CODEWIND_INDEX
 
+exec_hooks() {
+    local dir=$1
+    if [ -d $dir ]
+    then
+        echo "Running $(basename $dir) scripts"
+        for x in $dir/*
+        do
+            if [ -x $x ]
+            then
+                . $x
+            else
+                echo skipping $(basename $x)
+            fi
+        done
+    fi
+}
+
 
 #expose an extension point for running before main 'env' processing
-if [ -f $script_dir/ext/pre_env.sh ]
-then
-    . $script_dir/ext/pre_env.sh
-fi
+exec_hooks $script_dir/ext/pre_env.d
 
 #this is the default list of repos that we need to build index for
 if [ -z "$REPO_LIST" ]; then
@@ -134,7 +148,4 @@ then
 fi
 
 #expose an extension point for running after main 'env' processing
-if [ -f $script_dir/ext/post_env.sh ]
-then
-    . $script_dir/ext/post_env.sh
-fi
+exec_hooks $script_dir/ext/post_env.d
