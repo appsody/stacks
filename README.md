@@ -52,19 +52,22 @@ Click here to find out more about [Appsody stacks](https://github.com/appsody/we
 
    There are several environment variable that needs to be setup in order to correctly build the collections.
    ```
-   # Docker credentials for publishing images:
-   export DOCKER_USERNAME=<docker_username>
-   export DOCKER_PASSWORD=<docker_password>
-   export DOCKER_REGISTRY=<docker_registry>
+   # Publish images to image registry
+   # export IMAGE_REGISTRY_PUBLISH=false
 
-   # Organization for Docker images
-   export DOCKERHUB_ORG=<org_name>
+   # Credentials for publishing images:
+   # export IMAGE_REGISTRY=<registry>
+   # export IMAGE_REGISTRY_USERNAME=<registry_username>
+   # export IMAGE_REGISTRY_PASSWORD=<registry_password>
+
+   # Organization for images
+   # export IMAGE_REGISTRY_ORG=kabanero
 
 4. Build collections
 
    From the base directory, run the build script, for example:
    ```
-   ./ci/build.sh
+   . ./ci/build.sh
    ```
    
    Note that this will build all the collections in the incubator directory.
