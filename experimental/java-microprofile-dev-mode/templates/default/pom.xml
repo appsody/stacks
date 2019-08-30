@@ -103,6 +103,7 @@
                     <serverName>defaultServer</serverName>
                     <stripVersion>true</stripVersion>
                     <configFile>src/main/liberty/config/server.xml</configFile>
+                    <appsDirectory>apps</appsDirectory>
                     <looseApplication>true</looseApplication>
                     <packageFile>${package.file}</packageFile>
                     <include>${packaging.type}</include>
