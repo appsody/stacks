@@ -9,13 +9,19 @@ export build_dir="${script_dir}/build"
 mkdir -p $assets_dir
 mkdir -p $build_dir
 
-# Docker credentials for publishing images:
-# export DOCKER_USERNAME
-# export DOCKER_PASSWORD
-# export DOCKER_REGISTRY
 
-# Organization for Docker images
-# export DOCKERHUB_ORG=appsody
+# ENVIRONMENT VARIABLES for controlling behavior of build, package, and release
+
+# Publish images to image registry
+# export IMAGE_REGISTRY_PUBLISH=false
+
+# Credentials for publishing images:
+# export IMAGE_REGISTRY
+# export IMAGE_REGISTRY_USERNAME
+# export IMAGE_REGISTRY_PASSWORD
+
+# Organization for images
+# export IMAGE_REGISTRY_ORG=appsody
 
 # List of apposdy repositories to build indexes for
 # export REPO_LIST="experimental incubator stable"
@@ -41,6 +47,9 @@ mkdir -p $build_dir
 
 # Base nginx image for appsody-index (ci/nginx/Dockerfile)
 # export NGINX_IMAGE=nginx:stable-alpine
+
+# Use buildah instead of docker to build and push docker images when the value is true
+# export USE_BUILDAH=false
 
 # Build the Codewind index when the value is 'true' (requires PyYaml)
 # export CODEWIND_INDEX
@@ -71,10 +80,10 @@ if [ -z "$REPO_LIST" ]; then
     export REPO_LIST="experimental incubator stable"
 fi
 
-# dockerhub org for publishing stack
-if [ -z $DOCKERHUB_ORG ]
+# image registry org for publishing stack
+if [ -z "$IMAGE_REGISTRY_ORG" ]
 then
-    export DOCKERHUB_ORG=appsody
+    export IMAGE_REGISTRY_ORG=appsody
 fi
 
 if [ -z $GIT_BRANCH ]
@@ -146,6 +155,78 @@ then
     done
     export INDEX_LIST=${INDEX_LIST[@]}
 fi
+
+if [ -z "$USE_BUILDAH" ]
+then
+    export USE_BUILDAH=false
+fi
+
+if [ -z "$IMAGE_REGISTRY_PUBLISH" ]
+then
+    if [ -z "$IMAGE_REGISTRY" ]
+    then
+        export IMAGE_REGISTRY_PUBLISH=false
+    else
+        export IMAGE_REGISTRY_PUBLISH=true
+    fi
+fi
+
+image_build() {
+    if [ "$USE_BUILDAH" == "true" ]; then
+        buildah bud $@
+    else
+        docker build $@
+    fi
+}
+
+image_tag() {
+    if [ "$USE_BUILDAH" == "true" ]; then
+        buildah tag $1 $2
+    else
+        docker tag $1 $2
+    fi
+}
+
+image_push() {
+    if [ "$IMAGE_REGISTRY_PUBLISH" == "true" ]
+    then
+        local name=$@
+        if [ -n "$IMAGE_REGISTRY" ]
+        then
+            echo "Tagging ${IMAGE_REGISTRY}/$name"
+            image_tag $name ${IMAGE_REGISTRY}/$name
+
+            name=${IMAGE_REGISTRY}/$name
+        fi
+
+        echo "Pushing $name"
+        if [ "$USE_BUILDAH" == "true" ]; then
+            buildah push --tls-verify=false $name
+        else
+            docker push $name
+        fi
+    else
+        echo "IMAGE_REGISTRY_PUBLISH=${IMAGE_REGISTRY_PUBLISH}; Skipping push of $@"
+    fi
+}
+
+image_registry_login() {
+    if [ "$IMAGE_REGISTRY_PUBLISH" == "true" ] && [ -n "$IMAGE_REGISTRY_PASSWORD" ]
+    then
+        if [ "$USE_BUILDAH" == "true" ]
+        then
+            echo "$IMAGE_REGISTRY_PASSWORD" | buildah login -u "$IMAGE_REGISTRY_USERNAME" --password-stdin "$IMAGE_REGISTRY"
+        else
+            echo "$IMAGE_REGISTRY_PASSWORD" |  docker login -u "$IMAGE_REGISTRY_USERNAME" --password-stdin "$IMAGE_REGISTRY"
+        fi
+
+        if [ $? -ne 0 ]
+        then
+            echo "ERROR: Registry login failed. Will not push images to registry."
+            export IMAGE_REGISTRY_PUBLISH=false
+        fi
+    fi
+}
 
 #expose an extension point for running after main 'env' processing
 exec_hooks $script_dir/ext/post_env.d

@@ -64,9 +64,9 @@ do
 
                     if [ -d $stack_dir/image ]
                     then
-                        docker build \
+                        image_build \
                             --build-arg GIT_ORG_REPO=$GIT_ORG_REPO \
-                            --build-arg DOCKERHUB_ORG=$DOCKERHUB_ORG \
+                            --build-arg IMAGE_REGISTRY_ORG=$IMAGE_REGISTRY_ORG \
                             --build-arg STACK_ID=$stack_id \
                             --build-arg MAJOR_VERSION=$stack_version_major \
                             --build-arg MINOR_VERSION=$stack_version_minor \
@@ -74,16 +74,16 @@ do
                             --label "org.opencontainers.image.created=$(date +%Y-%m-%dT%H:%M:%S%z)" \
                             --label "org.opencontainers.image.version=${stack_version}" \
                             --label "org.opencontainers.image.revision=$(git log -1 --pretty=%H)" \
-                            -t $DOCKERHUB_ORG/$stack_id \
-                            -t $DOCKERHUB_ORG/$stack_id:$stack_version_major \
-                            -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor \
-                            -t $DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
+                            -t $IMAGE_REGISTRY_ORG/$stack_id \
+                            -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major \
+                            -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor \
+                            -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
                             -f $stack_dir/image/Dockerfile-stack $stack_dir/image
 
-                        echo "$DOCKERHUB_ORG/$stack_id" >> $build_dir/image_list
-                        echo "$DOCKERHUB_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
-                        echo "$DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
-                        echo "$DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch" >> $build_dir/image_list
+                        echo "$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
+                        echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
+                        echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
+                        echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch" >> $build_dir/image_list
                     fi
                 else
                     echo -e "\n- SKIPPING stack image: $repo_name/$stack_id"
@@ -130,9 +130,9 @@ do
                             # build template archive; include version in the file name
                             if [ $stack_version_major -gt 0 ]
                             then
-                                echo "stack: "$DOCKERHUB_ORG/$stack_id:$stack_version_major > $template_dir/.appsody-config.yaml
+                                echo "stack: "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major > $template_dir/.appsody-config.yaml
                             else
-                                echo "stack: "$DOCKERHUB_ORG/$stack_id:$stack_version_major.$stack_version_minor > $template_dir/.appsody-config.yaml
+                                echo "stack: "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor > $template_dir/.appsody-config.yaml
                             fi
 
                             tar -cz -f $assets_dir/$versioned_archive -C $template_dir .
@@ -221,7 +221,7 @@ fi
 exec_hooks $script_dir/ext/post_package.d
 
 # create appsody-index from contents of assets directory after post-processing
-echo -e "\nBUILDING: $DOCKERHUB_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
+echo -e "\nBUILDING: $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
 
 nginx_arg=
 if [ -n "$NGINX_IMAGE" ]
@@ -229,10 +229,10 @@ then
     nginx_arg="--build-arg NGINX_IMAGE=$NGINX_IMAGE"
 fi
 
-docker build $nginx_arg \
- -t $DOCKERHUB_ORG/$INDEX_IMAGE \
- -t $DOCKERHUB_ORG/$INDEX_IMAGE:${INDEX_VERSION} \
+image_build $nginx_arg \
+ -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE \
+ -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION} \
  -f $script_dir/nginx/Dockerfile $script_dir
 
-echo "$DOCKERHUB_ORG/$INDEX_IMAGE" >> $build_dir/image_list
-echo "$DOCKERHUB_ORG/$INDEX_IMAGE:${INDEX_VERSION}" >> $build_dir/image_list
+echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE" >> $build_dir/image_list
+echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}" >> $build_dir/image_list
