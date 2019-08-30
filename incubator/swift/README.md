@@ -48,7 +48,7 @@ You can enable an existing project as follows:
     ```bash
     cd my-project
     ```
-    
+
 2. Initialize your Appsody project with the Swift stack, but without a template:
 
     ```bash
@@ -66,3 +66,7 @@ You can enable an existing project as follows:
     You can continue to edit the application in your preferred IDE (VSCode or other) and your changes will be reflected in the running container within a few seconds.
 
 3. You should see your application run, with logs written to the console.
+
+## License
+
+This stack is licensed under the [Apache 2.0](./image/LICENSE) license

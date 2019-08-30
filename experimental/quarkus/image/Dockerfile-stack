@@ -1,6 +1,7 @@
 # Dockerfile for building the stack
 FROM quay.io/quarkus/centos-quarkus-maven:19.1.1
 
+COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
 
