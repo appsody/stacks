@@ -5,10 +5,7 @@ set -e
 . $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
 
 # expose an extension point for running beforer main 'list' processing
-if [ -f $script_dir/ext/pre_list.sh ]
-then
-    . $script_dir/ext/pre_list.sh $base_dir
-fi
+exec_hooks $script_dir/ext/pre_list.d
 
 # check if running on travis pull request or not
 if [ -z $BUILD_ALL ] && ([ $TRAVIS_PULL_REQUEST ] && [ "$TRAVIS_PULL_REQUEST" != "false" ] || [ $TRAVIS_COMMIT_RANGE ])
@@ -64,7 +61,4 @@ export STACKS_LIST=${STACKS_LIST[@]}
 echo "STACKS_LIST=$STACKS_LIST"
 
 # expose an extension point for running after main 'list' processing
-if [ -f $script_dir/ext/post_list.sh ]
-then
-    . $script_dir/ext/post_list.sh $base_dir 
-fi
+exec_hooks $script_dir/ext/post_list.d
