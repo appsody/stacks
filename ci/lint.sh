@@ -5,10 +5,7 @@ set -e
 . $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
 
 #expose an extension point for running before main 'lint' processing
-if [ -f $script_dir/ext/pre_lint.sh ]
-then
-    . $script_dir/ext/pre_lint.sh $base_dir
-fi
+exec_hooks $script_dir/ext/pre_lint.d
 
 error=0
 warning=0
@@ -118,7 +115,4 @@ then
 fi
 
 #expose an extension point for running after main 'lint' processing
-if [ -f $script_dir/ext/post_lint.sh ]
-then
-    . $script_dir/ext/post_lint.sh $base_dir
-fi
+exec_hooks $script_dir/ext/post_lint.d
