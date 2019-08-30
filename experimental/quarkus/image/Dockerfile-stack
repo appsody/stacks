@@ -1,27 +1,29 @@
 # Dockerfile for building the stack
-FROM quay.io/quarkus/centos-quarkus-maven:19.0.2
+FROM quay.io/quarkus/centos-quarkus-maven:19.1.1
 
+COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
+
 WORKDIR /project
 
-USER root
-RUN mkdir -p /mvn/repository
-RUN mvn -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipTests
+RUN mvn install dependency:go-offline -DskipTests
 
-ENV APPSODY_MOUNTS=/:/project/user-app
-ENV APPSODY_DEPS=/mvn/repository
+ENV APPSODY_USER_RUN_AS_LOCAL=true
 
-ENV APPSODY_RUN="./mvnw -Dmaven.repo.local=/mvn/repository compile quarkus:dev"
+ENV APPSODY_MOUNTS=".:/project/user-app/;~/.m2/repository:/home/$(id -un)/.m2/repository"
+ENV APPSODY_DEPS=
+
+ENV APPSODY_RUN="./mvnw compile quarkus:dev"
 ENV APPSODY_RUN_ON_CHANGE=""
 ENV APPSODY_RUN_KILL=false
 
-ENV APPSODY_DEBUG="./mvnw -Dmaven.repo.local=/mvn/repository -Ddebug compile quarkus:dev"
+ENV APPSODY_DEBUG="./mvnw -Ddebug compile quarkus:dev"
 ENV APPSODY_DEBUG_ON_CHANGE=""
 ENV APPSODY_DEBUG_KILL=false
 
-ENV APPSODY_TEST="./mvnw -Dmaven.repo.local=/mvn/repository test"
-ENV APPSODY_TEST_ON_CHANGE="./mvnw -Dmaven.repo.local=/mvn/repository test"
+ENV APPSODY_TEST="./mvnw test"
+ENV APPSODY_TEST_ON_CHANGE="./mvnw test"
 ENV APPSODY_TEST_KILL=true
 
 WORKDIR /project/user-app
@@ -30,4 +32,3 @@ ENV PORT=8080
 
 EXPOSE 8080
 EXPOSE 5005
-

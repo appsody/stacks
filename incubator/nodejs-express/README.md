@@ -70,3 +70,7 @@ This template only has a simple `app.js` file which implements the `/` endpoint.
     - Readiness endpoint: http://localhost:3000/ready
     - Metrics endpoint: http://localhost:3000/metrics
     - Dashboard endpoint: http://localhost:3000/appmetrics-dash (development only)
+
+## License
+
+This stack is licensed under the [Apache 2.0](./image/LICENSE) license
