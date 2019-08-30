@@ -7,7 +7,8 @@ eval $(mvn -q -Dexec.executable=echo -Dexec.args="${args}" --non-recursive -f ..
 
 # Install parent pom
 echo "Installing parent ${PARENT_GROUP_ID}:${PARENT_ARTIFACT_ID}:${PARENT_VERSION}"
-mvn install -Dmaven.repo.local=/mvn/repository -Denforcer.skip=true -f ../pom.xml
+mvn install -Denforcer.skip=true -f ../pom.xml
+#mvn install -Dmaven.repo.local=/mvn/repository -Denforcer.skip=true -f ../pom.xml
 
 # Check child pom for required parent project
 if ! grep -Gz "<parent>.*<groupId>${PARENT_GROUP_ID}</groupId>.*</parent>" pom.xml | grep -Gz "<parent>.*<artifactId>${PARENT_ARTIFACT_ID}</artifactId>.*</parent>" | grep -Gzq "<parent>.*<version>${PARENT_VERSION}</version>.*</parent>"

@@ -37,14 +37,14 @@
         <app.name>${project.artifactId}</app.name>
         <package.file>${project.build.directory}/${app.name}.zip</package.file>
     </properties>
-
+<!--
     <repositories>
         <repository>
             <id>localrepository</id>
             <url>/mvn/repository</url>
         </repository>
     </repositories>
-
+-->
     <!-- maven-enforcer-plugin -->
     <build>
         <plugins>
