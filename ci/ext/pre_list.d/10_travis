@@ -1,0 +1,69 @@
+#!/bin/bash
+
+if [ "$TRAVIS" == "true" ]
+then
+    echo "Selecting stacks to build based on Travis environment"
+
+    if [ -n "$TRAVIS_PULL_REQUEST" ] && [ "$TRAVIS_PULL_REQUEST" != "false" ] || [ $TRAVIS_COMMIT_RANGE ]
+    then
+        # check for changed files
+        echo "Listing new/updated stacks in this pull request ($TRAVIS_PULL_REQUEST) or commit range ($TRAVIS_COMMIT_RANGE)"
+        CHANGED_FILES=$(git diff --name-only "$TRAVIS_COMMIT_RANGE" 2>/dev/null)
+        rc=$?
+        if [ $rc -ne 0 ]
+        then
+            stderr "WARNING: unable to find differences in "$TRAVIS_COMMIT_RANGE", using last commit"
+            # Fall back to single commit: https://github.com/travis-ci/travis-ci/issues/5133
+            CHANGED_FILES=$(git diff --name-only "HEAD~..HEAD" 2>/dev/null)
+            rc=$?
+        fi
+
+        if [ $rc -eq 0 ]
+        then
+            for changed_stacks in $CHANGED_FILES
+            do
+                if [[ $changed_stacks == *stack.yaml ]]
+                then
+                    var=`awk '{split($1, a, "/*"); print a[1]"/"a[2]}' <<< $changed_stacks`
+                    export STACKS_LIST+=("$var")
+                fi
+            done
+        else
+            stderr "ERROR: unable to identify changed files in $TRAVIS_COMMIT_RANGE"
+            git diff --name-only "$TRAVIS_COMMIT_RANGE"
+            exit 1
+        fi
+    elif [ $TRAVIS_TAG ]
+    then
+        stack_id=`echo ${TRAVIS_TAG/-v[0-9]*/}`
+        echo "Listing stacks for this release"
+
+        for repo_name in $REPO_LIST
+        do
+            repo_dir=$base_dir/$repo_name
+            if [ -d $repo_dir ]
+            then
+                for stack_exists in $repo_dir/*/stack.yaml
+                do
+                    if [ -f $stack_exists ]
+                    then
+                        var=`echo ${stack_exists#"$base_dir/"}`
+                        repo_stack=`awk '{split($1, a, "/*"); print a[1]"/"a[2]}' <<< $var`
+                        if [[ $repo_stack != */$stack_id ]]
+                        then
+                            continue;
+                        fi
+                        # list of repositories to build indexes for
+                        export STACKS_LIST+=("$repo_stack")
+                    fi
+                done
+            fi
+        done
+
+        if [ -z "${STACKS_LIST}" ]
+        then
+            stderr "ERROR: Could not find stacks associated with tag"
+            exit 1
+        fi
+    fi
+fi

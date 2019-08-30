@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 # setup environment
 . $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
@@ -180,12 +179,12 @@ do
                                 else
                                     if [ "$result" == "nomatch" ]
                                     then
-                                        >&2 echo "WARNING: checksum for $old_archive doesn't match."
-                                        >&2 echo "         The archive contents don't match what was fetched."
-                                        >&2 echo "         Pre-fetched checksum is in ${build_dir}/prefetch-${stack_id}-${template_id}"
+                                        stderr "WARNING: checksum for $old_archive doesn't match." \
+                                               "         The archive contents don't match what was fetched." \
+                                               "         Pre-fetched checksum is in ${build_dir}/prefetch-${stack_id}-${template_id}"
                                     else
-                                        >&2 echo "WARNING: Version mismatch using $template_id for ${stack_id}-v${stack_version}."
-                                        >&2 echo "         Pre-fetched archive built for ${stack_id}-v${result}."
+                                        stderr "WARNING: Version mismatch using $template_id for ${stack_id}-v${stack_version}." \
+                                               "         Pre-fetched archive built for ${stack_id}-v${result}."
                                     fi
                                 fi
                             fi
@@ -199,9 +198,9 @@ do
                             echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$old_archive" >> $index_file
 
                         else
-                            >&2 echo "ERROR: could not find an archive for $stack_id/$template_id:"
-                            >&2 echo "       $versioned_archive not found."
-                            >&2 echo "       $old_archive not found."
+                            stderr "ERROR: Could not find an archive for $stack_id/$template_id:" \
+                                   "       $versioned_archive not found." \
+                                   "       $old_archive not found."
                         fi
                     fi
                 done
