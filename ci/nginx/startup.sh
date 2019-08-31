@@ -3,7 +3,7 @@
 CONF_FILE=
 if echo $EXTERNAL_URL | grep https
 then
-    CONF_FILE="-f nginx-ssl.conf"
+    CONF_FILE="-c nginx-ssl.conf"
 fi
 
 # Replace the resource paths in index yaml files to match the specified external URL
