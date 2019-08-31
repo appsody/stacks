@@ -8,8 +8,6 @@ import (
 	"reflect"
 	"strings"
 
-	"fatih/structs"
-
 	"gopkg.in/yaml.v2"
 )
 
@@ -31,12 +29,6 @@ func (s *stack) validateYaml() *stack {
 	err = yaml.Unmarshal(stackyaml, s)
 	if err != nil {
 		log.Fatalf("Unmarshal: %v", err)
-	}
-
-	missingField := structs.HasZero(s)
-
-	if missingField == true {
-		fmt.Println("ERROR: MISSING FIELD")
 	}
 
 	return s
