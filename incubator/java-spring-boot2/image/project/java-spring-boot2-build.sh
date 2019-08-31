@@ -32,7 +32,7 @@ error() {
 
 run_mvn () {
   echo -e "${GREEN}> mvn $@${NO_COLOR}"
-  mvn "$@"
+  mvn --no-transfer-progress "$@"
 }
 
 version() {
