@@ -14,12 +14,12 @@ import (
 )
 
 type stack struct {
-	Name        string `yaml: "name"`
-	Version     string `yaml: "version"`
-	Description string `yaml: "description"`
-	License     string `yaml: "license"`
-	Language    string `yaml: "language"`
-	//DefaultTemplate string `yaml: "default-template"`
+	Name            string `yaml: "name"`
+	Version         string `yaml: "version"`
+	Description     string `yaml: "description"`
+	License         string `yaml: "license"`
+	Language        string `yaml: "language"`
+	DefaultTemplate string `yaml: "default-template"`
 }
 
 func (s *stack) validateYaml() *stack {
@@ -66,10 +66,6 @@ func main() {
 			fmt.Println("ERROR: Missing value for field: " + strings.ToLower(v.Type().Field(i).Name) + " in " + errorPath[1])
 		}
 	}
-
-	// if len(yamlValues) < 6 {
-	// 	fmt.Println("ERROR: Missing field in " + errorPath[1])
-	// }
 
 	s.checkVersion()
 }
