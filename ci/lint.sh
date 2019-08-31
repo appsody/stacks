@@ -86,6 +86,8 @@ do
         done
       fi
 
+      go run . $stack_dir/stack.yaml
+
       if (($error > 0))
       then
           let "totalError=error+totalError"
