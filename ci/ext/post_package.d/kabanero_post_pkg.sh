@@ -28,3 +28,7 @@ index_src=$base_dir/ci/build/index-src
 if [ -f $index_src/incubator-index.yaml ]; then
     mv $index_src/incubator-index.yaml $index_src/kabanero-index.yaml
 fi
+
+NGINX_IMAGE=nginx-ubi
+image_build -t $NGINX_IMAGE \
+ -f $script_dir/nginx-ubi/Dockerfile $script_dir
