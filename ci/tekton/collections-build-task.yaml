@@ -1,0 +1,197 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: collections-build-task
+spec:
+  inputs:
+    resources:
+      - name: git-source
+        type: git
+    params:
+      - name: registry
+        type: string
+        description: Docker registry
+        default: docker-registry.default.svc:5000
+      - name: namespace
+        type: string
+        description: Namespace
+        default: kabanero
+      - name: hostname
+        type: string
+        description: Hostname of the application hosting collections
+        default: kabanero-index
+      - name: clusterSubdomain
+        type: string
+        description: Cluster subdomain
+
+  steps:
+    - name: build-collections
+      securityContext:
+        privileged: true
+      image: quay.io/buildah/stable:v1.9.0
+      command: ["/bin/bash"]
+      args:
+        - -cex
+        - |
+          # install yq
+          curl -L -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/2.4.0/yq_linux_amd64
+          chmod +x /usr/local/bin/yq
+
+          # install git
+          yum install -y git which findutils
+
+          # install pyyaml
+          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+          python3 get-pip.py
+          pip install pyyaml
+
+          # do build and release
+          export USE_BUILDAH="true"
+          export IMAGE_REGISTRY="${inputs.params.registry}"
+          export IMAGE_REGISTRY_ORG="${inputs.params.namespace}"
+          cd /workspace/git-source/
+          ./ci/prefetch.sh
+          ./ci/build.sh .
+          ./ci/release.sh
+      env:
+        - name: gitsource
+          value: git-source
+      volumeMounts:
+        - name: var-lib-containers
+          mountPath: /var/lib/containers
+
+    - name: deploy-collections-index
+      image: lachlanevenson/k8s-kubectl
+      command: ['/bin/sh']
+      args:
+        - -cex
+        - |
+          YAML_FILE=/workspace/git-source/ci/tekton/openshift.yaml
+          sed -i -e 's/HOST/${inputs.params.hostname}.${inputs.params.clusterSubdomain}/' $YAML_FILE
+          sed -i -e 's/REGISTRY/${inputs.params.registry}/' $YAML_FILE
+          sed -i -e 's/NAMESPACE/${inputs.params.namespace}/' $YAML_FILE
+          sed -i -e 's/TAG/latest/' $YAML_FILE
+          sed -i -e "s/DATE/$(date --utc '+%FT%TZ')/" $YAML_FILE
+          kubectl apply --validate=false -f $YAML_FILE
+
+  volumes:
+    - name: var-lib-containers
+      emptyDir: {}
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kabanero-index
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: kabanero-index
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - deployments
+  - services
+  verbs:
+  - get
+  - list
+  - create
+  - delete
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  - deployments/rollback
+  - deployments/scale
+  verbs:
+  - get
+  - list
+  - create
+  - delete
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  - route.openshift.io
+  attributeRestrictions: null
+  resources:
+  - routes
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  - route.openshift.io
+  attributeRestrictions: null
+  resources:
+  - routes/custom-host
+  verbs:
+  - create
+- apiGroups:
+  - ""
+  - route.openshift.io
+  attributeRestrictions: null
+  resources:
+  - routes/status
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  - image.openshift.io
+  attributeRestrictions: null
+  resources:
+  - imagestreams/layers
+  verbs:
+  - get
+  - update
+- apiGroups:
+  - ""
+  - image.openshift.io
+  attributeRestrictions: null
+  resources:
+  - imagestreams
+  verbs:
+  - create
+- apiGroups:
+  - ""
+  - build.openshift.io
+  attributeRestrictions: null
+  resources:
+  - builds/details
+  verbs:
+  - update
+- apiGroups:
+  - ""
+  - build.openshift.io
+  attributeRestrictions: null
+  resources:
+  - builds
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: kabanero-index
+subjects:
+- kind: ServiceAccount
+  name: kabanero-index
+roleRef:
+  kind: Role
+  name: kabanero-index
+  apiGroup: rbac.authorization.k8s.io
