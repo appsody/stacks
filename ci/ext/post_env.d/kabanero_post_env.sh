@@ -2,25 +2,11 @@
 set -e
 
 # Setup the environment variable needed to build Kabanero Collections
-if [ -z $BUILD_ALL ]; then
-    export BUILD_ALL=true
-fi
-
-if [ -z $REPO_LIST ]; then
-    export REPO_LIST=incubator
-fi
-
-if [ -z $EXCLUDED_STACKS ]; then
-    export EXCLUDED_STACKS=incubator/swift
-fi
-
-if [ -z $CODEWIND_INDEX ]; then
-    export CODEWIND_INDEX=true
-fi
-
-if [ -z $INDEX_IMAGE ]; then
-    export INDEX_IMAGE=kabanero-index
-fi
+export BUILD_ALL=true
+export REPO_LIST=incubator
+export EXCLUDED_STACKS=incubator/swift
+export CODEWIND_INDEX=true
+export INDEX_IMAGE=kabanero-index
 
 if [ -z $BUILD_ALL ]
 then
