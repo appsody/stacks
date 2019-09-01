@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 
+# Setup the environment variable needed to build Kabanero Collections
+export BUILD_ALL=true
+export REPO_LIST=incubator
+export EXCLUDED_STACKS=incubator/swift
+export CODEWIND_INDEX=true
+export INDEX_IMAGE=kabanero-index
+
 if [ -z $BUILD_ALL ]
 then
     export RELEASE_NAME="$stack_id-v$stack_version"
@@ -19,9 +26,3 @@ fi
 # Unset the INDEX_LIST variable that wopuld have been set by the Apposdy build
 unset INDEX_LIST
 
-# Setup the environment variable needed to build Kabanero Collections
-export BUILD_ALL=true
-export REPO_LIST=incubator
-export EXCLUDED_STACKS=incubator/swift
-export CODEWIND_INDEX=true
-export INDEX_IMAGE=kabanero-index

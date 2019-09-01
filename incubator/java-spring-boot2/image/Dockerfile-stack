@@ -68,7 +68,7 @@ COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 COPY ./mvn-stack-settings.xml /project/mvn-stack-settings.xml
 
 WORKDIR /project
-RUN mvn -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
+RUN mvn --no-transfer-progress -B -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 
 WORKDIR /project/user-app
 RUN chown -R java_user:java_group /project
@@ -78,6 +78,7 @@ USER java_user
 ENV MAVEN_CONFIG "~/.m2"
 
 ENV APPSODY_USER_RUN_AS_LOCAL=true
+ENV APPSODY_PROJECT_DIR="/project"
 
 ENV APPSODY_MOUNTS=".:/project/user-app;~/.m2/repository:/mvn/repository"
 ENV APPSODY_DEPS=
