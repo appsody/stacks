@@ -217,12 +217,12 @@ do
 
 done
 
+# expose an extension point for running after main 'package' processing
+exec_hooks $script_dir/ext/post_package.d
+
 if [ "$CODEWIND_INDEX" == "true" ]; then
   python3 $script_dir/create_codewind_index.py
 fi
-
-# expose an extension point for running after main 'package' processing
-exec_hooks $script_dir/ext/post_package.d
 
 # create appsody-index from contents of assets directory after post-processing
 echo -e "\nBUILDING: $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
