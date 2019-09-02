@@ -8,6 +8,7 @@ services:
     container_name: "appsody-index"
     ports:
       - "8008:8080"
+      - "8003:8443"
     environment:
       - EXTERNAL_URL=http://localhost:8008/
 
@@ -17,5 +18,11 @@ services:
     entrypoint: ""
     command: sh -c "/opt/startup.sh; cat /opt/www/public/*.yaml; ls /opt/www/public"
     environment:
-      - EXTERNAL_URL=http://localhost:8008/
+      - EXTERNAL_URL=https://localhost:8003/
       - DRY_RUN=true
+
+  registry:
+    image: "registry:2"
+    container_name: "registry"
+    ports:
+     - "5000:5000"

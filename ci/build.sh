@@ -27,6 +27,5 @@ then
 fi
 
 . $script_dir/lint.sh
-. $script_dir/prefetch.sh
 . $script_dir/package.sh
 . $script_dir/test.sh
