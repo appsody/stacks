@@ -1,7 +1,5 @@
 # Dockerfile for building the stack
 
-# Explain all the Appsody stack environment variables
-
 #See https://appsody.dev/docs/stacks/environment-variables for more information about each variable.
 
 ENV APPSODY_MOUNTS= #Mount directories
