@@ -20,7 +20,7 @@ then
 fi
 
 mkdir -p $build_dir/prefetch
-cd $build_dir/prefetch
+pushd $build_dir/prefetch
 
 if [ -n "${INDEX_LIST}" ]
 then
@@ -50,7 +50,7 @@ then
                     # ./ci/build/prefetch-stack_id-template_id 0.3.2
                     echo '#!/bin/bash
 
-cd "'${build_dir}'/prefetch"
+pushd "'${build_dir}'/prefetch"
 # Fetched from '${url}' on '$(date)'
 # '${x}'
 checksum="'$($create $filename)'"
@@ -65,6 +65,7 @@ then
 else
     echo nomatch
 fi
+popd
 ' > ${build_dir}/prefetch-"${stack[0]}-${template_id}"
                     chmod +x ${build_dir}/prefetch-"${stack[0]}-${template_id}"
                 fi
@@ -72,3 +73,4 @@ fi
         done
     done
 fi
+popd
