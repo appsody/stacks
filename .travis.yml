@@ -4,9 +4,9 @@ go:
   - 1.12.x
 
 matrix:
-  - include:
-    - os: linux
-      dist: bionic
+  include:
+  - os: linux
+    dist: bionic
 
 services:
   - docker
