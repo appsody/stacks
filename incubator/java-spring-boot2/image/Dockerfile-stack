@@ -52,6 +52,11 @@ ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 
 COPY ./LICENSE /licenses/
+
+# OSGI core for version range processing
+COPY ./util /util
+RUN  /util/check_version build
+
 COPY ./project /project
 COPY ./config /config
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml

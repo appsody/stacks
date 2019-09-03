@@ -5,8 +5,8 @@ go:
 
 matrix:
   include:
-    - os: linux
-      dist: bionic
+  - os: linux
+    dist: bionic
 
 services:
   - docker
@@ -19,7 +19,7 @@ before_install:
     - sudo snap install yq
 
 script:
-  - . ./ci/build.sh .
+  - . ./ci/build.sh
 
 # note before_deploy will run before each deploy provider
 before_deploy:
