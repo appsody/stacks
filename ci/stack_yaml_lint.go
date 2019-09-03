@@ -12,12 +12,13 @@ import (
 )
 
 type stack struct {
-	Name            string `yaml: "name"`
-	Version         string `yaml: "version"`
-	Description     string `yaml: "description"`
-	License         string `yaml: "license"`
-	Language        string `yaml: "language"`
-	DefaultTemplate string `yaml: "default-template"`
+	Name        string `yaml: "name"`
+	Version     string `yaml: "version"`
+	Description string `yaml: "description"`
+	License     string `yaml: "license"`
+	Language    string `yaml: "language"`
+	//DefaultTemplate string `yaml: "default-template"`
+	//Maintainer      string `yaml: "email"`
 }
 
 func (s *stack) validateYaml() *stack {
@@ -44,6 +45,20 @@ func (s *stack) checkVersion() *stack {
 	return s
 }
 
+func (s *stack) checkDescLenth() *stack {
+	errorPath := strings.Split(os.Args[1], "/stacks")
+
+	if len(s.Description) > 70 {
+		fmt.Println("ERROR: Description is too long in " + errorPath[1] + " (Max: 70 characters)")
+	}
+
+	return s
+}
+
+func (s *stack) checkMaintainer() *stack {
+	return s
+}
+
 func main() {
 	var s stack
 	s.validateYaml()
@@ -60,4 +75,6 @@ func main() {
 	}
 
 	s.checkVersion()
+	s.checkDescLenth()
+	//s.checkMaintainer()
 }
