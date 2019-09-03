@@ -32,7 +32,7 @@ error() {
 
 run_mvn () {
   echo -e "${GREEN}> mvn $@${NO_COLOR}"
-  mvn --no-transfer-progress "$@"
+  mvn "$@"
 }
 
 version() {
@@ -55,11 +55,11 @@ common() {
     error "Could not find Maven pom.xml
 
     * The project directory (containing an .appsody-conf.yaml file) must contain a pom.xml file.
-    * On Windows and MacOS, the project directory should also be shared with Docker: 
+    * On Windows and MacOS, the project directory should also be shared with Docker:
       - Win: https://docs.docker.com/docker-for-windows/#shared-drives
       - Mac: https://docs.docker.com/docker-for-mac/#file-sharing
     "
-    exit 1   
+    exit 1
   fi
   # workaround: exit with error if repository does not exist
   if [ ! -d /mvn/repository ]; then
