@@ -88,7 +88,7 @@ fi
 # image registry org for publishing stack
 if [ -z "$IMAGE_REGISTRY_ORG" ]
 then
-    export IMAGE_REGISTRY_ORG=mhamwala
+    export IMAGE_REGISTRY_ORG=appsody
 fi
 
 if [ -z $GIT_BRANCH ]
