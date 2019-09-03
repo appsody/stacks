@@ -1,7 +1,5 @@
 FROM registry.access.redhat.com/ubi7/ubi
 
-RUN cat /etc/os-release
-
 LABEL vendor="Kabanero" \
     name="kabanero/java-microprofile" \
     version="0.2.10" \
