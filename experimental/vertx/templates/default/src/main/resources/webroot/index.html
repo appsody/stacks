@@ -1,0 +1,63 @@
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <title>Vert.x HTTP Example</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div>
+        <div class="sect1">
+<h2 id="_http_Example">HTTP Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An example of simple mapping of a business operation to a remote endpoint. By taking this approach, clients use the HTTP protocol as a transport mechanism to call services. Application engineers define the APIs using a broad interpretation of the REST fundamentals, encouraging freedom in design and quick prototyping.</p>
+</div>
+<div class="sect2">
+<h3 id="_using_the_greeting_service">Using the greeting service</h3>
+
+</div>
+</div>
+</div>
+        
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="World">
+            </div>
+            <button id="invoke" type="submit" class="btn btn-success">Invoke</button>
+        </form>
+
+        <h3>Result:</h3>
+        <pre><code id="greeting-result">Invoke the service to see the result.</code></pre>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function() {
+       $("#invoke").click(function(e) {
+          var n = $("#name").val() || "World";
+          $.getJSON("/api/greeting?name=" + n, function(res) {
+              $("#greeting-result").text(JSON.stringify(res));
+          });
+          e.preventDefault();
+       });
+    });
+</script>
+
+</body>
+
+</html>

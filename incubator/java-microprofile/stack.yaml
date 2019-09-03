@@ -1,5 +1,5 @@
 name: Eclipse MicroProfile®
-version: 0.2.10
+version: 0.2.11
 description: Eclipse MicroProfile on Open Liberty & OpenJ9 using Maven
 license: Apache-2.0
 language: java
