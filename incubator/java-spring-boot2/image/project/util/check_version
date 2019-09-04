@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 # This is a small utility script that uses OSGi VersionRange and Version
 # classes to verify whether or not a specified version matches is contained
 # within a specified range.

@@ -92,7 +92,7 @@ common() {
     exit 1
   fi
 
-  if ! /util/check_version contains "$p_version_range" "$a_version";  then
+  if ! /project/util/check_version contains "$p_version_range" "$a_version";  then
     error "Version mismatch
 
 The version of the appsody stack '${a_version}' does not match the
