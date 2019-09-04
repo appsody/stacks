@@ -12,41 +12,6 @@ collection=$stack_dir/collection.yaml
 
 . $base_dir/ci/env.sh
 
-if [ -z $ASSET_LIST ]; then
-    asset_list="pipelines dashboards deploys"
-else 
-    asset_list=$ASSET_LIST
-fi
-
-build_asset_tar () {
-    asset_build=$assets_dir/asset_temp
-    mkdir -p $asset_build
-    
-    # copy all the files from the assets directoty to a build directory
-    cp -r $1/* $asset_build
-
-    # Generate a manifest.yaml file for each file in the tar.gz file
-    asset_manifest=$asset_build/manifest.yaml
-    echo "contents:" > $asset_manifest
-    
-    # for each of the assets generate a sha256 and add it to the manifest.yaml
-    for asset_path in $(find $asset_build -type f -name '*')
-    do
-        asset_name=${asset_path#$asset_build/}
-        if [ -f $asset_path ] && [ "$(basename -- $asset_path)" != "manifest.yaml" ]
-        then
-            sha256=$(cat $asset_path | $sha256cmd | awk '{print $1}')
-            echo "- file: $asset_name" >> $asset_manifest
-            echo "  sha256: $sha256" >> $asset_manifest
-        fi
-    done
-    
-    # build template archives
-    tar -czf $assets_dir/$2 -C $asset_build .
-    echo -e "--- Created $asset_type archive: $2"
-    rm -fr $asset_build
-}
-
 process_assets () {
     asset_types=$1
     asset_type="${asset_types%?}"
@@ -95,8 +60,8 @@ process_assets () {
             fi
         done
        
-        if [ -d $base_dir/common/$asset_types ]; then
-            for asset_dir in $base_dir/common/$asset_types/*/
+        if [ -d $base_dir/$repo_name/common/$asset_types ]; then
+            for asset_dir in $base_dir/$repo_name/common/$asset_types/*/
             do
                 if [ -d $asset_dir ]
                 then
@@ -186,31 +151,6 @@ then
             fi
         
             rm -fr $template_temp
-        fi
-    done
-    for asset in $asset_list
-    do
-        asset_type="${asset%?}"
-        if [ -d $base_dir/common/$asset ]; then
-            # echo "We have some common $asset to process"
-            for asset_dir in $base_dir/common/$asset/*/
-            do
-                if [ -d $asset_dir ]
-                then
-                    # determine the assest id based on the subdirectory 
-                    asset_id=$(basename $asset_dir)
-                
-                    # Determine the asset tar.gz filename to be used 
-                    # to contain all of the asset files
-                    asset_archive=$repo_name.common.$asset_type.$asset_id.tar.gz
-
-                    # Only process the assets if we are building
-                    if [ $build = true ]
-                    then
-                        build_asset_tar $asset_dir $asset_archive
-                    fi
-               fi
-          done
         fi
     done
 fi

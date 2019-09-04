@@ -23,6 +23,12 @@ else
     fi
 fi
 
+if [ -z $ASSET_LIST ]; then
+    asset_list="pipelines dashboards deploys"
+else 
+    asset_list=$ASSET_LIST
+fi
+
 # Unset the INDEX_LIST variable that wopuld have been set by the Apposdy build
 unset INDEX_LIST
 
