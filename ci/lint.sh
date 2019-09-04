@@ -5,10 +5,7 @@ set -e
 . $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
 
 #expose an extension point for running before main 'lint' processing
-if [ -f $script_dir/ext/pre_lint.sh ]
-then
-    . $script_dir/ext/pre_lint.sh $base_dir
-fi
+exec_hooks $script_dir/ext/pre_lint.d
 
 error=0
 warning=0
@@ -50,6 +47,12 @@ do
         if [ ! -f $image_dir/Dockerfile-stack ]
         then
             echo "ERROR: Missing Dockerfile-stack in $image_dir"
+            let "error=error+1"
+        fi
+
+        if [ ! -f $image_dir/LICENSE ]
+        then
+            echo "ERROR: Missing LICENSE in $image_dir"
             let "error=error+1"
         fi
 
@@ -112,7 +115,4 @@ then
 fi
 
 #expose an extension point for running after main 'lint' processing
-if [ -f $script_dir/ext/post_lint.sh ]
-then
-    . $script_dir/ext/post_lint.sh $base_dir
-fi
+exec_hooks $script_dir/ext/post_lint.d

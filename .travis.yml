@@ -3,16 +3,13 @@ language: generic
 go:
   - 1.12.x
 
-os:
-  - linux
+os: linux
+dist: bionic
 
 services:
   - docker
 
 script:
-  - pyenv global 3.6
-  - pip3 install pyyaml
-  - ./ci/prefetch.sh
   - . ./ci/build.sh
 
 # note before_deploy will run before each deploy provider
