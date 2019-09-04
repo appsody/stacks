@@ -32,21 +32,7 @@ error() {
 
 run_mvn () {
   echo -e "${GREEN}> mvn $@${NO_COLOR}"
-  mvn "$@"
-}
-
-version() {
-  if [ ! -f $1 ]; then
-    error "$1 does not exist."
-    exit 1
-  fi
-
-  # get version from specified POM
-  xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t \
-     -o "export GROUP_ID=" -v "/x:project/x:groupId" -n \
-     -o "export ARTIFACT_ID=" -v "/x:project/x:artifactId" -n \
-     -o "export VERSION=" -v "/x:project/x:version" \
-     $1
+  mvn --no-transfer-progress "$@"
 }
 
 common() {
@@ -55,11 +41,11 @@ common() {
     error "Could not find Maven pom.xml
 
     * The project directory (containing an .appsody-conf.yaml file) must contain a pom.xml file.
-    * On Windows and MacOS, the project directory should also be shared with Docker: 
+    * On Windows and MacOS, the project directory should also be shared with Docker:
       - Win: https://docs.docker.com/docker-for-windows/#shared-drives
       - Mac: https://docs.docker.com/docker-for-mac/#file-sharing
     "
-    exit 1   
+    exit 1
   fi
   # workaround: exit with error if repository does not exist
   if [ ! -d /mvn/repository ]; then
@@ -73,42 +59,55 @@ common() {
   fi
 
   # Get parent pom information (appsody-boot2-pom.xml)
-  eval $(version /project/appsody-boot2-pom.xml)
+  local a_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:groupId" /project/appsody-boot2-pom.xml)
+  local a_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:artifactId" /project/appsody-boot2-pom.xml)
+  local a_version=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:version" /project/appsody-boot2-pom.xml)
+  local a_major=$(echo ${a_version} | cut -d'.' -f1)
+  local a_minor=$(echo ${a_version} | cut -d'.' -f2)
+  ((next=a_minor+1))
+  local a_range="[${a_major}.${a_minor},${a_major}.${next})"
 
-  if ! $(mvn -N dependency:get -q -o -Dartifact=${GROUP_ID}:${ARTIFACT_ID}:${VERSION} -Dpackaging=pom >/dev/null)
+  if ! $(mvn -N dependency:get -q -o -Dartifact=${a_groupId}:${a_artifactId}:${a_version} -Dpackaging=pom >/dev/null)
   then
     # Install parent pom
-    note "Installing parent ${GROUP_ID}:${ARTIFACT_ID}:${VERSION}"
+    note "Installing parent ${a_groupId}:${a_artifactId}:${a_version}"
     run_mvn install -q -f /project/appsody-boot2-pom.xml
   fi
 
   local p_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:groupId" pom.xml)
   local p_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:artifactId" pom.xml)
-  local p_version=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:version" pom.xml)
+  local p_version_range=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:version" pom.xml)
 
   # Require parent in pom.xml
-  if [ "${p_groupId}" != "${GROUP_ID}" ] || [ "${p_artifactId}" != "${ARTIFACT_ID}" ]; then
-    error "Project is missing required parent:
+  if [ "${p_groupId}" != "${a_groupId}" ] || [ "${p_artifactId}" != "${a_artifactId}" ]; then
+    error "Project pom.xml is missing the required parent:
 
     <parent>
-      <groupId>${GROUP_ID}</groupId>
-      <artifactId>${ARTIFACT_ID}</artifactId>
-      <version>${VERSION}</version>
+      <groupId>${a_groupId}</groupId>
+      <artifactId>${a_artifactId}</artifactId>
+      <version>${a_range}</version>
       <relativePath/>
     </parent>
     "
     exit 1
   fi
 
-  if [ "${p_version}" != "${VERSION}" ]; then
-    major=$(echo ${VERSION} | cut -d'.' -f1)
-    ((next=major+1))
+  if ! /project/util/check_version contains "$p_version_range" "$a_version";  then
+    error "Version mismatch
 
-    note "Updating parent version"
-    run_mvn -q versions:update-parent "-DparentVersion=[${major},${next})"
+The version of the appsody stack '${a_version}' does not match the
+parent version specified in pom.xml '${p_version_range}'. Please update
+the parent version in pom.xml, and test your changes.
+
+    <parent>
+      <groupId>${a_groupId}</groupId>
+      <artifactId>${a_artifactId}</artifactId>
+      <version>${a_range}</version>
+      <relativePath/>
+    </parent>
+    "
+    exit 1
   fi
-
-  unset GROUP_ID ARTIFACT_ID VERSION
 }
 
 recompile() {
