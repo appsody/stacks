@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi7/ubi
+FROM registry.access.redhat.com/ubi8/ubi
 
 RUN yum upgrade --disableplugin=subscription-manager -y \
    && yum clean --disableplugin=subscription-manager packages \
@@ -30,8 +30,7 @@ COPY . /project
 WORKDIR /project/user-app
 
 # Maven install
-RUN wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo \
-  && yum install --disableplugin=subscription-manager -y maven
+RUN yum install --disableplugin=subscription-manager -y maven
 
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
@@ -45,7 +44,7 @@ RUN cd target && \
 
 FROM openliberty/open-liberty:microProfile3-ubi-min
 
-COPY --chown=1001:0 --from=0 /config/ /config/
+COPY --chown=1001:0 --from=0 /config/ /opt/ol/wlp/usr/servers/defaultServer/
 
 EXPOSE 9080
 EXPOSE 9443
