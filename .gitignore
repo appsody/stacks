@@ -3,6 +3,7 @@
 /ci/build
 /ci/release
 /ci/nginx/docker-compose.override.yml
+**/00_local
 **/.DS_Store
 **/node_modules
 **/*.log
