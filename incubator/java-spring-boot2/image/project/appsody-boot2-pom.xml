@@ -160,7 +160,6 @@
   <profiles>
     <!-- Activate Spring developer tools when using appsody -->
     <profile>
-<<<<<<< HEAD
         <id>dev</id>
         <activation>
           <property>
@@ -195,24 +194,9 @@
                   </configuration>
                 </execution>
               </executions>
-            </plugin>      
-          </plugins>          
+            </plugin>
+          </plugins>
         </build>
-=======
-      <id>dev</id>
-      <activation>
-        <property>
-          <name>env.APPSODY_RUN</name>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-devtools</artifactId>
-          <optional>true</optional>
-        </dependency>
-      </dependencies>
->>>>>>> Use the Docker stack image to build templates
     </profile>
 
   </profiles>

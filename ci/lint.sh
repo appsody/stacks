@@ -23,7 +23,7 @@ do
     else
         image_dir="$stack_dir/image"
         project_dir="$image_dir/project"
-        templates_dir="$stack_dir/templates/*"
+        templates_dir="$stack_dir/templates"
         if [ -d $stack_dir/image/templates ]
         then
             templates_dir=$stack_dir/image/templates
@@ -77,7 +77,7 @@ do
             let "error=error+1"
         fi
 
-        for template in "$templates_dir/*"
+        for template in $templates_dir/*/
         do
             if [ -f $template_list/.appsody-config.yaml ]
             then

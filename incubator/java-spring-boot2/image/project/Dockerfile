@@ -3,9 +3,6 @@ FROM {{APPSODY_STACK}} as compile
 #setup project folder for java build step
 COPY . /project
 
-# OSGI core for version range processing
-RUN  /project/util/check_version build
-
 WORKDIR /project/user-app
 
 RUN mkdir -p /mvn/repository \
