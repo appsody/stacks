@@ -9,7 +9,7 @@ metadata:
 spec:
   version: 1.0.0
   applicationImage: APPSODY_DOCKER_IMAGE
-  stack: sample-stack
+  stack: APPSODY_STACK
   service:
     type: NodePort
     port: APPSODY_PORT

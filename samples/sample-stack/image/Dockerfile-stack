@@ -1,23 +1,53 @@
 # Dockerfile for building the stack
 
-#See https://appsody.dev/docs/stacks/environment-variables for more information about each variable.
+FROM registry.access.redhat.com/ubi7/ubi
 
-ENV APPSODY_MOUNTS= #Mount directories
+# See https://appsody.dev/docs/stacks/environment-variables for more information about each variable.
 
-ENV APPSODY_WATCH_DIR= #Directories to watch for changes in.
-ENV APPSODY_WATCH_IGNORE_DIR= #Directories to ignore changes in.
-ENV APPSODY_WATCH_REGEX= #Regex expression to describe which files are watched for changes in.
+# Mount the application directory into the container filesystem, for example
+ENV APPSODY_MOUNTS=/:/project/userapp
 
-ENV APPSODY_INSTALL= #Optional command executed before RUN/TEST/DEBUG
+# Define a volume for dependencies to be stored between runs, for example
+ENV APPSODY_DEPS=/project/deps
 
-ENV APPSODY_RUN= #Command executed in 'run' mode.
-ENV APPSODY_RUN_ON_CHANGE= #Command executed in 'run' mode when a change is detected.
-ENV APPSODY_RUN_KILL= #Signals whether to kill the server process before starting the ON_CHANGE action.
+# Directories to watch for changes in
+ENV APPSODY_WATCH_DIR=/project/userapp
 
-ENV APPSODY_DEBUG= #Command executed in 'debug' mode
-ENV APPSODY_DEBUG_ON_CHANGE= #Command executed in 'debug' mode when a change is detected.
-ENV APPSODY_DEBUG_KILL= #Signals whether to kill the server process before starting the ON_CHANGE action.
+# Directories to ignore changes in
+ENV APPSODY_WATCH_IGNORE_DIR= 
 
-ENV APPSODY_TEST= #Command executed in 'test' mode
-ENV APPSODY_TEST_ON_CHANGE= #Command executed in 'test' mode when a change is detected.
-ENV APPSODY_TEST_KILL= #Signals whether to kill the server process before starting the ON_CHANGE action.
+# Types of file that will trigger a re-launch (change this to be specific to your application).
+ENV APPSODY_WATCH_REGEX="^.*.*"
+
+# Optional command executed before RUN/TEST/DEBUG - typically used to install any dependencies from
+# the user application
+ENV APPSODY_INSTALL= 
+
+# Command to be executed in 'run' mode (change this to launch your application)
+ENV APPSODY_RUN="echo \"I am running your application\""
+# Command to be executed in 'run' mode  when re-launch it trigged (often the same as APPSODY_RUN)
+ENV APPSODY_RUN_ON_CHANGE="echo I am re-running your application"
+#Signals whether to kill the server process before starting the ON_CHANGE action.
+ENV APPSODY_RUN_KILL=false
+
+# Command to be executed in 'debug' mode (change this to launch your application)
+ENV APPSODY_DEBUG="echo I am running your application in debug mode"
+# Command to be executed in 'debug' mode when re-launch it trigged (often the same as APPSODY_DEBUG)
+ENV APPSODY_DEBUG_ON_CHANGE="echo I am re-running your application in debug mode"
+# Signals whether to kill the server process before starting the ON_CHANGE action.
+ENV APPSODY_DEBUG_KILL=false
+
+# Command to be executed in 'run' mode (change this to launch your application)
+ENV APPSODY_TEST="echo I am running your application in test mode"
+# Command to be executed in 'run' mode on when re-launch it trigged (often the same as APPSODY_TEST)
+ENV APPSODY_TEST_ON_CHANGE="echo I am re-running your application in test mode"
+# Signals whether to kill the server process before starting the ON_CHANGE action.
+ENV APPSODY_TEST_KILL=false
+
+COPY ./LICENSE /licenses/
+COPY ./project /project
+COPY ./config /config
+WORKDIR /project
+
+ENV PORT=8080
+EXPOSE 8080
