@@ -45,6 +45,9 @@ ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 COPY . /project
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 
+# OSGI core for version range processing
+RUN  /project/util/check_version build
+
 WORKDIR /project/user-app
 
 RUN /project/java-spring-boot2-build.sh package
