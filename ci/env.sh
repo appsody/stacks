@@ -6,11 +6,6 @@ then
     return 0
 fi
 
-if [ ! -z "$assets_dir" ]
-then
-    return 0
-fi
-
 export script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 export base_dir=$(cd "${script_dir}/.." && pwd)
 export assets_dir="${script_dir}/assets"

@@ -30,6 +30,7 @@ then
             done
         else
             stderr "ERROR: unable to identify changed files in $TRAVIS_COMMIT_RANGE"
+            # show original error
             git diff --name-only "$TRAVIS_COMMIT_RANGE"
             exit 1
         fi
