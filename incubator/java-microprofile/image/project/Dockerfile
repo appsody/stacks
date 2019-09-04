@@ -1,8 +1,7 @@
-FROM registry.access.redhat.com/ubi8/ubi
+FROM registry.access.redhat.com/ubi7/ubi
 
 RUN yum upgrade --disableplugin=subscription-manager -y \
    && yum clean --disableplugin=subscription-manager packages \
-   && mkdir -p /mvn/repository \
    && echo 'Finished installing dependencies'
 
 USER root
@@ -30,7 +29,10 @@ COPY . /project
 WORKDIR /project/user-app
 
 # Maven install
-RUN yum install --disableplugin=subscription-manager -y maven
+RUN mkdir -p /mvn/repository
+
+RUN wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo \
+  && yum install --disableplugin=subscription-manager -y apache-maven
 
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
