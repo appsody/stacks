@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi7/ubi
+FROM registry.access.redhat.com/ubi8/ubi
 
 LABEL vendor="Kabanero" \
     name="kabanero/java-microprofile" \
@@ -39,8 +39,7 @@ RUN set -eux; \
    ENV JAVA_TOOL_OPTIONS="-XX:+IgnoreUnrecognizedVMOptions -XX:+UseContainerSupport -XX:+IdleTuningCompactOnIdle -XX:+IdleTuningGcOnIdle"
 
  # Maven install
- RUN wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo \
-  && yum install --disableplugin=subscription-manager -y maven
+ RUN yum install --disableplugin=subscription-manager -y maven
 
   ENV MAVEN_HOME /usr/share/maven
   ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
