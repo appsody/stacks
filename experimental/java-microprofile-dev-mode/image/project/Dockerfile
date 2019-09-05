@@ -1,7 +1,6 @@
-FROM adoptopenjdk/openjdk8-openj9
+FROM openjdk8-openj9-local
 
-RUN apt-get update && \
-    apt-get install -y maven unzip
+RUN apt-get install -y maven unzip
 
 # Pre-cache of maven dependencies
 COPY pom.xml /project/ 

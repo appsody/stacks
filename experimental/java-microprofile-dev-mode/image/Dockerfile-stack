@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk8-openj9
+FROM openjdk8-openj9-local
 
 USER root
 RUN  apt-get -qq update \
