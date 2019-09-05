@@ -1,3 +1,4 @@
+#Kabanero! on activate substitute CollectionName for text '${collection-name}'
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
