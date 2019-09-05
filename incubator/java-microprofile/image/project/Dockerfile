@@ -1,11 +1,11 @@
-FROM registry.access.redhat.com/ubi7/ubi
+FROM registry.access.redhat.com/ubi8/ubi
 
 RUN yum upgrade --disableplugin=subscription-manager -y \
    && yum clean --disableplugin=subscription-manager packages \
    && echo 'Finished installing dependencies'
 
 USER root
-RUN yum install --disableplugin=subscription-manager -y unzip curl ca-certificates wget
+RUN yum install --disableplugin=subscription-manager -y unzip curl ca-certificates
 
 #Install openjdk
 ENV JAVA_VERSION jdk8u222-b10_openj9-0.15.1
@@ -29,10 +29,17 @@ COPY . /project
 WORKDIR /project/user-app
 
 # Maven install
-RUN mkdir -p /mvn/repository
+ARG MAVEN_VERSION=3.6.2
+ARG USER_HOME_DIR="/root"
+ARG SHA=d941423d115cd021514bfd06c453658b1b3e39e6240969caf4315ab7119a77299713f14b620fb2571a264f8dff2473d8af3cb47b05acf0036fc2553199a5c1ee
+ARG BASE_URL=https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/
 
-RUN wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo \
-  && yum install --disableplugin=subscription-manager -y apache-maven
+ RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
+   && curl -fsSL -o /tmp/apache-maven.tar.gz ${BASE_URL}/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+   && echo "${SHA}  /tmp/apache-maven.tar.gz" | sha512sum -c - \
+   && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
+   && rm -f /tmp/apache-maven.tar.gz \
+   && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
