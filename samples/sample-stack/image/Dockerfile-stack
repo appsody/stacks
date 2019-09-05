@@ -24,23 +24,23 @@ ENV APPSODY_WATCH_REGEX="^.*.*"
 ENV APPSODY_INSTALL= 
 
 # Command to be executed in 'run' mode (change this to launch your application)
-ENV APPSODY_RUN="echo \"I am running your application\""
+ENV APPSODY_RUN="/bin/bash /project/userapp/hello.sh"
 # Command to be executed in 'run' mode  when re-launch it trigged (often the same as APPSODY_RUN)
-ENV APPSODY_RUN_ON_CHANGE="echo I am re-running your application"
+ENV APPSODY_RUN_ON_CHANGE="/bin/bash /project/userapp/hello.sh"
 #Signals whether to kill the server process before starting the ON_CHANGE action.
 ENV APPSODY_RUN_KILL=false
 
 # Command to be executed in 'debug' mode (change this to launch your application)
-ENV APPSODY_DEBUG="echo I am running your application in debug mode"
+ENV APPSODY_DEBUG="echo -n \"Debugging \"; /bin/bash /project/userapp/hello.sh"
 # Command to be executed in 'debug' mode when re-launch it trigged (often the same as APPSODY_DEBUG)
-ENV APPSODY_DEBUG_ON_CHANGE="echo I am re-running your application in debug mode"
+ENV APPSODY_DEBUG_ON_CHANGE="echo -n \"Debugging \"; /bin/bash /project/userapp/hello.sh"
 # Signals whether to kill the server process before starting the ON_CHANGE action.
 ENV APPSODY_DEBUG_KILL=false
 
 # Command to be executed in 'run' mode (change this to launch your application)
-ENV APPSODY_TEST="echo I am running your application in test mode"
+ENV APPSODY_TEST="/bin/bash /project/userapp/tests/test.sh"
 # Command to be executed in 'run' mode on when re-launch it trigged (often the same as APPSODY_TEST)
-ENV APPSODY_TEST_ON_CHANGE="echo I am re-running your application in test mode"
+ENV APPSODY_TEST_ON_CHANGE="/bin/bash /project/userapp/tests/test.sh"
 # Signals whether to kill the server process before starting the ON_CHANGE action.
 ENV APPSODY_TEST_KILL=false
 
