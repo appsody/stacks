@@ -8,4 +8,4 @@ COPY . ./
 
 EXPOSE 8080
 # Pass control your application
-CMD ["echo",  "I am running your application"]
+CMD ["/bin/bash",  "/project/userapp/hello.sh"]
