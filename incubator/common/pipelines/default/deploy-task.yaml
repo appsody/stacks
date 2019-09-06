@@ -1,7 +1,8 @@
+#Kabanero! on activate substitute CollectionName for text '${collection-name}'
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: java-spring-boot2-deploy-task
+  name: ${collection-name}-deploy-task
 spec:
   inputs:
     resources:
@@ -11,7 +12,7 @@ spec:
         type: image
     params:
       - name: repository-name
-        default: java-spring-boot2
+        default: ${collection-name}
       - name: app-deploy-file-name
         default: app-deploy.yaml
   steps:

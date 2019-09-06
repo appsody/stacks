@@ -1,7 +1,8 @@
+#Kabanero! on activate substitute CollectionName for text '${collection-name}'
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: nodejs-build-task
+  name: ${collection-name}-build-task
 spec:
   inputs:
     resources:

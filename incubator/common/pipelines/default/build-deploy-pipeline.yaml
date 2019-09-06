@@ -1,7 +1,8 @@
+#Kabanero! on activate substitute CollectionName for text '${collection-name}'
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: java-microprofile-build-deploy-pipeline
+  name: ${collection-name}-build-deploy-pipeline
 spec:
   resources:
     - name: git-source
@@ -11,7 +12,7 @@ spec:
   tasks:
     - name: build-task
       taskRef:
-        name: java-microprofile-build-task
+        name: ${collection-name}-build-task
       resources:
         inputs:
         - name: git-source
@@ -21,7 +22,7 @@ spec:
           resource: docker-image
     - name: deploy-task
       taskRef:
-        name: java-microprofile-deploy-task
+        name: ${collection-name}-deploy-task
       runAfter: [build-task]
       resources:
         inputs:
