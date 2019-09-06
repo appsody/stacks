@@ -1,8 +1,8 @@
-#Kabanero! on activate substitute CollectionName for text '${collection-name}'
+#Kabanero! on activate substitute CollectionId for text 'CollectionId'
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: ${collection-name}-build-deploy-pipeline
+  name: CollectionId-build-deploy-pipeline
 spec:
   resources:
     - name: git-source
@@ -12,7 +12,7 @@ spec:
   tasks:
     - name: build-task
       taskRef:
-        name: ${collection-name}-build-task
+        name: CollectionId-build-task
       resources:
         inputs:
         - name: git-source
@@ -22,7 +22,7 @@ spec:
           resource: docker-image
     - name: deploy-task
       taskRef:
-        name: ${collection-name}-deploy-task
+        name: CollectionId-deploy-task
       runAfter: [build-task]
       resources:
         inputs:

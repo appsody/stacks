@@ -1,8 +1,8 @@
-#Kabanero! on activate substitute CollectionName for text '${collection-name}'
+#Kabanero! on activate substitute CollectionId for text 'CollectionId'
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: ${collection-name}-build-task
+  name: CollectionId-build-task
 spec:
   inputs:
     resources:
