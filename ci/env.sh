@@ -1,8 +1,8 @@
 #!/bin/bash
-set -e
 
 if [ ! -z "$assets_dir" ]
 then
+    # we've been here before
     return 0
 fi
 
@@ -13,7 +13,6 @@ export build_dir="${script_dir}/build"
 
 mkdir -p $assets_dir
 mkdir -p $build_dir
-
 
 # ENVIRONMENT VARIABLES for controlling behavior of build, package, and release
 
@@ -63,7 +62,7 @@ exec_hooks() {
     local dir=$1
     if [ -d $dir ]
     then
-        echo "Running $(basename $dir) scripts"
+        echo " == Running $(basename $dir) scripts"
         for x in $dir/*
         do
             if [ -x $x ]
@@ -73,9 +72,16 @@ exec_hooks() {
                 echo skipping $(basename $x)
             fi
         done
+        echo " == Done $(basename $dir) scripts"
     fi
 }
 
+stderr() {
+    for x in "$@"
+    do
+        >&2 echo "$x"
+    done
+}
 
 #expose an extension point for running before main 'env' processing
 exec_hooks $script_dir/ext/pre_env.d
@@ -93,37 +99,27 @@ fi
 
 if [ -z $GIT_BRANCH ]
 then
-    if [ -z $TRAVIS_BRANCH ]
-    then
-        export GIT_BRANCH=$(git for-each-ref --format='%(refname:lstrip=2)' "$(git symbolic-ref -q HEAD)")
-    else
-        export GIT_BRANCH=${TRAVIS_BRANCH}
-    fi
+    export GIT_BRANCH=$(git for-each-ref --format='%(refname:lstrip=2)' "$(git symbolic-ref -q HEAD)")
 fi
 
 # find github repository slug
 if [ -z $GIT_ORG_REPO ]
 then
-    if [ -z "$TRAVIS_REPO_SLUG" ]
-    then
-        # Find git organization for the current branch
-        git_remote=$(git for-each-ref --format='%(upstream:remotename)' "$(git symbolic-ref -q HEAD)")
-        git_remote=${git_remote:-origin}
+    # Find git organization for the current branch
+    git_remote=$(git for-each-ref --format='%(upstream:remotename)' "$(git symbolic-ref -q HEAD)")
+    git_remote=${git_remote:-origin}
 
-        git_remote_url=$(git remote get-url $git_remote)
-        git_remote_url=${git_remote_url:-https://github.com/appsody/stacks.git}
-        git_remote_url=${git_remote_url#*:}
+    git_remote_url=$(git remote get-url $git_remote)
+    git_remote_url=${git_remote_url:-https://github.com/appsody/stacks.git}
+    git_remote_url=${git_remote_url#*:}
 
-        git_repo=$(basename $git_remote_url .git)
-        git_repo=${git_repo:-stacks}
+    git_repo=$(basename $git_remote_url .git)
+    git_repo=${git_repo:-stacks}
 
-        git_org=$(basename $(dirname $git_remote_url))
-        git_org=${git_org:-appsody}
+    git_org=$(basename $(dirname $git_remote_url))
+    git_org=${git_org:-appsody}
 
-        export GIT_ORG_REPO=$git_org/$git_repo
-    else
-        export GIT_ORG_REPO=$TRAVIS_REPO_SLUG
-    fi
+    export GIT_ORG_REPO=$git_org/$git_repo
 fi
 
 if [ -z "$RELEASE_URL" ]
@@ -144,12 +140,7 @@ fi
 
 if [ -z "$INDEX_VERSION" ]
 then
-    if [ -z $TRAVIS_BUILD_NUMBER ]
-    then
-        export INDEX_VERSION=SNAPSHOT
-    else
-        export INDEX_VERSION=${TRAVIS_BUILD_NUMBER}
-    fi
+    export INDEX_VERSION=SNAPSHOT
 fi
 
 if [ -z "$INDEX_LIST" ]
@@ -210,6 +201,12 @@ image_push() {
         else
             docker push $name
         fi
+
+        if [ $? -ne 0 ]
+        then
+            stderr "ERROR: Push failed."
+            exit 1
+        fi
     else
         echo "IMAGE_REGISTRY_PUBLISH=${IMAGE_REGISTRY_PUBLISH}; Skipping push of $@"
     fi
@@ -227,7 +224,7 @@ image_registry_login() {
 
         if [ $? -ne 0 ]
         then
-            echo "ERROR: Registry login failed. Will not push images to registry."
+            stderr "ERROR: Registry login failed. Will not push images to registry."
             export IMAGE_REGISTRY_PUBLISH=false
         fi
     fi
