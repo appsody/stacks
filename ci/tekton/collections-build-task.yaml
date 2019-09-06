@@ -47,6 +47,7 @@ spec:
 
           # do build and release
           export USE_BUILDAH="true"
+          export BUILDAH_FORMAT="docker"
           export IMAGE_REGISTRY="${inputs.params.registry}"
           export IMAGE_REGISTRY_ORG="${inputs.params.namespace}"
           export IMAGE_REGISTRY_PUBLISH="true"
