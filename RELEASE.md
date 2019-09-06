@@ -79,6 +79,9 @@ This script makes use of the **STACKS_LIST** to validate the file structure of t
 
 If a stack does not adhere to these rules, the lint will fail and exit. Otherwise the build process will continue.
 
+### Prefetch
+The `prefetch.sh` script downloads all latest released templates and makes them available for packaging.
+
 ### Package
 
 `package.sh` script iterates over each repository (`experimental incubator stable`) and creates indexes for each repository. The indexes are based on `stack.yaml` file for each stack. It then iterates over the **STACKS_LIST** environment variable and for each stack does the following:
