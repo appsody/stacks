@@ -18,10 +18,10 @@ spec:
       - name: docker-image
         type: image
   steps:
-    - name: assemble-extract-step
+    - name: assemble-extract
       securityContext:
         privileged: true
-      image: appsody/appsody-docker
+      image: appsody/appsody-buildah
       command: ["/bin/bash"]
       args:
         - -c
@@ -30,9 +30,9 @@ spec:
         - name: gitsource
           value: git-source
       volumeMounts:
-        - name: docker-socket
-          mountPath: /var/run/docker.sock
-    - name: build-push-step
+        - mountPath: /var/lib/containers
+          name: varlibcontainers
+    - name: build-push
       env:
       - name: DOCKER_CONFIG
         value: /builder/home/.docker
@@ -45,7 +45,5 @@ spec:
         - --context=${inputs.params.pathToContext}
         - --skip-tls-verify
   volumes:
-    - name: docker-socket
-      hostPath:
-        path: /var/run/docker.sock
-        type: Socket
+    - name: varlibcontainers
+      emptyDir: {}
