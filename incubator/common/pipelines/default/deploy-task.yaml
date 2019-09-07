@@ -16,7 +16,7 @@ spec:
       - name: app-deploy-file-name
         default: app-deploy.yaml
   steps:
-    - name: modify-app-deploy-yaml-step
+    - name: modify-app-deploy-yaml
       image: registry.access.redhat.com/ubi8/ubi:latest
       command: ['/bin/bash']
       args:
@@ -38,7 +38,7 @@ spec:
           value: ${inputs.resources.docker-image.url}
         - name: YAMLFILE
           value: ${inputs.params.app-deploy-file-name}
-    - name: deploy-image-step
+    - name: deploy-image
       image: lachlanevenson/k8s-kubectl
       command: ['/bin/sh']
       args: ['-c', 'find /workspace/git-source -name ${YAMLFILE} -type f|xargs kubectl apply -f']
