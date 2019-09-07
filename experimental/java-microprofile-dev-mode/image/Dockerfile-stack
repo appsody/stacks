@@ -12,6 +12,7 @@ COPY ./project /project
 WORKDIR /project/
 
 RUN mvn install dependency:go-offline -DskipTests
+RUN mvn install dependency:go-offline -DskipTests -f pom-dev.xml
 
 WORKDIR /project/user-app
 
@@ -22,14 +23,14 @@ ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/target
 ENV APPSODY_WATCH_REGEX="(pom.xml)$"
 
-ENV APPSODY_INSTALL="../validate.sh && mvn install -DskipTests"
+ENV APPSODY_INSTALL="../validate.sh && mvn install -DskipTests && /project/install-dev-deps.sh"
 
-ENV APPSODY_RUN="mvn liberty:dev -DskipTests"
-ENV APPSODY_RUN_ON_CHANGE="mvn liberty:dev -DskipTests"
+ENV APPSODY_RUN="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn liberty:dev -DskipTests"
+ENV APPSODY_RUN_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn liberty:dev -DskipTests"
 ENV APPSODY_RUN_KILL=true
 
-ENV APPSODY_DEBUG="mvn liberty:dev -Dliberty.debug.port=7777"
-ENV APPSODY_DEBUG_ON_CHANGE="mvn liberty:dev -Dliberty.debug.port=7777"
+ENV APPSODY_DEBUG="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn liberty:dev -Dliberty.debug.port=7777"
+ENV APPSODY_DEBUG_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn liberty:dev -Dliberty.debug.port=7777"
 ENV APPSODY_DEBUG_KILL=true
 
 ENV APPSODY_TEST="mvn verify"
