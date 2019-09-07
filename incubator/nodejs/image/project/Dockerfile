@@ -10,6 +10,8 @@ RUN yum upgrade --disableplugin=subscription-manager -y \
  RUN groupadd --gid 1000 node \
   && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
 
+COPY --chown=node:node . /project
+
 # Install user-app dependencies
 WORKDIR "/project/user-app"
 COPY ./user-app/package*.json ./
