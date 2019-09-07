@@ -25,7 +25,7 @@ spec:
       command: ["/bin/bash"]
       args:
         - -c
-        - "/setupAndRunExtract.sh"
+        - "/extract.sh"
       env:
         - name: gitsource
           value: git-source
