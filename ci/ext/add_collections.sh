@@ -97,51 +97,38 @@ do
             if [ -d $stack_dir ]
             then
                 stack_id=$(basename $stack_dir)
+                echo "Building collection: $repo_name/$stack_id"
 
-                # check if the stack needs to be built
-                build=false
-                for repo_stack in $STACKS_LIST
+                stack_version=$(awk '/^version *:/ { gsub("version:","",$NF); gsub("\"","",$NF); print $NF}' $stack)
+                collection=$stack_dir/collection.yaml
+
+                count=0
+                stack_to_use=-1
+                while [ $count -lt $num_stacks ]
                 do
-                    if [ $repo_stack = $repo_name/$stack_id ]
+                    if [ $stack_id == $(yq r $all_stacks stacks.[$count].id) ]
                     then
-                        build=true
+                        stack_to_use=$count
+                        break;
                     fi
+                    count=$(( $count + 1 ))
                 done
-
-                if [ $build = true ];  then
-                    echo "Building collection: $repo_name/$stack_id"
-
-                    stack_version=$(awk '/^version *:/ { gsub("version:","",$NF); gsub("\"","",$NF); print $NF}' $stack)
-                    collection=$stack_dir/collection.yaml
-
-                    count=0
-                    stack_to_use=-1
-                    while [ $count -lt $num_stacks ]
-                    do
-                        if [ $stack_id == $(yq r $all_stacks stacks.[$count].id) ]
-                        then
-                            stack_to_use=$count
-                            break;
-                        fi
-                        count=$(( $count + 1 ))
-                    done
-                    if [ $stack_to_use -ge 0 ]
+                if [ $stack_to_use -ge 0 ]
+                then
+                    yq r $all_stacks stacks.[$stack_to_use] > $one_stack
+                    if [ -f $collection ]
                     then
-                        yq r $all_stacks stacks.[$stack_to_use] > $one_stack
-                        if [ -f $collection ]
+                        if [ -f $base_dir/ci/ext/add_collection_resources.sh ]
                         then
-                            if [ -f $base_dir/ci/ext/add_collection_resources.sh ]
-                            then
-                                . $base_dir/ci/ext/add_collection_resources.sh $base_dir $stack_dir $stack_version $repo_name $one_stack
-                            fi
+                            . $base_dir/ci/ext/add_collection_resources.sh $base_dir $stack_dir $stack_version $repo_name $one_stack
                         fi
-                        yq p -i $one_stack stacks.[+]
-                        yq m -a -i $index_file_v2_temp $one_stack
                     fi
-                    if [ -f $one_stack ]
-                    then
-                        rm -f $one_stack
-                    fi
+                    yq p -i $one_stack stacks.[+]
+                    yq m -a -i $index_file_v2_temp $one_stack
+                fi
+                if [ -f $one_stack ]
+                then
+                    rm -f $one_stack
                 fi
             fi
         done
