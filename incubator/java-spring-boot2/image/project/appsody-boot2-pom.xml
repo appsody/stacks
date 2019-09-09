@@ -52,6 +52,9 @@
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <!-- Use a trigger file for spring devtools plugin restart -->
+    <spring.devtools.restart.trigger-file>.appsody-spring-trigger</spring.devtools.restart.trigger-file>
   </properties>
 
   <dependencyManagement>
@@ -163,7 +166,7 @@
         <id>dev</id>
         <activation>
           <property>
-            <name>env.APPSODY_RUN</name>
+            <name>env.APPSODY_DEV_MODE</name>
           </property>
         </activation>
         <dependencies>
