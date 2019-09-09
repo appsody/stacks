@@ -5,6 +5,9 @@ RUN apt-get update && \
 
 COPY . /project
 
+# OSGI core for version range processing
+RUN  /project/util/check_version build
+
 WORKDIR /project/user-app
 
 RUN mvn -B install -DskipTests

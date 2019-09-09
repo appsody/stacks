@@ -24,6 +24,7 @@ mvn install -Dmaven.repo.local=/mvn/repository -Denforcer.skip=true -f ../pom.xm
 # Get parent pom information
 a_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:groupId" /project/pom.xml)
 a_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:artifactId" /project/pom.xml)
+a_version=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:version" /project/pom.xml)
 p_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:groupId" pom.xml)
 p_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:artifactId" pom.xml)
 p_version_range=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:version" pom.xml)
@@ -31,6 +32,24 @@ p_version_range=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t 
 # Check child pom for required parent project
 if [ "${p_groupId}" != "${a_groupId}" ] || [ "${p_artifactId}" != "${a_artifactId}" ]; then
   error "Project pom.xml is missing the required parent:
+
+  <parent>
+    <groupId>${a_groupId}</groupId>
+    <artifactId>${a_artifactId}</artifactId>
+    <version>${a_range}</version>
+    <relativePath/>
+  </parent>
+  "
+  exit 1
+fi
+
+# Check parent version
+if ! /project/util/check_version contains "$p_version_range" "$a_version";  then
+  echo "Version mismatch
+
+The version of the appsody stack '${a_version}' does not match the
+parent version specified in pom.xml '${p_version_range}'. Please update
+the parent version in pom.xml, and test your changes.
 
   <parent>
     <groupId>${a_groupId}</groupId>

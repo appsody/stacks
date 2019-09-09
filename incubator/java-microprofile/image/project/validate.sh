@@ -30,7 +30,7 @@ p_version_range=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t 
 
 # Check child pom for required parent project
 if [ "${p_groupId}" != "${a_groupId}" ] || [ "${p_artifactId}" != "${a_artifactId}" ]; then
-  error "Project pom.xml is missing the required parent:
+  echo "Project pom.xml is missing the required parent:
 
   <parent>
     <groupId>${a_groupId}</groupId>
@@ -42,14 +42,21 @@ if [ "${p_groupId}" != "${a_groupId}" ] || [ "${p_artifactId}" != "${a_artifactI
   exit 1
 fi
 
-if ! grep -Gz "<parent>.*<groupId>${PARENT_GROUP_ID}</groupId>.*</parent>" pom.xml | grep -Gz "<parent>.*<artifactId>${PARENT_ARTIFACT_ID}</artifactId>.*</parent>" | grep -Gzq "<parent>.*<version>${PARENT_VERSION}</version>.*</parent>"
-then
-  echo "Project is missing required parent:
+# Check parent version
+if ! /project/util/check_version contains "$p_version_range" "$a_version";  then
+  echo "Version mismatch
+
+The version of the appsody stack '${a_version}' does not match the
+parent version specified in pom.xml '${p_version_range}'. Please update
+the parent version in pom.xml, and test your changes.
+
   <parent>
-    <groupId>${PARENT_GROUP_ID}</groupId>
-    <artifactId>${PARENT_ARTIFACT_ID}</artifactId>
-    <version>${PARENT_VERSION}</version>
-  </parent>"
+    <groupId>${a_groupId}</groupId>
+    <artifactId>${a_artifactId}</artifactId>
+    <version>${a_range}</version>
+    <relativePath/>
+  </parent>
+  "
   exit 1
 fi
 

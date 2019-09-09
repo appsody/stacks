@@ -10,6 +10,10 @@ RUN  apt-get -qq update \
 COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
+
+# OSGI core for version range processing
+RUN  /project/util/check_version build
+
 WORKDIR /project/
 
 RUN mkdir -p /mvn/repository
