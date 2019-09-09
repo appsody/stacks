@@ -10,11 +10,11 @@ services:
   - docker
 
 script:
-  - travis_wait ./ci/build.sh
+  - travis_wait 30 bash ./ci/build.sh
 
 # note before_deploy will run before each deploy provider
 before_deploy:
-  - . ./ci/release.sh
+  - ./ci/release.sh
 
 deploy:
   provider: releases
