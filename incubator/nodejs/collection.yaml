@@ -2,4 +2,4 @@ default-image: nodejs
 default-pipeline: default
 images:
 - id: nodejs
-  image: kabanero/nodejs:0.2
+  image: $IMAGE_REGISTRY_ORG/nodejs:0.2
