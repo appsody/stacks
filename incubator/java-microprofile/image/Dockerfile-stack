@@ -13,8 +13,8 @@ COPY ./config /config
 
 WORKDIR /project/
 RUN mkdir -p /mvn/repository
-RUN mvn --no-transfer-progress -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
-RUN mvn --no-transfer-progress -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipTests
+RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
+RUN mvn -B -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipTests
 
 WORKDIR /project/user-app
 
@@ -25,17 +25,17 @@ ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/target
 ENV APPSODY_WATCH_REGEX="^.*(.xml|.java|.properties)$"
 
-ENV APPSODY_INSTALL="../validate.sh && mvn --no-transfer-progress -Dmaven.repo.local=/mvn/repository install -DskipTests"
+ENV APPSODY_INSTALL="../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository install -DskipTests"
 
-ENV APPSODY_RUN="mvn --no-transfer-progress -Dmaven.repo.local=/mvn/repository liberty:run"
-ENV APPSODY_RUN_ON_CHANGE="mvn --no-transfer-progress -Dmaven.repo.local=/mvn/repository package -DskipTests"
+ENV APPSODY_RUN="mvn -B -Dmaven.repo.local=/mvn/repository liberty:run"
+ENV APPSODY_RUN_ON_CHANGE="mvn -Dmaven.repo.local=/mvn/repository package -DskipTests"
 ENV APPSODY_RUN_KILL=false
 
-ENV APPSODY_DEBUG="mvn --no-transfer-progress -Dmaven.repo.local=/mvn/repository liberty:debug"
-ENV APPSODY_DEBUG_ON_CHANGE="mvn --no-transfer-progress -Dmaven.repo.local=/mvn/repository package -DskipTests"
+ENV APPSODY_DEBUG="mvn -B -Dmaven.repo.local=/mvn/repository liberty:debug"
+ENV APPSODY_DEBUG_ON_CHANGE="mvn -Dmaven.repo.local=/mvn/repository package -DskipTests"
 ENV APPSODY_DEBUG_KILL=false
 
-ENV APPSODY_TEST="mvn --no-transfer-progress -Dmaven.repo.local=/mvn/repository verify"
+ENV APPSODY_TEST="mvn -B -Dmaven.repo.local=/mvn/repository verify"
 ENV APPSODY_TEST_ON_CHANGE=""
 ENV APPSODY_TEST_KILL=false
 
