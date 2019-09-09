@@ -1,7 +1,7 @@
 FROM adoptopenjdk/openjdk8-openj9
 
 RUN apt-get update && \
-    apt-get install -y maven unzip
+    apt-get install -y maven unzip wget xmlstarlet
 
 COPY . /project
 

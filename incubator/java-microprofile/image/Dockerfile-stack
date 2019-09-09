@@ -2,7 +2,7 @@ FROM adoptopenjdk/openjdk8-openj9
 
 USER root
 RUN  apt-get -qq update \
-  && apt-get -qq install -y curl maven xmlstarlet \
+  && apt-get -qq install -y curl maven xmlstarlet wget \
   && DEBIAN_FRONTEND=noninteractive apt-get -qq upgrade -y \
   && apt-get -qq clean \
   && rm -rf /tmp/* /var/lib/apt/lists/*
