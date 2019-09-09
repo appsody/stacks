@@ -14,7 +14,7 @@ The repository is based on the Appsody repository.
 Click here to find out more about [Appsody stacks](https://github.com/appsody/website/blob/master/content/docs/stacks/stacks-overview.md).
 
 
-## Customizing & building the collections locally
+## Building the collections locally
 
 1. Clone the collections repository and create a new copy of it in your git organization:
    ```bash
