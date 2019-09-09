@@ -41,7 +41,7 @@ Click here to find out more about [Appsody stacks](https://github.com/appsody/we
      * pyyaml
        * YAML parser and emitter for python (pip3 install pyyaml)
 
-   There are several environment variable that needs to be setup. These are required in order to correctly build the collections.
+   There are several environment variables that need to be setup. These are required in order to correctly build the collections.
    ```bash
    # Organization for images
    export IMAGE_REGISTRY_ORG=kabanero
@@ -98,6 +98,6 @@ Click here to find out more about [Appsody stacks](https://github.com/appsody/we
 If you have a question that you can't find an answer to, we would also like to hear about that too. 
 You can reach out to the community for assistance on the [Kabanero Slack channel](https://ibm-cloud-tech.slack.com/messages/CJZCYTD0Q).
 
-## Licence
+## License
 
 Please see [LICENSE](https://github.com/kabanero-io/collections/blob/master/LICENSE) and [NOTICES](https://github.com/kabanero-io/collections/blob/master/NOTICE.md) for more information.
