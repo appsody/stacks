@@ -21,7 +21,27 @@ eval $(mvn -q -Dexec.executable=echo -Dexec.args="${args}" --non-recursive -f ..
 echo "Installing parent ${PARENT_GROUP_ID}:${PARENT_ARTIFACT_ID}:${PARENT_VERSION}"
 mvn install -Dmaven.repo.local=/mvn/repository -Denforcer.skip=true -f ../pom.xml
 
+# Get parent pom information (appsody-boot2-pom.xml)
+local a_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:groupId" /project/pom.xml)
+local a_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:artifactId" /project/pom.xml)
+local p_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:groupId" pom.xml)
+local p_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:artifactId" pom.xml)
+local p_version_range=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:version" pom.xml)
+
 # Check child pom for required parent project
+if [ "${p_groupId}" != "${a_groupId}" ] || [ "${p_artifactId}" != "${a_artifactId}" ]; then
+  error "Project pom.xml is missing the required parent:
+  
+  <parent>
+    <groupId>${a_groupId}</groupId>
+    <artifactId>${a_artifactId}</artifactId>
+    <version>${a_range}</version>
+    <relativePath/>
+  </parent>
+  "
+  exit 1
+fi
+
 if ! grep -Gz "<parent>.*<groupId>${PARENT_GROUP_ID}</groupId>.*</parent>" pom.xml | grep -Gz "<parent>.*<artifactId>${PARENT_ARTIFACT_ID}</artifactId>.*</parent>" | grep -Gzq "<parent>.*<version>${PARENT_VERSION}</version>.*</parent>"
 then
   echo "Project is missing required parent:
