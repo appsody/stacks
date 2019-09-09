@@ -11,7 +11,6 @@ COPY ./config /config
 COPY ./project /project
 WORKDIR /project/
 
-RUN mvn install dependency:go-offline -DskipTests
 RUN mvn install dependency:go-offline -DskipTests -f pom-dev.xml
 
 WORKDIR /project/user-app
@@ -33,7 +32,7 @@ ENV APPSODY_DEBUG="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn lib
 ENV APPSODY_DEBUG_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn liberty:dev -Dliberty.debug.port=7777"
 ENV APPSODY_DEBUG_KILL=true
 
-ENV APPSODY_TEST="mvn verify"
+ENV APPSODY_TEST="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn verify"
 ENV APPSODY_TEST_ON_CHANGE=""
 ENV APPSODY_TEST_KILL=false
 

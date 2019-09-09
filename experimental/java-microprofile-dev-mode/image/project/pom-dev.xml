@@ -10,12 +10,14 @@
     <version>0.2.0</version>
     <packaging>jar</packaging>
 
+<!--
     <repositories>
         <repository>
             <id>localrepository</id>
             <url>/mvn/repository</url>
         </repository>
     </repositories>
+-->
 
     <dependencies>
       <dependency>
