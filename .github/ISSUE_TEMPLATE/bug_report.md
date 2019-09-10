@@ -29,7 +29,7 @@ What is the actual behaviour.
 
 **If applicable please specify:**
  - CLI version:
- - Stack you are using:
+ - Collection you are using:
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
