@@ -36,7 +36,10 @@ Click here to find out more about [Appsody stacks](https://github.com/appsody/we
        * Command-line YAML processor  (sudo snap install yq)
      * docker
        * A tool to help you build and run apps within containers
-   These are only required if you are also building the Codewind Index (CODEWIND_INDEX=true)
+       
+   These are only required if you are also building the Codewind Index (export CODEWIND_INDEX=true)
+     * python3
+       * Python is a general-purpose interpreted, interactive, object-oriented, and high-level programming language
      * pyyaml
        * YAML parser and emitter for python (pip3 install pyyaml)
 
@@ -46,7 +49,7 @@ Click here to find out more about [Appsody stacks](https://github.com/appsody/we
    export IMAGE_REGISTRY_ORG=kabanero
 
    # Whether to build the Codewind Index file
-   CODEWIND_INDEX=false
+   export CODEWIND_INDEX=false
    ```
    These settings are also required to correctly release the collections (if done manually):
    ```bash
