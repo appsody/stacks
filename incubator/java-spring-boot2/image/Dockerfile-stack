@@ -1,5 +1,12 @@
 FROM maven:3.6-ibmjava-8
-LABEL maintainer="IBM Java Engineering at IBM Cloud"
+
+# passed in via package script
+ARG GIT_ORG_REPO=appsody/stacks
+ARG IMAGE_REGISTRY_ORG=appsody
+ARG STACK_ID=java-spring-boot2
+ARG MAJOR_VERSION=0
+ARG MINOR_VERSION=1
+ARG PATCH_VERSION=0
 
 # Ensure up to date / patched OS
 RUN  apt-get -qq update \
@@ -15,11 +22,19 @@ COPY ./config /config
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 COPY ./mvn-stack-settings.xml /project/mvn-stack-settings.xml
 
-# OSGI core for version range processing
-RUN  /project/util/check_version build
+# Build utility for version range processing
+# Update Dockerfile to build from this appsody stack image (by range)
+RUN /project/util/check_version build \
+ && if [ ${MAJOR_VERSION} -eq 0 ]; then \
+      export IMAGE_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}; \
+    else \
+      export IMAGE_VERSION=${MAJOR_VERSION}; \
+    fi \
+ && sed -i -e "s|{{APPSODY_STACK}}|${IMAGE_REGISTRY_ORG}/${STACK_ID}:${IMAGE_VERSION}|" /project/Dockerfile
 
-WORKDIR /project
-RUN mvn --no-transfer-progress -B -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
+# Install maven wrapper
+RUN cd /project \
+ && mvn --no-transfer-progress -B -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 
 WORKDIR /project/user-app
 
@@ -31,7 +46,8 @@ ENV APPSODY_DEPS=
 
 ENV APPSODY_WATCH_DIR="/project/user-app/src"
 ENV APPSODY_WATCH_IGNORE_DIR=""
-ENV APPSODY_WATCH_REGEX=".*"
+# Watch all but hidden files
+ENV APPSODY_WATCH_REGEX="^[^.]+\.?.*"
 
 ENV APPSODY_RUN="/project/java-spring-boot2-build.sh run"
 ENV APPSODY_RUN_ON_CHANGE="/project/java-spring-boot2-build.sh recompile"
@@ -48,6 +64,7 @@ ENV APPSODY_TEST_KILL=true
 ENV PORT=8080
 
 EXPOSE 8080
+EXPOSE 8443
 EXPOSE 5005
 EXPOSE 35729
 ENTRYPOINT ["/project/java-spring-boot2-build.sh", "run"]

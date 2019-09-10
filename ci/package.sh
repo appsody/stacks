@@ -73,6 +73,7 @@ do
                             --label "org.opencontainers.image.created=$(date +%Y-%m-%dT%H:%M:%S%z)" \
                             --label "org.opencontainers.image.version=${stack_version}" \
                             --label "org.opencontainers.image.revision=$(git log -1 --pretty=%H)" \
+                            --label "appsody.stack=$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch" \
                             -t $IMAGE_REGISTRY_ORG/$stack_id \
                             -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major \
                             -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor \
