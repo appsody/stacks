@@ -32,18 +32,28 @@ spec:
       volumeMounts:
         - mountPath: /var/lib/containers
           name: varlibcontainers
-    - name: build-push
+    - name: build-bud
+      securityContext:
+        privileged: true
+      image: appsody/appsody-buildah
+      command: ['buildah', 'bud', '--tls-verify=false', '--format=docker', '-f', '${inputs.params.pathToDockerFile}', '-t', '${outputs.resources.docker-image.url}', '${inputs.params.pathToContext}']
       env:
-      - name: DOCKER_CONFIG
-        value: /builder/home/.docker
-      image: gcr.io/kaniko-project/executor
-      command:
-        - /kaniko/executor
-      args:
-        - --dockerfile=${inputs.params.pathToDockerFile}
-        - --destination=${outputs.resources.docker-image.url}
-        - --context=${inputs.params.pathToContext}
-        - --skip-tls-verify
+        - name: gitsource
+          value: git-source
+      volumeMounts:
+        - mountPath: /var/lib/containers
+          name: varlibcontainers
+    - name: build-push
+      securityContext:
+        privileged: true
+      image: appsody/appsody-buildah
+      command: ['buildah', 'push', '--tls-verify=false', '${outputs.resources.docker-image.url}', 'docker://${outputs.resources.docker-image.url}']
+      env:
+        - name: gitsource
+          value: git-source
+      volumeMounts:
+        - mountPath: /var/lib/containers
+          name: varlibcontainers
   volumes:
     - name: varlibcontainers
       emptyDir: {}
