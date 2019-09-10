@@ -7,7 +7,7 @@ COPY . /project
 
 WORKDIR /project/user-app
 
-RUN mvn install -DskipTests
+RUN mvn -B install -DskipTests
 
 RUN cd target && \
     unzip *.zip && \

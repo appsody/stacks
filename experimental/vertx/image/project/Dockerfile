@@ -9,7 +9,7 @@ COPY . /project
 WORKDIR /project/user-app
 COPY ./user-app/src ./src
 COPY ./user-app/pom.xml ./
-RUN mvn clean package
+RUN mvn -B clean package
 
 FROM adoptopenjdk:8-jre-openj9
 

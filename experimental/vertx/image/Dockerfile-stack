@@ -13,23 +13,23 @@ COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
 WORKDIR /project/
-RUN mvn install dependency:go-offline -DskipTests
+RUN mvn -B install dependency:go-offline -DskipTests
 
 ENV APPSODY_USER_RUN_AS_LOCAL=true
 
 ENV APPSODY_MOUNTS=".:/project/user-app/;~/.m2/repository:/.m2/repository"
 ENV APPSODY_DEPS=
 
-ENV APPSODY_RUN="mvn compile vertx:run"
+ENV APPSODY_RUN="mvn -B compile vertx:run"
 ENV APPSODY_RUN_ON_CHANGE=""
 ENV APPSODY_RUN_KILL=false
 
-ENV APPSODY_DEBUG="mvn compile vertx:debug"
+ENV APPSODY_DEBUG="mvn -B compile vertx:debug"
 ENV APPSODY_DEBUG_ON_CHANGE=""
 ENV APPSODY_DEBUG_KILL=false
 
-ENV APPSODY_TEST="mvn test"
-ENV APPSODY_TEST_ON_CHANGE="mvn test"
+ENV APPSODY_TEST="mvn -B test"
+ENV APPSODY_TEST_ON_CHANGE="mvn -B test"
 ENV APPSODY_TEST_KILL=true
 
 WORKDIR /project/user-app
