@@ -10,9 +10,9 @@ This repository holds the default set of collections available for Kabanero. Eac
 To find out more about Kabanero, check out [kabanero.io](https://kabanero.io).
 
 ## Repository Structure
-The repository is based on the Appsody repository.
-Click here to find out more about [Appsody stacks](https://github.com/appsody/website/blob/master/content/docs/stacks/stacks-overview.md).
+The repository is based on the Appsody repository structure with additional Kabanero Collections content. 
 
+Click here to find out more about the [Repository structure](https://github.com/kabanero-io/collections/blob/master/repo-structure.md).
 
 ## Building the collections locally
 
