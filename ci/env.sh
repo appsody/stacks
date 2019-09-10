@@ -58,6 +58,9 @@ mkdir -p $build_dir
 # Build the Codewind index when the value is 'true' (requires PyYaml)
 # export CODEWIND_INDEX
 
+# Specify a wrapper where required for long-running commands
+CI_WAIT_FOR=
+
 exec_hooks() {
     local dir=$1
     if [ -d $dir ]
@@ -169,16 +172,20 @@ fi
 
 image_build() {
     if [ "$USE_BUILDAH" == "true" ]; then
-        buildah bud $@
+        echo "> ${CI_WAIT_FOR} buildah bud $@"
+        ${CI_WAIT_FOR} buildah bud $@
     else
-        docker build $@
+        echo "> ${CI_WAIT_FOR} docker build $@"
+        ${CI_WAIT_FOR} docker build $@
     fi
 }
 
 image_tag() {
     if [ "$USE_BUILDAH" == "true" ]; then
+        echo "> buildah tag $@"
         buildah tag $1 $2
     else
+        echo "> docker tag $@"
         docker tag $1 $2
     fi
 }
