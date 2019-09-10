@@ -1,2 +1,4 @@
 README.md merge=ours
 RELEASE.md merge=ours
+.github/ISSUE_TEMPLATE/bug_report.md merge=ours
+.github/PULL_REQUEST_TEMPLATE.md merge=ours
