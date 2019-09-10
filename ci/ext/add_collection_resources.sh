@@ -110,7 +110,7 @@ then
     yq m -x -i $index_file $collection
 
     # find the name of the default image in the collection.yaml
-    default_imageId=$(yq r $index_file default-image) 
+    default_imageId=$(yq r $index_file default-image)
     imagesCount=$(yq r $index_file images | awk '$1 == "-" { count++ } END { print count }')
     count=0
     while [ $count -lt $imagesCount ]
@@ -119,6 +119,7 @@ then
         if [ $default_imageId == $imageId ]
         then
             default_image=$(yq r $index_file images.[$count].image)
+            default_image="${default_image/\$IMAGE_REGISTRY_ORG/${IMAGE_REGISTRY_ORG}}"
         fi
         count=$(( $count + 1 ))
     done
