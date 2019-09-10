@@ -1,7 +1,3 @@
----
-title: Kabanero Collections
----
-
 # Kabanero Collections
 
 Kabanero provides pre-configured collections that enable rapid development and deployment of quality microservice-based applications. Collections include an Appsody stack (base container image and project templates) and pipelines which act as a starting point for your application development.
@@ -29,7 +25,7 @@ Collections are categorized as either `stable`, `incubator` or `experimental` de
 
 This is a simplified view of the Kabanero Collections github repository structure.
 
-```bash
+```
 ci
 ├── [ files used for CI/CD of the Kabanero collections ]
 incubator
@@ -71,7 +67,7 @@ experimental
 
 There is a standard structure that all collections follow. The structure below represents the source structure of a collection:
 
-```bash
+```
 my-collection
 ├── README.md
 ├── stack.yaml
@@ -95,7 +91,7 @@ my-collection
 
 ```
 
-The structure above is then processed when you build the collection, to generate a Docker image for the stack, along with tar files of each of the templates and pipelines, which can then all be stored/referenced in a local or public appsody repo. Refer to the section on [Building and Testing Stacks](/docs/stacks/build-and-test.md) for more details. The appsody CLI can then access such a repo, to use the stack to initiate local development.
+The structure above is then processed when you build the collection, to generate a Docker image for the stack, along with tar files of each of the templates and pipelines, which can then all be stored/referenced in a local or public appsody repo. Refer to the section on [Building and Testing Stacks](https://github.com/appsody/website/blob/master/content/docs/stacks/build-and-test.md) for more details. The appsody CLI can then access such a repo, to use the stack to initiate local development.
 
 ## Summary of files within the stack and collection source and user directory structure
 
@@ -103,7 +99,7 @@ The structure above is then processed when you build the collection, to generate
 
 The `stack.yaml` file in the top level directory defines the different attributes of the stack and which template the stack should use by default. See the example below:
 
-```bash
+```yaml
 name: Sample Application Stack   # concise one line name for the stack
 version: 0.1.0                   # version of the stack
 description: sample stack to help creation of more appsody stacks # free form text explaining more about the capabilities of this stack and various templates
@@ -120,8 +116,8 @@ default-template: my-template-1  # name of default template
 
 The `collection.yaml` file in the top level directory defines the different attributes of the collection and which container image and pipeline the collection should use by default. See the example below:
 
-```bash
-default-image: java-microprofile # name of the default containier image - reference into the images element below
+```yaml
+default-image: java-microprofile # name of the default container image - reference into the images element below
 default-pipeline: default        # name of the default pipeline - reference to the pipeline in the directory structure
 images:                          # list of container images
 - id: java-microprofile
@@ -144,7 +140,7 @@ The `app-deploy.yaml` is the configuration file for deploying an Appsody project
 
 The `Dockerfile-stack` file in the `image` directory defines the foundation stack image, and a set of environment variables that specify the desired behaviour during the rapid local development cycle. It also defines what is exposed from the host machine to the container during this mode.
 
-Environment variables can be set to alter the behaviour of the CLI and controller (see [Appsody Environment Variables](/docs/stacks/environment-variables.md)).
+Environment variables can be set to alter the behaviour of the CLI and controller (see [Appsody Environment Variables](https://github.com/appsody/website/blob/master/content/docs/stacks/environment-variables.md)).
 
 ### Dockerfile
 
@@ -160,10 +156,10 @@ A pipeline is set of Tekton pipelines (k8s-style resources for declaring CI/CD-s
 
 ### .appsody-config.yaml
 
-The `.appsody-config.yaml` is not part of the the source structure, but will be generated as part of the stack building process, and will be placed in the user directory by the `appsody init`, command. This file specifies the stack image that will be used, and can be overridden for testing purposes to a locally built stack.
+The `.appsody-config.yaml` is not part of the source structure, but will be generated as part of the stack building process, and will be placed in the user directory by the `appsody init`, command. This file specifies the stack image that will be used, and can be overridden for testing purposes to a locally built stack.
 
 For example, the following specifies that the template will use the python-flask image:
 
-```bash
+```yaml
 stack: python-flask:0.1
 ```
