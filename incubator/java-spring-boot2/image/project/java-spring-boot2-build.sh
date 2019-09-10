@@ -6,18 +6,20 @@ else
 fi
 
 if [[ "$color_prompt" == "yes" ]]; then
-      BLUE="\033[0;34m"
-    GREEN="\033[0;32m"
-    WHITE="\033[1;37m"
-      RED="\033[0;31m"
-    YELLOW="\033[0;33m"
-  NO_COLOR="\033[0m"
+       BLUE="\033[0;34m"
+      GREEN="\033[0;32m"
+      WHITE="\033[1;37m"
+        RED="\033[0;31m"
+     YELLOW="\033[0;33m"
+   NO_COLOR="\033[0m"
+  MVN_COLOR=""
 else
         BLUE=""
       GREEN=""
       WHITE=""
         RED=""
-  NO_COLOUR=""
+   NO_COLOR=""
+  MVN_COLOR="-Dstyle.color=never"
 fi
 
 note() {
@@ -32,7 +34,7 @@ error() {
 
 run_mvn () {
   echo -e "${GREEN}> mvn $@${NO_COLOR}"
-  mvn --no-transfer-progress "$@"
+  mvn --no-transfer-progress ${MVN_COLOR} "$@"
 }
 
 common() {
@@ -151,14 +153,17 @@ case "${ACTION}" in
     package
   ;;
   debug)
+    export APPSODY_DEV_MODE=debug
     common
     debug
   ;;
   run)
+    export APPSODY_DEV_MODE=run
     common
     run
   ;;
   test)
+    export APPSODY_DEV_MODE=test
     common
     test
   ;;
