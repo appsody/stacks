@@ -50,7 +50,7 @@ test_template() {
     if appsody list $index_local | grep -q $stack
     then
         local repo=$index_local
-        export APPSODY_PULL_POLICY=$pull_policy
+        export APPSODY_PULL_POLICY=IFNOTPRESENT
     else
         local repo=$index
         export APPSODY_PULL_POLICY=ALWAYS
