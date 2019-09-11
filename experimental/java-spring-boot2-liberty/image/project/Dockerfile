@@ -5,6 +5,8 @@ RUN apt-get update && \
 
 COPY . /project
 
+RUN  /project/util/check_version build
+
 WORKDIR /project/user-app
 
 RUN mvn -B install -DskipTests
