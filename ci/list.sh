@@ -28,6 +28,8 @@ then
     STACKS_LIST=${STACKS_LIST[@]}
 fi
 
+echo "Building stacks: $STACKS_LIST"
+
 # expose environment variable for stacks
 export STACKS_LIST
 

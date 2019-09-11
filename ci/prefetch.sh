@@ -19,7 +19,6 @@ then
     verify="shasum --status -c -"
 fi
 
-mkdir -p $build_dir/prefetch
 pushd $build_dir/prefetch
 
 if [ -n "${INDEX_LIST}" ]
@@ -44,13 +43,15 @@ then
 
                     # The template id is in the filename: incubator.nodejs-loopback.templates.scaffold.tar.gz
                     template_id=$(echo $filename | sed -E 's|.*templates\.(.*)\.tar\.gz|\1|')
+                    repo=$(echo $filename | cut -d'.' -f1)
 
                     # Create a script that can compare a pre-fetched template version
                     # to the current stack version (read from stack.yaml), e.g.:
                     # ./ci/build/prefetch-stack_id-template_id 0.3.2
                     echo '#!/bin/bash
 
-pushd "'${build_dir}'/prefetch"
+dir=$(pwd)
+cd "'${build_dir}'/prefetch"
 # Fetched from '${url}' on '$(date)'
 # '${x}'
 checksum="'$($create $filename)'"
@@ -65,9 +66,9 @@ then
 else
     echo nomatch
 fi
-popd
-' > ${build_dir}/prefetch-"${stack[0]}-${template_id}"
-                    chmod +x ${build_dir}/prefetch-"${stack[0]}-${template_id}"
+cd $dir
+' > ${build_dir}/prefetch-"${repo}-${stack[0]}-${template_id}"
+                    chmod +x ${build_dir}/prefetch-"${repo}-${stack[0]}-${template_id}"
                 fi
             fi
         done
