@@ -1,7 +1,7 @@
 #!/bin/bash
 
-parent_pom=pom.xml
-child_pom=user-app/pom.xml
+parent_pom=../pom.xml
+child_pom=pom.xml
 
 # Test child pom file is present
 if [ ! -f ${child_pom} ]; then
