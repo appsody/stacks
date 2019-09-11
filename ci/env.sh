@@ -172,12 +172,16 @@ then
 fi
 
 image_build() {
+    local cmd="docker build"
     if [ "$USE_BUILDAH" == "true" ]; then
-        echo "> ${CI_WAIT_FOR} buildah bud $@"
-        ${CI_WAIT_FOR} buildah bud $@
-    else
-        echo "> ${CI_WAIT_FOR} docker build $@"
-        ${CI_WAIT_FOR} docker build $@
+        cmd="buildah bud"
+    fi
+
+    echo "> ${CI_WAIT_FOR} ${cmd} $@"
+    if ! ${CI_WAIT_FOR} ${cmd} $@
+    then
+      echo "Failed building image"
+      exit 1
     fi
 }
 
