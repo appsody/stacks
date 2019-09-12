@@ -25,4 +25,4 @@
 /build/
 
 ### VS Code ###
-.vscode/
+#.vscode/

@@ -8,7 +8,7 @@ exec_hooks $script_dir/ext/pre_test.d
 
 pull_policy=$APPSODY_PULL_POLICY
 
-if ! which appsody
+if ! which appsody > /dev/null
 then
     echo "appsody CLI not found on the path"
     return 1
@@ -63,12 +63,14 @@ test_template() {
     echo ""
     echo "> appsody init $repo/$stack $template"
     echo ""
-    if ${CI_WAIT_FOR} appsody init --overwrite $repo/$stack $template > init.log
+    if ${CI_WAIT_FOR} appsody init --overwrite $repo/$stack $template > init.log  2>&1
     then
+        trace  "Output from appsody init" init.log
+
         echo ""
         echo "> appsody run -P --name $stack-$template"
         echo ""
-        2>run.log 1>&2 appsody run -P --name $stack-$template &
+        appsody run -P --name $stack-$template > run.log  2>&1 &
 
         echo "Waiting for container to start"
         if ! wait_until_ready "appsody ps | grep -q $stack-$template"
@@ -90,14 +92,17 @@ test_template() {
         echo error=$error
         appsody ps
 
+        trace "Output from appsody run" run.log
+
         echo ""
         echo "> appsody build"
         echo ""
-        if ! ${CI_WAIT_FOR} appsody build > build.log
+        if ! ${CI_WAIT_FOR} appsody build > build.log  2>&1
         then
             ((error=error+1))
             cat build.log
         fi
+        trace  "Output from appsody build" build.log
         echo error=$error
     else
         ((error=error+1))
@@ -119,7 +124,7 @@ do
     then
         index_url=file://$x
         y=$(basename $x)
-        if appsody repo list | awk '{print $1}' | grep -e "${y%.*}$"
+        if appsody repo list | awk '{print $1}' | grep -q -e "${y%.*}$"
         then
             echo "Repo ${y%.*} exists"
         else
@@ -134,7 +139,13 @@ export APPSODY_PULL_POLICY=IFNOTPRESENT
 
 for stack in $STACKS_LIST
 do
-    for template in "$stack/templates/*"
+    templates_dir=$stack/templates
+    if [ -d $stack/image/templates ]
+    then
+        templates_dir=$stack/image/templates
+    fi
+
+    for template in "$templates_dir/*"
     do
         test_template "$stack" "$(basename $template)"
     done

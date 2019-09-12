@@ -19,22 +19,47 @@ COPY ./LICENSE /licenses/
 
 COPY ./project /project
 COPY ./config /config
+COPY ./templates /templates
+
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 COPY ./mvn-stack-settings.xml /project/mvn-stack-settings.xml
 
 # Build utility for version range processing
 # Update Dockerfile to build from this appsody stack image (by range)
+# Install maven wrapper
 RUN /project/util/check_version build \
- && if [ ${MAJOR_VERSION} -eq 0 ]; then \
+ && cd /project \
+ && mvn --no-transfer-progress -B -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
+
+# For the parent pom:
+# Use the git repository slug as the maven group: appsody/stacks --> dev.appsody.stacks
+# Use the stack id as the maven artifact id: java-spring-boot2
+# Use the passed in version as the mvn artifact version
+RUN if [ ${MAJOR_VERSION} -eq 0 ]; then \
       export IMAGE_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}; \
     else \
       export IMAGE_VERSION=${MAJOR_VERSION}; \
     fi \
- && sed -i -e "s|{{APPSODY_STACK}}|${IMAGE_REGISTRY_ORG}/${STACK_ID}:${IMAGE_VERSION}|" /project/Dockerfile
-
-# Install maven wrapper
-RUN cd /project \
- && mvn --no-transfer-progress -B -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
+ && export MAVEN_GROUP_ID="dev.$(echo $GIT_ORG_REPO | sed 's|/|.|')" \
+ && export MAVEN_ARTIFACT_ID="${STACK_ID}" \
+ && export MAVEN_ARTIFACT_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" \
+ && export MAVEN_VERSION_RANGE=$(/project/java-spring-boot2-build.sh range "${MAJOR_VERSION}.${MINOR_VERSION}") \
+ && echo ${MAVEN_GROUP_ID}:${MAVEN_ARTIFACT_ID}:${MAVEN_ARTIFACT_VERSION} - ${MAVEN_VERSION_RANGE} \
+ && sed -i -e "s|{{APPSODY_STACK}}|${IMAGE_REGISTRY_ORG}/${STACK_ID}:${IMAGE_VERSION}|" \
+           -e "s|{{APPSODY_STACK_FULL}}|${IMAGE_REGISTRY_ORG}/${STACK_ID}:${MAVEN_ARTIFACT_VERSION}|" /project/Dockerfile \
+ && find /project /templates -name '*pom.xml' -exec \
+      sed -i -e "s|{{MAVEN_GROUP_ID}}|${MAVEN_GROUP_ID}|" \
+             -e "s|{{MAVEN_ARTIFACT_ID}}|${MAVEN_ARTIFACT_ID}|" \
+             -e "s|{{MAVEN_ARTIFACT_VERSION}}|${MAVEN_ARTIFACT_VERSION}|" \
+             -e "s|{{MAVEN_VERSION_RANGE}}|${MAVEN_VERSION_RANGE}|" {} \; \
+ && for x in /templates/*; do \
+      cd $x; \
+      name=$(basename $x); \
+      echo "stack: ${IMAGE_REGISTRY_ORG}/${STACK_ID}:${IMAGE_VERSION}" > .appsody-config.yaml; \
+      tar -czf /templates/${name}.tar.gz --exclude-from=.gitignore .; \
+      pwd; \
+      cd /templates; \
+      done
 
 WORKDIR /project/user-app
 

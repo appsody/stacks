@@ -4,13 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent><!--required parent POM-->
-    <groupId>dev.appsody</groupId>
-    <artifactId>spring-boot2-stack</artifactId>
-    <version>[0.3, 0.4)</version>
+    <groupId>{{MAVEN_GROUP_ID}}</groupId>
+    <artifactId>{{MAVEN_ARTIFACT_ID}}</artifactId>
+    <version>{{MAVEN_VERSION_RANGE}}</version>
     <relativePath/>
   </parent>
 
-  <groupId>dev.appsody</groupId>
+  <groupId>{{MAVEN_GROUP_ID}}</groupId>
   <artifactId>kotlin-application</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>

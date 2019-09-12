@@ -17,8 +17,9 @@ ARG artifactId=appsody-spring
 ARG version=1.0-SNAPSHOT
 ENV JVM_ARGS=""
 
-LABEL org.opencontainers.image.version=${version}
-LABEL org.opencontainers.image.title=${artifactId}
+LABEL org.opencontainers.image.version="${version}"
+LABEL org.opencontainers.image.title="${artifactId}"
+LABEL appsody.stack="{{APPSODY_STACK_FULL}}"
 
 COPY --from=compile /project/user-app/target/app.jar /app.jar
 

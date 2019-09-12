@@ -61,6 +61,7 @@ mkdir -p $prefetch_dir
 
 # Specify a wrapper where required for long-running commands
 CI_WAIT_FOR=
+VERBOSE=
 
 exec_hooks() {
     local dir=$1
@@ -85,6 +86,21 @@ stderr() {
     do
         >&2 echo "$x"
     done
+}
+
+trace() {
+    if [ -z "${VERBOSE}" ]
+    then
+        for x in "$@"
+        do
+            if [ -f "$x" ]
+            then
+                >&2 cat "$x"
+            else
+                >&2 echo "$x"
+            fi
+        done
+    fi
 }
 
 #expose an extension point for running before main 'env' processing
