@@ -50,7 +50,7 @@ test_template() {
     if appsody list $index_local | grep -q $stack
     then
         local repo=$index_local
-        export APPSODY_PULL_POLICY=$pull_policy
+        export APPSODY_PULL_POLICY=IFNOTPRESENT
     else
         local repo=$index
         export APPSODY_PULL_POLICY=ALWAYS
@@ -61,9 +61,9 @@ test_template() {
     pushd $build_dir/test/$repo/$stack/$template
 
     echo ""
-    echo "> appsody init -v $repo/$stack $template"
+    echo "> appsody init $repo/$stack $template"
     echo ""
-    if ${CI_WAIT_FOR} appsody init -v --overwrite $repo/$stack $template
+    if ${CI_WAIT_FOR} appsody init --overwrite $repo/$stack $template > init.log
     then
         echo ""
         echo "> appsody run -P --name $stack-$template"
@@ -93,15 +93,21 @@ test_template() {
         echo ""
         echo "> appsody build"
         echo ""
-        if ! ${CI_WAIT_FOR} appsody build
+        if ! ${CI_WAIT_FOR} appsody build > build.log
         then
             ((error=error+1))
+            cat build.log
         fi
         echo error=$error
-
-        echo "Finished with ${error} error(s)"
     else
+        ((error=error+1))
         echo "Unable to initialize project"
+        cat init.log
+    fi
+
+    if [ $error -gt 0 ]
+    then
+        echo "Finished with ${error} error(s)"
         exit 1
     fi
     popd

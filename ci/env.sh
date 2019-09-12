@@ -10,9 +10,10 @@ export script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 export base_dir=$(cd "${script_dir}/.." && pwd)
 export assets_dir="${script_dir}/assets"
 export build_dir="${script_dir}/build"
+export prefetch_dir="${script_dir}/build/prefetch"
 
 mkdir -p $assets_dir
-mkdir -p $build_dir
+mkdir -p $prefetch_dir
 
 # ENVIRONMENT VARIABLES for controlling behavior of build, package, and release
 
@@ -171,12 +172,16 @@ then
 fi
 
 image_build() {
+    local cmd="docker build"
     if [ "$USE_BUILDAH" == "true" ]; then
-        echo "> ${CI_WAIT_FOR} buildah bud $@"
-        ${CI_WAIT_FOR} buildah bud $@
-    else
-        echo "> ${CI_WAIT_FOR} docker build $@"
-        ${CI_WAIT_FOR} docker build $@
+        cmd="buildah bud"
+    fi
+
+    echo "> ${CI_WAIT_FOR} ${cmd} $@"
+    if ! ${CI_WAIT_FOR} ${cmd} $@
+    then
+      echo "Failed building image"
+      exit 1
     fi
 }
 
