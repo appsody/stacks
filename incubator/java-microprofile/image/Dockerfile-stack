@@ -14,8 +14,10 @@ USER root
 
 RUN groupadd --gid 1000 java_group \
  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user
+# Dependency install
 
-RUN yum install --disableplugin=subscription-manager -y curl xmlstarlet wget
+RUN yum install --disableplugin=subscription-manager -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+    && yum install --disableplugin=subscription-manager -y curl xmlstarlet wget
 
 COPY ./LICENSE /licenses/
 COPY ./project /project

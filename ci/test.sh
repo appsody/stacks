@@ -42,6 +42,10 @@ test_template() {
     local index=$(dirname $1)-index
     local index_local=$(dirname $1)-index-local
     local error=0
+    
+    # Kabanero overrides
+    local index="kabanero-index"
+    local index_local=$index"-local"
 
     echo ""
     echo "=== Testing $stack : $template"
