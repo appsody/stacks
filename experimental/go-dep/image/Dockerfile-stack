@@ -1,0 +1,34 @@
+FROM golang:1
+
+ENV APPSODY_MOUNTS=/:/go/src/user-app 
+
+ENV APPSODY_PROJECT_DIR=/go/src/user-app
+ENV APPSODY_WATCH_DIR=/go/src/user-app
+ENV APPSODY_WATCH_IGNORE_DIR= /go/src/user-app/vendor
+ENV APPSODY_WATCH_REGEX="^.*.go$"
+
+ENV APPSODY_INSTALL="dep ensure"
+
+ENV APPSODY_RUN="go run user-app"
+ENV APPSODY_RUN_ON_CHANGE="go run user-app"
+ENV APPSODY_RUN_KILL=true
+
+ENV APPSODY_DEBUG= 
+ENV APPSODY_DEBUG_ON_CHANGE= 
+ENV APPSODY_DEBUG_KILL= 
+
+ENV APPSODY_TEST= 
+ENV APPSODY_TEST_ON_CHANGE= 
+ENV APPSODY_TEST_KILL= 
+
+COPY ./go-tools.sh /go-tools.sh
+COPY ./project /project
+COPY ./config /config
+
+WORKDIR /go/src/user-app
+ENV PORT=3000
+ENV GOPATH="/go"
+EXPOSE 3000
+
+RUN /go-tools.sh
+RUN mkdir /go/src/template-app && cd /go/src/template-app && dep init

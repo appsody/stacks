@@ -1,0 +1,34 @@
+FROM golang:1
+
+ENV APPSODY_MOUNTS=/:/project/user-app
+
+ENV APPSODY_PROJECT_DIR=/project/user-app
+ENV APPSODY_WATCH_DIR=/project/user-app
+ENV APPSODY_WATCH_IGNORE_DIR=
+ENV APPSODY_WATCH_REGEX="^.*.go$"
+
+ENV APPSODY_INSTALL=
+
+ENV APPSODY_RUN="go run /project/user-app/main.go"
+ENV APPSODY_RUN_ON_CHANGE="go run /project/user-app/main.go"
+ENV APPSODY_RUN_KILL=true
+
+ENV APPSODY_DEBUG= 
+ENV APPSODY_DEBUG_ON_CHANGE= 
+ENV APPSODY_DEBUG_KILL= 
+
+ENV APPSODY_TEST= 
+ENV APPSODY_TEST_ON_CHANGE= 
+ENV APPSODY_TEST_KILL= 
+
+COPY ./go-tools.sh /go-tools.sh
+COPY ./project /project
+COPY ./config /config
+WORKDIR /project
+
+ENV PORT=3000
+ENV GOPATH="/go"
+
+EXPOSE 3000
+
+RUN /go-tools.sh
