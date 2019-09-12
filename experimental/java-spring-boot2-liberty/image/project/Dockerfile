@@ -1,9 +1,13 @@
 FROM adoptopenjdk/openjdk8-openj9
 
 RUN apt-get update && \
-    apt-get install -y maven unzip wget
+    apt-get install -y maven unzip wget xmlstarlet
 
 COPY . /project
+
+RUN  /project/util/check_version build
+
+RUN cd /project && mvn -B install dependency:go-offline -DskipTests
 
 WORKDIR /project/user-app
 
