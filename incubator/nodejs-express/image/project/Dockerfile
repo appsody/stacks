@@ -36,6 +36,8 @@ COPY --chown=node:node --from=0 /project/user-app/node_modules /project/user-app
 
 WORKDIR /project
 
+ENV NODE_PATH=/project/user-app/node_modules
+
 ENV NODE_ENV production
 ENV PORT 3000
 
