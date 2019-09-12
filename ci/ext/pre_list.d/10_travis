@@ -78,10 +78,7 @@ then
             stack_version=$(awk '/^version *:/ { gsub("version:","",$NF); gsub("\"","",$NF); print $NF}' $stack)
             rebuild=true
 
-            if [ $stack_repo = "samples" ]
-            then
-                rebuild=false
-            elif ls ${prefetch_dir} | grep $stack_repo.$stack_name | grep -q $stack_version
+            if ls ${prefetch_dir} | grep $stack_repo.$stack_name | grep -q $stack_version
             then
                 # e.g. experimental.java-spring-boot2-liberty.v0.1.7.templates.default.tar.gz
                 rebuild=false
