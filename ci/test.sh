@@ -119,7 +119,7 @@ do
     then
         index_url=file://$x
         y=$(basename $x)
-        if appsody repo list | grep -q -e "^\*\?${y%.*}"
+        if appsody repo list | awk '{print $1}' | grep -e "${y%.*}$"
         then
             echo "Repo ${y%.*} exists"
         else
