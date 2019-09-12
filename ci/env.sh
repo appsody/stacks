@@ -10,9 +10,10 @@ export script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 export base_dir=$(cd "${script_dir}/.." && pwd)
 export assets_dir="${script_dir}/assets"
 export build_dir="${script_dir}/build"
+export prefetch_dir="${script_dir}/build/prefetch"
 
 mkdir -p $assets_dir
-mkdir -p $build_dir
+mkdir -p $prefetch_dir
 
 # ENVIRONMENT VARIABLES for controlling behavior of build, package, and release
 
@@ -57,6 +58,9 @@ mkdir -p $build_dir
 
 # Build the Codewind index when the value is 'true' (requires PyYaml)
 # export CODEWIND_INDEX
+
+# Specify a wrapper where required for long-running commands
+CI_WAIT_FOR=
 
 exec_hooks() {
     local dir=$1
@@ -168,17 +172,25 @@ then
 fi
 
 image_build() {
+    local cmd="docker build"
     if [ "$USE_BUILDAH" == "true" ]; then
-        buildah bud $@
-    else
-        docker build $@
+        cmd="buildah bud"
+    fi
+
+    echo "> ${CI_WAIT_FOR} ${cmd} $@"
+    if ! ${CI_WAIT_FOR} ${cmd} $@
+    then
+      echo "Failed building image"
+      exit 1
     fi
 }
 
 image_tag() {
     if [ "$USE_BUILDAH" == "true" ]; then
+        echo "> buildah tag $@"
         buildah tag $1 $2
     else
+        echo "> docker tag $@"
         docker tag $1 $2
     fi
 }

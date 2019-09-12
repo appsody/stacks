@@ -5,7 +5,7 @@ RUN yum upgrade --disableplugin=subscription-manager -y \
    && echo 'Finished installing dependencies'
 
 USER root
-RUN yum install --disableplugin=subscription-manager -y unzip curl ca-certificates
+RUN yum install --disableplugin=subscription-manager -y unzip curl ca-certificates wget xmlstarlet
 
 #Install openjdk
 ENV JAVA_VERSION jdk8u222-b10_openj9-0.15.1
@@ -25,6 +25,10 @@ RUN set -eux; \
    ENV JAVA_TOOL_OPTIONS="-XX:+IgnoreUnrecognizedVMOptions -XX:+UseContainerSupport -XX:+IdleTuningCompactOnIdle -XX:+IdleTuningGcOnIdle"
 
 COPY . /project
+
+RUN  /project/util/check_version build
+
+RUN cd /project && mvn -B install dependency:go-offline -DskipTests
 
 WORKDIR /project/user-app
 

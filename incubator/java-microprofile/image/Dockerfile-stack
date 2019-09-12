@@ -15,7 +15,7 @@ USER root
 RUN groupadd --gid 1000 java_group \
  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user
 
-RUN yum install --disableplugin=subscription-manager -y curl
+RUN yum install --disableplugin=subscription-manager -y curl xmlstarlet wget
 
 COPY ./LICENSE /licenses/
 COPY ./project /project
@@ -53,6 +53,8 @@ RUN set -eux; \
 
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
+
+RUN  /project/util/check_version build
 
 WORKDIR /project/
 RUN mkdir -p /mvn/repository

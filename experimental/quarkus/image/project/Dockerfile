@@ -10,7 +10,7 @@ COPY ./user-app/pom.xml ./
 USER root
 RUN chown -R quarkus .
 USER quarkus
-RUN mvn -Pnative clean package
+RUN mvn -B -Pnative clean package
 
 
 ## Stage 2 : create the docker final image

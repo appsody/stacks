@@ -32,7 +32,6 @@ then
             stderr "ERROR: unable to identify changed files in $TRAVIS_COMMIT_RANGE"
             # show original error
             git diff --name-only "$TRAVIS_COMMIT_RANGE"
-            exit 1
         fi
     elif [ $TRAVIS_TAG ]
     then
@@ -66,5 +65,45 @@ then
             stderr "ERROR: Could not find stacks associated with tag"
             exit 1
         fi
+    fi
+
+    if [ -z "${STACKS_LIST}" ]
+    then
+        echo "Fall back to stacks that don't match most recent index"
+        printf "  %-50s %-10s %-10s %s\n" "Stack directory" "version" "rebuild"
+        for stack in $(find $base_dir -name stack.yaml)
+        do
+            stack_repo=$(basename $(dirname $(dirname $stack)))
+            stack_name=$(basename $(dirname $stack))
+            stack_version=$(awk '/^version *:/ { gsub("version:","",$NF); gsub("\"","",$NF); print $NF}' $stack)
+            rebuild=true
+
+            if [ $stack_repo = "samples" ]
+            then
+                rebuild=false
+            elif ls ${prefetch_dir} | grep $stack_repo.$stack_name | grep -q $stack_version
+            then
+                # e.g. experimental.java-spring-boot2-liberty.v0.1.7.templates.default.tar.gz
+                rebuild=false
+            elif grep -q $stack_version $build_dir/prefetch-$stack_repo-$stack_name-* 2>/dev/null
+            then
+                # e.g. experimental.java-spring-boot2-liberty.templates.default.tar.gz
+                # use prefetch data
+                rebuild=false
+            fi
+
+            printf "  %-50s %-10s %s\n" "$stack_repo/$stack_name" "$stack_version" "$rebuild"
+            if [ "$rebuild" = "true" ]
+            then
+                export STACKS_LIST+=("$stack_repo/$stack_name")
+            fi
+        done
+    fi
+
+    # Finally, if we still don't have any modified stacks, pick a few
+    if [ -z "${STACKS_LIST}" ]
+    then
+        echo "Choosing a subset of stacks to test with CI/CD changes"
+        export STACKS_LIST="incubator/java-microprofile incubator/java-spring-boot2 incubator/nodejs experimental/java-spring-boot2-liberty"
     fi
 fi

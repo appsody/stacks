@@ -121,8 +121,8 @@ do
                         build=$rebuild_local
                         if [ "$PACKAGE_WHEN_MISSING" = "true" ] &&
                             [ ! -f $assets_dir/$versioned_archive ] &&
-                            [ ! -f $build_dir/prefetch/$old_archive ] &&
-                            [ ! -f $build_dir/prefetch/$versioned_archive ]
+                            [ ! -f $prefetch_dir/$old_archive ] &&
+                            [ ! -f $prefetch_dir/$versioned_archive ]
                         then
                             # force build of template archive if it doesn't exist
                             build=true
@@ -143,7 +143,7 @@ do
                             echo -e "--- Created template archive: $versioned_archive"
 
                             # clean up prefetched resources if they exist
-                            rm -f $build_dir/prefetch/${old_archive%.tar.gz}*
+                            rm -f $prefetch_dir/${old_archive%.tar.gz}*
                         fi
 
                         # Update index yaml based on archive file name (prefer versioned archives)
@@ -160,7 +160,7 @@ do
 
                             echo "      - id: $template_id" >> $index_file
                             echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file
-                        elif [ -f $build_dir/prefetch/$versioned_archive ]
+                        elif [ -f $prefetch_dir/$versioned_archive ]
                         then
                             # Add references to existing template archive.
                             echo "      - id: $template_id" >> $index_src
@@ -168,15 +168,17 @@ do
 
                             echo "      - id: $template_id" >> $index_file
                             echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file
-                        elif [ -f $build_dir/prefetch/$old_archive ]
+                        elif [ -f $prefetch_dir/$old_archive ]
                         then
+                            verify="$build_dir/prefetch-${repo_name}-${stack_id}-${template_id}"
+
                             # If an archive exists with no version in the name,
                             # check for a prefetch script that can verify it
                             # matches this stack. This helps ensure that the new
                             # stack image
-                            if [ -f $build_dir/prefetch-${stack_id}-${template_id} ]
+                            if [ -f ${verify} ]
                             then
-                                result=$($build_dir/prefetch-${stack_id}-${template_id} ${stack_version})
+                                result=$(${verify} ${stack_version})
                                 if [ "$result" == "ok" ]
                                 then
                                     echo "template ok"
@@ -185,7 +187,7 @@ do
                                     then
                                         stderr "WARNING: checksum for $old_archive doesn't match." \
                                                "         The archive contents don't match what was fetched." \
-                                               "         Pre-fetched checksum is in ${build_dir}/prefetch-${stack_id}-${template_id}"
+                                               "         Pre-fetched checksum is in ${verify}"
                                     else
                                         stderr "WARNING: Version mismatch using $template_id for ${stack_id}-v${stack_version}." \
                                                "         Pre-fetched archive built for ${stack_id}-v${result}."
