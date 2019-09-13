@@ -9,6 +9,10 @@ from collections import OrderedDict
 
 base_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
 
+displayNamePrefix = "Appsody"
+if len(sys.argv) > 1:
+    displayNamePrefix = sys.argv[1]
+
 # directory to store assets for test or release
 assets_dir = base_dir + "/assets/"
 
@@ -31,7 +35,7 @@ for file in os.listdir(assets_dir):
 
                             # populate stack details
                             res = (OrderedDict([
-                                ("displayName", "Appsody " + item['name'] + template + " template"),
+                                ("displayName", displayNamePrefix + " " + item['name'] + template + " template"),
                                 ("description", item['description']),
                                 ("language", item['language']),
                                 ("projectType", "appsodyExtension"),
