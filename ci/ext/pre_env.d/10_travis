@@ -8,6 +8,8 @@ then
     export GIT_ORG_REPO=${TRAVIS_REPO_SLUG}
     export INDEX_VERSION=${TRAVIS_BUILD_NUMBER}
 
+    export CI_WAIT_FOR='travis_wait'
+
     if [ $TRAVIS_TAG ] && [ "$TRAVIS_TAG" == "$TRAVIS_BRANCH" ]
     then
         echo "This is a release build for $TRAVIS_TAG"

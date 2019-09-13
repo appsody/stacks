@@ -5,7 +5,10 @@ RUN yum upgrade --disableplugin=subscription-manager -y \
    && echo 'Finished installing dependencies'
 
 USER root
-RUN yum install --disableplugin=subscription-manager -y unzip curl ca-certificates
+
+# Dependency install
+RUN yum install --disableplugin=subscription-manager -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+   && yum install --disableplugin=subscription-manager -y unzip curl ca-certificates wget xmlstarlet
 
 #Install openjdk
 ENV JAVA_VERSION jdk8u222-b10_openj9-0.15.1
@@ -24,10 +27,6 @@ RUN set -eux; \
    PATH="/opt/java/openjdk/bin:$PATH"
    ENV JAVA_TOOL_OPTIONS="-XX:+IgnoreUnrecognizedVMOptions -XX:+UseContainerSupport -XX:+IdleTuningCompactOnIdle -XX:+IdleTuningGcOnIdle"
 
-COPY . /project
-
-WORKDIR /project/user-app
-
 # Maven install
 ARG MAVEN_VERSION=3.6.2
 ARG USER_HOME_DIR="/root"
@@ -43,6 +42,14 @@ ARG BASE_URL=https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/bina
 
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
+
+COPY . /project
+
+RUN  /project/util/check_version build
+
+RUN cd /project && mvn -B install dependency:go-offline -DskipTests
+
+WORKDIR /project/user-app
 
 RUN mvn install -DskipTests
 

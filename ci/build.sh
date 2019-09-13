@@ -13,6 +13,9 @@ then
     fi
 fi
 
+# Fetch previously released stacks
+. $script_dir/prefetch.sh
+
 # Allow multiple stacks to be selected
 if [ $# -gt 0 ]
 then
@@ -26,6 +29,5 @@ then
 fi
 
 . $script_dir/lint.sh
-. $script_dir/prefetch.sh
 . $script_dir/package.sh
 . $script_dir/test.sh
