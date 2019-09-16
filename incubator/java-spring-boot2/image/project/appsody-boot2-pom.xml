@@ -5,7 +5,7 @@
 
   <groupId>dev.appsody</groupId>
   <artifactId>spring-boot2-stack</artifactId>
-  <version>0.3.12</version>
+  <version>0.3.13</version>
   <packaging>pom</packaging>
 
   <name>Appsody Spring Boot2 stack</name>
@@ -50,6 +50,7 @@
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+ 
   </properties>
 
   <dependencyManagement>
@@ -161,7 +162,7 @@
         <id>dev</id>
         <activation>
           <property>
-            <name>env.APPSODY_RUN</name>
+            <name>env.APPSODY_DEV_MODE</name>
           </property>
         </activation>
         <dependencies>
@@ -187,7 +188,7 @@
                   <configuration>
                     <tasks>
                       <echo>Triggering Spring app restart.</echo>
-                      <touch file="${basedir}/.appsody-spring-trigger" />
+                      <touch file="${basedir}/target/.appsody-spring-trigger" />
                     </tasks>
                   </configuration>
                 </execution>
