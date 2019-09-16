@@ -215,7 +215,7 @@ do
 done
 
 if [ "$CODEWIND_INDEX" == "true" ]; then
-  python3 $script_dir/create_codewind_index.py
+  python3 $script_dir/create_codewind_index.py $DISPLAY_NAME_PREFIX
 fi
 
 # expose an extension point for running after main 'package' processing

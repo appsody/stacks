@@ -59,6 +59,9 @@ mkdir -p $prefetch_dir
 # Build the Codewind index when the value is 'true' (requires PyYaml)
 # export CODEWIND_INDEX
 
+# Prefix to be used on the display name of the stack in the Codewind index file
+# export DISPLAY_NAME_PREFIX="Appsody"
+
 # Specify a wrapper where required for long-running commands
 CI_WAIT_FOR=
 
@@ -169,6 +172,11 @@ then
     else
         export IMAGE_REGISTRY_PUBLISH=true
     fi
+fi
+
+if [ -z "$DISPLAY_NAME_PREFIX" ]
+then
+    export DISPLAY_NAME_PREFIX="Appsody"
 fi
 
 image_build() {
