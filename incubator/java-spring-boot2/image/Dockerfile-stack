@@ -91,7 +91,7 @@ ENV APPSODY_DEPS=
 
 ENV APPSODY_WATCH_DIR="/project/user-app/src"
 ENV APPSODY_WATCH_IGNORE_DIR=""
-ENV APPSODY_WATCH_REGEX=".*"
+ENV APPSODY_WATCH_REGEX="(^.*\.java$)|(^.*\.properties$)|(^.*\.yaml$)|(^.*\.html$)|(^.*\.sql$)|(^.*\.js$)|(^.*\.properties$)"
 
 ENV APPSODY_RUN="/project/java-spring-boot2-build.sh run"
 ENV APPSODY_RUN_ON_CHANGE="/project/java-spring-boot2-build.sh recompile"

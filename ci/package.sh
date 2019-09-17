@@ -222,7 +222,7 @@ done
 exec_hooks $script_dir/ext/post_package.d
 
 if [ "$CODEWIND_INDEX" == "true" ]; then
-  python3 $script_dir/create_codewind_index.py
+  python3 $script_dir/create_codewind_index.py $DISPLAY_NAME_PREFIX
 fi
 
 # create appsody-index from contents of assets directory after post-processing
