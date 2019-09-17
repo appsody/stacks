@@ -94,41 +94,55 @@ do
         for stack in $repo_dir/*/stack.yaml
         do
             stack_dir=$(dirname $stack)
+            
             if [ -d $stack_dir ]
             then
                 stack_id=$(basename $stack_dir)
-                echo "Building collection: $repo_name/$stack_id"
-
-                stack_version=$(awk '/^version *:/ { gsub("version:","",$NF); gsub("\"","",$NF); print $NF}' $stack)
-                collection=$stack_dir/collection.yaml
-
-                count=0
-                stack_to_use=-1
-                while [ $count -lt $num_stacks ]
+                
+                # check if the stack needs to be built
+                build=true
+                for excluded_stack in $EXCLUDED_STACKS
                 do
-                    if [ $stack_id == $(yq r $all_stacks stacks.[$count].id) ]
+                    if [ $excluded_stack = $repo_name/$stack_id ]
                     then
-                        stack_to_use=$count
-                        break;
+                        build=false
                     fi
-                    count=$(( $count + 1 ))
                 done
-                if [ $stack_to_use -ge 0 ]
-                then
-                    yq r $all_stacks stacks.[$stack_to_use] > $one_stack
-                    if [ -f $collection ]
-                    then
-                        if [ -f $base_dir/ci/ext/add_collection_resources.sh ]
+
+                if [ $build = true ];  then
+                    echo "Building collection: $repo_name/$stack_id"
+
+                    stack_version=$(awk '/^version *:/ { gsub("version:","",$NF); gsub("\"","",$NF); print $NF}' $stack)
+                    collection=$stack_dir/collection.yaml
+
+                    count=0
+                    stack_to_use=-1
+                    while [ $count -lt $num_stacks ]
+                    do
+                        if [ $stack_id == $(yq r $all_stacks stacks.[$count].id) ]
                         then
-                            . $base_dir/ci/ext/add_collection_resources.sh $base_dir $stack_dir $stack_version $repo_name $one_stack
+                            stack_to_use=$count
+                            break;
                         fi
+                        count=$(( $count + 1 ))
+                    done
+                    if [ $stack_to_use -ge 0 ]
+                    then
+                        yq r $all_stacks stacks.[$stack_to_use] > $one_stack
+                        if [ -f $collection ]
+                        then
+                            if [ -f $base_dir/ci/ext/add_collection_resources.sh ]
+                            then
+                                . $base_dir/ci/ext/add_collection_resources.sh $base_dir $stack_dir $stack_version $repo_name $one_stack
+                            fi
+                        fi
+                        yq p -i $one_stack stacks.[+]
+                        yq m -a -i $index_file_v2_temp $one_stack
                     fi
-                    yq p -i $one_stack stacks.[+]
-                    yq m -a -i $index_file_v2_temp $one_stack
-                fi
-                if [ -f $one_stack ]
-                then
-                    rm -f $one_stack
+                    if [ -f $one_stack ]
+                    then
+                        rm -f $one_stack
+                    fi
                 fi
             fi
         done
