@@ -11,6 +11,11 @@ mkdir -p $build_dir/index-src
 # expose an extension point for running before main 'package' processing
 exec_hooks $script_dir/ext/pre_package.d
 
+if [[ "${STACKS_LIST}" =~ samples/ ]]
+then
+	export REPO_LIST="$REPO_LIST samples"
+fi
+	
 # iterate over each repo
 for repo_name in $REPO_LIST
 do
