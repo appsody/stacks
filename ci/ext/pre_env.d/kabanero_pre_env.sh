@@ -17,3 +17,7 @@ fi
 if [ -z $INDEX_IMAGE ]; then
     export INDEX_IMAGE=kabanero-index
 fi 
+if [ -z "$DISPLAY_NAME_PREFIX" ]
+then
+    export DISPLAY_NAME_PREFIX="Kabanero"
+fi
