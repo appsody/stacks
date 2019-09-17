@@ -28,6 +28,8 @@ RUN chown -hR node:node /project
 
 WORKDIR /project
 
+ENV NODE_PATH=/project/user-app/node_modules
+
 ENV NODE_ENV production
 ENV PORT 3000
 
