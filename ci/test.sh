@@ -113,7 +113,14 @@ test_template() {
     popd
 }
 
-for x in $assets_dir/*.yaml
+if [ "$TRAVIS" == "true" ]
+then
+    indexPath=$assets_dir/*.yaml
+else
+    indexPath=$assets_dir/*-local.yaml
+fi
+
+for x in $indexPath
 do
     if [ -f $x ] && grep template $x > /dev/null
     then

@@ -19,21 +19,24 @@ do
     then
         echo -e "\nProcessing repo: $repo_name"
 
+        if [ "$TRAVIS" == "true" ]
+        then
         # versioned stack directory for per-stack release
         index_file=$assets_dir/$repo_name-index.yaml
-
         # flat index used by static appsody-index and local test repo
         index_src=$build_dir/index-src/$repo_name-index.yaml
-        index_file_local=$assets_dir/$repo_name-index-local.yaml
-
+     
         echo "apiVersion: v2" > $index_src
         echo "stacks:" >> $index_src
 
-        echo "apiVersion: v2" > $index_file_local
-        echo "stacks:" >> $index_file_local
-
         echo "apiVersion: v2" > $index_file
         echo "stacks:" >> $index_file
+        fi
+
+        index_file_local=$assets_dir/$repo_name-index-local.yaml
+
+        echo "apiVersion: v2" > $index_file_local
+        echo "stacks:" >> $index_file_local
 
         # iterate over each stack
         for stack in $repo_dir/*/stack.yaml
@@ -88,10 +91,19 @@ do
                     echo -e "\n- SKIPPING stack image: $repo_name/$stack_id"
                 fi
 
-                echo "  - id: $stack_id" >> $index_src
-                sed 's/^/    /' $stack >> $index_src
-                [ -n "$(tail -c1 $index_src)" ] && echo >> $index_src
-                echo "    templates:" >> $index_src
+                if [ "$TRAVIS" == "true" ]
+                then
+                    echo "  - id: $stack_id" >> $index_src
+                    sed 's/^/    /' $stack >> $index_src
+                    [ -n "$(tail -c1 $index_src)" ] && echo >> $index_src
+                    echo "    templates:" >> $index_src
+
+                    echo "  - id: $stack_id" >> $index_file
+                    sed 's/^/    /' $stack >> $index_file
+                    [ -n "$(tail -c1 $index_file)" ] && echo >> $index_file
+                    echo "    templates:" >> $index_file
+
+                fi
 
                 if [ $rebuild_local = true ]
                 then
@@ -100,11 +112,6 @@ do
                     [ -n "$(tail -c1 $index_file_local)" ] && echo >> $index_file_local
                     echo "    templates:" >> $index_file_local
                 fi
-
-                echo "  - id: $stack_id" >> $index_file
-                sed 's/^/    /' $stack >> $index_file
-                [ -n "$(tail -c1 $index_file)" ] && echo >> $index_file
-                echo "    templates:" >> $index_file
 
                 for template_dir in $stack_dir/templates/*/
                 do
@@ -145,8 +152,13 @@ do
                         # Update index yaml based on archive file name (prefer versioned archives)
                         if [ -f $assets_dir/$versioned_archive ]
                         then
-                            echo "      - id: $template_id" >> $index_src
-                            echo "        url: {{EXTERNAL_URL}}/$versioned_archive" >> $index_src
+                            if [ "$TRAVIS" == "true" ]
+                            then
+                                echo "      - id: $template_id" >> $index_src
+                                echo "        url: {{EXTERNAL_URL}}/$versioned_archive" >> $index_src
+                                echo "      - id: $template_id" >> $index_file
+                                echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file
+                            fi
 
                             if [ $rebuild_local = true ]
                             then
@@ -154,16 +166,17 @@ do
                                 echo "        url: file://$assets_dir/$versioned_archive" >> $index_file_local
                             fi
 
-                            echo "      - id: $template_id" >> $index_file
-                            echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file
                         elif [ -f $prefetch_dir/$versioned_archive ]
                         then
-                            # Add references to existing template archive.
-                            echo "      - id: $template_id" >> $index_src
-                            echo "        url: {{EXTERNAL_URL}}/$versioned_archive" >> $index_src
+                            if [ "$TRAVIS" == "true" ]
+                            then
+                                # Add references to existing template archive.
+                                echo "      - id: $template_id" >> $index_src
+                                echo "        url: {{EXTERNAL_URL}}/$versioned_archive" >> $index_src
 
-                            echo "      - id: $template_id" >> $index_file
-                            echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file
+                                echo "      - id: $template_id" >> $index_file
+                                echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file
+                            fi
                         elif [ -f $prefetch_dir/$old_archive ]
                         then
                             verify="$build_dir/prefetch-${repo_name}-${stack_id}-${template_id}"
@@ -193,11 +206,14 @@ do
 
                             # Add references to existing/old template archives.
 
-                            echo "      - id: $template_id" >> $index_src
-                            echo "        url: {{EXTERNAL_URL}}/$old_archive" >> $index_src
+                            if [ "$TRAVIS" == "true" ]
+                            then 
+                                echo "      - id: $template_id" >> $index_src
+                                echo "        url: {{EXTERNAL_URL}}/$old_archive" >> $index_src
 
-                            echo "      - id: $template_id" >> $index_file
-                            echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$old_archive" >> $index_file
+                                echo "      - id: $template_id" >> $index_file
+                                echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$old_archive" >> $index_file
+                            fi
 
                         else
                             stderr "ERROR: Could not find an archive for $stack_id/$template_id:" \
