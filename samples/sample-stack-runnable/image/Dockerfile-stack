@@ -29,7 +29,7 @@ ENV APPSODY_INSTALL=
 # APPSODY_RUN_KILL Signals whether to kill the server process before starting the APPSODY_RUN_ON_CHANGE action
 
 ENV APPSODY_RUN="/bin/bash /project/userapp/hello.sh"
-ENV APPSODY_RUN_ON_CHANGE="/bin/bash /project/userapp/hello.sh"
+ENV APPSODY_RUN_ON_CHANGE=$APPSODY_RUN
 ENV APPSODY_RUN_KILL=false
 
 # Configurations for appsody debug
@@ -38,7 +38,7 @@ ENV APPSODY_RUN_KILL=false
 # APPSODY_DEBUG_KILL Signals whether to kill the server process before starting the APPSODY_DEBUG_ON_CHANGE action
 
 ENV APPSODY_DEBUG="echo -n \"Debugging \"; /bin/bash /project/userapp/hello.sh"
-ENV APPSODY_DEBUG_ON_CHANGE="echo -n \"Debugging \"; /bin/bash /project/userapp/hello.sh"
+ENV APPSODY_DEBUG_ON_CHANGE=$APPSODY_DEBUG_ON_CHANGE
 ENV APPSODY_DEBUG_KILL=false
 
 # Configurations for appsody test
@@ -47,7 +47,7 @@ ENV APPSODY_DEBUG_KILL=false
 # APPSODY_TEST_KILL Signals whether to kill the server process before starting the APPSODY_TEST_ON_CHANGE action
 
 ENV APPSODY_TEST="/bin/bash /project/userapp/tests/test.sh"
-ENV APPSODY_TEST_ON_CHANGE="/bin/bash /project/userapp/tests/test.sh"
+ENV APPSODY_TEST_ON_CHANGE=$APPSODY_TEST_ON_CHANGE
 ENV APPSODY_TEST_KILL=false
 
 # Copy the common components across into your stack filesystem (most stacks will need these)
