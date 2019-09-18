@@ -62,6 +62,9 @@ do
                 then
                     echo -e "\n- BUILDING stack: $repo_name/$stack_id"
 
+                    # cygwin cannot handle the absolute context paths in the docker build
+                    cd $stack_dir/image
+
                     if [ -d $stack_dir/image ]
                     then
                         image_build \
@@ -78,7 +81,7 @@ do
                             -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major \
                             -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor \
                             -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
-                            -f $stack_dir/image/Dockerfile-stack $stack_dir/image
+                            -f ./Dockerfile-stack .
 
                         echo "$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
                         echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
@@ -229,10 +232,13 @@ then
     nginx_arg="--build-arg NGINX_IMAGE=$NGINX_IMAGE"
 fi
 
+# cygwin cannot handle the absolute context paths in the docker build
+cd $script_dir
+
 image_build $nginx_arg \
  -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE \
  -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION} \
- -f $script_dir/nginx/Dockerfile $script_dir
+ -f ./nginx/Dockerfile .
 
 echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE" >> $build_dir/image_list
 echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}" >> $build_dir/image_list
