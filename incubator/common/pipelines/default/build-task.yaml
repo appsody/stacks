@@ -71,4 +71,3 @@ spec:
   volumes:
     - name: varlibcontainers
       emptyDir: {}
-      
