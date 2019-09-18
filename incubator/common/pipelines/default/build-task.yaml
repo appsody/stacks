@@ -32,6 +32,20 @@ spec:
       volumeMounts:
         - mountPath: /var/lib/containers
           name: varlibcontainers
+    - name: validate-collection-is-active
+      securityContext:
+        privileged: true
+      image: smcclem/validate-collection
+      command: ["/bin/bash"]
+      args:
+        - -c
+        - "/validate.sh"
+      env:
+        - name: gitsource
+          value: git-source
+      volumeMounts:
+        - mountPath: /var/lib/containers
+          name: varlibcontainers
     - name: build-bud
       securityContext:
         privileged: true
@@ -57,3 +71,4 @@ spec:
   volumes:
     - name: varlibcontainers
       emptyDir: {}
+      
