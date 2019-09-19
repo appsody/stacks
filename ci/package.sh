@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-
+set -x
 # setup environment
 . $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
 
@@ -210,6 +210,9 @@ do
                 done
             fi
         done
+
+        # For Cygwin support, harmless on other distros
+        sed -i "s|/cygdrive/\([a-z]\)|/\1:|g" $index_file_local
     else
         echo "SKIPPING: $repo_dir"
     fi
@@ -242,3 +245,5 @@ image_build $nginx_arg \
 
 echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE" >> $build_dir/image_list
 echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}" >> $build_dir/image_list
+
+ 
