@@ -92,12 +92,6 @@ process_assets () {
     fi
 }
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    sha256cmd="shasum --algorithm 256"    # Mac OSX
-else
-    sha256cmd="sha256sum "  # other OSs
-fi
-
 if [ -f $collection ]
 then
     # check to see if we have maintainers in the collection.yaml
