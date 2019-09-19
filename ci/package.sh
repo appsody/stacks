@@ -10,9 +10,50 @@ mkdir -p $build_dir/index-src
 
 # expose an extension point for running before main 'package' processing
 exec_hooks $script_dir/ext/pre_package.d
+incubator=0
+experimental=0
+stable=0
+for stackRepo in $STACKS_LIST
+do
+    if [[ $stackRepo == incubator* ]]
+    then
+        let "incubator=incubator+1"
+    elif [[ $stackRepo == experimental* ]]
+    then
+        let "experimental=experimental+1"
+    elif [[ $stackRepo == stable* ]]
+    then
+        let "stable=stable+1"
+    fi
+done
+
+if (($incubator > 0))
+then
+    generateRepoIndex="incubator"
+fi
+if (($experimental > 0))
+then
+    generateRepoIndex="experimental"
+fi
+if (($stable > 0))
+then
+    generateRepoIndex="stable"
+fi
+if (($stable > 0))&&(($incubator > 0))
+then
+    generateRepoIndex="stable incubator"
+fi
+if (($stable > 0))&&(($experimental > 0))
+then
+    generateRepoIndex="stable experimental"
+fi
+if [[ $incubator > 0 ]] && [[ $experimental > 0 ]]
+then
+    generateRepoIndex="incubator experimental"
+fi
 
 # iterate over each repo
-for repo_name in $REPO_LIST
+for repo_name in $generateRepoIndex
 do
     repo_dir=$base_dir/$repo_name
     if [ -d $repo_dir ]
