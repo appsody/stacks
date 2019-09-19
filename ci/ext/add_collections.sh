@@ -17,6 +17,13 @@ mkdir -p $assets_dir
 # url for downloading released assets
 release_url="https://github.com/$TRAVIS_REPO_SLUG/releases/download"
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    sha256cmd="shasum --algorithm 256"    # Mac OSX
+else
+    sha256cmd="sha256sum "  # other OSs
+fi
+
+
 build_asset_tar () {
     asset_build=$assets_dir/asset_temp
     mkdir -p $asset_build
