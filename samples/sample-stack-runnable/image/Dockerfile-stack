@@ -21,7 +21,7 @@ ENV APPSODY_WATCH_REGEX="^.*.*"
 
 # Optional command executed before RUN/TEST/DEBUG - typically used to install any dependencies from
 # the user application
-ENV APPSODY_INSTALL= 
+ENV APPSODY_PREP=
 
 # Configurations for appsody run
 # APPSODY_RUN should specify the command to launch your application
