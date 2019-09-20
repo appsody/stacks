@@ -112,9 +112,6 @@ do
                     then
                         template_id=$(basename $template_dir)
 
-                        # Kabanero override (separate entry to stop merge conflicts)
-                        #template_archive=$repo_name.$stack_id.v$stack_version.templates.$template_id.tar.gz
-
                         old_archive=$repo_name.$stack_id.templates.$template_id.tar.gz
                         versioned_archive=$repo_name.$stack_id.v$stack_version.templates.$template_id.tar.gz
 
@@ -204,9 +201,11 @@ do
                             echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$old_archive" >> $index_file
 
                         else
-                            stderr "ERROR: Could not find an archive for $stack_id/$template_id:" \
-                                   "       $versioned_archive not found." \
-                                   "       $old_archive not found."
+                            if [ $rebuild_local = true ]; then
+                                stderr "ERROR: Could not find an archive for $stack_id/$template_id:" \
+                                       "       $versioned_archive not found." \
+                                       "       $old_archive not found."
+                            fi       
                         fi
                     fi
                 done
