@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-set -x
+#set -x
+
 # setup environment
 . $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
 
@@ -212,7 +213,7 @@ do
         done
 
         # For Cygwin support, harmless on other distros
-        sed -i "s|/cygdrive/\([a-z]\)|/\1:|g" $index_file_local
+         [[ `uname` == CYGWIN* ]] && sed -i "s|/cygdrive/\([a-z]\)|/\1:|g" $index_file_local
     else
         echo "SKIPPING: $repo_dir"
     fi
