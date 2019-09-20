@@ -14,7 +14,10 @@ then
 fi
 
 # Fetch previously released stacks
-. $script_dir/prefetch.sh
+if [ "$RUN_PREFETCH" == "true" ]
+then
+  . $script_dir/prefetch.sh
+fi
 
 # Allow multiple stacks to be selected
 if [ $# -gt 0 ]

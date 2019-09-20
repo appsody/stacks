@@ -33,23 +33,11 @@ then
 fi
 if (($experimental > 0))
 then
-    generateRepoIndex="experimental"
+    generateRepoIndex="$generateRepoIndex experimental"
 fi
 if (($stable > 0))
 then
-    generateRepoIndex="stable"
-fi
-if (($stable > 0))&&(($incubator > 0))
-then
-    generateRepoIndex="stable incubator"
-fi
-if (($stable > 0))&&(($experimental > 0))
-then
-    generateRepoIndex="stable experimental"
-fi
-if [[ $incubator > 0 ]] && [[ $experimental > 0 ]]
-then
-    generateRepoIndex="incubator experimental"
+    generateRepoIndex="$generateRepoIndex stable"
 fi
 
 # iterate over each repo
