@@ -1,0 +1,8 @@
+# ignore rust build artifacts
+**/target
+Cargo.lock
+**/*.rs.bk
+
+**/.git
+**/.gitignore
+**/.vscode
