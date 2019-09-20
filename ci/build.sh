@@ -30,4 +30,8 @@ fi
 
 . $script_dir/lint.sh
 . $script_dir/package.sh
-. $script_dir/test.sh
+if [ -z $SKIP_TESTS ]; then
+    . $script_dir/test.sh
+else
+    echo "Not running tests"
+fi
