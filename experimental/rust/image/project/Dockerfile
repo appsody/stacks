@@ -12,8 +12,6 @@ RUN mkdir src/ \
 
 COPY ./user-app/src ./src/
 
-RUN cargo build --release
-
 FROM rust:1.37-slim-stretch
 
 # reuse dependency files from previous image
@@ -21,6 +19,6 @@ WORKDIR "/project/user-app"
 
 COPY --from=builder ./project/user-app/Cargo.toml .
 
-COPY ./user-app/src ./src/
+COPY --from=builder ./project/user-app/src ./src/
 
 CMD ["cargo", "run", "--release"]
