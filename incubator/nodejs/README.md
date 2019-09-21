@@ -4,7 +4,7 @@ The Node.js stack provides a consistent way of developing [Node.js](https://node
 
 This stack is based on the `Node.js v10` runtime and allows you to develop new or existing Node.js application using Appsody.
 
-Additionally, if you are developing an applicaton that includes a HTTP server or a web framework such as Express.js,the stack provides a built-in application performance dashboard using the [appmetrics-dash](https://github.com/runtimetools/appmetrics-dash) module. This makes it easy to see the resource usage and HTTP endpoint performance of your application as it is developed.
+Additionally, if you are developing an application that includes a HTTP server or a web framework such as Express.js,the stack provides a built-in application performance dashboard using the [appmetrics-dash](https://github.com/runtimetools/appmetrics-dash) module. This makes it easy to see the resource usage and HTTP endpoint performance of your application as it is developed.
 
 The dashboard is only included during development, and is not included in images build using `appsody build`.
 
