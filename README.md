@@ -9,20 +9,20 @@ Infused with cloud native capabilities from the moment you start, Appsody provid
 
 # Stacks
 
-This respository holds the default set of stacks available from Appsody. Each stack is pre-configured with popular open source technologies to enable rapid development of quality microservice-based applications. Stacks include a base container image and project templates which act as a starting point for your application development.
+This repository holds the default set of stacks available from Appsody. Each stack is pre-configured with popular open source technologies to enable rapid development of quality microservice-based applications. Stacks include a base container image and project templates which act as a starting point for your application development.
 
 Stacks allow for rapid development whilst giving the stack developer the ability to control the overall applications that are created from it.
 
 To find out more about Appsody check out [appsody.dev](https://appsody.dev).
 
 ## Repository Structure
-Stacks are catagorized as either stable, incubator or experimental depending on the content of the stack.
+Stacks are categorized as either stable, incubator or experimental depending on the content of the stack.
 
 - `stable/`: Stable stacks meet this set of [technical requirements](https://github.com/appsody/stacks/blob/master/TECHNICAL_REQUIREMENTS.md).
 
-- `incubator/:` The stacks in the incubator folder are actively being worked on to satisfy the stable critria.
+- `incubator/:` The stacks in the incubator folder are actively being worked on to satisfy the stable criteria.
 
-- `experimental/:` Exprimental stacks are not being actively been worked on and may not fulfill the requirements of an Appsody stack. These can be used for trying out specific capabilites or proof of concept work.
+- `experimental/:` Experimental stacks are not being actively been worked on and may not fulfill the requirements of an Appsody stack. These can be used for trying out specific capabilities or proof of concept work.
 
 Click here to find out more about [Appsody stacks](https://github.com/appsody/website/blob/master/content/docs/stacks/stacks-overview.md).
 
