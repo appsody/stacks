@@ -126,7 +126,7 @@ debug() {
 }
 
 run() {
-  note "Build and run project in the foreground"
+  note "Build and run project in the foreground"  
   run_mvn clean -Dmaven.test.skip=true spring-boot:run
 }
 
@@ -144,6 +144,7 @@ fi
 
 case "${ACTION}" in
   recompile)
+    export APPSODY_DEV_MODE=run
     recompile
   ;;
   package)
@@ -152,14 +153,17 @@ case "${ACTION}" in
   ;;
   debug)
     common
+    export APPSODY_DEV_MODE=debug    
     debug
   ;;
   run)
     common
+    export APPSODY_DEV_MODE=run    
     run
   ;;
   test)
     common
+    export APPSODY_DEV_MODE=test
     test
   ;;
   *)
