@@ -25,9 +25,9 @@ Click here to find out more about the [Repository structure](https://github.com/
    ```
    Once this has been done, you will have your own copy of the collections repository in your own git org/repo. Follow any normal development processes you have for using git (i.e., creating branches, etc.).
 
-1. Create / Modify the collections (stacks) if required.
+1. Create / Modify the collections if required.
 
-   Click here to find out more about [creating or modifying collections](https://github.com/appsody/website/blob/master/content/docs/stacks/create.md).
+   One of the main items in the collection that can be modified is the Appsody stack. Click here to find out more about [creating or modifying Appsody stacks](https://github.com/appsody/website/blob/master/content/docs/stacks/create.md).
 
 1. Set up local build environment
 
