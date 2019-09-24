@@ -14,7 +14,7 @@ then
 fi
 
 # Fetch previously released stacks
-if [ "$RUN_PREFETCH" == "true" ]
+if [ "$GENERATE_ALL" == "true" ]
 then
   . $script_dir/prefetch.sh
 fi

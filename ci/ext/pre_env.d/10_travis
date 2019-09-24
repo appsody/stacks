@@ -10,7 +10,7 @@ then
 
     export CI_WAIT_FOR='travis_wait'
 
-    export RUN_PREFETCH="true"
+    export GENERATE_ALL="true"
 
     if [ $TRAVIS_TAG ] && [ "$TRAVIS_TAG" == "$TRAVIS_BRANCH" ]
     then

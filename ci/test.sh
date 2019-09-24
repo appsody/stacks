@@ -113,7 +113,7 @@ test_template() {
     popd
 }
 
-if [ "$TRAVIS" == "true" ]
+if [ "$GENERATE_ALL" == "true" ]
 then
     indexPath=$assets_dir/*.yaml
 else
