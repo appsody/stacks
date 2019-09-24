@@ -17,7 +17,7 @@ ENV APPSODY_WATCH_DIR=/project/userapp
 ENV APPSODY_WATCH_IGNORE_DIR= 
 
 # Types of file that will trigger a re-launch (change this to be specific to your application).
-ENV APPSODY_WATCH_REGEX="^.*.*"
+ENV APPSODY_WATCH_REGEX="^.*.sh$"
 
 # Optional command executed before RUN/TEST/DEBUG - typically used to install any dependencies from
 # the user application
