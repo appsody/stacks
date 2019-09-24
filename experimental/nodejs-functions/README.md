@@ -1,6 +1,6 @@
 # Node.js Functions Stack
 
-The Node.js Functions stack extends the [Node.js Express stack](../../incubator/nodejs-express/README.md) and provides a way for you to build one or more individual functions using the "Connect Middeware" API from Express.js:
+The Node.js Functions stack extends the [Node.js Express stack](../../incubator/nodejs-express/README.md) and provides a way for you to build one or more individual functions using the "Connect Middleware" API from Express.js:
 
 ```js
 var handler = function handler(req, res, next) {
@@ -8,7 +8,7 @@ var handler = function handler(req, res, next) {
 }
 ```
 
-These are then applied onto the pre-configured Express.js from the Node.js Express stack, which provides pre-confugured cloud-native capabilities include health checking and application metrics, along with installing a performance monitoring and analysis dashboard during development.
+These are then applied onto the pre-configured Express.js from the Node.js Express stack, which provides pre-configured cloud-native capabilities include health checking and application metrics, along with installing a performance monitoring and analysis dashboard during development.
 
 This stack is based on `Node.js v10` and `Express v4.16.0`, as derived from the  [Node.js Express stack](../../incubator/nodejs-express/README.md).
 
@@ -66,7 +66,7 @@ module.exports.get = function(req, res, next) {
 }
 ```
 
-If you wish to have multiple functions as part of your project, simply create an additonal `.js` file in your folder to contain the function.
+If you wish to have multiple functions as part of your project, simply create an additional `.js` file in your folder to contain the function.
 
 Note that you can also `require` any modules that you wish to use but adding them to the `package.json` and adding a `require` statement into your function files as you would normally.
 
