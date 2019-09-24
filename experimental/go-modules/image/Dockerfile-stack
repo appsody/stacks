@@ -1,34 +1,36 @@
 FROM golang:1
 
 ENV APPSODY_MOUNTS=/:/project/user-app
+ENV APPSODY_DEPS=
 
-ENV APPSODY_PROJECT_DIR=/project/user-app
 ENV APPSODY_WATCH_DIR=/project/user-app
-ENV APPSODY_WATCH_IGNORE_DIR=
-ENV APPSODY_WATCH_REGEX="^.*.go$"
+ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/vendor
+ENV APPSODY_WATCH_REGEX="^.*.(go|mod)$"
 
-ENV APPSODY_INSTALL=
+ENV APPSODY_INSTALL=""
 
-ENV APPSODY_RUN="go run /project/user-app/main.go"
-ENV APPSODY_RUN_ON_CHANGE="go run /project/user-app/main.go"
+ENV APPSODY_RUN="go run ."
+ENV APPSODY_RUN_ON_CHANGE="go run ."
 ENV APPSODY_RUN_KILL=true
 
-ENV APPSODY_DEBUG= 
-ENV APPSODY_DEBUG_ON_CHANGE= 
-ENV APPSODY_DEBUG_KILL= 
+ENV APPSODY_DEBUG="dlv debug --listen 0.0.0.0:9229 --headless ."
+ENV APPSODY_DEBUG_ON_CHANGE="dlv debug --listen 0.0.0.0:9229 --headless ."
+ENV APPSODY_DEBUG_KILL=true
 
-ENV APPSODY_TEST= 
-ENV APPSODY_TEST_ON_CHANGE= 
-ENV APPSODY_TEST_KILL= 
+ENV APPSODY_TEST="go test ."
+ENV APPSODY_TEST_ON_CHANGE=""
+ENV APPSODY_TEST_KILL=false
 
-COPY ./go-tools.sh /go-tools.sh
+COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
-WORKDIR /project
+
+WORKDIR /project/user-app
+
+RUN go get -u github.com/go-delve/delve/cmd/dlv
 
 ENV PORT=3000
-ENV GOPATH="/go"
 
 EXPOSE 3000
+EXPOSE 9229
 
-RUN /go-tools.sh

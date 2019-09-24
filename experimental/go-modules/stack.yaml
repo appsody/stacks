@@ -1,10 +1,10 @@
-name: Go Modules stack # title or short name for the stack (used on the website)
-version: 0.0.1 # version of the stack
-description: A basic go stack with Go 1.11+ Modules # short description of this stack (used on the website and `list` command)
-license: Apache-2.0 # license for the stack (SPDX license id)
-language: Go # language used for this stack
-maintainers: # list of maintainers for this stack
+name: Go Modules
+version: 0.3.0
+description: Runtime for Go using Go 1.11+ modules for dependencies
+license: Apache-2.0
+language: go
+maintainers:
   - name: John Pape
     email: jpapejr@icloud.com
     github-id: jpapejr
-default-template: hello # folder name of default template
+default-template: default

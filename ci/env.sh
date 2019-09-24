@@ -26,7 +26,7 @@ mkdir -p $prefetch_dir
 # export IMAGE_REGISTRY_PASSWORD
 
 # Organization for images
-# export IMAGE_REGISTRY_ORG=appsody
+export IMAGE_REGISTRY_ORG=jpapejr
 
 # List of apposdy repositories to build indexes for
 # export REPO_LIST="experimental incubator stable"
