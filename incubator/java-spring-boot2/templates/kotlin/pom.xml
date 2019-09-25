@@ -11,7 +11,7 @@
   </parent>
 
   <groupId>dev.appsody</groupId>
-  <artifactId>application</artifactId>
+  <artifactId>kotlin-application</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 

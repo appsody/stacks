@@ -93,7 +93,7 @@ stderr() {
 }
 
 trace() {
-    if [ -z "${VERBOSE}" ]
+    if [ "${VERBOSE}" == "true" ]
     then
         for x in "$@"
         do

@@ -81,7 +81,7 @@ do
                             -f $stack_dir/image/Dockerfile-stack $stack_dir/image \
                             > ${build_dir}/image.$stack_id.$stack_version.log 2>&1
                         then
-                            trace  "Output from image build" ${build_dir}/image.$stack_id.$stack_version.log
+                            trace  "Output from image build" "${build_dir}/image.$stack_id.$stack_version.log"
 
                             echo "created $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
                             echo "$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
@@ -248,13 +248,13 @@ if ${CI_WAIT_FOR} image_build $nginx_arg \
     -f $script_dir/nginx/Dockerfile $script_dir \
     > ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log
 then
-    trace  "Output from appsody index build" ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log
+    trace  "Output from appsody index build" "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
 
     echo "created $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
     echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE" >> $build_dir/image_list
     echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}" >> $build_dir/image_list
 else
     echo "failed building $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
-    cat ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log
+    cat "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
     exit 1
 fi
