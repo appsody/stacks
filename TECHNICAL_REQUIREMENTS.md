@@ -2,7 +2,7 @@
 
 All stable stacks must:
 - Adhere to the [Structure of a stack](https://github.com/appsody/website/blob/master/content/docs/stacks/stack-structure.md)
-- Support all the Appsody CLI commmands
+- Support all the Appsody CLI commands
 - Support all the operating systems supported by Appsody, today this list includes:
     - macOS Mojave
     - Ubuntu 18.04.2

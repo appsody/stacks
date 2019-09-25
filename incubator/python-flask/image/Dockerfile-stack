@@ -7,7 +7,6 @@ ENV APPSODY_MOUNTS=/:/project/userapp
 ENV APPSODY_DEPS=/project/deps
 
 ENV APPSODY_WATCH_DIR=/project/userapp
-ENV APPSODY_WATCH_IGNORE_DIR=/project/userapp/dependencies
 ENV APPSODY_WATCH_REGEX="^.*.py$"
 
 ENV APPSODY_INSTALL="cd /project/userapp;pipenv lock -r > requirements.txt;python -m pip install -r requirements.txt -t /project/deps"
