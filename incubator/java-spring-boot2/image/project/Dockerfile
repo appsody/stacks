@@ -1,4 +1,5 @@
-FROM registry.access.redhat.com/ubi8/ubi as compile
+FROM {{APPSODY_STACK}} as compile
+#FROM registry.access.redhat.com/ubi8/ubi as compile
 
 RUN yum upgrade --disableplugin=subscription-manager -y \
    && yum clean --disableplugin=subscription-manager packages \
@@ -72,6 +73,7 @@ ENV JVM_ARGS=""
 LABEL maintainer="IBM Java Engineering at IBM Cloud"
 LABEL org.opencontainers.image.version=${version}
 LABEL org.opencontainers.image.title=${artifactId}
+LABEL appsody.stack="{{APPSODY_STACK_FULL}}"
 
 #Install openj9 v8
 
@@ -98,4 +100,7 @@ RUN set -eux; \
 
 COPY --from=compile /project/user-app/target/app.jar /app.jar
 
-ENTRYPOINT [ "sh", "-c", "java $JVM_ARGS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
+EXPOSE 8080
+EXPOSE 8443
+
+ENTRYPOINT [ "sh", "-c", "exec java $JVM_ARGS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]

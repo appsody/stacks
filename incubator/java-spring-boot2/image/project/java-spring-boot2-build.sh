@@ -6,18 +6,20 @@ else
 fi
 
 if [[ "$color_prompt" == "yes" ]]; then
-      BLUE="\033[0;34m"
-    GREEN="\033[0;32m"
-    WHITE="\033[1;37m"
-      RED="\033[0;31m"
-    YELLOW="\033[0;33m"
-  NO_COLOR="\033[0m"
+       BLUE="\033[0;34m"
+      GREEN="\033[0;32m"
+      WHITE="\033[1;37m"
+        RED="\033[0;31m"
+     YELLOW="\033[0;33m"
+   NO_COLOR="\033[0m"
+  MVN_COLOR=""
 else
         BLUE=""
       GREEN=""
       WHITE=""
         RED=""
-  NO_COLOUR=""
+   NO_COLOR=""
+  MVN_COLOR="-Dstyle.color=never"
 fi
 
 note() {
@@ -32,7 +34,7 @@ error() {
 
 run_mvn () {
   echo -e "${GREEN}> mvn $@${NO_COLOR}"
-  mvn "$@"
+  mvn --no-transfer-progress ${MVN_COLOR} "$@"
 }
 
 common() {
@@ -122,12 +124,15 @@ package() {
 
 debug() {
   note "Build and debug project in the foreground"
-  run_mvn spring-boot:run -Dspring-boot.run.jvmArguments='-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005'
+  run_mvn -Dmaven.test.skip=true \
+    -Dspring-boot.run.jvmArguments='-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005' \
+    spring-boot:run
 }
 
 run() {
-  note "Build and run project in the foreground"  
-  run_mvn clean -Dmaven.test.skip=true spring-boot:run
+  note "Build and run project in the foreground"
+  run_mvn -Dmaven.test.skip=true \
+    clean spring-boot:run
 }
 
 test() {
@@ -153,12 +158,12 @@ case "${ACTION}" in
   ;;
   debug)
     common
-    export APPSODY_DEV_MODE=debug    
+    export APPSODY_DEV_MODE=debug
     debug
   ;;
   run)
     common
-    export APPSODY_DEV_MODE=run    
+    export APPSODY_DEV_MODE=run
     run
   ;;
   test)
