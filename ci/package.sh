@@ -200,10 +200,10 @@ do
                                 echo "      - id: $template_id" >> $index_file_local
                                 echo "        url: file://$assets_dir/$versioned_archive" >> $index_file_local
                             fi
-
-                        elif [ -f $prefetch_dir/$versioned_archive ]
+                        fi
+                        if [ "$GENERATE_ALL" == "true" ]
                         then
-                            if [ "$GENERATE_ALL" == "true" ]
+                            if [ -f $prefetch_dir/$versioned_archive ]
                             then
                                 # Add references to existing template archive.
                                 echo "      - id: $template_id" >> $index_src
@@ -211,49 +211,46 @@ do
 
                                 echo "      - id: $template_id" >> $index_file
                                 echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file
-                            fi
-                        elif [ -f $prefetch_dir/$old_archive ]
-                        then
-                            verify="$build_dir/prefetch-${repo_name}-${stack_id}-${template_id}"
-
-                            # If an archive exists with no version in the name,
-                            # check for a prefetch script that can verify it
-                            # matches this stack. This helps ensure that the new
-                            # stack image
-                            if [ -f ${verify} ]
+                            elif [ -f $prefetch_dir/$old_archive ]
                             then
-                                result=$(${verify} ${stack_version})
-                                if [ "$result" == "ok" ]
+                                verify="$build_dir/prefetch-${repo_name}-${stack_id}-${template_id}"
+
+                                # If an archive exists with no version in the name,
+                                # check for a prefetch script that can verify it
+                                # matches this stack. This helps ensure that the new
+                                # stack image
+                                if [ -f ${verify} ]
                                 then
-                                    echo "template ok"
-                                else
-                                    if [ "$result" == "nomatch" ]
+                                    result=$(${verify} ${stack_version})
+                                    if [ "$result" == "ok" ]
                                     then
-                                        stderr "WARNING: checksum for $old_archive doesn't match." \
-                                               "         The archive contents don't match what was fetched." \
-                                               "         Pre-fetched checksum is in ${verify}"
+                                        echo "template ok"
                                     else
-                                        stderr "WARNING: Version mismatch using $template_id for ${stack_id}-v${stack_version}." \
-                                               "         Pre-fetched archive built for ${stack_id}-v${result}."
+                                        if [ "$result" == "nomatch" ]
+                                        then
+                                            stderr "WARNING: checksum for $old_archive doesn't match." \
+                                                "         The archive contents don't match what was fetched." \
+                                                "         Pre-fetched checksum is in ${verify}"
+                                        else
+                                            stderr "WARNING: Version mismatch using $template_id for ${stack_id}-v${stack_version}." \
+                                                "         Pre-fetched archive built for ${stack_id}-v${result}."
+                                        fi
                                     fi
                                 fi
-                            fi
 
-                            # Add references to existing/old template archives.
+                                # Add references to existing/old template archives.
 
-                            if [ "$GENERATE_ALL" == "true" ]
-                            then 
                                 echo "      - id: $template_id" >> $index_src
                                 echo "        url: {{EXTERNAL_URL}}/$old_archive" >> $index_src
 
                                 echo "      - id: $template_id" >> $index_file
                                 echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$old_archive" >> $index_file
-                            fi
 
-                        else
-                            stderr "ERROR: Could not find an archive for $stack_id/$template_id:" \
-                                   "       $versioned_archive not found." \
-                                   "       $old_archive not found."
+                            else
+                                stderr "ERROR: Could not find an archive for $stack_id/$template_id:" \
+                                    "       $versioned_archive not found." \
+                                    "       $old_archive not found."
+                            fi
                         fi
                     fi
                 done

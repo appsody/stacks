@@ -113,12 +113,7 @@ test_template() {
     popd
 }
 
-if [ "$GENERATE_ALL" == "true" ]
-then
-    indexPath=$assets_dir/*.yaml
-else
-    indexPath=$assets_dir/*-local.yaml
-fi
+indexPath=$assets_dir/*-local.yaml
 
 for x in $indexPath
 do
