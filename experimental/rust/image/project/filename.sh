@@ -1,11 +1,4 @@
 #!/bin/bash
-while read line
-do 
-    #if the line ends 
-    if [[ "$line" == "name"* ]] 
-    then
-    export filename=$line
-    fi
-done < Cargo.toml
+bin_name=$(awk '$0 == "[[bin]]" {i=1;next};i && i++ <= 1' Cargo.toml)
 
-echo "$filename" | sed -e 's/name = "\(.*\)"/\1/'
+echo "$bin_name" | sed -e 's/name = "\(.*\)"/\1/'

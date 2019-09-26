@@ -1,13 +1,11 @@
 FROM rust:1.37
 
 ENV APPSODY_MOUNTS=/:/project/user-app
-ENV APPSODY_DEPS=/project/deps
+ENV APPSODY_DEPS=/project/user-app/target/debug/deps
 
 ENV APPSODY_WATCH_DIR="/project/user-app"
 ENV APPSODY_WATCH_IGNORE_DIR=/project/deps
 ENV APPSODY_WATCH_REGEX="(^.*.rs$)"
-
-ENV APPSODY_PREP="cd /project/user-app; cargo fetch"
 
 ENV APPSODY_RUN="cargo run"
 ENV APPSODY_RUN_ON_CHANGE="cargo run"
