@@ -101,7 +101,7 @@ do
 
                     if [ -d $stack_dir/image ]
                     then
-                        image_build \
+                        if ${CI_WAIT_FOR} image_build \
                             --build-arg GIT_ORG_REPO=$GIT_ORG_REPO \
                             --build-arg IMAGE_REGISTRY_ORG=$IMAGE_REGISTRY_ORG \
                             --build-arg STACK_ID=$stack_id \
@@ -111,16 +111,26 @@ do
                             --label "org.opencontainers.image.created=$(date +%Y-%m-%dT%H:%M:%S%z)" \
                             --label "org.opencontainers.image.version=${stack_version}" \
                             --label "org.opencontainers.image.revision=$(git log -1 --pretty=%H)" \
+                            --label "appsody.stack=$IMAGE_REGISTRY_ORG/$stack_id:$stack_version" \
                             -t $IMAGE_REGISTRY_ORG/$stack_id \
+                            -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version \
                             -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major \
                             -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor \
-                            -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
-                            -f $stack_dir/image/Dockerfile-stack $stack_dir/image
+                            -f $stack_dir/image/Dockerfile-stack $stack_dir/image \
+                            > ${build_dir}/image.$stack_id.$stack_version.log 2>&1
+                        then
+                            trace  "Output from image build" "${build_dir}/image.$stack_id.$stack_version.log"
 
-                        echo "$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
-                        echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
-                        echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
-                        echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch" >> $build_dir/image_list
+                            echo "created $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
+                            echo "$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
+                            echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version" >> $build_dir/image_list
+                            echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
+                            echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
+                        else
+                            echo "Error building $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
+                            cat ${build_dir}/image.$stack_id.$stack_version.log
+                            exit 1
+                        fi
                     fi
                 else
                     echo -e "\n- SKIPPING stack image: $repo_name/$stack_id"
@@ -201,10 +211,15 @@ do
                                 echo "        url: file://$assets_dir/$versioned_archive" >> $index_file_local
                             fi
                         fi
+                        
                         if [ "$GENERATE_ALL" == "true" ]
                         then
+                            echo "      - id: $template_id" >> $index_file
+                            echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file
                             if [ -f $prefetch_dir/$versioned_archive ]
                             then
+                                echo "$template_id template ok"
+
                                 # Add references to existing template archive.
                                 echo "      - id: $template_id" >> $index_src
                                 echo "        url: {{EXTERNAL_URL}}/$versioned_archive" >> $index_src
@@ -221,8 +236,9 @@ do
                                 # stack image
                                 if [ -f ${verify} ]
                                 then
-                                    result=$(${verify} ${stack_version})
-                                    if [ "$result" == "ok" ]
+                                    echo "$template_id template ok"
+                                else
+                                    if [ "$result" == "nomatch" ]
                                     then
                                         echo "template ok"
                                     else
@@ -278,10 +294,19 @@ then
     nginx_arg="--build-arg NGINX_IMAGE=$NGINX_IMAGE"
 fi
 
-image_build $nginx_arg \
- -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE \
- -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION} \
- -f $script_dir/nginx/Dockerfile $script_dir
+if ${CI_WAIT_FOR} image_build $nginx_arg \
+    -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE \
+    -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION} \
+    -f $script_dir/nginx/Dockerfile $script_dir \
+    > ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log
+then
+    trace  "Output from appsody index build" "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
 
-echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE" >> $build_dir/image_list
-echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}" >> $build_dir/image_list
+    echo "created $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
+    echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE" >> $build_dir/image_list
+    echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}" >> $build_dir/image_list
+else
+    echo "failed building $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
+    cat "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
+    exit 1
+fi
