@@ -73,21 +73,47 @@ Click here to find out more about the [Repository structure](https://github.com/
 
    Following the build, you can find the generated collection assets in the file://$PWD/ci/assets/ directory and all the docker images in your local docker registry.
 
-1. Test the collections.
+## Testing the collections locally
 
-   To test the collections, add the `kabanero-index.yaml` to Appsody using the Appsody CLI:
+1. Add the local collections repository to Appsody.
+
+   The `./ci/build.sh` should have added the local kabanero index into the Appsody repository list. You can check this by running the command:
+   ```
+   appsody repo list
+   ```
+   
+   The output from this command should include entries similar to:
+   ``` 
+   appsodyhub              https://github.com/appsody/stacks/releases/latest/download/incubator-index.yaml        
+   kabanero-index          file:///Users/myuser/kabanero-io/collections/ci/assets/kabanero-index.yaml      
+   kabanero-index-local    file:///Users/myuser/kabanero-io/collections/ci/assets/kabanero-index-local.yaml
+   ```
+   
+   If the `kabanero-index-local` repository is not in the list then it can be added to Appsody using the Appsody CLI:
 
    ```bash
-   appsody repo add kabanero file://$PWD/ci/assets/kabanero-index-local.yaml
+   appsody repo add kabanero-index-local file://$PWD/ci/assets/kabanero-index-local.yaml
    ```
+   This will enable you to do an `appsody init` for a collection that is in the newly built kabanero collections.
 
-   This will enable you to do an `appsody init` for a collection that is in the newly built kabanero collections.  For example:
+1. Test the collections.
+
+   To test the collections using the local docker images, rather than pulling them from docker hub, set the following environment variable:
    ```
-   appsody init kabanero/java-microprofile
+   export APPSODY_PULL_POLICY=IFNOTPRESENT
    ```
+   
+   The `appsody init` will now use the local docker images. For example:
+   ```
+   appsody init kabanero-index-local/java-microprofile
+   ```
+   
+   will create a new java-microprofile project using the local docker images and the local collection artifacts. 
 
 1. Test the pipelines and other components that have been included in the collection within the Kabanero/OpenShift environment.
    * More details coming.
+
+## Releasing the collections
 
 1. Once you have made all the changes to the collection and you are ready to push the changes back to your git repository then:
     1. Commit your changes back to git.  For example:

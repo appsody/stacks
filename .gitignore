@@ -13,3 +13,4 @@
 .*.swp
 __pycache__/
 *.py[cod]
+**/.*.md.html
