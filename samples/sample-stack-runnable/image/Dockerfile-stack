@@ -59,5 +59,4 @@ COPY ./config /config
 WORKDIR /project
 
 # Expose the relevant ports (change this to be specific to your application).
-ENV PORT=8080
 EXPOSE 8080
