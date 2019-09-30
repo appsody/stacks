@@ -1,14 +1,14 @@
-const express = require("express");
-const fs = require("fs");
-var path = require("path");
+const express = require('express');
+const fs = require('fs');
+var path = require('path');
 
 const app = express();
 
-const basePath = path.join(__dirname, "functions");
+const basePath = path.join(__dirname, 'functions');
 
 var files = fs.readdirSync(basePath);
 files.forEach(function(fileName) {
-  if (!fileName.endsWith(".js")) return;
+  if (!fileName.endsWith('.js')) return;
   var file = path.join(basePath, fileName);
   var exports = require(file);
   if (exports.url == undefined) return;
