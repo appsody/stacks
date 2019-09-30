@@ -2,10 +2,7 @@
 
 The Python Flask stack provides a consistent way of developing web applications using [Flask](http://flask.pocoo.org). "Flask is a lightweight WSGI web application framework. It is designed to make getting started quick and easy, with the ability to scale up to complex applications."
 
-This stack is based on Python 3.7 and Flask 0.11.1 and enables health checking and application metrics out of the box. The stack also provides a set of unit tests. The stack also uses [flasgger](https://github.com/rochacbruno-archive/flasgger) to auto-generate swagger ui
-documentation and specification.
-
-Remote debugging of applications is enabled during `debug` mode using `ptvsd`, which enables you to connect using the debugger in VS Code. A VS Code debug launch configuration is also provided.
+This stack is based on Python 3.7 and Flask 1.1.1 and enables health checking and application metrics out of the box. The stack also provides a set of unit tests. The stack also uses [flasgger](https://github.com/rochacbruno-archive/flasgger) to auto-generate swagger ui documentation and specification.
 
 Note that the use of the Python Flask stack requires that `pipenv` is installed, which is used for both version management of Python versions (ensuring you are using the same version locally as used in the stack), and to allow you to specify your own dependencies in a Pipfile.
 
@@ -31,13 +28,11 @@ This stack also comes with Prometheus metrics, which has been preconfigured to w
 
 ## Templates
 
-Templates are used to create your local project and start your development. When initializing your project you will be provided with the simplest Node.js Express application you can write.
-
-This template only has a simple `__init__.py` file which implements the `/hello` endpoint and returns "Hello from Appsody!".
+Templates are used to create your local project and start your development. When initializing your project you will be provided with simple python flask application, implemented as a single `__init__.py` file which provides a `/hello` endpoint, which returns "Hello from Appsody!". You can then modify this to build out the endpoints required for your application.
 
 ## Getting Started
 
-1. Create a new folder in your local directory and initialize it using the Appsody CLI, e.g.:
+1. Create a new directory in your local directory and initialize it using the Appsody CLI, e.g.:
 
     ```bash
     mkdir my-project
@@ -64,6 +59,19 @@ This template only has a simple `__init__.py` file which implements the `/hello`
     - Health endpoint: http://localhost:8080/health
     - Metrics endpoint: http://localhost:8080/metrics
     - Swagger API doc: http://localhost:8080/apidocs
+
+## Debugging
+
+You can run also your application in debug mode using the following command:
+
+```bash
+    appsody debug
+```
+
+In debug mode, two aspects are enabled:
+
+1. The flask server is started in development mode, which enables the flask debugger
+1. The python debugger for Visual Studio (`ptvsd`) is enabled in the server, enabling remote debugging. The template included in this stack already has a `launch.json` for Visual Studio Code to enable remote debugging attach. This will be placed a directory called `.vscode` in the application directory that you initialize for Appsody. Opening your application in Visual Studio Code should cause this to be loaded.
 
 ## License
 
