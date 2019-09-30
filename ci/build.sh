@@ -27,12 +27,12 @@ for stack_name in $STACKS_LIST
 do
   if [ "${stack_name: -1}" == "/" ]
   then
-    stack_name=${stack_name%/}
+    stack_name=${stack_name%?}
   fi
-  stack="$stack $stack_name"
+  stack_no_slash="$stack_no_slash $stack_name"
 done
 
-STACKS_LIST=$stack
+STACKS_LIST=$stack_no_slash
 
 if [ -z "$STACKS_LIST" ]
 then
