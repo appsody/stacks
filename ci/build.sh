@@ -23,6 +23,17 @@ then
   echo "STACKS_LIST=$STACKS_LIST"
 fi
 
+for stack_name in $STACKS_LIST
+do
+  if [ "${stack_name: -1}" == "/" ]
+  then
+    stack_name=${stack_name%/}
+  fi
+  stack="$stack $stack_name"
+done
+
+STACKS_LIST=$stack
+
 if [ -z "$STACKS_LIST" ]
 then
   . $script_dir/list.sh
