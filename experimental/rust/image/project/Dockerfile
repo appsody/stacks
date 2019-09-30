@@ -22,15 +22,11 @@ RUN useradd rust
 
 WORKDIR "/project/user-app"
 
-COPY --from=builder /project/user-app/filename.sh .
-RUN chmod +x filename.sh
+# get files and built binary from previous image
+COPY --from=builder /project/user-app/filename.sh /project/user-app/Cargo.toml /project/user-app/target/release/ ./
 
-COPY --from=builder /project/user-app/Cargo.toml .
-
-# get built binary from previous image
-COPY --from=builder /project/user-app/target/release/ .
-
-RUN chown rust:rust $(./filename.sh)
+RUN chmod +x filename.sh \
+ && chown rust:rust $(./filename.sh)
 
 USER rust
 
