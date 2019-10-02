@@ -30,4 +30,8 @@ RUN chmod +x filename.sh \
 
 USER rust
 
+ENV PORT 8000
+
+EXPOSE 8000
+
 CMD ["bash", "-c", "./$(./filename.sh)"]
