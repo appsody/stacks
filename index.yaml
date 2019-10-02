@@ -1,83 +1,130 @@
-apiVersion: v1
-projects:
-  java-microprofile:
-  - updated: 2019-08-02T23:12:19+0000
-    name: Eclipse MicroProfile®
-    version: 0.2.11
-    description: Eclipse MicroProfile using OpenJ9 and Maven
-    license: Apache-2.0
-    maintainers:
-      - emijiang6@googlemail.com
-      - neeraj.laad@gmail.com
-    default-template: default
-    urls:
-    - https://github.com/appsody/stacks/releases/download/java-microprofile-v0.2.11/incubator.java-microprofile.v0.2.11.templates.default.tar.gz
-  java-spring-boot2:
-  - updated: 2019-08-02T23:12:19+0000
-    name: Spring Boot®
-    version: 0.3.10
-    description: Spring Boot using OpenJ9 and Maven
-    license: Apache-2.0
-    maintainers:
-      - schnabel@us.ibm.com
-    default-template: default
-    urls:
-    - https://github.com/appsody/stacks/releases/download/java-spring-boot2-v0.3.10/incubator.java-spring-boot2.v0.3.10.templates.default.tar.gz
-  nodejs-express:
-  - updated: 2019-08-02T23:12:19+0000
-    name: Node.js Express
-    version: 0.2.5
-    description: Express web framework for Node.js
-    license: Apache-2.0
-    maintainers:
-      - cnbailey@gmail.com
-      - neeraj.laad@gmail.com
-    default-template: simple
-    urls:
-    - https://github.com/appsody/stacks/releases/download/nodejs-express-v0.2.5/incubator.nodejs-express.templates.simple.tar.gz
-  nodejs:
-  - updated: 2019-08-02T23:12:19+0000
-    name: Node.js
-    version: 0.2.5
-    description: Runtime for Node.js applications
-    license: Apache-2.0
-    maintainers:
-      - cnbailey@gmail.com
-      - neeraj.laad@gmail.com
-    default-template: simple
-    urls:
-    - https://github.com/appsody/stacks/releases/download/nodejs-v0.2.5/incubator.nodejs.templates.simple.tar.gz
-  swift:
-  - updated: 2019-08-02T23:12:19+0000
-    name: Swift
-    version: 0.1.4
-    description: Runtime for Swift applications
-    license: Apache-2.0
-    maintainers:
-      - i.partridge@uk.ibm.com
-    default-template: simple
-    urls:
-    - https://github.com/appsody/stacks/releases/download/swift-v0.1.4/incubator.swift.templates.simple.tar.gz
-  nodejs-loopback:
-  - updated: 2019-07-26T21:00:00+00:00
-    name: nodejs-loopback
-    version: 0.1.4
-    description: LoopBack API framework for Node.js
-    license: Apache-2.0
-    maintainers:
-    - enjoyjava@gmail.com
-    default-template: scaffold
-    urls:
-    - https://github.com/appsody/stacks/releases/download/nodejs-loopback-v0.1.4/incubator.nodejs-loopback.templates.scaffold.tar.gz
-  python-flask:
-  - updated: 2019-07-26T21:00:00+00:00
-    name: Python Flask
-    version: 0.1.3
-    description: Flask web Framework for Python
-    license: Apache-2.0
-    maintainers:
-      - cnbailey@gmail.com
-      - henry.nash@uk.ibm.com
-    default-template: simple
-    urls:
-    - https://github.com/appsody/stacks/releases/download/python-flask-v0.1.3/incubator.python-flask.v0.1.3.templates.simple.tar.gz
+apiVersion: v2
+stacks:
+- default-image: java-microprofile
+  default-pipeline: default
+  default-template: default
+  description: Eclipse MicroProfile on Open Liberty & OpenJ9 using Maven
+  id: java-microprofile
+  images:
+  - id: java-microprofile
+    image: kabanero/java-microprofile:0.2
+  language: java
+  license: Apache-2.0
+  maintainers:
+  - email: emijiang6@googlemail.com
+    github-id: Emily-Jiang
+    name: Emily Jiang
+  - email: neeraj.laad@gmail.com
+    github-id: neeraj-laad
+    name: Neeraj Laad
+  name: Eclipse MicroProfile®
+  pipelines:
+  - id: default
+    sha256: a59a779825c543e829d7a51e383f26c2089b4399cf39a89c10b563597d286991
+    url: https://github.com/kabanero-io/collections/releases/download/v0.1.2/incubator.common.pipeline.default.tar.gz
+  templates:
+  - id: default
+    url: https://github.com/kabanero-io/collections/releases/download/v0.1.2/incubator.java-microprofile.v0.2.11.templates.default.tar.gz
+  version: 0.2.11
+- default-image: java-spring-boot2
+  default-pipeline: default
+  default-template: default
+  description: Spring Boot using OpenJ9 and Maven
+  id: java-spring-boot2
+  images:
+  - id: java-spring-boot2
+    image: kabanero/java-spring-boot2:0.3
+  language: java
+  license: Apache-2.0
+  maintainers:
+  - email: schnabel@us.ibm.com
+    github-id: ebullient
+    name: Erin Schnabel
+  name: Spring Boot®
+  pipelines:
+  - id: default
+    sha256: a59a779825c543e829d7a51e383f26c2089b4399cf39a89c10b563597d286991
+    url: https://github.com/kabanero-io/collections/releases/download/v0.1.2/incubator.common.pipeline.default.tar.gz
+  templates:
+  - id: default
+    url: https://github.com/kabanero-io/collections/releases/download/v0.1.2/incubator.java-spring-boot2.v0.3.9.templates.default.tar.gz
+  - id: kotlin
+    url: https://github.com/kabanero-io/collections/releases/download/v0.1.2/incubator.java-spring-boot2.v0.3.9.templates.kotlin.tar.gz
+  version: 0.3.9
+- default-image: nodejs-express
+  default-pipeline: default
+  default-template: simple
+  description: Express web framework for Node.js
+  id: nodejs-express
+  images:
+  - id: nodejs-express
+    image: kabanero/nodejs-express:0.2
+  language: nodejs
+  license: Apache-2.0
+  maintainers:
+  - email: cnbailey@gmail.com
+    github-id: seabaylea
+    name: Chris Bailey
+  - email: neeraj.laad@gmail.com
+    github-id: neeraj-laad
+    name: Neeraj Laad
+  name: Node.js Express
+  pipelines:
+  - id: default
+    sha256: a59a779825c543e829d7a51e383f26c2089b4399cf39a89c10b563597d286991
+    url: https://github.com/kabanero-io/collections/releases/download/v0.1.2/incubator.common.pipeline.default.tar.gz
+  templates:
+  - id: simple
+    url: https://github.com/kabanero-io/collections/releases/download/v0.1.2/incubator.nodejs-express.v0.2.5.templates.simple.tar.gz
+  - id: skaffold
+    url: https://github.com/kabanero-io/collections/releases/download/v0.1.2/incubator.nodejs-express.v0.2.5.templates.skaffold.tar.gz
+  version: 0.2.5
+- default-image: nodejs-loopback
+  default-pipeline: default
+  default-template: scaffold
+  description: LoopBack 4 API Framework for Node.js
+  id: nodejs-loopback
+  images:
+  - id: nodejs-loopback
+    image: kabanero/nodejs-loopback:0.1
+  language: nodejs
+  license: Apache-2.0
+  maintainers:
+  - email: enjoyjava@gmail.com
+    github-id: raymondfeng
+    name: Raymond Feng
+  name: LoopBack 4
+  pipelines:
+  - id: default
+    sha256: a59a779825c543e829d7a51e383f26c2089b4399cf39a89c10b563597d286991
+    url: https://github.com/kabanero-io/collections/releases/download/v0.1.2/incubator.common.pipeline.default.tar.gz
+  templates:
+  - id: scaffold
+    url: https://github.com/kabanero-io/collections/releases/download/v0.1.2/incubator.nodejs-loopback.v0.1.4.templates.scaffold.tar.gz
+  version: 0.1.4
+- default-image: nodejs
+  default-pipeline: default
+  default-template: simple
+  description: Runtime for Node.js applications
+  id: nodejs
+  images:
+  - id: nodejs
+    image: kabanero/nodejs:0.2
+  language: nodejs
+  license: Apache-2.0
+  maintainers:
+  - email: cnbailey@gmail.com
+    github-id: seabaylea
+    name: Chris Bailey
+  - email: neeraj.laad@gmail.com
+    github-id: neeraj-laad
+    name: Neeraj Laad
+  name: Node.js
+  pipelines:
+  - id: default
+    sha256: a59a779825c543e829d7a51e383f26c2089b4399cf39a89c10b563597d286991
+    url: https://github.com/kabanero-io/collections/releases/download/v0.1.2/incubator.common.pipeline.default.tar.gz
+  templates:
+  - id: simple
+    url: https://github.com/kabanero-io/collections/releases/download/v0.1.2/incubator.nodejs.v0.2.5.templates.simple.tar.gz
+  version: 0.2.5
