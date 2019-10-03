@@ -111,7 +111,21 @@ Click here to find out more about the [Repository structure](https://github.com/
    will create a new java-microprofile project using the local docker images and the local collection artifacts. 
 
 1. Test the pipelines and other components that have been included in the collection within the Kabanero/OpenShift environment.
-   * More details coming.
+
+## [Optional] Test the collections using a test GIT release
+
+Before creating a final production release for use with your Kabanero installation, you may wish to create a test release on a test GIT repository. 
+
+1. Use these instructions to [create a GIT release manually](https://github.com/kabanero-io/collections/blob/master/create-release.md) from your local build.
+1. Once all the artifacts are uploaded to the GIT Release, go to the assets inside that release and find the file kabanero-index.yaml and copy its URL.
+e.g. https://github.com/kabanero-io/collections/releases/download/v0.2.0.beta2/kabanero-index.yaml
+1. Within your Kabanero environment create a sample.yaml based on this sample yaml e.g.
+https://raw.githubusercontent.com/kabanero-io/kabanero-operator/master/config/samples/full.yaml
+1. In the yaml update the URL for the kabanero-index.yaml to tghe one from the release. e.g. 
+https://github.com/kabanero-io/collections/releases/download/v0.2.0.beta2/kabanero-index.yaml
+1. Save the yaml and then apply it to your Kabanero instance `kubectl apply -f sample.yaml`
+
+This will update the collections and pipelines in your environment. New collections and pipeline should get activated as a result of this step.
 
 ## Releasing the collections
 
@@ -137,7 +151,6 @@ Click here to find out more about the [Repository structure](https://github.com/
    git push --tags
    ```
    This will trigger another Travis build that will also generate a Git Release and push the images to the image repository.
-
 ## Need help?
 If you have a question that you can't find an answer to, we would also like to hear about that too.
 You can reach out to the community for assistance on the [Kabanero Slack channel](https://ibm-cloud-tech.slack.com/messages/CJZCYTD0Q).
