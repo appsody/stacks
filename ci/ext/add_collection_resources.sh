@@ -9,6 +9,7 @@ index_file=$5
 assets_dir=$base_dir/ci/assets
 stack_id=$(basename $stack_dir)
 collection=$stack_dir/collection.yaml
+collection_temp=$stack_dir/collection_temp.yaml
 
 . $base_dir/ci/env.sh
 
@@ -101,7 +102,16 @@ then
     if [ "$(yq r $collection stacks.[0].maintainers)" != "null" ]; then
         yq d -i $index_file stacks.[0].maintainers
     fi
-    yq m -x -i $index_file $collection
+
+    # Replace the IMAGE_REGISTRY_ORG placeholder with the actual value of the env var
+    # and store into a temporary file for use in merging into kabanero-index.yaml 
+    sed -e "s|\$IMAGE_REGISTRY_ORG|${IMAGE_REGISTRY_ORG}|" $collection > $collection_temp
+    
+    # Merge the collection yaml file into the index file
+    yq m -x -i $index_file $collection_temp
+    
+    # Remove the temporary file
+    rm -fr $collection_temp
 
     # find the name of the default image in the collection.yaml
     default_imageId=$(yq r $index_file default-image)
@@ -113,11 +123,9 @@ then
         if [ $default_imageId == $imageId ]
         then
             default_image=$(yq r $index_file images.[$count].image)
-            default_image="${default_image/\$IMAGE_REGISTRY_ORG/${IMAGE_REGISTRY_ORG}}"
         fi
         count=$(( $count + 1 ))
     done
-    #echo "Default image name is $default_image"
 
     # for each of the appsody templates we need to update the .appsody_config.yaml
     # file to contain the correct docker image name that is specified for the image
