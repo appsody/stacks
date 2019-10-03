@@ -14,7 +14,7 @@
 
     <groupId>dev.appsody</groupId>
     <artifactId>java-microprofile</artifactId>
-    <version>0.2.14</version>
+    <version>0.2.15</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -31,6 +31,7 @@
         <liberty.groupId>io.openliberty</liberty.groupId>
         <liberty.artifactId>openliberty-runtime</liberty.artifactId>
         <version.openliberty-runtime>19.0.0.8</version.openliberty-runtime>
+        <openliberty.maven.version>3.0.1</openliberty.maven.version>
         <http.port>9080</http.port>
         <https.port>9443</https.port>
         <packaging.type>usr</packaging.type>
