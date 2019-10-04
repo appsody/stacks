@@ -17,6 +17,7 @@ spec:
       port: APPSODY_PORT
     initialDelaySeconds: 5
     periodSeconds: 2
+    timeoutSeconds: 1
   livenessProbe:
     failureThreshold: 12
     httpGet:
