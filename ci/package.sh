@@ -11,50 +11,15 @@ mkdir -p $build_dir/index-src
 # expose an extension point for running before main 'package' processing
 exec_hooks $script_dir/ext/pre_package.d
 
-if [ "$GENERATE_ALL" == "true" ]
-then
-    generateRepoIndex="stable incubator experimental"
-else
-    incubator=0
-    experimental=0
-    stable=0
-    for stackRepo in $STACKS_LIST
-    do
-        if [[ $stackRepo == incubator* ]]
-        then
-            let "incubator=incubator+1"
-        elif [[ $stackRepo == experimental* ]]
-        then
-            let "experimental=experimental+1"
-        elif [[ $stackRepo == stable* ]]
-        then
-            let "stable=stable+1"
-        fi
-    done
-
-    if (($incubator > 0))
-    then
-        generateRepoIndex="incubator"
-    fi
-    if (($experimental > 0))
-    then
-        generateRepoIndex="$generateRepoIndex experimental"
-    fi
-    if (($stable > 0))
-    then
-        generateRepoIndex="$generateRepoIndex stable"
-    fi 
-fi
-
 # iterate over each repo
-for repo_name in $generateRepoIndex
+for repo_name in $REPO_LIST
 do
     repo_dir=$base_dir/$repo_name
     if [ -d $repo_dir ]
     then
         echo -e "\nProcessing repo: $repo_name"
 
-        if [ "$GENERATE_ALL" == "true" ]
+        if [ "$GENERATE_ALL_INDEXES" == "true" ]
         then
         # versioned stack directory for per-stack release
         index_file=$assets_dir/$repo_name-index.yaml
@@ -136,7 +101,7 @@ do
                     echo -e "\n- SKIPPING stack image: $repo_name/$stack_id"
                 fi
 
-                if [ "$GENERATE_ALL" == "true" ]
+                if [ "$GENERATE_ALL_INDEXES" == "true" ]
                 then
                     echo "  - id: $stack_id" >> $index_src
                     sed 's/^/    /' $stack >> $index_src
@@ -197,7 +162,7 @@ do
                         # Update index yaml based on archive file name (prefer versioned archives)
                         if [ -f $assets_dir/$versioned_archive ]
                         then
-                            if [ "$GENERATE_ALL" == "true" ]
+                            if [ "$GENERATE_ALL_INDEXES" == "true" ]
                             then
                                 echo "      - id: $template_id" >> $index_src
                                 echo "        url: {{EXTERNAL_URL}}/$versioned_archive" >> $index_src
@@ -212,7 +177,7 @@ do
                             fi
                         fi
                         
-                        if [ "$GENERATE_ALL" == "true" ]
+                        if [ "$GENERATE_ALL_INDEXES" == "true" ]
                         then
                             echo "      - id: $template_id" >> $index_file
                             echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file

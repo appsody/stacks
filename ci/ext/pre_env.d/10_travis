@@ -11,7 +11,7 @@ then
     export CI_WAIT_FOR='travis_wait'
     export VERBOSE=
 
-    export GENERATE_ALL="true"
+    export GENERATE_ALL_INDEXES="true"
 
     if [ $TRAVIS_TAG ] && [ "$TRAVIS_TAG" == "$TRAVIS_BRANCH" ]
     then
