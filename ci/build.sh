@@ -34,7 +34,7 @@ done
 
 STACKS_LIST=$stack_no_slash
 
-if [ -z "$STACKS_LIST" ]
+if [ -n "$STACKS_LIST" ]
 then
   . $script_dir/list.sh
 fi
