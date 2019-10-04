@@ -12,6 +12,20 @@ spec:
     port: APPSODY_PORT
     annotations:
       prometheus.io/scrape: 'true'
+  monitoring:
+    endpoints:
+    - basicAuth:
+        password:
+          key: password
+          name: metrics-liberty
+        username:
+          key: username
+          name: metrics-liberty
+      interval: 5s
+      tlsConfig:
+        insecureSkipVerify: true
+    labels:
+      k8s-app: ""
   livenessProbe:
     failureThreshold: 12
     httpGet:
