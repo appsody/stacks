@@ -140,17 +140,19 @@ then
             mkdir -p $template_temp
 
             # Update template archives
-            tar -xzf $assets_dir/$template_archive -C $template_temp
-            if [ -f $template_temp/.appsody-config.yaml ]
-            then 
-                yq w -i $template_temp/.appsody-config.yaml stack $default_image 
-            else
-                echo "stack: $default_image" > $template_temp/.appsody-config.yaml
-            fi
-            tar -czf $assets_dir/$template_archive -C $template_temp .
-            echo -e "--- Updated template archive: $template_archive"
+            if [ -f $assets_dir/$template_archive ]; then
+                tar -xzf $assets_dir/$template_archive -C $template_temp
+                if [ -f $template_temp/.appsody-config.yaml ]
+                then 
+                    yq w -i $template_temp/.appsody-config.yaml stack $default_image 
+                else
+                    echo "stack: $default_image" > $template_temp/.appsody-config.yaml
+                fi
+                tar -czf $assets_dir/$template_archive -C $template_temp .
+                echo -e "--- Updated template archive: $template_archive"
         
-            rm -fr $template_temp
+                rm -fr $template_temp
+            fi
         fi
     done
 fi

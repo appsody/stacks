@@ -21,9 +21,3 @@ if [ -z "$DISPLAY_NAME_PREFIX" ]
 then
     export DISPLAY_NAME_PREFIX="Kabanero"
 fi
-
-if [ -z "$PACKAGE_WHEN_MISSING" ]
-then
-    export PACKAGE_WHEN_MISSING=false
-fi
-
