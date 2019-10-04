@@ -151,6 +151,7 @@ This will update the collections and pipelines in your environment. New collecti
    git push --tags
    ```
    This will trigger another Travis build that will also generate a Git Release and push the images to the image repository.
+
 ## Need help?
 If you have a question that you can't find an answer to, we would also like to hear about that too.
 You can reach out to the community for assistance on the [Kabanero Slack channel](https://ibm-cloud-tech.slack.com/messages/CJZCYTD0Q).
