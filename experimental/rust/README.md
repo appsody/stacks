@@ -4,6 +4,8 @@ The Rust stack provides a consistent way of developing [Rust](https://rust-lang.
 
 This stack is based on the `Rust v1.37` runtime and allows you to develop new or existing Rust applications using Appsody.
 
+Currently, debugging is not supported in this stack.
+
 ## Templates
 
 Templates are used to create your local project and start your development. When initializing your project you will be provided with the default template project. This template provides a simple application that prints "Hello from Appsody!".
