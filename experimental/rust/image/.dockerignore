@@ -1,0 +1,7 @@
+# ignore rust build artifacts
+**/target
+**/*.rs.bk
+
+**/.git
+**/.gitignore
+**/.vscode
