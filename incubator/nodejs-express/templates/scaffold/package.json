@@ -1,13 +1,13 @@
 {
-  "name": "nodejs-express-skaffold",
+  "name": "nodejs-express-scaffold",
   "version": "0.1.0",
-  "description": "Skaffolded Node.js Express application",
+  "description": "Scaffolded Node.js Express application",
   "license": "Apache-2.0",
   "main": "app.js",
   "repository": {
     "type" : "git",
     "url" : "https://github.com/appsody/stacks.git",
-    "directory": "incubator/nodejs-express/templates/skaffold"
+    "directory": "incubator/nodejs-express/templates/scaffold"
   },
   "scripts": {
     "test": "mocha"
