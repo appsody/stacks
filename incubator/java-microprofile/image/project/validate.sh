@@ -71,7 +71,7 @@ if ! [[
         ( "${l_groupId}" == "\${liberty.groupId}" && "${l_artifactId}" == "\${liberty.artifactId}" && "${l_version}" == "\${version.openliberty-runtime}" )
      ]]
 then
-  echo "Project is not using the right OpenLiberty assembly artifact:
+  echo "Project is not using the right Open Liberty assembly artifact:
   <assemblyArtifact>
     <groupId>${LIBERTY_GROUP_ID}</groupId>
     <artifactId>${LIBERTY_ARTIFACT_ID}</artifactId>
@@ -87,12 +87,3 @@ Alternatively you could also use these properties:
   exit 1
 fi
 
-# Enforcing loose application
-l_looseConfig=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:looseApplication" pom.xml)
-if ! [ "${l_looseConfig}" == "true" ]; then
-  echo "Should be a loose application:
-  <configuration>
-    <looseApplication>true</looseApplication>
-  </configuration>"
-  exit 1
-fi
