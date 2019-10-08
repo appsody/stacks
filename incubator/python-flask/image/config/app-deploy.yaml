@@ -14,13 +14,6 @@ spec:
       prometheus.io/scrape: 'true'
   monitoring:
     endpoints:
-    - basicAuth:
-        password:
-          key: password
-          name: metrics-liberty
-        username:
-          key: username
-          name: metrics-liberty
       interval: 5s
       tlsConfig:
         insecureSkipVerify: true
