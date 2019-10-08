@@ -38,20 +38,12 @@ else
         generateRepoIndex=""
         for stackRepo in $STACKS_LIST
         do
-            if [ "${stackRepo: -1}" == "/" ]
-            then
-                stack_name=${stackRepo%?}
-            fi
-            stack_no_slash="$stack_no_slash $stackRepo"
-
-            repo_of_stack=${stackRepo%/*}
             if [[ $generateRepoIndex != *$repo_of_stack* ]]
             then
                 generateRepoIndex="$generateRepoIndex $repo_of_stack"
             fi
         done
     REPO_LIST=$generateRepoIndex
-    STACKS_LIST=$stack_no_slash
     fi
 fi
 
