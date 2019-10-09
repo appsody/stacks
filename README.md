@@ -19,9 +19,9 @@ Click here to find out more about the [Repository structure](https://github.com/
 1. Clone the collections repository and create a new copy of it in your git organization:
    ```bash
    git clone https://github.com/kabanero-io/collections.git
+   cd collections
    git remote add private-org https://github.acme.com/my_org/collections.git
    git push -u private-org
-   cd collections
    ```
    Once this has been done, you will have your own copy of the collections repository in your own git org/repo. Follow any normal development processes you have for using git (i.e., creating branches, etc.).
 
