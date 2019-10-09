@@ -1,0 +1,33 @@
+FROM appsody/rust:0.1
+
+RUN rustup default nightly \
+ && rustup update
+
+ENV CARGO_HOME=/usr/local/cargo/deps
+
+ENV APPSODY_MOUNTS=.:/project/user-app
+ENV APPSODY_DEPS=$CARGO_HOME
+
+ENV APPSODY_WATCH_DIR="/project/user-app"
+ENV APPSODY_WATCH_REGEX="(^.*.rs$)"
+
+ENV ROCKET_ADDRESS=0.0.0.0 
+ENV ROCKET_PORT=8000 
+
+ENV APPSODY_RUN="cargo run"
+ENV APPSODY_RUN_ON_CHANGE="cargo run"
+ENV APPSODY_RUN_KILL=true
+
+ENV APPSODY_TEST="cargo test"
+
+COPY ./LICENSE /licenses
+COPY ./project /project
+COPY ./config /config
+
+WORKDIR /project/user-app
+
+RUN cargo fetch
+
+ENV PORT=8000
+
+EXPOSE 8000
