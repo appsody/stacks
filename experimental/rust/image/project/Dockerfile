@@ -12,11 +12,9 @@ RUN cargo fetch
 COPY /user-app/src ./src
 
 # build for release
-RUN cargo build --release
-
-RUN echo "#!/bin/bash" > run.sh \
- && cargo run --release 2>&1 | tee output.txt \
- && bin=$(grep "Running " output.txt | sed -e 's/Running `\(.*\)`/\1/') \
+RUN cargo build --release \
+ && echo "#!/bin/bash" > run.sh \
+ && bin=$(find . -maxdepth 3 -perm -111 -type f | grep release/) \
  && echo ./${bin##*/} >> run.sh \
  && chmod 755 run.sh
 

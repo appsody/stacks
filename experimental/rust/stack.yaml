@@ -1,4 +1,4 @@
-name: rust
+name: Rust
 version: 0.1.0 
 description: Runtime for Rust applications
 license: Apache-2.0
