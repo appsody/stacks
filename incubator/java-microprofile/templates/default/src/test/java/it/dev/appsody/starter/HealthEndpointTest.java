@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class HealthEndpointIT {
+public class HealthEndpointTest {
     
     private static String baseUrl;
     private static final String LIVENESS_ENDPOINT = "/health/live";
