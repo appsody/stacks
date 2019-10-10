@@ -10,7 +10,7 @@ Currently, debugging is not supported in this stack.
 
 Health-checking enables the cloud platform to determine the `liveness` of your application.
 
- This exposed as follows:
+ This is exposed as follows:
 
 - Health check endpoint: http://localhost:8000/health
 
