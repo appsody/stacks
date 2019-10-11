@@ -36,9 +36,11 @@ The dashboard is only included during development, and is not included in images
 
 ## Templates
 
-Templates are used to create your local project and start your development. When initializing your project you will be provided with the simplest Node.js Express application you can write.
+Templates are used to create your local project and start your development. This stack provides two templates, simple and scaffold.
 
-This template only has a simple `app.js` file which implements the `/` endpoint. The application metadata is provided via a package.json file.
+Simple, the default template, provides you with a basic Express app and a sample test in a test sub directory.
+
+The scaffold template provides you with an Express application and additional subdirectories for separate routes and views with sample files for each. This gives the user the ability to easily add multiple routes and views, and implement them in the Express application in the `app.js` file provided in this template. This template also comes with a sample test in a test sub directory.
 
 ## Getting Started
 
@@ -50,7 +52,11 @@ This template only has a simple `app.js` file which implements the `/` endpoint.
     appsody init nodejs-express
     ```
 
-    This will initialize a Node.js Express project using the default template.
+    This will initialize a Node.js Express project using the default template. To initialize a Node.js Express project using the scaffold template substitute the last line above with the following:
+
+    ```bash
+    appsody init nodejs-express scaffold
+    ```
 
 1. After your project has been initialized you can then run your application using the following command:
 
