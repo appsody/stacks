@@ -13,10 +13,6 @@ spec:
     annotations:
       prometheus.io/scrape: 'true'
   monitoring:
-    endpoints:
-      interval: 5s
-      tlsConfig:
-        insecureSkipVerify: true
     labels:
       k8s-app: ""
   livenessProbe:
