@@ -1,10 +1,10 @@
-name: sample runnable stack
+name: minimal sample runnable stack
 version: 0.1.0
-description: sample stack that can be run by appsody, to help creation of more stacks
+description: minimal sample stack that can be run by appsody, to help creation of more stacks
 license: Apache-2.0
 language: bash
 maintainers: 
-  - name: First Middle Last
-    email: name@email.com
-    github-id: github-account
+  - name: Henry Nash
+    email: henry.nash@uk.ibm.com
+    github-id: henrynash
 default-template: simple
