@@ -10,7 +10,7 @@ mkdir -p $build_dir/index-src
 
 # expose an extension point for running before main 'package' processing
 exec_hooks $script_dir/ext/pre_package.d
-	
+
 # iterate over each repo
 for repo_name in $REPO_LIST
 do

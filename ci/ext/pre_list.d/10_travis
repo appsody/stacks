@@ -80,7 +80,7 @@ then
 
             if [ $stack_repo = "samples" ]
             then
-                 rebuild=false
+                rebuild=false
             elif ls ${prefetch_dir} | grep $stack_repo.$stack_name | grep -q $stack_version
             then
                 # e.g. experimental.java-spring-boot2-liberty.v0.1.7.templates.default.tar.gz
