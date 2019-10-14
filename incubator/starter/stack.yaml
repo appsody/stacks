@@ -1,6 +1,6 @@
-name: minimal sample runnable stack
+name: starter sample runnable stack
 version: 0.1.0
-description: minimal sample stack that can be run by appsody, to help creation of more stacks
+description: starter sample stack that can be run by appsody, to help creation of more stacks
 license: Apache-2.0
 language: bash
 maintainers: 
