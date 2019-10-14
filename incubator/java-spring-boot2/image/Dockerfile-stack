@@ -58,7 +58,7 @@ ENV APPSODY_RUN_ON_CHANGE="/project/java-spring-boot2-build.sh recompile"
 ENV APPSODY_RUN_KILL=false
 
 ENV APPSODY_DEBUG="/project/java-spring-boot2-build.sh debug"
-ENV APPSODY_DEBUG_ON_CHANGE=""
+ENV APPSODY_DEBUG_ON_CHANGE="/project/java-spring-boot2-build.sh recompile"
 ENV APPSODY_DEBUG_KILL=false
 
 ENV APPSODY_TEST="/project/java-spring-boot2-build.sh test"
