@@ -14,7 +14,7 @@ COPY /user-app/src ./src
 # build for release
 RUN cargo build --release \
  && echo "#!/bin/bash" > run.sh \
- && bin=$(find . -maxdepth 3 -perm -111 -type f | grep release/) \
+ && bin=$(find ./target/release -maxdepth 1 -perm -111 -type f| head -n 1) \
  && echo ./${bin##*/} >> run.sh \
  && chmod 755 run.sh
 
