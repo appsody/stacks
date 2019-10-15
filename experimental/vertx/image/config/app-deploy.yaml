@@ -4,8 +4,8 @@ metadata:
   name: APPSODY_PROJECT_NAME
 spec:
   # Add fields here
-  version: 1.0.0
-  applicationImage: APPSODY_DOCKER_IMAGE 
+  version: 0.1.0
+  applicationImage: APPSODY_DOCKER_IMAGE
   stack: APPSODY_STACK
   service:
     type: NodePort
@@ -13,7 +13,7 @@ spec:
   readinessProbe:
     failureThreshold: 12
     httpGet:
-      path: /ready
+      path: /health
       port: APPSODY_PORT
     initialDelaySeconds: 5
     periodSeconds: 2
@@ -21,7 +21,7 @@ spec:
   livenessProbe:
     failureThreshold: 12
     httpGet:
-      path: /live
+      path: /health
       port: APPSODY_PORT
     initialDelaySeconds: 5
     periodSeconds: 2

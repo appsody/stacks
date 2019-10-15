@@ -31,7 +31,7 @@ p_version_range=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t 
 
 # Check child pom for required parent project
 if [ "${p_groupId}" != "${a_groupId}" ] || [ "${p_artifactId}" != "${a_artifactId}" ]; then
-  echo "Project pom.xml is missing the required parent:
+  error "Project pom.xml is missing the required parent:
 
   <parent>
     <groupId>${a_groupId}</groupId>
@@ -71,7 +71,7 @@ if ! [[
         ( "${l_groupId}" == "\${liberty.groupId}" && "${l_artifactId}" == "\${liberty.artifactId}" && "${l_version}" == "\${version.openliberty-runtime}" )
      ]]
 then
-  echo "Project is not using the right OpenLiberty assembly artifact:
+  echo "Project is not using the right Open Liberty assembly artifact:
   <assemblyArtifact>
     <groupId>${LIBERTY_GROUP_ID}</groupId>
     <artifactId>${LIBERTY_ARTIFACT_ID}</artifactId>
