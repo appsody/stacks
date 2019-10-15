@@ -8,6 +8,7 @@
             "type": "lldb",
             "request": "launch",
             "name": "Debug executable 'rust-simple'",
+            /**
             "cargo": {
                 "args": [
                     "build",
@@ -18,14 +19,17 @@
                     "name": "rust-simple",
                     "kind": "bin"
                 }
-            },
+            },*/
+            "program": "${workspaceFolder}/target/debug/rust-simple",
             "sourceLanguages": ["rust"],
             "initCommands": [
                 "platform select remote-linux",
                 "platform connect connect://localhost:1234",
                 "platform settings -w /project/user-app/target/debug",
-                "file rust-simple",
-                "run"
+                //"target create rust-simple",
+                //"process launch"
+                //"file rust-simple",
+                //"run"
             ]
         }
     ]

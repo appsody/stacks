@@ -2,11 +2,15 @@ FROM rust:1.37
 
 RUN apt-get update && apt-get install -y lldb
 
-ENV APPSODY_MOUNTS=.:/project/user-app
-ENV APPSODY_DEPS=$CARGO_HOME/registry
+ENV CARGO_HOME=/usr/local/cargo/deps
+
+ENV APPSODY_MOUNTS=.:/project/user-app/
+ENV APPSODY_DEPS=$CARGO_HOME
 
 ENV APPSODY_WATCH_DIR="/project/user-app"
 ENV APPSODY_WATCH_REGEX="(^.*.rs$)"
+
+ENV APPSODY_PREP="cargo clean"
 
 ENV APPSODY_RUN="cargo run"
 ENV APPSODY_RUN_ON_CHANGE="cargo run"
@@ -14,9 +18,7 @@ ENV APPSODY_RUN_KILL=false
 
 ENV APPSODY_TEST="cargo test"
 
-ENV APPSODY_DEBUG="lldb-server platform --listen '*:1234' --min-gdbserver-port 5000 --max-gdbserver-port 5001 --server"
-ENV APPSODY_DEBUG_ON_CHANGE="$APPSODY_DEBUG"
-ENV APPSODY_DEBUG_KILL=true
+ENV APPSODY_DEBUG="cargo build --target=x86_64-unknown-linux-gnu && lldb-server platform --listen '*:1234' --min-gdbserver-port 5000 --max-gdbserver-port 5001 --server"
 
 COPY ./LICENSE /licenses
 COPY ./project /project
