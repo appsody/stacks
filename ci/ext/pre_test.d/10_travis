@@ -1,21 +1,21 @@
 #!/bin/bash
 # invoked from ci/test.env
 
-if [ -z "${APPSODY_CLI_RELEASE_URL}" ]
-then
-    APPSODY_CLI_RELEASE_URL=https://api.github.com/repos/appsody/appsody/releases/latest
-fi
-if [ -z "${APPSODY_CLI_DOWNLOAD_URL}" ]
-then
-    APPSODY_CLI_DOWNLOAD_URL=https://github.com/appsody/appsody/releases/download/
-fi
-if [ -z "${APPSODY_CLI_FALLBACK}" ]
-then
-    APPSODY_CLI_FALLBACK=0.4.2
-fi
-
 if [ "$TRAVIS" == "true" ]
 then
+    if [ -z "${APPSODY_CLI_RELEASE_URL}" ]
+    then
+        APPSODY_CLI_RELEASE_URL=https://api.github.com/repos/appsody/appsody/releases/latest
+    fi
+    if [ -z "${APPSODY_CLI_DOWNLOAD_URL}" ]
+    then
+        APPSODY_CLI_DOWNLOAD_URL=https://github.com/appsody/appsody/releases/download/
+    fi
+    if [ -z "${APPSODY_CLI_FALLBACK}" ]
+    then
+        APPSODY_CLI_FALLBACK=0.4.2
+    fi
+
     cli_dir=$build_dir/cli
     mkdir -p $cli_dir
 
