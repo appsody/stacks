@@ -11,7 +11,7 @@ ENV APPSODY_INSTALL=""
 
 ENV APPSODY_RUN="go run ."
 ENV APPSODY_RUN_ON_CHANGE="go run ."
-ENV APPSODY_RUN_KILL=true
+ENV APPSODY_RUN_KILL=false
 
 ENV APPSODY_DEBUG="dlv debug --listen 0.0.0.0:9229 --headless ."
 ENV APPSODY_DEBUG_ON_CHANGE="dlv debug --listen 0.0.0.0:9229 --headless ."

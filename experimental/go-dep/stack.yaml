@@ -1,5 +1,5 @@
 name: Go Dep
-version: 0.3.0
+version: 0.1.0
 description: Runtime for Go using Dep for dependencies
 license: Apache-2.0
 language: go
