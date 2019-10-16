@@ -4,13 +4,11 @@ RUN apt-get update && apt-get install -y lldb
 
 ENV CARGO_HOME=/usr/local/cargo/deps
 
-ENV APPSODY_MOUNTS=/Cargo.toml:/project/user-app/Cargo.toml;/src:/project/user-app/src
+ENV APPSODY_MOUNTS=.:/project/user-app
 ENV APPSODY_DEPS=$CARGO_HOME
 
 ENV APPSODY_WATCH_DIR="/project/user-app"
 ENV APPSODY_WATCH_REGEX="(^.*.rs$)"
-
-ENV APPSODY_PREP="cargo clean"
 
 ENV APPSODY_RUN="cargo run"
 ENV APPSODY_RUN_ON_CHANGE="cargo run"

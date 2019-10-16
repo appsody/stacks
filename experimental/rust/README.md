@@ -4,8 +4,6 @@ The Rust stack provides a consistent way of developing [Rust](https://rust-lang.
 
 This stack is based on the `Rust v1.37` runtime and allows you to develop new or existing Rust applications using Appsody.
 
-Currently, debugging is not supported in this stack.
-
 ## Templates
 
 Templates are used to create your local project and start your development. When initializing your project you will be provided with the default template project. This template provides a simple application that prints "Hello from Appsody!".
@@ -66,6 +64,16 @@ You can enable an existing project as follows:
     You can continue to edit the application in your preferred IDE (VSCode or other) and your changes will be reflected in the running container within a few seconds.
 
 3. You should see your application run, with logs written to the console.
+
+## Debugging
+
+You can run also your application in debug mode using the following command:
+
+```bash
+    appsody debug --docker-options "--cap-add=SYS_PTRACE --security-opt seccomp=unconfined"
+```
+
+The command will start the LLDB platform and wait for incoming connections from any address to port 1234.
 
 ## License
 
