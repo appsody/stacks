@@ -51,6 +51,8 @@ spec:
           export IMAGE_REGISTRY="${inputs.params.registry}"
           export IMAGE_REGISTRY_ORG="${inputs.params.namespace}"
           export IMAGE_REGISTRY_PUBLISH="true"
+          # disable tests as 'appsody run' does not work without docker
+          export SKIP_TESTS="true"
           cd /workspace/git-source/
           ./ci/prefetch.sh
           ./ci/build.sh .
