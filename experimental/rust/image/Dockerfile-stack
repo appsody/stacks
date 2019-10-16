@@ -18,7 +18,9 @@ ENV APPSODY_RUN_KILL=false
 
 ENV APPSODY_TEST="cargo test"
 
-ENV APPSODY_DEBUG="lldb-server platform --listen '*:1234' --min-gdbserver-port 5000 --max-gdbserver-port 5001 --server"
+ENV APPSODY_DEBUG="cargo build && lldb-server platform --listen '*:1234' --min-gdbserver-port 5000 --max-gdbserver-port 5001 --server"
+ENV APPSODY_DEBUG_ON_CHANGE="$APPSODY_DEBUG"
+ENV APPSODY_DEBUG_KILL=true
 
 COPY ./LICENSE /licenses
 COPY ./project /project
