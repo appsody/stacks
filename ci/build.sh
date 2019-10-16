@@ -21,18 +21,19 @@ if [ $# -gt 0 ]
 then
   export STACKS_LIST="$@"
   echo "STACKS_LIST=$STACKS_LIST"
+
+  for stack_name in $STACKS_LIST
+  do
+    if [ "${stack_name: -1}" == "/" ]
+    then
+      stack_name=${stack_name%?}
+    fi
+     
+    stack_no_slash="$stack_no_slash $stack_name"
+  done
+
+  STACKS_LIST=$stack_no_slash
 fi
-
-for stack_name in $STACKS_LIST
-do
-  if [ "${stack_name: -1}" == "/" ]
-  then
-    stack_name=${stack_name%?}
-  fi
-  stack_no_slash="$stack_no_slash $stack_name"
-done
-
-STACKS_LIST=$stack_no_slash
 
 if [ -z "$STACKS_LIST" ]
 then
