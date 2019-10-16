@@ -38,7 +38,7 @@ ENV APPSODY_DEBUG="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn -B 
 ENV APPSODY_DEBUG_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn -Dmaven.repo.local=/mvn/repository package -DskipTests"
 ENV APPSODY_DEBUG_KILL=false
 
-ENV APPSODY_TEST="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn -B -Dmaven.repo.local=/mvn/repository verify"
+ENV APPSODY_TEST="mvn -B -Dmaven.repo.local=/mvn/repository verify"
 ENV APPSODY_TEST_ON_CHANGE=""
 ENV APPSODY_TEST_KILL=false
 
