@@ -43,9 +43,6 @@ spec:
       env:
         - name: gitsource
           value: git-source
-      volumeMounts:
-        - mountPath: /var/lib/containers
-          name: varlibcontainers
     - name: build-bud
       securityContext:
         privileged: true
