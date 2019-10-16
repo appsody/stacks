@@ -1,7 +1,6 @@
 FROM golang:1
 
 ENV APPSODY_MOUNTS=/:/project/user-app
-ENV APPSODY_DEPS=
 
 ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/vendor
@@ -18,7 +17,6 @@ ENV APPSODY_DEBUG_ON_CHANGE="dlv debug --listen 0.0.0.0:9229 --headless ."
 ENV APPSODY_DEBUG_KILL=true
 
 ENV APPSODY_TEST="go test ."
-ENV APPSODY_TEST_ON_CHANGE=""
 ENV APPSODY_TEST_KILL=false
 
 COPY ./LICENSE /licenses/
