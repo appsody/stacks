@@ -41,5 +41,5 @@
 
 1. Trigger build
     ```
-    oc delete --ignore-not-found -f tekton/collections-build-task-run.yaml; sleep 5; oc apply -f tekton/collections-build-task-run.yaml
+    oc delete -n kabanero --ignore-not-found -f tekton/collections-build-task-run.yaml; sleep 5; oc apply -n kabanero -f tekton/collections-build-task-run.yaml
     ```
