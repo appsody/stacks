@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.appsody</groupId>
+    <artifactId>dev-dependencies</artifactId>
+    <version>0.2.0</version>
+    <packaging>jar</packaging>
+
+    <repositories>
+        <repository>
+            <id>localrepository</id>
+            <url>/mvn/repository</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+      <dependency>
+          <groupId>com.ibm.runtimetools</groupId>
+          <artifactId>javametrics-agent</artifactId>
+          <version>[1.2,2.0)</version>
+          <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>com.ibm.runtimetools</groupId>
+          <artifactId>javametrics-dash</artifactId>
+          <version>[1.2,2.0)</version>
+          <scope>provided</scope>
+          <type>war</type>
+      </dependency>
+      <dependency>
+          <groupId>com.ibm.runtimetools</groupId>
+          <artifactId>javametrics-rest</artifactId>
+          <version>[1.2,2.0)</version>
+          <scope>provided</scope>
+          <type>war</type>
+      </dependency>
+  </dependencies>
+
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.0.1</version>
+          <executions>
+              <execution>
+                  <id>copy-dropin</id>
+                  <phase>package</phase>
+                  <goals>
+                      <goal>copy-dependencies</goal>
+                  </goals>
+                  <configuration>
+                  <stripVersion>true</stripVersion>
+                  <outputDirectory>${project.build.directory}/../user-app/target/liberty/wlp/usr/servers/defaultServer/dropins</outputDirectory>
+                  <includeArtifactIds>javametrics-dash,javametrics-rest</includeArtifactIds>
+              </configuration>
+              </execution>
+              <execution>
+                  <id>copy-resource</id>
+                  <phase>package</phase>
+                  <goals>
+                      <goal>copy-dependencies</goal>
+                  </goals>
+                  <configuration>
+                  <stripVersion>true</stripVersion>
+                  <outputDirectory>${project.build.directory}/../user-app/target/liberty/wlp/usr/servers/defaultServer/resources/</outputDirectory>
+                  <includeArtifactIds>javametrics-agent</includeArtifactIds>
+              </configuration>
+              </execution>
+              <execution>
+                  <id>copy-asm</id>
+                  <phase>package</phase>
+                  <goals>
+                      <goal>copy-dependencies</goal>
+                  </goals>
+                  <configuration>
+                  <outputDirectory>${project.build.directory}/../user-app/target/liberty/wlp/usr/servers/defaultServer/resources/asm</outputDirectory>
+                  <includeGroupIds>org.ow2.asm</includeGroupIds>
+                  <includeArtifactIds>asm,asm-commons</includeArtifactIds>
+              </configuration>
+              </execution>
+          </executions>
+      </plugin>
+        </plugins>
+    </build>
+
+</project>
