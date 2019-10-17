@@ -9,3 +9,6 @@ set -e
 # project directory, so we copy the dependencies to a .appsody directory
 # one level up.
 cp -R -p ./deps ../.appsody
+
+# Mark dependency source code as read-only
+find ../.appsody -type f -name '*.swift' -exec chmod ugo-w {} \;
