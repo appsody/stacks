@@ -1,3 +1,7 @@
+/**
+ * This source file is supplied by the appsody/kitura base image. DO NOT MODIFY.
+ */
+
 import Kitura
 import SwiftMetrics
 import SwiftMetricsDash

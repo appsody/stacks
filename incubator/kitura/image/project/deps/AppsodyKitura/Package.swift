@@ -1,6 +1,10 @@
 // swift-tools-version:5.0
 import PackageDescription
 
+/**
+ * This source file is supplied by the appsody/kitura base image. DO NOT MODIFY.
+ */
+
 let package = Package(
     name: "AppsodyKitura",
     products: [

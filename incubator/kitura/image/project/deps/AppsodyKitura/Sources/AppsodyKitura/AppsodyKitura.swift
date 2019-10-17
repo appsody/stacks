@@ -1,3 +1,7 @@
+/**
+ * This source file is supplied by the appsody/kitura base image. DO NOT MODIFY.
+ */
+
 import Foundation
 import Configuration
 import Kitura
