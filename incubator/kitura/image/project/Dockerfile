@@ -12,6 +12,7 @@ WORKDIR "/project"
 COPY . /project
 
 # Copy pristine dependencies
+# TODO: This should be a reference to the project's stack image
 RUN rm -rf /project/user-app/.appsody
 COPY --from=appsody/kitura /project/deps /project/user-app/.appsody
 
