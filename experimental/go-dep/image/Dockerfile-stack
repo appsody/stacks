@@ -6,7 +6,7 @@ ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/vendor
 ENV APPSODY_WATCH_REGEX="^.*.(go|toml)$"
 
-ENV APPSODY_INSTALL="bash /vendor.sh"
+ENV APPSODY_PREP="bash /vendor.sh"
 
 ENV APPSODY_RUN="go run ."
 ENV APPSODY_RUN_ON_CHANGE="go run ."
