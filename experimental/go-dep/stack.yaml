@@ -1,0 +1,10 @@
+name: Go Dep
+version: 0.1.0
+description: Runtime for Go using Dep for dependencies
+license: Apache-2.0
+language: go
+maintainers:
+  - name: John Pape
+    email: jpapejr@icloud.com
+    github-id: jpapejr
+default-template: default
