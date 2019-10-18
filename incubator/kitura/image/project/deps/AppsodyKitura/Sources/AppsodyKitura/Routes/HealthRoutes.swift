@@ -9,7 +9,7 @@ public let health = Health()
 
 func initializeHealthRoutes(router: Router) {
     
-    router.get("/health") { (respondWith: (Status?, RequestError?) -> Void) -> Void in
+    router.get(AppsodyKitura.livenessPath) { (respondWith: (Status?, RequestError?) -> Void) -> Void in
         if health.status.state == .UP {
             respondWith(health.status, nil)
         } else {

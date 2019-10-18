@@ -5,6 +5,7 @@
 import Foundation
 import Configuration
 import Kitura
+import KituraOpenAPI
 
 public class AppsodyKitura {
 
@@ -32,7 +33,16 @@ public class AppsodyKitura {
         return Int(AppsodyKitura.manager["PORT"] as? String ?? "8080") ?? 8080
     }
 
-    /// Creates a Kitura `Router` initialized with liveness and metrics endpoints.
+    /// Returns the path configured for serving the OpenAPI document.
+    public static let openAPIPath = "/openapi"
+
+    /// Returns the path configured for serving the Swagger UI tool.
+    public static let swaggerUIPath = "/openapi/ui"
+
+    /// Returns the path configured for serving the liveness (health) endpoint.
+    public static let livenessPath = "/health"
+
+    /// Creates a Kitura `Router` initialized with liveness, metrics and OpenAPI endpoints.
     /// Logging will be enabled at a default level of `info`, which can be customized
     /// by setting the `LOG_LEVEL` environment variable.
     public static func createRouter(mergeParameters: Bool = false, enableWelcomePage: Bool = true) -> Router {
@@ -47,6 +57,10 @@ public class AppsodyKitura {
 
         // Add health monitoring endpoint
         initializeHealthRoutes(router: router)
+
+        // Add OpenAPI endpoints
+        let config = KituraOpenAPIConfig(apiPath: self.openAPIPath, swaggerUIPath: self.swaggerUIPath)
+        KituraOpenAPI.addEndpoints(to: router, with: config)
 
         return router
     }
