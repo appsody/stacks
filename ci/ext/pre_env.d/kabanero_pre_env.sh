@@ -9,7 +9,7 @@ if [ -z $REPO_LIST ]; then
     export REPO_LIST=incubator
 fi
 if [ -z $EXCLUDED_STACKS ]; then
-    export EXCLUDED_STACKS="incubator/swift incubator/python-flask"
+    export EXCLUDED_STACKS=""
 fi
 if [ -z $CODEWIND_INDEX ]; then
     export CODEWIND_INDEX=true
@@ -20,4 +20,8 @@ fi
 if [ -z "$DISPLAY_NAME_PREFIX" ]
 then
     export DISPLAY_NAME_PREFIX="Kabanero"
+fi
+if [ -z "$IMAGE_REGISTRY_ORG" ]
+then
+    export IMAGE_REGISTRY_ORG="kabanero"
 fi
