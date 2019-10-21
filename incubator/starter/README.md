@@ -18,7 +18,7 @@ drwxr-xr-x  7 henrynash  staff  224 21 Oct 00:14 image
 drwxr-xr-x  3 henrynash  staff   96 21 Oct 00:14 templates
 ```
 
-The initial version of your new stack is now ready to be packaged (using `appsody stack package`) and will then be available to the Appsody CLI. You can check that this is working, ahead of start too modify the stack structure to match the requirements of your new stack:
+The initial version of your new stack is now ready to be packaged (using `appsody stack package`) and will then be available to the Appsody CLI. You can check that this is working, ahead of starting to modify the stack structure to match the requirements of your new stack:
 
 ```bash
 $ appsody stack package
@@ -42,9 +42,9 @@ Running docker command: docker[run --rm -p 8080:8080 --name test20-dev -v /Users
 [Container] Hello from Appsody!
 ```
 
-For a more complete tutorial on creating new stack using this starter, please see [Creating a New Appsody Stack](https://developer.ibm.com/tutorials/create-appsody-stack/).
+For a more complete tutorial on creating a new stack using this starter, please see [Creating a New Appsody Stack](https://developer.ibm.com/tutorials/create-appsody-stack/).
 
-For any new stack, You should replace this README with one that explains your new stack in detail and any templates included, e.g.:
+For any new stack, you should replace this README with one that explains your new stack in detail and any templates included, e.g.:
 
 - How can a user start using this stack for application development, debugging etc.
 - links to getting started guides etc.
