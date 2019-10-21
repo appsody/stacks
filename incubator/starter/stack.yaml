@@ -1,6 +1,6 @@
 name: Starter Sample
 version: 0.1.0
-description: Runnable starter stack, copy to create a stack
+description: Runnable starter stack, copy to create a new stack
 license: Apache-2.0
 language: bash
 maintainers: 
