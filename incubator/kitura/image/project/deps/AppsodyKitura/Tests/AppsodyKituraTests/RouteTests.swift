@@ -10,7 +10,8 @@ class RouteTests: XCTestCase {
         return [
             ("testGetWelcomePage", testGetWelcomePage),
             ("testHealthRoute", testHealthRoute),
-            ("testOpenAPIRoute", testOpenAPIRoute)
+            ("testOpenAPIRoute", testOpenAPIRoute),
+            ("testMetricsRoute", testMetricsRoute)
         ]
     }
 
@@ -111,6 +112,27 @@ class RouteTests: XCTestCase {
         waitForExpectations(timeout: 3.0)
     }
 
+    /// Tests that the built-in Metrics endpoint is available and functioning correctly.
+    func testMetricsRoute() {
+        let responseExpectation = expectation(description: "The /metrics route will serve metrics content.")
+
+        URLRequest(forTestWithMethod: "GET", port: AppsodyKitura.port, route: AppsodyKitura.metricsPath)?
+            .responseFromKitura { responseString, statusCode in
+                XCTAssertEqual(statusCode, .OK)
+                guard let responseString = responseString else {
+                    XCTFail("No response string returned")
+                    return responseExpectation.fulfill()
+                }
+                // Note: there may be no actual metrics data returned yet as the server has
+                // only recently started, however we should at least find a line containing
+                // "HELP http_requests_total" followed by a description.
+                XCTAssertTrue(responseString.contains("http_requests_total"))
+                responseExpectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 3.0)
+    }
+
 }
 
 /// A simple HTTP client for use by the application tests.
@@ -141,22 +163,25 @@ private extension URLRequest {
     /// be empty.
     /// If a non-success status is returned, details of the response will also be printed.
     func responseFromKitura(completion: @escaping (String?, HTTPStatusCode) -> Void) {
-        guard let method = httpMethod, var path = url?.path, let headers = allHTTPHeaderFields else {
-            XCTFail("Invalid request params")
-            return
+        guard let url = url else {
+            return XCTFail("URL is nil")
+        }
+        guard let method = httpMethod, let headers = allHTTPHeaderFields, let host = url.host, let port = url.port else {
+            return XCTFail("Invalid request params")
         }
 
-        if let query = url?.query {
+        var path = url.path
+        if let query = url.query {
             path += "?" + query
         }
 
-        let requestOptions: [ClientRequest.Options] = [.method(method), .hostname("localhost"), .port(8080), .path(path), .headers(headers)]
+        let requestOptions: [ClientRequest.Options] = [.method(method), .hostname(host), .port(Int16(bitPattern: UInt16(port))), .path(path), .headers(headers)]
 
         // Create a ClientRequest. Completion will be called when the server
         // responds.
         let req = HTTP.request(requestOptions) { response in
             guard let response = response else {
-                return XCTFail("ClientResponse was nil")
+                return XCTFail("ClientResponse was nil for \(method) on \(host):\(port)/\(path)")
             }
             var body = Data()
             do {

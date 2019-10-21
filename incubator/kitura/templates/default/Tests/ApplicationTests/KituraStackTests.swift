@@ -6,11 +6,13 @@ import AppsodyKitura
 
 @testable import Application
 
-class RouteTests: XCTestCase {
-    static var allTests : [(String, (RouteTests) -> () throws -> Void)] {
+/// A set of tests to verify the features provided by the base Kitura stack.
+class KituraStackTests: XCTestCase {
+    static var allTests : [(String, (KituraStackTests) -> () throws -> Void)] {
         return [
-            ("testGetWelcomePage", testGetWelcomePage),
-            ("testHealthRoute", testHealthRoute)
+            ("testHealthRoute", testHealthRoute),
+            ("testOpenAPIRoute", testOpenAPIRoute),
+            ("testMetricsRoute", testMetricsRoute)
         ]
     }
 
@@ -35,30 +37,11 @@ class RouteTests: XCTestCase {
         super.tearDown()
     }
 
-    /// Tests that the default welcome page served by Kitura can be obtained.
-    func testGetWelcomePage() {
-        let responseExpectation = expectation(description: "The / route will serve static HTML content.")
-
-        URLRequest(forTestWithMethod: "GET", port: AppsodyKitura.port, route: "/")?
-            .responseFromKitura { responseString, statusCode in
-                XCTAssertEqual(statusCode, .OK)
-                guard let responseString = responseString else {
-                    XCTFail("No response string returned")
-                    return responseExpectation.fulfill()
-                }
-                XCTAssertTrue(responseString.contains("<html"))
-                XCTAssertTrue(responseString.contains("</html>"))
-                responseExpectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 3.0)
-    }
-
     /// Tests that the built-in health endpoint is responding correctly.
     func testHealthRoute() {
         let responseExpectation = expectation(description: "The /health route responds with UP, followed by a timestamp.")
-        
-        URLRequest(forTestWithMethod: "GET", port: AppsodyKitura.port, route: "/health")?
+
+        URLRequest(forTestWithMethod: "GET", port: AppsodyKitura.port, route: AppsodyKitura.livenessPath)?
             .responseFromKitura { responseString, statusCode in
                 XCTAssertEqual(statusCode, .OK)
                 guard let responseString = responseString else {
@@ -72,6 +55,63 @@ class RouteTests: XCTestCase {
                 XCTAssertTrue(responseString.contains(yearString), "Health timestamp does not contain the current year.")
                 responseExpectation.fulfill()
         }
+        waitForExpectations(timeout: 3.0)
+    }
+
+    /// Tests that the built-in OpenAPI endpoint is responding correctly.
+    func testOpenAPIRoute() {
+        let responseExpectation = expectation(description: "The /openapi route responds with a JSON document.")
+
+        URLRequest(forTestWithMethod: "GET", port: AppsodyKitura.port, route: AppsodyKitura.openAPIPath)?
+            .responseFromKitura { responseString, statusCode in
+                defer { responseExpectation.fulfill() }
+                XCTAssertEqual(statusCode, .OK)
+                guard let responseString = responseString, let data = responseString.data(using: .utf8) else {
+                    XCTFail("No response data returned")
+                    return responseExpectation.fulfill()
+                }
+                do {
+                    guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                        return XCTFail("JSON object was not a dictionary")
+                    }
+                    // Check that OpenAPI document contains a basePath of /
+                    guard let basePath = json["basePath"] as? String else {
+                        return XCTFail("Document did not contain basePath")
+                    }
+                    XCTAssertEqual(basePath, "/")
+                    // Check that the document contains a 'paths' section
+                    guard let paths = json["paths"] as? [String: Any] else {
+                        return XCTFail("Document did not contain 'paths' dictionary")
+                    }
+                    // Check that the paths include the /health route
+                    guard (paths[AppsodyKitura.livenessPath] as? [String: Any]) != nil else {
+                        return XCTFail("Document did not contain a '\(AppsodyKitura.livenessPath)' path dictionary")
+                    }
+                } catch {
+                    return XCTFail("Invalid JSON document received: \(error)")
+                }
+        }
+        waitForExpectations(timeout: 3.0)
+    }
+
+    /// Tests that the built-in Metrics endpoint is available and functioning correctly.
+    func testMetricsRoute() {
+        let responseExpectation = expectation(description: "The /metrics route will serve metrics content.")
+
+        URLRequest(forTestWithMethod: "GET", port: AppsodyKitura.port, route: AppsodyKitura.metricsPath)?
+            .responseFromKitura { responseString, statusCode in
+                XCTAssertEqual(statusCode, .OK)
+                guard let responseString = responseString else {
+                    XCTFail("No response string returned")
+                    return responseExpectation.fulfill()
+                }
+                // Note: there may be no actual metrics data returned yet as the server has
+                // only recently started, however we should at least find a line containing
+                // "HELP http_requests_total" followed by a description.
+                XCTAssertTrue(responseString.contains("http_requests_total"))
+                responseExpectation.fulfill()
+        }
+
         waitForExpectations(timeout: 3.0)
     }
 

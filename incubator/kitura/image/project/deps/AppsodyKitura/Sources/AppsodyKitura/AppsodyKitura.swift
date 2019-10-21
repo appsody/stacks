@@ -42,6 +42,9 @@ public class AppsodyKitura {
     /// Returns the path configured for serving the liveness (health) endpoint.
     public static let livenessPath = "/health"
 
+    /// Returns the path configured for serving the Prometheus metrics endpoint.
+    public static let metricsPath = "/metrics"
+
     /// Creates a Kitura `Router` initialized with liveness, metrics and OpenAPI endpoints.
     /// Logging will be enabled at a default level of `info`, which can be customized
     /// by setting the `LOG_LEVEL` environment variable.
