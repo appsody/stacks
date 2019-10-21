@@ -1,8 +1,8 @@
 # Starter Stack
 
-A minimal, runnable starter stack that can be used as a base for developing new stacks. This stack provides a sample application template consisting of single line bash scripts, along with all the settings in Dockerfiles and manifests to allow you to use the Appsody CLI to test out package/init/run/debug/test/build/deploy ahead of starting to make changes to a copy of this stack for yourself.
+A minimal, runnable starter stack that can be used as a base for developing new stacks. This stack provides a sample application template consisting of single line bash scripts, along with all the settings in Dockerfiles and manifests to allow you to use the Appsody CLI to test out init/run/debug/test/build/deploy ahead of starting to make changes to a copy of this stack for yourself.
 
-To make a copy of this stack as a basis for your new stack, enter, for example:
+To create a new stack called mystack based on this sample starter stack, enter, for example:
 
 ```bash
 $ cd ~
@@ -18,7 +18,7 @@ drwxr-xr-x  7 henrynash  staff  224 21 Oct 00:14 image
 drwxr-xr-x  3 henrynash  staff   96 21 Oct 00:14 templates
 ```
 
-The initial version of your new stack is now ready to be packaged (using `appsody stack package`) and will then be available to the Appsody CLI. You can check that this is working, ahead of starting to modify the stack structure to match the requirements of your new stack:
+The initial version of your new stack is now ready to be packaged and made available to the Appsody CLI, by using `appsody stack package`. You can then check that the package works before you start to modify the stack structure to match the requirements of your new stack:
 
 ```bash
 $ appsody stack package
@@ -42,7 +42,7 @@ Running docker command: docker[run --rm -p 8080:8080 --name test20-dev -v /Users
 [Container] Hello from Appsody!
 ```
 
-For a more complete tutorial on creating a new stack using this starter, please see [Creating a New Appsody Stack](https://developer.ibm.com/tutorials/create-appsody-stack/).
+For a tutorial, which describes in more detail how to create a new stack based on this starter, see [Creating a New Appsody Stack](https://developer.ibm.com/tutorials/create-appsody-stack/).
 
 For any new stack, you should replace this README with one that explains your new stack in detail and any templates included, e.g.:
 
