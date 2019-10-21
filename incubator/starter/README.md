@@ -18,9 +18,14 @@ drwxr-xr-x  7 henrynash  staff  224 21 Oct 00:14 image
 drwxr-xr-x  3 henrynash  staff   96 21 Oct 00:14 templates
 ```
 
-The initial version of your new stack is now ready to be packaged and made available to the Appsody CLI, by using `appsody stack package`. You can then check that the package works before you start to modify the stack structure to match the requirements of your new stack:
+The initial version of your new stack is now ready to be packaged and made available to the Appsody CLI, by using `appsody stack package`.
+
+> **Note** In general, Appsody will always try and look in the existing repositories first for stacks, and then in the local cache. For normal stack usage this is exactly what you want - however, when in the process of creating new stacks, by definition, the existing repositories will not yet know about your new stack. Hence it is quicker in this situation to tell Appsody to look in the local cache first. You can do this by setting the following environment variable: `export APPSODY_PULL_POLICY=IFNOTPRESENT`.
+
+You can then check that the package works before you start to modify the stack structure to match the requirements of your new stack:
 
 ```bash
+$ export APPSODY_PULL_POLICY=IFNOTPRESENT
 $ appsody stack package
 $ appsody list dev-local
 REPO             ID       VERSION         TEMPLATES       DESCRIPTION
