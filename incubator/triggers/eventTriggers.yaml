@@ -1,0 +1,30 @@
+variables:
+  - name: buildNamespace
+    value: ' kabanero.controlNamespace '
+  - name: buildRegistryNamespace
+    value: ' "kabanero" '
+  - name: serviceAccount
+    value: ' "appsody-sa" '
+  - name: buildRegistry
+    value: ' "docker-registry.default.svc:5000/" + buildRegistryNamespace +  "/" + event.repository.name '
+  - when: 'kabanero.eventType=="Repository"'
+    variables:
+      - name: kubeNameSuffix
+        value: 'event.repository.owner.login + "-" + event.repository.name + "-" + kabanero.jobid'
+      - name: cloneURL
+        value: 'event.repository.clone_url'
+      - when: 'has(kabanero.collectionID)'
+        name: appsodyCollectionID
+        value: 'kabanero.collectionID'
+      - when: 'kabanero.ref[1] == "heads" '
+        name: buildBranch
+        value: 'kabanero.ref[2]'
+eventTriggers:
+  - when: 'has(kabanero.collectionID)' # appsody build
+    eventTriggers:
+       - when:  'kabanero.repositoryEvent == "push"'  # push can be push code or tag
+         eventTriggers:
+             - when:  'kabanero.ref[1] == "heads" && kabanero.ref[2] == "master"' # push to master
+               action:
+                   applyResources:
+                     directory: pushMaster
