@@ -15,3 +15,6 @@ pub fn initialize_metrics() -> rocket::Rocket {
         .attach(prometheus.clone())
         .mount("/metrics", prometheus)
 }
+
+#[cfg(test)]
+mod tests;

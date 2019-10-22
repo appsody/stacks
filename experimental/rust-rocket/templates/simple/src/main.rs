@@ -1,6 +1,6 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
-use rust_rocket;
+use appsody_rocket;
 
 #[macro_use] extern crate rocket;
 
@@ -10,7 +10,7 @@ fn world() -> &'static str {
 }
 
 fn rocket() -> rocket::Rocket {
-    rust_rocket::initialize_metrics().mount("/", routes![world])
+    appsody_rocket::initialize_metrics().mount("/", routes![world])
 }
 
 fn main() {
