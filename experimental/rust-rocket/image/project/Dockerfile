@@ -1,26 +1,30 @@
 FROM rust:1.37 as builder
 
 RUN rustup default nightly \
- && rustup update
+ && rustup update \
+ && cargo install cargo-edit
 
 WORKDIR "/project"
 
-COPY Cargo.toml Cargo.toml
-
-COPY /src/lib.rs /project/src/lib.rs
-
-RUN ls && cd src && cat lib.rs
-
-WORKDIR "/project/user-app"
+COPY /deps /project/deps
 
 # copy dependency files 
-COPY /user-app/Cargo.toml Cargo.toml
+COPY /copy/Cargo.toml /project
 
+RUN cargo add -q appsody-rocket --path=../deps \
+ && mkdir /project/user-app \
+ && mv /project/Cargo.toml /project/user-app/
+
+WORKDIR "/project/user-app"
 # get user application dependencies
-RUN cargo fetch 
+RUN cargo fetch
 
 #copy user code
-COPY /user-app/src ./src
+COPY /user-app/src /project/user-app/src/
+
+ENV ROCKET_ADDRESS=0.0.0.0 
+
+ENV ROCKET_PORT=8000
 
 # build for release
 RUN cargo build --release
@@ -40,10 +44,6 @@ WORKDIR "/project/user-app"
 COPY --from=builder /project/user-app/run.sh /project/user-app/Cargo.toml /project/user-app/target/release/ ./
 
 USER rust
-
-ENV ROCKET_ADDRESS=0.0.0.0 
-
-ENV ROCKET_PORT=8000
 
 EXPOSE 8000
 
