@@ -212,8 +212,13 @@ do
             fi
         done
 
+        ## Matches
+        # file:///cygdrive/c/Users/Blah
+        #  and
+        # file:///c/Users/Blah
+
         # For Cygwin support, harmless on other distros
-         [[ `uname` == CYGWIN* ]] && sed -i "s|/cygdrive/\([a-z]\)|/\1:|g" $index_file_local
+        [[ `uname` == CYGWIN* ]] && sed -i "s|file:\/\/\/\(cygdrive\/\)\{0,1\}\([a-z]\)|file:\/\/\/\2:|1" $index_file_local
     else
         echo "SKIPPING: $repo_dir"
     fi
