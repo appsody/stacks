@@ -67,13 +67,26 @@ You can enable an existing project as follows:
 
 ## Debugging
 
-You can run also your application in debug mode using the following command:
+To debug your application running in a container, start the container using:
 
 ```bash
     appsody debug --docker-options "--cap-add=SYS_PTRACE --security-opt seccomp=unconfined"
 ```
 
 The command will start the LLDB platform and wait for incoming connections from any address to port 1234.
+
+You can connect `lldb` in remote debug mode to this container as follows:
+```bash
+lldb \
+  -o "platform select remote-linux" \
+  -o "platform connect connect://localhost:1234" \
+  -o "platform settings -w /project/user-app/target/debug" \
+  -o "file rust-simple" 
+```
+
+Once in lldb, you can use `breakpoint set` to set breakpoints in your application, and then `run` to start the app.
+
+**NOTE:** Due to a current limitation, breakpoints must be set _before_ the application is run. Breakpoints can be disabled, but cannot be re-enabled without restarting the app. After adding or re-enabling breakpoints, restart the app with `process kill` and then `run`.
 
 ## License
 
