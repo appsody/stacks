@@ -61,33 +61,33 @@ You can enable an existing project as follows:
 
 3. Add the `AppsodyKitura` dependency to your `Package.swift`:
 
-In your package dependencies:
+    In your package dependencies:
     ```diff
     dependencies: [
--      .package(url: "https://github.com/IBM-Swift/Kitura.git", .upToNextMinor(from: "2.8.0")),
-+      .package(path: ".appsody/AppsodyKitura"),
-      // Place any additional dependencies here
+    -    .package(url: "https://github.com/IBM-Swift/Kitura.git", .upToNextMinor(from: "2.8.0")),
+    +    .package(path: ".appsody/AppsodyKitura"),
+        // Place any additional dependencies here
     ],
     ```
-Note: AppsodyKitura provides the `Kitura`, `HeliumLogger`, `Kitura-OpenAPI`, `SwiftMetrics` and `Configuration` dependencies. You may remove these dependencies if your existing project declared them.
+    Note: AppsodyKitura provides the `Kitura`, `HeliumLogger`, `Kitura-OpenAPI`, `SwiftMetrics` and `Configuration` dependencies. You may remove these dependencies if your existing project declared them.
 
-In your application's target:
+    In your application's target:
     ```diff
     targets: [
       .target(name: "my-project", dependencies: [ .target(name: "Application") ]),
       .target(name: "Application", dependencies: [
-+          "AppsodyKitura",
+    +      "AppsodyKitura",
           // Any additional dependencies
       ]),
     ]
     ```
 
-In your application:
+    In your application:
     ```diff
--    let router = Router()
-+    let router = AppsodyKitura.createRouter()
+    -    let router = Router()
+    +    let router = AppsodyKitura.createRouter()
     ```
-Note: the router provided by AppsodyKitura is pre-initialized with the liveness, metrics and OpenAPI routes as required by the stack. If your existing application added these routes manually, you must remove them.
+    Note: the router provided by AppsodyKitura is pre-initialized with the liveness, metrics and OpenAPI routes as required by the stack. If your existing application added these routes manually, you must remove them.
 
 4. You can then run your application using the following command:
 
