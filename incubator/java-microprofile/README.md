@@ -6,6 +6,8 @@ The Java MicroProfile stack uses a parent Maven project object model (POM) to ma
 
 This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.8`. It provides live reloading during development by utilizing `loose application` capabilities.
 
+The stack also provides a in-built application monitoring dashboard based on [javametrics](https://github.com/runtimetools/javametrics). This dashboard is only included during development and is not included in the image built using `appsody build`.
+
 **Note:** Maven is provided by the Appsody stack container, allowing you to build, test, and debug your Java application without installing Maven locally. However, we recommend installing Maven locally for the best IDE experience.
 
 ## Templates
@@ -65,6 +67,7 @@ OpenAPI endpoints:
     - Metrics endpoint: http://localhost:9080/metrics (login as `admin` user with `adminpwd` password)
     - OpenAPI endpoint: http://localhost:9080/openapi
     - Swagger UI endpoint: http://localhost:9080/openapi/ui
+    - Javametrics Dashboard endpoint: http://localhost:9080/javametrics-dash/ (development-time only)
 
 ## License
 
