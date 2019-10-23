@@ -9,6 +9,7 @@ ENV CARGO_TARGET_DIR=$CARGO_HOME/target
 
 ENV APPSODY_MOUNTS=/Cargo.toml:/project/copy/Cargo.toml;/src:/project/user-app/src/
 ENV APPSODY_DEPS=$CARGO_HOME
+ENV APPSODY_PROJECT_DIR=/project
 
 ENV APPSODY_WATCH_DIR="/project/user-app"
 ENV APPSODY_WATCH_IGNORE_DIR="/project/user-app/.appsody"
