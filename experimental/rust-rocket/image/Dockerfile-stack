@@ -1,7 +1,6 @@
 FROM appsody/rust:0.1
 
-RUN rustup default nightly \
- && rustup update 
+RUN rustup default nightly
 
 ENV CARGO_HOME=/usr/local/cargo/deps
 ENV CARGO_TARGET_DIR=$CARGO_HOME/target
