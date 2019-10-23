@@ -23,7 +23,6 @@ else
     sha256cmd="sha256sum "  # other OSs
 fi
 
-
 build_asset_tar () {
     asset_build=$assets_dir/asset_temp
     mkdir -p $asset_build
