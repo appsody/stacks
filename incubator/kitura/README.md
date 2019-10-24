@@ -4,7 +4,7 @@ The [Kitura](https://kitura.io) stack extends the [Swift stack](../swift/README.
 
 ## Templates
 
-Templates are used to create your local project and start your development. The `default` template provides a simple application that hosts the Kitura landing page, and an example route on `/hello`, that returns a simple greeting.
+Templates are used to create your local project and start your development. The `default` template provides a simple application that hosts the Kitura landing page, and an example route on `/hello`, which returns a simple greeting.
 
 ## Getting Started for a new Project
 
@@ -37,7 +37,7 @@ The `kitura` stack provides a number of predefined routes for your application:
 - `/openapi`: the OpenAPI definition for your server, describing all Codable routes
 - `/openapi/ui`: the SwaggerUI allowing you to inspect and test your routes.
 
-The project's dependencies include `AppsodyKitura`, a package provided by the stack that includes the `Kitura`, `HeliumLogger` and `Configuration` packages.  These are available to be imported by your application and you do not need to declare a dependency on them explicitly.
+The project's dependencies include `AppsodyKitura`, a package provided by the stack that includes the `Kitura`, `HeliumLogger` and `Configuration` packages.  These can be imported by your application and you do not need to declare a dependency on them explicitly.
 
 **NOTE:** You should not remove or modify the `AppsodyKitura` dependency.
 
