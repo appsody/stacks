@@ -1,6 +1,6 @@
-name: starter sample runnable stack
-version: 0.1.0
-description: starter sample stack that can be run by appsody, to help creation of more stacks
+name: Starter Sample
+version: 0.1.1
+description: Runnable starter stack, copy to create a new stack
 license: Apache-2.0
 language: bash
 maintainers: 
