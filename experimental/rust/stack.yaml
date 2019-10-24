@@ -1,0 +1,10 @@
+name: Rust
+version: 0.1.2
+description: Runtime for Rust applications
+license: Apache-2.0
+language: rust
+maintainers:
+  - name: Sandy Koh
+    email: sandy.koh@ibm.com
+    github-id: skoh7645
+default-template: simple
