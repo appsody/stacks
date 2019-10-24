@@ -4,7 +4,7 @@ The [Kitura](https://kitura.io) stack extends the [Swift stack](../swift/README.
 
 ## Templates
 
-Templates are used to create your local project and start your development. When initializing your project you will be provided with the default template project. This template provides a simple application that hosts the Kitura landing page, and an example route on `/hello` which returns a simple greeting.
+Templates are used to create your local project and start your development. The `default` template provides a simple application that hosts the Kitura landing page, and an example route on `/hello`, that returns a simple greeting.
 
 ## Getting Started for a new Project
 
@@ -15,7 +15,7 @@ Templates are used to create your local project and start your development. When
     cd my-project
     appsody init kitura
     ```
-    This will initialize a Kitura project using the default template.
+    This initializes a Kitura project using the `default` template.
 
 2. After your project has been initialized you can then run your application using the following command:
 
@@ -23,7 +23,7 @@ Templates are used to create your local project and start your development. When
     appsody run
     ```
 
-    This launches a Docker container that continuously re-builds and re-runs your project. It also exposes port 8080, to allow you to interact with your application.
+    This launches a Docker container that rebuilds and reruns your project in response to source code changes. It publishes port 8080, to allow you to interact with your application.
 
     You can continue to edit the application in your preferred IDE (VSCode, Xcode or others) and your changes will be reflected in the running container within a few seconds.
 
@@ -43,7 +43,7 @@ The project's dependencies include `AppsodyKitura`, a package provided by the st
 
 ## Enabling an existing Project
 
-The Kitura stack can be used with an existing Kitura project in order to provide an iterative containerized development and test environment, and to "cloud package" it into an optimized production Docker container.
+This stack can be used with an existing Kitura project to provide an iterative, containerized development and test environment, and to "cloud package" it into an optimized production Docker container.
 
 You can enable an existing project as follows:
 
@@ -69,7 +69,7 @@ You can enable an existing project as follows:
         // Place any additional dependencies here
     ],
     ```
-    Note: AppsodyKitura provides the `Kitura`, `HeliumLogger`, `Kitura-OpenAPI`, `SwiftMetrics` and `Configuration` dependencies. You may remove these dependencies if your existing project declared them.
+    Note: AppsodyKitura provides the `Kitura`, `HeliumLogger`, `Kitura-OpenAPI`, `SwiftMetrics` and `Configuration` dependencies. You can remove these dependencies if your existing project declared them.
 
     In your application's target:
     ```diff
@@ -95,11 +95,11 @@ You can enable an existing project as follows:
     appsody run
     ```
 
-    This launches a Docker container that continuously re-builds and re-runs your project. It also exposes port 8080, to allow you to bring your own web application and use it with this stack.
+    This launches a Docker container that rebuilds and reruns your project in response to source code changes. It publishes port 8080, to allow you to interact with your application.
 
-    You can continue to edit the application in your preferred IDE (VSCode or other) and your changes will be reflected in the running container within a few seconds.
+    You can continue to edit the application in your preferred IDE (VSCode, Xcode or others) and your changes will be reflected in the running container within a few seconds.
 
-3. You should see your application run, with logs written to the console.
+5. You should see your application run, with logs written to the console.
 
 ## Debugging
 
