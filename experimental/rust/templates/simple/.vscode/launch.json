@@ -1,0 +1,23 @@
+// You will need to install the CodeLLDB plugin to use this launch config
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Remote Debug",
+            "type": "lldb",
+            "request": "custom",
+            "initCommands": [
+                "platform select remote-linux",
+                "platform connect connect://localhost:1234",
+                "platform settings -w /project/user-app/target/debug"
+            ],
+            "targetCreateCommands": [
+                "file rust-simple"
+            ],
+            "processCreateCommands": [
+                "run"
+            ],
+            "sourceMap": { "/project/user-app" : "${workspaceFolder}" }
+        }
+    ]
+}
