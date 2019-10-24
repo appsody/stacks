@@ -12,6 +12,9 @@ spec:
     port: APPSODY_PORT
     annotations:
       prometheus.io/scrape: 'true'
+  monitoring:
+    labels:
+      k8s-app: APPSODY_PROJECT_NAME
   readinessProbe:
     # By default, Kitura's liveness and readiness endpoints are the same.
     # You may wish to implement a custom readiness endpoint that is appropriate for
