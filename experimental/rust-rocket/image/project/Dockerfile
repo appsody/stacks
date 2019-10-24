@@ -1,15 +1,16 @@
 FROM rustlang/rust:nightly as builder
 
-RUN cargo install cargo-edit
-
 WORKDIR "/project"
 
 COPY /deps /project/deps
 
 # copy dependency files 
-COPY /copy/Cargo.toml /project
+COPY /copy/Cargo.toml cargo-add /project/
 
-RUN cargo add -q appsody-rocket --path=../deps \
+#get stack dependencies
+RUN mv /project/cargo-add /usr/local/cargo/bin \
+ && cargo fetch --manifest-path /project/deps/Cargo.toml \ 
+ && cargo add -q appsody-rocket --path=../deps \
  && mkdir /project/user-app \
  && mv /project/Cargo.toml /project/user-app/
 
