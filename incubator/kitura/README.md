@@ -17,7 +17,7 @@ Templates are used to create your local project and start your development. The 
     ```
     This initializes a Kitura project using the `default` template.
 
-2. After your project has been initialized you can then run your application using the following command:
+2. After your project has been initialized, you can run your application using the following command:
 
     ```bash
     appsody run
