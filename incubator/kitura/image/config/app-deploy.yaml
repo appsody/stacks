@@ -16,9 +16,12 @@ spec:
     labels:
       k8s-app: APPSODY_PROJECT_NAME
   readinessProbe:
+    # By default, Kitura's liveness and readiness endpoints are the same.
+    # You may wish to implement a custom readiness endpoint that is appropriate for
+    # the initialization of your app - if so, adjust the route here.
     failureThreshold: 12
     httpGet:
-      path: /ready
+      path: /health
       port: APPSODY_PORT
     initialDelaySeconds: 5
     periodSeconds: 2
@@ -26,8 +29,8 @@ spec:
   livenessProbe:
     failureThreshold: 12
     httpGet:
-      path: /live
+      path: /health
       port: APPSODY_PORT
     initialDelaySeconds: 5
-    periodSeconds: 2
+periodSeconds: 2
   expose: true
