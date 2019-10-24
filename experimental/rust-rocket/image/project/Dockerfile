@@ -1,8 +1,6 @@
-FROM rust:1.37 as builder
+FROM rustlang/rust:nightly as builder
 
-RUN rustup default nightly \
- && rustup update \
- && cargo install cargo-edit
+RUN cargo install cargo-edit
 
 WORKDIR "/project"
 
@@ -33,14 +31,16 @@ RUN cargo build --release \
  && echo ./${bin##*/} >> run.sh \
  && chmod 755 run.sh
 
-FROM rust:1.37-slim-stretch
+FROM rust:1.37-slim
 
-RUN useradd rust
-
-WORKDIR "/project/user-app"
+WORKDIR "/project"
 
 # get files and built binary from previous image
 COPY --from=builder /project/user-app/run.sh /project/user-app/Cargo.toml /project/user-app/target/release/ ./
+
+RUN rm -rf build deps examples incremental
+
+RUN useradd rust
 
 USER rust
 
