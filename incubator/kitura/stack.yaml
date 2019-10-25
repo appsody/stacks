@@ -1,6 +1,6 @@
-name: Swift
-version: 0.2.0
-description: Runtime for Swift applications
+name: Kitura
+version: 0.1.0
+description: Runtime for Kitura applications
 license: Apache-2.0
 language: swift
 maintainers:
@@ -10,4 +10,4 @@ maintainers:
   - name: David Jones
     email: djones6@uk.ibm.com
     github-id: djones6
-default-template: simple
+default-template: default

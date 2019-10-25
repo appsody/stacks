@@ -11,7 +11,7 @@
         {
             "label": "Appsody: debug",
             "type": "shell",
-            "command": "appsody debug",
+            "command": "appsody debug --docker-options \"--cap-add=SYS_PTRACE --security-opt seccomp=unconfined\"",
             "group": "build",
             "problemMatcher": []
         },
