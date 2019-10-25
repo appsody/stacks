@@ -1,6 +1,11 @@
 # Install the app dependencies
 FROM swift:5.1 as builder
 
+# Install OS updates
+RUN apt-get update \
+ && apt-get clean \
+ && echo 'Finished installing dependencies'
+
 # Install user-app dependencies
 WORKDIR "/project/user-app"
 COPY ./user-app ./
