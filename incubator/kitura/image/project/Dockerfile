@@ -1,5 +1,5 @@
 # Install the app dependencies
-FROM swift:5.0 as builder
+FROM swift:5.1 as builder
 
 # Install OS updates
 RUN apt-get update \
@@ -22,7 +22,7 @@ RUN echo "#!/bin/bash" > run.sh \
  && cat output.txt | awk 'END {print $NF}' >> run.sh \
  && chmod 755 run.sh
 
-FROM swift:5.0-slim
+FROM swift:5.1-slim
 
 # Install OS updates
 RUN apt-get update \
