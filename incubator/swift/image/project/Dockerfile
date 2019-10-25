@@ -3,6 +3,7 @@ FROM swift:5.1 as builder
 
 # Install OS updates
 RUN apt-get update \
+ && apt-get install -y zlib1g-dev \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 
