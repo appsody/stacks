@@ -64,7 +64,7 @@ You can enable an existing project as follows:
     In your package dependencies:
     ```diff
     dependencies: [
-    -    .package(url: "https://github.com/IBM-Swift/Kitura.git", .upToNextMinor(from: "2.8.0")),
+    -    .package(url: "https://github.com/IBM-Swift/Kitura.git", .upToNextMinor(from: "2.9.0")),
     +    .package(path: ".appsody/AppsodyKitura"),
         // Place any additional dependencies here
     ],
@@ -103,6 +103,10 @@ You can enable an existing project as follows:
 
 ## Debugging
 
+You can debug your application running in an appsody container using lldb.
+
+### Debugging from the command line
+
 To debug your application running in a container, start the container using:
 ```bash
 appsody debug --docker-options "--cap-add=SYS_PTRACE --security-opt seccomp=unconfined"
@@ -120,6 +124,18 @@ lldb \
 Once in lldb, you can use `breakpoint set` to set breakpoints in your application, and then `run` to start the app.
 
 **NOTE:** Due to a current limitation, breakpoints must be set _before_ the application is run. Breakpoints can be disabled, but cannot be re-enabled without restarting the app. After adding or re-enabling breakpoints, restart the app with `process kill` and then `run`.
+
+### Debugging from VSCode
+
+You can debug directly through VSCode as follows:
+- Install the [CodeLLDB](https://github.com/vadimcn/vscode-lldb.git) plugin.
+- Run the `Appsody: debug` task provided.
+- Set any breakpoints that you require in your code.
+- From the Debug view, run the `Remote Debug` configuration.
+
+The final step connects the debugger to your appsody container and launches an instance of your app. Upon hitting a breakpoint, you will see the application's state in VSCode's debug view.
+
+**NOTE:** Due to a current limitation, restarting the debugger will fail. To restart the debugging session, first restart the appsody container. You can do this by running the `Appsody: stop` and `Appsody: debug` tasks.
 
 ## License
 
