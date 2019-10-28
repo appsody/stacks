@@ -4,8 +4,6 @@ The Rust stack provides a consistent way of developing [Rust](https://rust-lang.
 
 This stack is based on the `Rust v1.37` runtime and allows you to develop new or existing Rust applications using Appsody.
 
-Currently, debugging is not supported in this stack.
-
 ## Templates
 
 Templates are used to create your local project and start your development. When initializing your project you will be provided with the default template project. This template provides a simple application that prints "Hello from Appsody!".
@@ -66,6 +64,30 @@ You can enable an existing project as follows:
     You can continue to edit the application in your preferred IDE (VSCode or other) and your changes will be reflected in the running container within a few seconds.
 
 3. You should see your application run, with logs written to the console.
+
+## Debugging
+
+To debug your application running in a container, start the container using:
+
+```bash
+    appsody debug --docker-options "--cap-add=SYS_PTRACE --security-opt seccomp=unconfined"
+```
+
+The command will start the LLDB platform and wait for incoming connections from any address to port 1234. 
+
+You can use the `launch.json` provided to debug in the VS Code IDE. Alternatively, you can connect `lldb` in remote debug mode to this container as follows:
+
+```bash
+lldb \
+  -o "platform select remote-linux" \
+  -o "platform connect connect://localhost:1234" \
+  -o "platform settings -w /project/user-app/target/debug" \
+  -o "file rust-simple" 
+```
+
+Once in lldb, you can use `breakpoint set` to set breakpoints in your application, and then `run` to start the app.
+
+**NOTE:** Due to a current limitation, breakpoints must be set _before_ the application is run. Breakpoints can be disabled, but cannot be re-enabled without restarting the app. After adding or re-enabling breakpoints, restart the app with `process kill` and then `run`.
 
 ## License
 
