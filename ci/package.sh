@@ -233,7 +233,16 @@ done
 exec_hooks $script_dir/ext/post_package.d
 
 if [ "$CODEWIND_INDEX" == "true" ]; then
-  python3 $script_dir/create_codewind_index.py $DISPLAY_NAME_PREFIX
+    python3 $script_dir/create_codewind_index.py $DISPLAY_NAME_PREFIX
+
+    # iterate over each repo
+    for codewind_file in $assets_dir/*.json
+    do
+        # flat json used by static appsody-index for codewind
+        index_src=$build_dir/index-src/$(basename "$codewind_file")
+
+        sed -e "s|${RELEASE_URL}/.*/|{{EXTERNAL_URL}}/|" $codewind_file > $index_src
+    done
 fi
 
 # create appsody-index from contents of assets directory after post-processing

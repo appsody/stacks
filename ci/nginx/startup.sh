@@ -9,6 +9,9 @@ fi
 # Replace the resource paths in index yaml files to match the specified external URL
 find /opt/www/public -name '*.yaml' -exec sed -i -e "s|{{EXTERNAL_URL}}|${EXTERNAL_URL%/}|" {} \;
 
+# Replace the resource paths in index json files to match the specified external URL
+find /opt/www/public -name '*.json' -exec sed -i -e "s|{{EXTERNAL_URL}}|${EXTERNAL_URL%/}|" {} \;
+
 if [ -z "${DRY_RUN}" ]
 then
     exec nginx $CONF_FILE

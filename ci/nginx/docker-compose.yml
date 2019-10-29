@@ -16,7 +16,7 @@ services:
     image: "kabanero/kabanero-index"
     container_name: "kabanero-verify"
     entrypoint: ""
-    command: sh -c "/opt/startup.sh; cat /opt/www/public/*.yaml; ls /opt/www/public"
+    command: sh -c "/opt/startup.sh; cat /opt/www/public/*.yaml; cat /opt/www/public/*.json; ls /opt/www/public"
     environment:
       - EXTERNAL_URL=https://localhost:8003/
       - DRY_RUN=true
