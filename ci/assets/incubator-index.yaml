@@ -69,3 +69,20 @@ stacks:
     templates:
       - id: scaffold
         url: https://github.com/davco01a/collections/releases/download/nodejs-loopback-v0.1.5/incubator.nodejs-loopback.v0.1.5.templates.scaffold.tar.gz
+  - id: nodejs
+    name: Node.js
+    version: 0.2.5
+    description: Runtime for Node.js applications
+    license: Apache-2.0
+    language: nodejs
+    maintainers:
+      - name: Chris Bailey
+        email: cnbailey@gmail.com
+        github-id: seabaylea
+      - name: Neeraj Laad
+        email: neeraj.laad@gmail.com
+        github-id: neeraj-laad
+    default-template: simple
+    templates:
+      - id: simple
+        url: https://github.com/davco01a/collections/releases/download/nodejs-v0.2.5/incubator.nodejs.v0.2.5.templates.simple.tar.gz
