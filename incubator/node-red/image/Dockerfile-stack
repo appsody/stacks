@@ -18,8 +18,6 @@ ENV APPSODY_DEBUG_ON_CHANGE="npm run debug"
 ENV APPSODY_DEBUG_KILL=true
 
 ENV APPSODY_TEST="npm test"
-ENV APPSODY_TEST_ON_CHANGE=""
-ENV APPSODY_TEST_KILL=false
 
 COPY ./project /project
 WORKDIR /project
