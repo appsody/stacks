@@ -41,6 +41,8 @@ do
             stack_dir=$(dirname $stack)
             if [ -d $stack_dir ]
             then
+                pushd $stack_dir
+
                 stack_id=$(basename $stack_dir)
                 stack_version=$(awk '/^version *:/ { gsub("version:","",$NF); gsub("\"","",$NF); print $NF}' $stack)
                 stack_version_major=`echo $stack_version | cut -d. -f1`
@@ -60,39 +62,20 @@ do
                 if [ $rebuild_local = true ]
                 then
                     echo -e "\n- BUILDING stack: $repo_name/$stack_id"
-
-                    if [ -d $stack_dir/image ]
+                    if ${CI_WAIT_FOR} appsody stack package -v --image-namespace $IMAGE_REGISTRY_ORG \
+                        > ${build_dir}/image.$stack_id.$stack_version.log 2>&1
                     then
-                        if ${CI_WAIT_FOR} image_build \
-                            --build-arg GIT_ORG_REPO=$GIT_ORG_REPO \
-                            --build-arg IMAGE_REGISTRY_ORG=$IMAGE_REGISTRY_ORG \
-                            --build-arg STACK_ID=$stack_id \
-                            --build-arg MAJOR_VERSION=$stack_version_major \
-                            --build-arg MINOR_VERSION=$stack_version_minor \
-                            --build-arg PATCH_VERSION=$stack_version_patch \
-                            --label "org.opencontainers.image.created=$(date +%Y-%m-%dT%H:%M:%S%z)" \
-                            --label "org.opencontainers.image.version=${stack_version}" \
-                            --label "org.opencontainers.image.revision=$(git log -1 --pretty=%H)" \
-                            --label "appsody.stack=$IMAGE_REGISTRY_ORG/$stack_id:$stack_version" \
-                            -t $IMAGE_REGISTRY_ORG/$stack_id \
-                            -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version \
-                            -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major \
-                            -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor \
-                            -f $stack_dir/image/Dockerfile-stack $stack_dir/image \
-                            > ${build_dir}/image.$stack_id.$stack_version.log 2>&1
-                        then
-                            trace  "Output from image build" "${build_dir}/image.$stack_id.$stack_version.log"
+                        trace  "Output from image build" "${build_dir}/image.$stack_id.$stack_version.log"
 
-                            echo "created $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
-                            echo "$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
-                            echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version" >> $build_dir/image_list
-                            echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
-                            echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
-                        else
-                            echo "Error building $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
-                            cat ${build_dir}/image.$stack_id.$stack_version.log
-                            exit 1
-                        fi
+                        echo "created $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
+                        echo "$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
+                        echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version" >> $build_dir/image_list
+                        echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
+                        echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
+                    else
+                        echo "Error building $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
+                        cat ${build_dir}/image.$stack_id.$stack_version.log
+                        exit 1
                     fi
                 else
                     echo -e "\n- SKIPPING stack image: $repo_name/$stack_id"
@@ -123,6 +106,7 @@ do
                         template_id=$(basename $template_dir)
                         old_archive=$repo_name.$stack_id.templates.$template_id.tar.gz
                         versioned_archive=$repo_name.$stack_id.v$stack_version.templates.$template_id.tar.gz
+                        packaged_archive=$stack_id.v$stack_version.templates.$template_id.tar.gz
 
                         build=$rebuild_local
                         if [ "$PACKAGE_WHEN_MISSING" = "true" ] &&
@@ -144,7 +128,11 @@ do
                                 echo "stack: "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor > $template_dir/.appsody-config.yaml
                             fi
 
-                            tar -cz -f $assets_dir/$versioned_archive -C $template_dir .
+                            if [ -f $HOME/.appsody/stacks/dev.local/$packaged_archive ]; then
+                                echo "--- Copying $HOME/.appsody/stacks/dev.local/$packaged_archive to $assets_dir/$versioned_archive"
+                                cp $HOME/.appsody/stacks/dev.local/$packaged_archive $assets_dir/$versioned_archive
+                            fi
+
                             rm $template_dir/.appsody-config.yaml
                             echo -e "--- Created template archive: $versioned_archive"
 
@@ -218,12 +206,12 @@ do
                         fi
                     fi
                 done
+               popd
             fi
         done
     else
         echo "SKIPPING: $repo_dir"
     fi
-
 done
 
 # expose an extension point for running after main 'package' processing
@@ -241,7 +229,6 @@ if [ "$CODEWIND_INDEX" == "true" ]; then
         sed -e "s|${RELEASE_URL}/.*/|{{EXTERNAL_URL}}/|" $codewind_file > $index_src
     done
 fi
-
 
 # create appsody-index from contents of assets directory after post-processing
 echo -e "\nBUILDING: $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
