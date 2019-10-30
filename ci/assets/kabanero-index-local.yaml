@@ -23,7 +23,7 @@ stacks:
   name: Eclipse MicroProfile®
   pipelines:
   - id: default
-    sha256: a2343aa5fd22cebc705a6250357676b00972efeeaea794bbfbf919907b99307a
+    sha256: 311e9bebbc94e484e194832b91c90480622e4f39c168d820d67e04bb54cc3c1a
     url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.common.pipeline.default.tar.gz
   templates:
   - id: default
@@ -46,7 +46,7 @@ stacks:
   name: Spring Boot®
   pipelines:
   - id: default
-    sha256: a2343aa5fd22cebc705a6250357676b00972efeeaea794bbfbf919907b99307a
+    sha256: 311e9bebbc94e484e194832b91c90480622e4f39c168d820d67e04bb54cc3c1a
     url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.common.pipeline.default.tar.gz
   templates:
   - id: default
@@ -74,7 +74,7 @@ stacks:
   name: Node.js Express
   pipelines:
   - id: default
-    sha256: a2343aa5fd22cebc705a6250357676b00972efeeaea794bbfbf919907b99307a
+    sha256: 311e9bebbc94e484e194832b91c90480622e4f39c168d820d67e04bb54cc3c1a
     url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.common.pipeline.default.tar.gz
   templates:
   - id: scaffold
@@ -99,7 +99,7 @@ stacks:
   name: LoopBack 4
   pipelines:
   - id: default
-    sha256: a2343aa5fd22cebc705a6250357676b00972efeeaea794bbfbf919907b99307a
+    sha256: 311e9bebbc94e484e194832b91c90480622e4f39c168d820d67e04bb54cc3c1a
     url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.common.pipeline.default.tar.gz
   templates:
   - id: scaffold
@@ -125,12 +125,12 @@ stacks:
   name: Node.js
   pipelines:
   - id: default
-    sha256: a2343aa5fd22cebc705a6250357676b00972efeeaea794bbfbf919907b99307a
+    sha256: 311e9bebbc94e484e194832b91c90480622e4f39c168d820d67e04bb54cc3c1a
     url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.common.pipeline.default.tar.gz
   templates:
   - id: simple
-    url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.nodejs.v0.2.5.templates.simple.tar.gz
-  version: 0.2.5
+    url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.nodejs.v0.2.4.templates.simple.tar.gz
+  version: 0.2.4
 triggers:
 - url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.trigger.tar.gz
-  sha256: 14e9aa37e5c1c59f3949f1ef33f118e6f111cb79b2378e4ca4d5e6310153f582
+  sha256: c04a885937546a554244f6936fbdac30ce79ff681a2c586a810da66eb72749bf
