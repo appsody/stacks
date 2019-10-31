@@ -2,7 +2,7 @@
 FROM quay.io/quarkus/centos-quarkus-maven:19.1.1 AS build
 
 COPY . /project
-
+RUN cd /project && mvn -B install dependency:go-offline -DskipTests
 # Install user-app dependencies
 WORKDIR /project/user-app
 COPY ./user-app/src ./src
