@@ -7,7 +7,7 @@ const PORT = require('../../server').PORT;
 const url = "http://localhost:" + PORT;
 
 // Testing / endpoint, should return 200
-describe('Node.js Express Skaffold template', function () {
+describe('Node.js Express Scaffold template', function () {
     describe('/ endpoint', function () {
         it('status', function (done) {
             request(url + '/', function (error, response, body) {

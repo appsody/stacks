@@ -12,6 +12,9 @@ spec:
     port: APPSODY_PORT
     annotations:
       prometheus.io/scrape: 'true'
+  monitoring:
+    labels:
+      k8s-app: APPSODY_PROJECT_NAME
   readinessProbe:
     failureThreshold: 12
     httpGet:
@@ -19,6 +22,7 @@ spec:
       port: APPSODY_PORT
     initialDelaySeconds: 5
     periodSeconds: 2
+    timeoutSeconds: 1
   livenessProbe:
     failureThreshold: 12
     httpGet:

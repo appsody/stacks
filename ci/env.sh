@@ -59,8 +59,13 @@ mkdir -p $prefetch_dir
 # Build the Codewind index when the value is 'true' (requires PyYaml)
 # export CODEWIND_INDEX
 
+# Prefix to be used on the display name of the stack in the Codewind index file
+# export DISPLAY_NAME_PREFIX="Appsody"
+
 # Specify a wrapper where required for long-running commands
 CI_WAIT_FOR=
+# Show output of commands
+VERBOSE=true
 
 exec_hooks() {
     local dir=$1
@@ -85,6 +90,21 @@ stderr() {
     do
         >&2 echo "$x"
     done
+}
+
+trace() {
+    if [ "${VERBOSE}" == "true" ]
+    then
+        for x in "$@"
+        do
+            if [ -f "$x" ]
+            then
+                >&2 cat "$x"
+            else
+                >&2 echo "$x"
+            fi
+        done
+    fi
 }
 
 #expose an extension point for running before main 'env' processing
@@ -169,6 +189,11 @@ then
     else
         export IMAGE_REGISTRY_PUBLISH=true
     fi
+fi
+
+if [ -z "$DISPLAY_NAME_PREFIX" ]
+then
+    export DISPLAY_NAME_PREFIX="Appsody"
 fi
 
 image_build() {
