@@ -40,6 +40,3 @@ Templates are used to create your local project and start your development. When
 
 This stack is licensed under the [Apache 2.0](./image/LICENSE) license
 
-## Notes
-
-For debugging, the `appsody debug` command needs to be executed with the `-i` option (run with TTY).
