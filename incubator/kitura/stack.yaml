@@ -1,0 +1,13 @@
+name: Kitura
+version: 0.2.0
+description: Runtime for Kitura applications
+license: Apache-2.0
+language: swift
+maintainers:
+  - name: Ian Partridge
+    email: i.partridge@uk.ibm.com
+    github-id: ianpartridge
+  - name: David Jones
+    email: djones6@uk.ibm.com
+    github-id: djones6
+default-template: default
