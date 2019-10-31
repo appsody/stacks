@@ -38,7 +38,8 @@ do
                 tar -czf $assets_dir/$asset_archive -C $asset_dir .
 
                 # Add details of the asset tar.gz into the index file
-                echo "- url: $RELEASE_URL/$RELEASE_NAME/$asset_archive" >> $index_file
+                echo "- id: $repo_name"  >> $index_file
+                echo "  url: $RELEASE_URL/$RELEASE_NAME/$asset_archive" >> $index_file
                 if [ -f $assets_dir/$asset_archive ]; then
                     sha256=$(cat $assets_dir/$asset_archive | $sha256cmd | awk '{print $1}')
                     echo "  sha256: $sha256" >> $index_file
