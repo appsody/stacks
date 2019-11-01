@@ -129,8 +129,8 @@ stacks:
     url: https://github.com/davco01a/collections/releases/download/daveTest2/incubator.common.pipeline.default.tar.gz
   templates:
   - id: simple
-    url: https://github.com/davco01a/collections/releases/download/daveTest2/incubator.nodejs.v0.2.5.templates.simple.tar.gz
-  version: 0.2.5
+    url: https://github.com/davco01a/collections/releases/download/daveTest2/incubator.nodejs.v0.2.4.templates.simple.tar.gz
+  version: 0.2.4
 triggers:
 - url: https://github.com/davco01a/collections/releases/download/daveTest2/incubator.trigger.tar.gz
   sha256: c04a885937546a554244f6936fbdac30ce79ff681a2c586a810da66eb72749bf
