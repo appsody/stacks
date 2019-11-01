@@ -1,13 +1,16 @@
 settings:
   dryrun: false
 variables:
+# Initialize
+  - name: kabanero
+    value: 'kabaneroConfig()'
 #   Customize these
   - name: build.pr.allowedBranches
     value: ' [ "master" ] '
   - name: build.push.allowedBranches
     value: ' [ "master" ] '
   - name: build.tag.pattern
-    value: '"v\\d\\.\\d\\.\\d"'
+    value: '"\\d\\.\\d\\.\\d"'
   - name: build.tag.promoteNamespaceSuffix # suffix for promoted namespace. Default is project-test.
     value: '"-test"'
   - name: build.registry
@@ -15,7 +18,7 @@ variables:
   - name: build.namespace
     value: ' kabanero.namespace ' 
   - name: build.serviceAccount
-    value: ' "appsody-sa" '
+    value: ' "kabanero-operator" '
   - name: build.timeout
     value: ' "1h0m0s" '
 # Setting Variqables 
@@ -44,8 +47,8 @@ variables:
                       build.repositoryEvent) )
               + "-" 
               + build.jobid)
-      - name: build.sshURL
-        value: 'message.webhook.body.repository.ssh_url'
+      - name: build.repoURL
+        value: 'message.webhook.body.repository.clone_url'
       - when: 'build.repositoryEvent == "pull_request"' 
         variables:
           - name: build.pr.url

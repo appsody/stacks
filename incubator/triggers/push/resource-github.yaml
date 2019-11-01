@@ -8,5 +8,5 @@ spec:
   - name: revision
     value: {{.build.push.sha}}
   - name: url
-    value: {{.build.sshURL}}
+    value: {{.build.repoURL}}
   type: git
