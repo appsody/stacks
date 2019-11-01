@@ -13,7 +13,7 @@ then
     fi
     if [ -z "${APPSODY_CLI_FALLBACK}" ]
     then
-        APPSODY_CLI_FALLBACK=0.4.2
+        APPSODY_CLI_FALLBACK=0.4.7
     fi
 
     cli_dir=$build_dir/cli
