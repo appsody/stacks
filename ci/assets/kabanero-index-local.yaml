@@ -1,0 +1,136 @@
+apiVersion: v2
+stacks:
+- default-image: java-microprofile
+  default-pipeline: default
+  default-template: default
+  description: Eclipse MicroProfile on Open Liberty & OpenJ9 using Maven
+  id: java-microprofile
+  images:
+  - id: java-microprofile
+    image: kabanero/java-microprofile:0.2
+  language: java
+  license: Apache-2.0
+  maintainers:
+  - email: emijiang6@googlemail.com
+    github-id: Emily-Jiang
+    name: Emily Jiang
+  - email: neeraj.laad@gmail.com
+    github-id: neeraj-laad
+    name: Neeraj Laad
+  - email: ozzy@ca.ibm.com
+    github-id: BarDweller
+    name: Ozzy
+  name: Eclipse MicroProfile®
+  pipelines:
+  - id: default
+    sha256: 311e9bebbc94e484e194832b91c90480622e4f39c168d820d67e04bb54cc3c1a
+    url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.common.pipeline.default.tar.gz
+  templates:
+  - id: default
+    url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.java-microprofile.v0.2.18.templates.default.tar.gz
+  version: 0.2.18
+- default-image: java-spring-boot2
+  default-pipeline: default
+  default-template: default
+  description: Spring Boot using OpenJ9 and Maven
+  id: java-spring-boot2
+  images:
+  - id: java-spring-boot2
+    image: kabanero/java-spring-boot2:0.3
+  language: java
+  license: Apache-2.0
+  maintainers:
+  - email: schnabel@us.ibm.com
+    github-id: ebullient
+    name: Erin Schnabel
+  name: Spring Boot®
+  pipelines:
+  - id: default
+    sha256: 311e9bebbc94e484e194832b91c90480622e4f39c168d820d67e04bb54cc3c1a
+    url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.common.pipeline.default.tar.gz
+  templates:
+  - id: default
+    url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.java-spring-boot2.v0.3.15.templates.default.tar.gz
+  - id: kotlin
+    url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.java-spring-boot2.v0.3.15.templates.kotlin.tar.gz
+  version: 0.3.15
+- default-image: nodejs-express
+  default-pipeline: default
+  default-template: simple
+  description: Express web framework for Node.js
+  id: nodejs-express
+  images:
+  - id: nodejs-express
+    image: kabanero/nodejs-express:0.2
+  language: nodejs
+  license: Apache-2.0
+  maintainers:
+  - email: cnbailey@gmail.com
+    github-id: seabaylea
+    name: Chris Bailey
+  - email: neeraj.laad@gmail.com
+    github-id: neeraj-laad
+    name: Neeraj Laad
+  name: Node.js Express
+  pipelines:
+  - id: default
+    sha256: 311e9bebbc94e484e194832b91c90480622e4f39c168d820d67e04bb54cc3c1a
+    url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.common.pipeline.default.tar.gz
+  templates:
+  - id: scaffold
+    url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.nodejs-express.v0.2.7.templates.scaffold.tar.gz
+  - id: simple
+    url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.nodejs-express.v0.2.7.templates.simple.tar.gz
+  version: 0.2.7
+- default-image: nodejs-loopback
+  default-pipeline: default
+  default-template: scaffold
+  description: LoopBack 4 API Framework for Node.js
+  id: nodejs-loopback
+  images:
+  - id: nodejs-loopback
+    image: kabanero/nodejs-loopback:0.1
+  language: nodejs
+  license: Apache-2.0
+  maintainers:
+  - email: enjoyjava@gmail.com
+    github-id: raymondfeng
+    name: Raymond Feng
+  name: LoopBack 4
+  pipelines:
+  - id: default
+    sha256: 311e9bebbc94e484e194832b91c90480622e4f39c168d820d67e04bb54cc3c1a
+    url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.common.pipeline.default.tar.gz
+  templates:
+  - id: scaffold
+    url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.nodejs-loopback.v0.1.5.templates.scaffold.tar.gz
+  version: 0.1.5
+- default-image: nodejs
+  default-pipeline: default
+  default-template: simple
+  description: Runtime for Node.js applications
+  id: nodejs
+  images:
+  - id: nodejs
+    image: kabanero/nodejs:0.2
+  language: nodejs
+  license: Apache-2.0
+  maintainers:
+  - email: cnbailey@gmail.com
+    github-id: seabaylea
+    name: Chris Bailey
+  - email: neeraj.laad@gmail.com
+    github-id: neeraj-laad
+    name: Neeraj Laad
+  name: Node.js
+  pipelines:
+  - id: default
+    sha256: 311e9bebbc94e484e194832b91c90480622e4f39c168d820d67e04bb54cc3c1a
+    url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.common.pipeline.default.tar.gz
+  templates:
+  - id: simple
+    url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.nodejs.v0.2.4.templates.simple.tar.gz
+  version: 0.2.4
+triggers:
+- url: file:///Users/dacohen@us.ibm.com/git/collections/ci/assets/incubator.trigger.tar.gz
+  sha256: c04a885937546a554244f6936fbdac30ce79ff681a2c586a810da66eb72749bf
