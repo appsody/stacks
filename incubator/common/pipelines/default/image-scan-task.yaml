@@ -1,0 +1,56 @@
+# This task scans the docker image using the specified command and arguments.
+# It requires an image that contains the scanner to be used to scan the docker-image image input.
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: image-scan-task
+spec:
+  inputs:
+    resources:
+      - name: git-source
+        type: git
+      - name: docker-image
+        type: image
+    params:
+      - name: command
+        description: The scanner command
+        default: oscap-chroot
+      - name: scansDir
+        description: The relative directory to save the scan outputs to
+        default: kabanero/scans
+      - name: pathToInputFile
+        description: The scanner's XCCDF or OVAL file 
+        default: /usr/local/share/openscap/cpe/openscap-cpe-oval.xml 
+  steps:
+    - name: mount-image          
+      securityContext:
+        privileged: true
+      image: appsody/appsody-buildah
+# Temporarily make copy of mounted image since the mounted image will be unmounted when the container for this task ends.
+# TODO: Determine another way to persist the mounted container image accross containers
+      command: ['/bin/bash']
+      args: ['-c', 'buildah from $(inputs.resources.docker-image.url); echo $(buildah mount $(buildah containers -q)) > /var/lib/containers/rootfs.txt; cd $(cat /var/lib/containers/rootfs.txt); ls -la; cp -a $(cat /var/lib/containers/rootfs.txt) /var/lib/containers; ls -la /var/lib/containers/merged']
+      env:
+        - name: gitsource
+          value: git-source
+      volumeMounts:
+        - name: varlibcontainers
+          mountPath: /var/lib/containers
+    - name: scan-image
+      securityContext:
+        privileged: true
+      image: kabanero/scanner
+      command: ['/bin/bash']
+      args: ['-c', 'echo "Scanning copy of image at $(cat /var/lib/containers/rootfs.txt)"; cd /var/lib/containers/merged; ls -la; $(inputs.params.command) /var/lib/containers/merged oval eval --results /workspace/scans/$(inputs.params.scansDir)/scan-oval-results.xml --report /workspace/scans/$(inputs.params.scansDir)/oscap-chroot-report.html $(inputs.params.pathToInputFile)']
+      volumeMounts:
+        - name: host-save-dir
+          mountPath: /workspace/scans
+        - name: varlibcontainers
+          mountPath: /var/lib/containers
+  volumes:
+# The host directory to mount where the scansDir will be created and the the scan outputs will be saved to.
+    - name: host-save-dir
+      hostPath:
+        path: /var/lib
+    - name: varlibcontainers
+      emptyDir: {}

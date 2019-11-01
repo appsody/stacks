@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Condition
+metadata:
+  name: deployment-condition
+spec:
+  params:
+  - name: event-headers
+    type: string
+    description: "The GitHub event headers"
+  check:
+    name: deployment-condition
+    image: stedolan/jq
+    command:
+    - bash
+    args:
+    - -ce
+    - |
+      [[ $(jq '."Ce-Github-Event"[0]' <<< '$(params.event-headers)') = *"push"* ]]
