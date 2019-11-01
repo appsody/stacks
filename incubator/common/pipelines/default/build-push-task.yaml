@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: build-push-task
+  name: CollectionId-build-push-task
 spec:
   inputs:
     resources:

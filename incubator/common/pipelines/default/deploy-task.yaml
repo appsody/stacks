@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: deploy-task
+  name: CollectionId-deploy-task
 spec:
   inputs:
     resources:

@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: build-push-deploy-pipeline
+  name: CollectionId-build-push-deploy-pipeline
 spec:
   params:
   - name: event-headers
@@ -16,7 +16,7 @@ spec:
   tasks:
   - name: build-push-task
     taskRef:
-      name: build-push-task
+      name: CollectionId-build-push-task
     resources:
       inputs:
       - name: git-source
@@ -36,7 +36,7 @@ spec:
         resource: docker-image  
   - name: deploy-task
     taskRef:
-      name: deploy-task
+      name: CollectionId-deploy-task
     runAfter: [build-push-task]
     resources:
       inputs:
