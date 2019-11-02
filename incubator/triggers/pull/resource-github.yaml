@@ -7,6 +7,6 @@ spec:
   type: git
   params:
     - name: url
-      value: {{.build.sshURL}}
+      value: {{.build.repoURL}}
     - name: revision
       value: {{.build.pr.revision}}

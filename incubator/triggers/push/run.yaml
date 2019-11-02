@@ -5,7 +5,7 @@ metadata:
   namespace: {{.build.namespace}}
 spec:
   pipelineRef:
-    name: {{.kabanero.collectionID}}-build-push-pipeline
+    name: {{.build.collectionID}}-build-push-pipeline
   resources:
   - name: git-source
     resourceRef:
