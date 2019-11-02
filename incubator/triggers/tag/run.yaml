@@ -7,11 +7,11 @@ spec:
   serviceAccount: {{.build.serviceAccount}}
   timeout: 
   pipelineRef:
-    name: {{.build.collectionID}}-build-tag-push-pipeline
+    name: {{.build.collectionID}}-image-retag-push-pipeline
   resources:
-    - name: docker-image
+    - name: docker-src-image
       resourceRef:
-        name: docker-from-{{.build.nameSuffix}}
+        name: docker-src-{{.build.nameSuffix}}
     - name: docker-dest-image
       resourceRef:
-        name: docker-to-{{.build.nameSuffix}}
+        name: docker-dest-{{.build.nameSuffix}}
