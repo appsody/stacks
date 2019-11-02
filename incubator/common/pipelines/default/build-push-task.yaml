@@ -1,0 +1,70 @@
+#Kabanero! on activate substitute CollectionId for text 'CollectionId'
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: CollectionId-build-push-task
+spec:
+  inputs:
+    resources:
+    - name: git-source
+      type: git
+    params:
+    - name: pathToDockerFile
+      default: /workspace/extracted/Dockerfile
+    - name: pathToContext
+      default: /workspace/extracted
+  outputs:
+    resources:
+    - name: docker-image
+      type: image
+  steps:
+  - name: assemble-extract
+    securityContext:
+      privileged: true
+    image: appsody/appsody-buildah
+    command: ["/bin/bash"]
+    args:
+    - -c
+    - "/extract.sh"
+    env:
+    - name: gitsource
+      value: git-source
+    volumeMounts:
+    - mountPath: /var/lib/containers
+      name: varlibcontainers
+  - name: validate-collection-is-active
+    securityContext:
+      privileged: true
+    image: kabanero/validate-collection
+    command: ["/bin/bash"]
+    args:
+    - -c
+    - "/validate.sh"
+    env:
+    - name: gitsource
+      value: git-source
+  - name: build
+    securityContext:
+      privileged: true
+    image: appsody/appsody-buildah
+    command: ['buildah', 'bud', '--tls-verify=false', '--format=docker', '-f', '$(inputs.params.pathToDockerFile)', '-t', '$(outputs.resources.docker-image.url)', '$(inputs.params.pathToContext)']
+    env:
+    - name: gitsource
+      value: git-source
+    volumeMounts:
+    - mountPath: /var/lib/containers
+      name: varlibcontainers
+  - name: push
+    securityContext:
+      privileged: true
+    image: appsody/appsody-buildah
+    command: ['buildah', 'push', '--tls-verify=false', '$(outputs.resources.docker-image.url)', 'docker://$(outputs.resources.docker-image.url)']
+    env:
+    - name: gitsource
+      value: git-source
+    volumeMounts:
+    - mountPath: /var/lib/containers
+      name: varlibcontainers
+  volumes:
+  - name: varlibcontainers
+    emptyDir: {}

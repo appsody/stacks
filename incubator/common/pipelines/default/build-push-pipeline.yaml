@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: CollectionId-build-deploy-pipeline
+  name: CollectionId-build-push-pipeline
 spec:
   resources:
     - name: git-source
@@ -10,9 +10,9 @@ spec:
     - name: docker-image
       type: image
   tasks:
-    - name: build-task
+    - name: build-push-task
       taskRef:
-        name: CollectionId-build-task
+        name: CollectionId-build-push-task
       resources:
         inputs:
         - name: git-source
@@ -20,10 +20,10 @@ spec:
         outputs:
         - name: docker-image
           resource: docker-image
-    - name: deploy-task
+    - name: image-scan-task
       taskRef:
-        name: CollectionId-deploy-task
-      runAfter: [build-task]
+        name: image-scan-task
+      runAfter: [build-push-task]
       resources:
         inputs:
         - name: git-source

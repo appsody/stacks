@@ -1,0 +1,46 @@
+#Kabanero! on activate substitute CollectionId for text 'CollectionId'
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: CollectionId-build-push-deploy-pipeline
+spec:
+  params:
+  - name: event-headers
+    type: string
+    description: "The event headers"
+  resources:
+  - name: git-source
+    type: git
+  - name: docker-image
+    type: image
+  tasks:
+  - name: build-push-task
+    taskRef:
+      name: CollectionId-build-push-task
+    resources:
+      inputs:
+      - name: git-source
+        resource: git-source
+      outputs:
+      - name: docker-image
+        resource: docker-image
+  - name: image-scan-task
+    taskRef:
+      name: image-scan-task
+    runAfter: [build-push-task]
+    resources:
+      inputs:
+      - name: git-source
+        resource: git-source
+      - name: docker-image
+        resource: docker-image  
+  - name: deploy-task
+    taskRef:
+      name: CollectionId-deploy-task
+    runAfter: [build-push-task]
+    resources:
+      inputs:
+      - name: git-source
+        resource: git-source
+      - name: docker-image
+        resource: docker-image

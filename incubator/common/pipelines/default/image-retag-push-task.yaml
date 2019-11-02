@@ -2,54 +2,45 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: CollectionId-build-task
+  name: CollectionId-image-retag-push-task
 spec:
   inputs:
     resources:
-      - name: git-source
-        type: git
+      - name: docker-src-image
+        type: image
+      - name: docker-dest-image
+        type: image
     params:
       - name: pathToDockerFile
         default: /workspace/extracted/Dockerfile
       - name: pathToContext
         default: /workspace/extracted
+  outputs:
+    resources:
+      - name: docker-dest-image
+        type: image
   steps:
-    - name: assemble-extract
+    - name: buildah-pull
       securityContext:
         privileged: true
       image: appsody/appsody-buildah
-      command: ["/bin/bash"]
-      args:
-        - -c
-        - "/extract.sh"
-      env:
-        - name: gitsource
-          value: git-source
+      command: ['buildah', 'pull', '--tls-verify=false', '$(inputs.resources.docker-src-image.url)']
       volumeMounts:
         - mountPath: /var/lib/containers
           name: varlibcontainers
-    - name: validate-collection-is-active
-      securityContext:
-        privileged: true
-      image: kabanero/validate-collection
-      command: ["/bin/bash"]
-      args:
-        - -c
-        - "/validate.sh"
-      env:
-        - name: gitsource
-          value: git-source
-      volumeMounts:
-        - mountPath: /var/lib/containers
-          name: varlibcontainers
-    - name: build
+    - name: buildah-tag
       securityContext:
         privileged: true
       image: appsody/appsody-buildah
-      command: ['buildah', 'bud', '--tls-verify=false', '--format=docker', '-f', '$(inputs.params.pathToDockerFile)', '$(inputs.params.pathToContext)']
-      env:
-        - name: gitsource
-          value: git-source
+      command: ['buildah', 'tag', '$(inputs.resources.docker-src-image.url)', '$(inputs.resources.docker-dest-image.url)']
+      volumeMounts:
+        - mountPath: /var/lib/containers
+          name: varlibcontainers
+    - name: buildah-push
+      securityContext:
+        privileged: true
+      image: appsody/appsody-buildah
+      command: ['buildah', 'push', '--tls-verify=false', '$(outputs.resources.docker-dest-image.url)', 'docker://$(outputs.resources.docker-dest-image.url)']
       volumeMounts:
         - mountPath: /var/lib/containers
           name: varlibcontainers

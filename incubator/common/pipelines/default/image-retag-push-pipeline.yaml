@@ -1,0 +1,24 @@
+#Kabanero! on activate substitute CollectionId for text 'CollectionId'
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: CollectionId-image-retag-push-pipeline
+spec:
+  resources:
+    - name: docker-src-image
+      type: image
+    - name: docker-dest-image
+      type: image
+  tasks:
+    - name: image-retag-task
+      taskRef:
+        name: CollectionId-image-retag-push-task
+      resources:
+        inputs:
+        - name: docker-src-image
+          resource: docker-src-image
+        - name: docker-dest-image
+          resource: docker-dest-image
+        outputs:
+        - name: docker-dest-image
+          resource: docker-dest-image
