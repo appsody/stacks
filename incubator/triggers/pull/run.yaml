@@ -5,7 +5,7 @@ metadata:
   namespace: {{.build.namespace}}
 spec:
   pipelineRef:
-    name: {{.build.collectionID}}-build-only-pipeline
+    name: {{.build.collectionID}}-build-pipeline
   resources:
   - name: git-source
     resourceRef:

@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
-  name: docker-from-{{.build.nameSuffix}}
+  name: docker-src-{{.build.nameSuffix}}
   namespace: {{.build.namespace}}
 spec:
   params:
