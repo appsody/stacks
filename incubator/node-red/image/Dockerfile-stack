@@ -19,7 +19,9 @@ ENV APPSODY_DEBUG_KILL=true
 
 ENV APPSODY_TEST="npm test"
 
+COPY ./LICENSE /licenses/
 COPY ./project /project
+COPY ./config /config
 WORKDIR /project
 RUN npm install && npm audit fix
 
