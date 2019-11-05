@@ -57,7 +57,7 @@ projects:
       - i.partridge@uk.ibm.com
     default-template: simple
     urls:
-    - https://github.com/appsody/stacks/releases/download/swift-v0.2.1/incubator.swift.templates.simple.tar.gz
+    - https://github.com/appsody/stacks/releases/download/swift-v0.2.1/incubator.swift.v0.2.1.templates.simple.tar.gz
   nodejs-loopback:
   - updated: 2019-07-26T21:00:00+00:00
     name: nodejs-loopback
