@@ -26,4 +26,7 @@ fi
 
 NGINX_IMAGE=nginx-ubi
 image_build -t $NGINX_IMAGE \
- -f $script_dir/nginx-ubi/Dockerfile $script_dir
+ -f $script_dir/nginx-ubi/Dockerfile $script_dir \
+> ${build_dir}/image.$NGINX_IMAGE.log
+echo "File containing output from nginx image build: ${build_dir}/image.$NGINX_IMAGE.log"
+trace  "Output from nginx index build" "${build_dir}/image.$NGINX_IMAGE.log"

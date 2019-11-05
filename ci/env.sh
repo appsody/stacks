@@ -65,7 +65,9 @@ mkdir -p $prefetch_dir
 # Specify a wrapper where required for long-running commands
 CI_WAIT_FOR=
 # Show output of commands
-VERBOSE=true
+if [ -z $VERBOSE ]; then
+    VERBOSE=false
+fi
 
 exec_hooks() {
     local dir=$1
