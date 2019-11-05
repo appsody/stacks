@@ -12,9 +12,9 @@ WORKDIR "/project/user-app"
 COPY ./user-app ./
 
 # Build project, and discover executable name
-RUN echo "#!/bin/bash" > run.sh \
+RUN echo '#!/bin/bash' > run.sh \
  && swift build -c release | tee output.txt \
- && cat output.txt | awk 'END {print $NF}' >> run.sh \
+ && cat output.txt | awk 'END {print "./.build/x86_64-unknown-linux/release/" $NF}' >> run.sh \
  && chmod 755 run.sh
 
 FROM swift:5.1-slim
