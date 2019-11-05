@@ -9,7 +9,7 @@ then
     export INDEX_VERSION=${TRAVIS_BUILD_NUMBER}
 
     export CI_WAIT_FOR='travis_wait'
-    export VERBOSE=
+    export VERBOSE=true
 
     if [ $TRAVIS_TAG ] && [ "$TRAVIS_TAG" == "$TRAVIS_BRANCH" ]
     then
