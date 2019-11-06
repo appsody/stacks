@@ -1,6 +1,6 @@
 name: Swift
-version: 0.2.1
-description: Runtime for Swift applications
+version: 0.2.2
+description: Appsody runtime for Swift applications
 license: Apache-2.0
 language: swift
 maintainers:
