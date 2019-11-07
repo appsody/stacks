@@ -1,5 +1,8 @@
 FROM swift:5.1
 
+LABEL Description="Appsody runtime for Swift applications"
+LABEL maintainer="Ian Partridge <i.partridge@uk.ibm.com>, David Jones <djones6@uk.ibm.com>"
+
 RUN apt-get update \
  && apt-get install -y zlib1g-dev libcurl4-openssl-dev libssl-dev \
  && apt-get clean \
