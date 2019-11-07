@@ -14,7 +14,7 @@ variables:
   - name: build.tag.promoteNamespaceSuffix # suffix for promoted namespace. Default is project-test.
     value: '"-test"'
   - name: build.registry
-    value: ' "docker-registry.default.svc:5000" '
+    value: ' "image-registry.openshift-image-registry.svc:5000" '
   - name: build.namespace
     value: ' kabanero.namespace ' 
   - name: build.serviceAccount
