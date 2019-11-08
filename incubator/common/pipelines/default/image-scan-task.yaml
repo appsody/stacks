@@ -29,7 +29,7 @@ spec:
 # Temporarily make copy of mounted image since the mounted image will be unmounted when the container for this task ends.
 # TODO: Determine another way to persist the mounted container image accross containers
       command: ['/bin/bash']
-      args: ['-c', 'buildah from $(inputs.resources.docker-image.url); echo $(buildah mount $(buildah containers -q)) > /var/lib/containers/rootfs.txt; cd $(cat /var/lib/containers/rootfs.txt); ls -la; cp -a $(cat /var/lib/containers/rootfs.txt) /var/lib/containers; ls -la /var/lib/containers/merged']
+      args: ['-c', 'echo "Pulling image $(inputs.resources.docker-image.url)"; buildah from --tls-verify=false $(inputs.resources.docker-image.url); echo $(buildah mount $(buildah containers -q)) > /var/lib/containers/rootfs.txt; echo "Mounted image to $(cat /var/lib/containers/rootfs.txt)"; cd $(cat /var/lib/containers/rootfs.txt); ls -la; cp -a $(cat /var/lib/containers/rootfs.txt) /var/lib/containers; echo "Copied mounted image to /var/lib/containers/merged"; ls -la /var/lib/containers/merged; echo $(buildah images -q $(inputs.resources.docker-image.url)) > /var/lib/containers/imageid.txt; echo "Image ID of the image to scan: $(cat /var/lib/containers/imageid.txt)"']
       env:
         - name: gitsource
           value: git-source
@@ -41,14 +41,14 @@ spec:
         privileged: true
       image: kabanero/scanner
       command: ['/bin/bash']
-      args: ['-c', 'echo "Scanning copy of image at $(cat /var/lib/containers/rootfs.txt)"; cd /var/lib/containers/merged; ls -la; $(inputs.params.command) /var/lib/containers/merged oval eval --results /workspace/scans/$(inputs.params.scansDir)/scan-oval-results.xml --report /workspace/scans/$(inputs.params.scansDir)/oscap-chroot-report.html $(inputs.params.pathToInputFile)']
+      args: ['-c', 'mkdir -p /workspace/scans/$(inputs.params.scansDir)/$(inputs.resources.docker-image.url)/$(cat /var/lib/containers/imageid.txt); echo "Scanning copy of image $(inputs.resources.docker-image.url) with image ID $(cat /var/lib/containers/imageid.txt) in /var/lib/containers/merged"; cd /var/lib/containers/merged; ls -la; $(inputs.params.command) /var/lib/containers/merged oval eval --results /workspace/scans/$(inputs.params.scansDir)/$(inputs.resources.docker-image.url)/$(cat /var/lib/containers/imageid.txt)/results.xml --report /workspace/scans/$(inputs.params.scansDir)/$(inputs.resources.docker-image.url)/$(cat /var/lib/containers/imageid.txt)/report.html $(inputs.params.pathToInputFile)']
       volumeMounts:
         - name: host-save-dir
           mountPath: /workspace/scans
         - name: varlibcontainers
           mountPath: /var/lib/containers
   volumes:
-# The host directory to mount where the scansDir will be created and the the scan outputs will be saved to.
+    # The host directory to mount where the scansDir will be created and the the scan outputs will be saved to.
     - name: host-save-dir
       hostPath:
         path: /var/lib
