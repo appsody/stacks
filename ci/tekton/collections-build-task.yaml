@@ -11,7 +11,7 @@ spec:
       - name: registry
         type: string
         description: Docker registry
-        default: docker-registry.default.svc:5000
+        default: image-registry.openshift-image-registry.svc:5000
       - name: namespace
         type: string
         description: Namespace
@@ -22,6 +22,7 @@ spec:
         default: kabanero-index
       - name: clusterSubdomain
         type: string
+        default: ""
         description: Cluster subdomain
 
   steps:
@@ -48,8 +49,8 @@ spec:
           # do build and release
           export USE_BUILDAH="true"
           export BUILDAH_FORMAT="docker"
-          export IMAGE_REGISTRY="${inputs.params.registry}"
-          export IMAGE_REGISTRY_ORG="${inputs.params.namespace}"
+          export IMAGE_REGISTRY="$(inputs.params.registry)"
+          export IMAGE_REGISTRY_ORG="$(inputs.params.namespace)"
           export IMAGE_REGISTRY_PUBLISH="true"
           # disable tests as 'appsody run' does not work without docker
           export SKIP_TESTS="true"
@@ -65,15 +66,19 @@ spec:
           mountPath: /var/lib/containers
 
     - name: deploy-collections-index
-      image: lachlanevenson/k8s-kubectl
+      image: kabanero/kabanero-utils
       command: ['/bin/sh']
       args:
         - -cex
         - |
           YAML_FILE=/workspace/git-source/ci/tekton/openshift.yaml
-          sed -i -e 's/HOST/${inputs.params.hostname}.${inputs.params.clusterSubdomain}/' $YAML_FILE
-          sed -i -e 's/REGISTRY/${inputs.params.registry}/' $YAML_FILE
-          sed -i -e 's/NAMESPACE/${inputs.params.namespace}/' $YAML_FILE
+          if [ -z "$(inputs.params.clusterSubdomain)" ]; then
+            sed -i -e '/host:/d' $YAML_FILE
+          else
+            sed -i -e 's/HOST/$(inputs.params.hostname).$(inputs.params.clusterSubdomain)/' $YAML_FILE
+          fi
+          sed -i -e 's/REGISTRY/$(inputs.params.registry)/' $YAML_FILE
+          sed -i -e 's/NAMESPACE/$(inputs.params.namespace)/' $YAML_FILE
           sed -i -e 's/TAG/latest/' $YAML_FILE
           sed -i -e "s/DATE/$(date --utc '+%FT%TZ')/" $YAML_FILE
           kubectl apply --validate=false -f $YAML_FILE
