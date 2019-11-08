@@ -22,4 +22,5 @@ ENV PYTHONPATH=/project/deps
 ENV FLASK_APP=server/__init__.py
 
 EXPOSE 8080
+EXPOSE 5678
 CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=8080"]
