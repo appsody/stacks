@@ -8,7 +8,7 @@
     <parent>
         <groupId>dev.appsody</groupId>
         <artifactId>java-microprofile-dev-mode</artifactId>
-        <version>0.2.10</version>
+        <version>0.2.11</version>
     </parent>
 
     <groupId>dev.appsody.starter.java-microprofile</groupId>
@@ -89,24 +89,18 @@
             </plugin>
             <!-- Enable liberty-maven plugin -->
             <plugin>
-                <groupId>net.wasdev.wlp.maven.plugins</groupId>
+                <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
-                <version>3.0.M1</version>
                 <configuration>
                     <verifyTimeout>120</verifyTimeout>
+                    <looseApplication>true</looseApplication>
                     <assemblyArtifact>
                         <groupId>${liberty.groupId}</groupId>
                         <artifactId>${liberty.artifactId}</artifactId>
                         <version>${version.openliberty-runtime}</version>
                         <type>zip</type>
                     </assemblyArtifact>
-                    <serverName>defaultServer</serverName>
                     <stripVersion>true</stripVersion>
-                    <configFile>src/main/liberty/config/server.xml</configFile>
-                    <appsDirectory>apps</appsDirectory>
-                    <looseApplication>true</looseApplication>
-                    <packageFile>${package.file}</packageFile>
-                    <include>${packaging.type}</include>
                     <bootstrapProperties>
                         <default.http.port>${http.port}</default.http.port>
                         <default.https.port>${https.port}</default.https.port>

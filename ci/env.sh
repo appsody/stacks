@@ -33,7 +33,7 @@ mkdir -p $build_dir
 
 # git information (determined from current branch if unspecified)
 # export GIT_BRANCH
-# export GIT_ORG_REPO=appsody/stacks
+ export GIT_ORG_REPO=appsody/stacks
 
 # External/remote URL for downloading git released assets
 # export RELEASE_URL=https://github.com/$GIT_ORG_REPO/releases/download
