@@ -44,6 +44,6 @@
     "!*/__tests__"
   ],
   "devDependencies": {
-    "@loopback/build": "^2.0.8"
+    "@loopback/build": "^2.0.15"
   }
 }
