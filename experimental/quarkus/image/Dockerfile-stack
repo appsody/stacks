@@ -7,14 +7,7 @@ COPY ./config /config
 
 WORKDIR /project
 
-USER root
-
-RUN mkdir -p /mvn/repository
-RUN chown -R quarkus /mvn
-
-USER quarkus
-
-RUN mvn -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
+RUN mvn -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 RUN mvn -B install dependency:go-offline -DskipTests
 
 ENV APPSODY_USER_RUN_AS_LOCAL=true
