@@ -73,9 +73,10 @@ To debug your application running in a container, start the container using:
     appsody debug --docker-options "--cap-add=SYS_PTRACE --security-opt seccomp=unconfined"
 ```
 
-The command will start the LLDB platform and wait for incoming connections from any address to port 1234.
+The command will start the LLDB platform and wait for incoming connections from any address to port 1234. 
 
-You can connect `lldb` in remote debug mode to this container as follows:
+You can use the `launch.json` provided to debug in the VS Code IDE. Alternatively, you can connect `lldb` in remote debug mode to this container as follows:
+
 ```bash
 lldb \
   -o "platform select remote-linux" \

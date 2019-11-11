@@ -1,5 +1,5 @@
 # Install the app dependencies
-FROM swift:5.0 as builder
+FROM swift:5.1 as builder
 
 # Install OS updates
 RUN apt-get update \
@@ -17,12 +17,12 @@ COPY ./deps /project/user-app/.appsody
 
 # Build project, and discover executable name
 WORKDIR "/project/user-app"
-RUN echo "#!/bin/bash" > run.sh \
+RUN echo '#!/bin/bash' > run.sh \
  && swift build -c release | tee output.txt \
- && cat output.txt | awk 'END {print $NF}' >> run.sh \
+ && cat output.txt | awk 'END {print "./.build/x86_64-unknown-linux/release/" $NF}' >> run.sh \
  && chmod 755 run.sh
 
-FROM swift:5.0-slim
+FROM swift:5.1-slim
 
 # Install OS updates
 RUN apt-get update \
