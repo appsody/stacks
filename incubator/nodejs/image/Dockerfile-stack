@@ -2,7 +2,7 @@ FROM registry.access.redhat.com/ubi8/nodejs-10
 
 LABEL vendor="Kabanero" \
     name="kabanero/nodejs" \
-    version="0.2.5" \
+    version="0.2.6" \
     summary="Image for Kabanero Nodejs development" \
     description="This image contains the Kabanero development stack for the Nodejs collection"
 
