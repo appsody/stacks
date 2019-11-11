@@ -57,7 +57,7 @@ To try this, run:
 
 ```bash
 appsody build
-docker run -i --rm -p 8080:8080 my-project:latest
+docker run -i --rm -p 8080:8080 <my-project>:latest
 ```
 
 Running the production container should give you an output similar to:
