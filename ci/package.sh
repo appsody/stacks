@@ -261,8 +261,8 @@ if ${CI_WAIT_FOR} image_build $nginx_arg \
     -f $script_dir/nginx/Dockerfile $script_dir \
     > ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log
 then
-    echo "File containing output from index build: ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
-    trace  "Output from index build" "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
+    echo "File containing output from $INDEX_IMAGE build: ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
+    trace  "Output from $INDEX_IMAGE build" "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
 
     echo "created $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
     echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE" >> $build_dir/image_list
