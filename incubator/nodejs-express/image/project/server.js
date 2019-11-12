@@ -16,7 +16,7 @@ function getEntryPoint() {
     let rawPackage = fs.readFileSync(basePath + 'package.json');
     let package = JSON.parse(rawPackage);
     if (!package.main) {
-        console.error("Please define a primary entrypoint of your application by agdding 'main: <entrypoint>' to package.json.")
+        console.error("Please define a primary entrypoint of your application by adding 'main: <entrypoint>' to package.json.")
         process.exit(1)
     }
     return package.main;
