@@ -1,4 +1,4 @@
-FROM kabanero/ubi8-maven
+FROM kabanero/ubi8-maven:0.3.0
 
 LABEL vendor="Kabanero" \
     name="kabanero/java-microprofile" \

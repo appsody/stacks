@@ -1,4 +1,4 @@
-FROM kabanero/ubi8-maven
+FROM kabanero/ubi8-maven:0.3.0
 
 USER root
 
@@ -17,7 +17,7 @@ RUN cd target && \
     mkdir /config && \
     mv wlp/usr/servers/*/* /config/
 
-FROM openliberty/open-liberty:microProfile3-ubi-min
+FROM openliberty/open-liberty:19.0.0.9-microProfile3-ubi-min
 
 COPY --chown=1001:0 --from=0 /config/ /opt/ol/wlp/usr/servers/defaultServer/
 

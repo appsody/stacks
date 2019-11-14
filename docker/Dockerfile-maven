@@ -1,4 +1,4 @@
-FROM kabanero/ubi8-openjdk
+FROM kabanero/ubi8-openjdk:0.3.0
 
 RUN yum upgrade --disableplugin=subscription-manager -y \
    && yum clean --disableplugin=subscription-manager packages \

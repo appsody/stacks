@@ -13,7 +13,7 @@ RUN /project/util/check_version build \
 USER java_user
 
 ####
-FROM kabanero/ubi8-openjdk
+FROM kabanero/ubi8-openjdk:0.3.0
 
 ARG artifactId=appsody-spring
 ARG version=1.0-SNAPSHOT
