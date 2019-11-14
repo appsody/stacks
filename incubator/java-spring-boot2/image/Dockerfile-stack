@@ -1,4 +1,4 @@
-FROM kabanero/ubi8-maven
+FROM kabanero/ubi8-maven:0.3.0
 
 # passed in via package script
 ARG GIT_ORG_REPO=appsody/stacks

@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-10
+FROM registry.access.redhat.com/ubi8/nodejs-10:1-54
 
 USER root
 
@@ -20,7 +20,7 @@ COPY ./user-app/package*.json ./
 RUN npm install
 WORKDIR /project/user-app/node_modules
 
-FROM registry.access.redhat.com/ubi8/nodejs-10
+FROM registry.access.redhat.com/ubi8/nodejs-10:1-54
 
 USER root
 
