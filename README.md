@@ -72,9 +72,9 @@ This will update the collections and pipelines in your environment. New collecti
      e.g. https://github.com/kabanero-io/collections/releases/download/v0.2.0.beta2/kabanero-index.yaml .
    ```
 
-## Github enterprise considerations
+## Github Enterprise considerations
 
-When using Github enterprise to store collections you may need an alternative mechanism for hosting your release artefacts due to authentication requirements. See [Hosting your collections using NGINX](https://github.com/kabanero-io/collections/blob/master/ci/tekton/README.md) which describes the steps needed to build your collections and deploy an NGINX server to host them into your Kabanero instance.
+When using Github Enterprise to store collections you may need an alternative mechanism for hosting your release artifacts due to authentication requirements. See [Hosting your collections using NGINX](https://github.com/kabanero-io/collections/blob/master/ci/tekton/README.md), which describes the steps needed to build your collections and deploy an NGINX server to host them into your Kabanero instance.
 
 ## Need help?
 If you have a question that you can't find an answer to, we would also like to hear about that too.
