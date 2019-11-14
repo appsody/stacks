@@ -61,7 +61,7 @@ projects:
   nodejs-loopback:
   - updated: 2019-07-26T21:00:00+00:00
     name: nodejs-loopback
-    version: 0.1.4
+    version: 0.1.7
     description: LoopBack API framework for Node.js
     license: Apache-2.0
     maintainers:
