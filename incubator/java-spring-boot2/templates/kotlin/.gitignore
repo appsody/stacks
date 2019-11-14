@@ -1,4 +1,5 @@
 /target/*
+.appsody-spring-trigger
 
 ### STS ###
 .apt_generated

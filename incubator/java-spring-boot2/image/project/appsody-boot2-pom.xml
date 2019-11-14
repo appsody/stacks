@@ -5,7 +5,7 @@
 
   <groupId>dev.appsody</groupId>
   <artifactId>spring-boot2-stack</artifactId>
-  <version>0.3.9</version>
+  <version>{{MAVEN_ARTIFACT_VERSION}}</version>
   <packaging>pom</packaging>
 
   <name>Appsody Spring Boot2 stack</name>
@@ -161,7 +161,7 @@
         <id>dev</id>
         <activation>
           <property>
-            <name>env.APPSODY_RUN</name>
+            <name>env.APPSODY_DEV_MODE</name>
           </property>
         </activation>
         <dependencies>
@@ -171,6 +171,30 @@
             <optional>true</optional>
           </dependency>
         </dependencies>
+        <build>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-antrun-plugin</artifactId>
+              <version>1.1</version>
+              <executions>
+                <execution>
+                  <id>trigger-spring-restart</id>
+                  <phase>compile</phase>
+                  <goals>
+                    <goal>run</goal>
+                  </goals>
+                  <configuration>
+                    <tasks>
+                      <echo>Triggering Spring app restart.</echo>
+                      <touch file="${basedir}/target/.appsody-spring-trigger" />
+                    </tasks>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </build>
     </profile>
   </profiles>
 

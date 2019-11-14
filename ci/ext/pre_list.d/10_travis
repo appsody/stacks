@@ -1,0 +1,109 @@
+#!/bin/bash
+
+if [ "$TRAVIS" == "true" ]
+then
+    echo "Selecting stacks to build based on Travis environment"
+
+    if [ -n "$TRAVIS_PULL_REQUEST" ] && [ "$TRAVIS_PULL_REQUEST" != "false" ] || [ $TRAVIS_COMMIT_RANGE ]
+    then
+        # check for changed files
+        echo "Listing new/updated stacks in this pull request ($TRAVIS_PULL_REQUEST) or commit range ($TRAVIS_COMMIT_RANGE)"
+        CHANGED_FILES=$(git diff --name-only "$TRAVIS_COMMIT_RANGE" 2>/dev/null)
+        rc=$?
+        if [ $rc -ne 0 ]
+        then
+            stderr "WARNING: unable to find differences in "$TRAVIS_COMMIT_RANGE", using last commit"
+            # Fall back to single commit: https://github.com/travis-ci/travis-ci/issues/5133
+            CHANGED_FILES=$(git diff --name-only "HEAD~..HEAD" 2>/dev/null)
+            rc=$?
+        fi
+
+        if [ $rc -eq 0 ]
+        then
+            for changed_stacks in $CHANGED_FILES
+            do
+                if [[ $changed_stacks == *stack.yaml ]]
+                then
+                    var=`awk '{split($1, a, "/*"); print a[1]"/"a[2]}' <<< $changed_stacks`
+                    export STACKS_LIST+=("$var")
+                fi
+            done
+        else
+            stderr "ERROR: unable to identify changed files in $TRAVIS_COMMIT_RANGE"
+            # show original error
+            git diff --name-only "$TRAVIS_COMMIT_RANGE"
+        fi
+    elif [ $TRAVIS_TAG ]
+    then
+        stack_id=`echo ${TRAVIS_TAG/-v[0-9]*/}`
+        echo "Listing stacks for this release"
+
+        for repo_name in $REPO_LIST
+        do
+            repo_dir=$base_dir/$repo_name
+            if [ -d $repo_dir ]
+            then
+                for stack_exists in $repo_dir/*/stack.yaml
+                do
+                    if [ -f $stack_exists ]
+                    then
+                        var=`echo ${stack_exists#"$base_dir/"}`
+                        repo_stack=`awk '{split($1, a, "/*"); print a[1]"/"a[2]}' <<< $var`
+                        if [[ $repo_stack != */$stack_id ]]
+                        then
+                            continue;
+                        fi
+                        # list of repositories to build indexes for
+                        export STACKS_LIST+=("$repo_stack")
+                    fi
+                done
+            fi
+        done
+
+        if [ -z "${STACKS_LIST}" ]
+        then
+            stderr "ERROR: Could not find stacks associated with tag"
+            exit 1
+        fi
+    fi
+
+    if [ -z "${STACKS_LIST}" ]
+    then
+        echo "Fall back to stacks that don't match most recent index"
+        printf "  %-50s %-10s %-10s %s\n" "Stack directory" "version" "rebuild"
+        for stack in $(find $base_dir -name stack.yaml)
+        do
+            stack_repo=$(basename $(dirname $(dirname $stack)))
+            stack_name=$(basename $(dirname $stack))
+            stack_version=$(awk '/^version *:/ { gsub("version:","",$NF); gsub("\"","",$NF); print $NF}' $stack)
+            rebuild=true
+
+            if [ $stack_repo = "samples" ]
+            then
+                rebuild=false
+            elif ls ${prefetch_dir} | grep $stack_repo.$stack_name | grep -q $stack_version
+            then
+                # e.g. experimental.java-spring-boot2-liberty.v0.1.7.templates.default.tar.gz
+                rebuild=false
+            elif grep -q $stack_version $build_dir/prefetch-$stack_repo-$stack_name-* 2>/dev/null
+            then
+                # e.g. experimental.java-spring-boot2-liberty.templates.default.tar.gz
+                # use prefetch data
+                rebuild=false
+            fi
+
+            printf "  %-50s %-10s %s\n" "$stack_repo/$stack_name" "$stack_version" "$rebuild"
+            if [ "$rebuild" = "true" ]
+            then
+                export STACKS_LIST+=("$stack_repo/$stack_name")
+            fi
+        done
+    fi
+
+    # Finally, if we still don't have any modified stacks, pick a few
+    if [ -z "${STACKS_LIST}" ]
+    then
+        echo "Choosing a subset of stacks to test with CI/CD changes"
+        export STACKS_LIST="incubator/java-microprofile incubator/java-spring-boot2 incubator/nodejs experimental/java-spring-boot2-liberty"
+    fi
+fi

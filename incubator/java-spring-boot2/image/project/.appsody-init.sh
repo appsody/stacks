@@ -18,4 +18,7 @@ if [ ! -d ~/.m2/repository ]; then
   mkdir -p ~/.m2/repository
 fi
 
-./mvnw install -q -f ./appsody-boot2-pom.xml
+which java 2>&1 >/dev/null ; JAVA_KNOWN=$?
+if [ ! -z "$JAVA_HOME" ] || [ $JAVA_KNOWN = "0" ]; then
+  ./mvnw install -q -f ./appsody-boot2-pom.xml
+fi
