@@ -155,7 +155,9 @@ do
         if [ -f $index_file_temp ]; then
             # Resolve external URL for local / github release
             sed -e "s|${RELEASE_URL}/.*/|file://$assets_dir/|" $index_file_v2_temp > $index_file_local_v2
-            sed -e "s|${RELEASE_URL}/.*/|${RELEASE_URL}/${RELEASE_NAME}/|" $index_file_v2_temp > $index_file_v2
+            if [ "${BUILD_ALL}" == "true" ]; then
+                sed -e "s|${RELEASE_URL}/.*/|${RELEASE_URL}/${RELEASE_NAME}/|" $index_file_v2_temp > $index_file_v2
+            fi
             rm -f $base_dir/ci/build/index-src/*.yaml
             sed -e "s|${RELEASE_URL}/.*/|{{EXTERNAL_URL}}/|" $index_file_v2_temp > $nginx_file
             rm -f $index_file_v2_temp

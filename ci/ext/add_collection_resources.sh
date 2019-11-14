@@ -7,9 +7,11 @@ stack_version=$3
 repo_name=$4
 index_file=$5
 assets_dir=$base_dir/ci/assets
+#assets_dir="/Users/stevengroeger/.appsody/stacks/kabanero"
 stack_id=$(basename $stack_dir)
 collection=$stack_dir/collection.yaml
 collection_temp=$stack_dir/collection_temp.yaml
+collection_temp2=$stack_dir/collection_temp2.yaml
 
 . $base_dir/ci/env.sh
 
@@ -41,7 +43,8 @@ process_assets () {
                     
                     # Determine the asset tar.gz filename to be used 
                     # to contain all of the asset files
-                    asset_archive=$repo_name.$stack_id.v$stack_version.$asset_type.$asset_id.tar.gz
+#                    asset_archive=$repo_name.$stack_id.v$stack_version.$asset_type.$asset_id.tar.gz
+                    asset_archive=$stack_id.v$stack_version.$asset_type.$asset_id.tar.gz
 
                     # Only process the assets if we are building
                     if [ $build = true ]
@@ -52,6 +55,7 @@ process_assets () {
                     # Add details of the asset tar.gz into the index file
                     echo "- id: $asset_id" >> $index_file
                     echo "  url: $RELEASE_URL/$stack_id-v$stack_version/$asset_archive" >> $index_file
+#                    echo "  url: file://$assets_dir/$stack_id-v$stack_version/$asset_archive" >> $index_file
                     if [ -f $assets_dir/$asset_archive ]
                     then
                         sha256=$(cat $assets_dir/$asset_archive | $sha256cmd | awk '{print $1}')
@@ -77,11 +81,13 @@ process_assets () {
                 
                     # Determine the asset tar.gz filename to be used 
                     # to contain all of the asset files
-                    asset_archive=$repo_name.common.$asset_type.$asset_id.tar.gz
+#                    asset_archive=$repo_name.common.$asset_type.$asset_id.tar.gz
+                    asset_archive=common.$asset_type.$asset_id.tar.gz
 
                     # Add details of the asset tar.gz into the index file
                     echo "- id: $asset_id" >> $index_file
                     echo "  url: $RELEASE_URL/$stack_id-v$stack_version/$asset_archive" >> $index_file
+#                    echo "  url: file://$assets_dir/$asset_archive" >> $index_file
                     if [ -f $assets_dir/$asset_archive ]
                     then
                         sha256=$(cat $assets_dir/$asset_archive | $sha256cmd | awk '{print $1}')
@@ -105,7 +111,7 @@ then
 
     # Replace the IMAGE_REGISTRY_ORG placeholder with the actual value of the env var
     # and store into a temporary file for use in merging into kabanero-index.yaml 
-    sed -e "s|\$IMAGE_REGISTRY_ORG|${IMAGE_REGISTRY_ORG}|" $collection > $collection_temp
+    sed -e "s|\$IMAGE_REGISTRY_ORG|${IMAGE_REGISTRY_ORG}|" -e "s|\$IMAGE_REGISTRY|${IMAGE_REGISTRY}|" $collection > $collection_temp
     
     # Merge the collection yaml file into the index file
     yq m -x -i $index_file $collection_temp
@@ -129,32 +135,34 @@ then
 
     # for each of the appsody templates we need to update the .appsody_config.yaml
     # file to contain the correct docker image name that is specified for the image
-    for template_dir in $stack_dir/templates/*/
-    do
-        if [ -d $template_dir ]
-        then
-            template_id=$(basename $template_dir)
-            template_archive=$repo_name.$stack_id.v$stack_version.templates.$template_id.tar.gz
-            template_temp=$assets_dir/tar_temp
-            
-            mkdir -p $template_temp
+#    for template_dir in $stack_dir/templates/*/
+#    do
+#        if [ -d $template_dir ]
+#        then
+#            template_id=$(basename $template_dir)
+#            template_archive=$repo_name.$stack_id.v$stack_version.templates.$template_id.tar.gz
+##            template_archive=$stack_id.v$stack_version.templates.$template_id.tar.gz
+#            template_temp=$assets_dir/tar_temp
 
-            # Update template archives
-            if [ -f $assets_dir/$template_archive ]; then
-                tar -xzf $assets_dir/$template_archive -C $template_temp
-                if [ -f $template_temp/.appsody-config.yaml ]
-                then 
-                    yq w -i $template_temp/.appsody-config.yaml stack $default_image 
-                else
-                    echo "stack: $default_image" > $template_temp/.appsody-config.yaml
-                fi
-                tar -czf $assets_dir/$template_archive -C $template_temp .
-                echo -e "--- Updated template archive: $template_archive"
-        
-                rm -fr $template_temp
-            fi
-        fi
-    done
+#            mkdir -p $template_temp
+
+#            # Update template archives
+#            if [ -f $assets_dir/$template_archive ]; then
+#                tar -xzf $assets_dir/$template_archive -C $template_temp
+#                if [ -f $template_temp/.appsody-config.yaml ]
+#                then 
+#                    yq w -i $template_temp/.appsody-config.yaml stack $default_image 
+#                else
+#                    echo "stack: $default_image" > $template_temp/.appsody-config.yaml
+#                fi
+#                tar -czf $assets_dir/$template_archive -C $template_temp .
+#                echo -e "--- Updated template archive: $template_archive"
+#            fi
+
+#            rm -fr $template_temp
+
+#        fi
+#    done
 fi
 
 #process the assets

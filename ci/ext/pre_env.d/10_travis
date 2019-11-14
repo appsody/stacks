@@ -8,8 +8,7 @@ then
     export GIT_ORG_REPO=${TRAVIS_REPO_SLUG}
     export INDEX_VERSION=${TRAVIS_BUILD_NUMBER}
 
-    export CI_WAIT_FOR='travis_wait'
-    export VERBOSE=true
+    export CI_WAIT_FOR='travis_wait 30'
 
     if [ $TRAVIS_TAG ] && [ "$TRAVIS_TAG" == "$TRAVIS_BRANCH" ]
     then

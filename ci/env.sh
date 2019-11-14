@@ -64,6 +64,7 @@ mkdir -p $prefetch_dir
 
 # Specify a wrapper where required for long-running commands
 CI_WAIT_FOR=
+
 # Show output of commands
 if [ -z $VERBOSE ]; then
     VERBOSE=false
@@ -121,6 +122,12 @@ fi
 if [ -z "$IMAGE_REGISTRY_ORG" ]
 then
     export IMAGE_REGISTRY_ORG=appsody
+fi
+
+# image registry for publishing stack
+if [ -z "$IMAGE_REGISTRY" ]
+then
+    export IMAGE_REGISTRY=docker.io
 fi
 
 if [ -z $GIT_BRANCH ]
@@ -185,12 +192,7 @@ fi
 
 if [ -z "$IMAGE_REGISTRY_PUBLISH" ]
 then
-    if [ -z "$TRAVIS_TAG" ]
-    then
-        export IMAGE_REGISTRY_PUBLISH=false
-    else
-        export IMAGE_REGISTRY_PUBLISH=true
-    fi
+    export IMAGE_REGISTRY_PUBLISH=false
 fi
 
 if [ -z "$DISPLAY_NAME_PREFIX" ]
@@ -226,13 +228,6 @@ image_push() {
     if [ "$IMAGE_REGISTRY_PUBLISH" == "true" ]
     then
         local name=$@
-        if [ -n "$IMAGE_REGISTRY" ]
-        then
-            echo "Tagging ${IMAGE_REGISTRY}/$name"
-            image_tag $name ${IMAGE_REGISTRY}/$name
-
-            name=${IMAGE_REGISTRY}/$name
-        fi
 
         echo "Pushing $name"
         if [ "$USE_BUILDAH" == "true" ]; then

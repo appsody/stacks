@@ -26,11 +26,5 @@ then
     export IMAGE_REGISTRY_ORG="kabanero"
 fi
 if [ -z "${LATEST_RELEASE}" ]; then
-    export LATEST_RELEASE=false
+    export LATEST_RELEASE=true
 fi
-# Temporary change to force latest release to be true
-# This will normally be determined and set in another script
-# based on whether a later release exists or not. This is not
-# written yet so we need to hardcode this value.
-export LATEST_RELEASE=true
-

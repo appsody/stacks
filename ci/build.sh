@@ -22,6 +22,9 @@ then
   export STACKS_LIST="$@"
   echo "STACKS_LIST=$STACKS_LIST"
 
+  echo "Stacks listed on command line, overriding BUILD_ALL to be false"
+  export BUILD_ALL=false
+
   for stack_name in $STACKS_LIST
   do
     if [ "${stack_name: -1}" == "/" ]
@@ -40,10 +43,4 @@ then
   . $script_dir/list.sh
 fi
 
-. $script_dir/lint.sh
 . $script_dir/package.sh
-if [ -z $SKIP_TESTS ]; then
-    . $script_dir/test.sh
-else
-    echo "Not running tests"
-fi

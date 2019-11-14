@@ -16,7 +16,7 @@ do
     if [[ $asset != *-local.yaml ]]
     then
         echo "Releasing: $asset"
-        mv $asset $release_dir
+        cp $asset $release_dir
     fi
 done
 
