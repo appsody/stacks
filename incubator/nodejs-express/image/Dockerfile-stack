@@ -1,5 +1,6 @@
 FROM appsody/nodejs:0.2
 
+ENV APPSODY_PROJECT_DIR=/project
 ENV APPSODY_MOUNTS=/:/project/user-app
 ENV APPSODY_DEPS=/project/user-app/node_modules
 
