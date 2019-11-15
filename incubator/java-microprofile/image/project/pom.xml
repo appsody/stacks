@@ -30,7 +30,7 @@
         <!-- OpenLiberty runtime -->
         <liberty.groupId>io.openliberty</liberty.groupId>
         <liberty.artifactId>openliberty-runtime</liberty.artifactId>
-        <version.openliberty-runtime>19.0.0.8</version.openliberty-runtime>
+        <version.openliberty-runtime>19.0.0.9</version.openliberty-runtime>
         <http.port>9080</http.port>
         <https.port>9443</https.port>
         <packaging.type>usr</packaging.type>
@@ -66,8 +66,8 @@
                             </requireJavaVersion>
                             <requireProperty>
                                 <property>version.openliberty-runtime</property>
-                                <regex>19.0.0.8</regex>
-                                <regexMessage>OpenLiberty runtime version must be 19.0.0.8</regexMessage>
+                                <regex>19.0.0.9</regex>
+                                <regexMessage>OpenLiberty runtime version must be 19.0.0.9</regexMessage>
                             </requireProperty>
                         </rules>
                     </configuration>
