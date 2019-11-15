@@ -1,5 +1,5 @@
 name: Spring Boot®
-version: 0.3.15
+version: 0.3.16
 description: Spring Boot using OpenJ9 and Maven
 license: Apache-2.0
 language: java
