@@ -1,8 +1,10 @@
 const express = require('express');
 const health = require('@cloudnative/health-connect');
 const fs = require('fs');
+const http = require('http');
 
 const app = express();
+const server = http.createServer(app)
 
 // Requires statements and code for non-production mode usage
 if (process.env.NODE_ENV !== 'production') {
@@ -23,8 +25,11 @@ function getEntryPoint() {
 
 // Register the users app. As this is before the health/live/ready routes,
 // those can be overridden by the user
-const userApp = require(basePath + getEntryPoint()).app;
-app.use('/', userApp);
+const userApp = require(basePath + getEntryPoint());
+app.use('/', userApp({
+  server: server,
+  app: app,
+}));
 
 const healthcheck = new health.HealthChecker();
 app.use('/live', health.LivenessEndpoint(healthcheck));
@@ -37,7 +42,7 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`App started on PORT ${PORT}`);
 });
 
