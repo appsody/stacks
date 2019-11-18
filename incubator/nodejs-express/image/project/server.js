@@ -1,14 +1,13 @@
-// Requires statements and code for non-production mode usage
-if (!process.env.NODE_ENV || !process.env.NODE_ENV === 'production') {
-  require('appmetrics-dash').attach();
-}
 const express = require('express');
 const health = require('@cloudnative/health-connect');
 const fs = require('fs');
 
-require('appmetrics-prometheus').attach();
-
 const app = express();
+
+// Requires statements and code for non-production mode usage
+if (process.env.NODE_ENV !== 'production') {
+  require('appmetrics-dash').monitor({server, app});
+}
 
 const basePath = __dirname + '/user-app/';
 
@@ -31,6 +30,7 @@ const healthcheck = new health.HealthChecker();
 app.use('/live', health.LivenessEndpoint(healthcheck));
 app.use('/ready', health.ReadinessEndpoint(healthcheck));
 app.use('/health', health.HealthEndpoint(healthcheck));
+app.use('/metrics', require('appmetrics-prometheus').endpoint());
 
 app.get('*', (req, res) => {
   res.status(404).send("Not Found");

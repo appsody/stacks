@@ -15,13 +15,13 @@
   },
   "dependencies": {
     "@cloudnative/health-connect": "^2.0.0",
-    "appmetrics-prometheus": "^3.0.0",
+    "appmetrics-prometheus": "~3.1.0",
     "express": "~4.17.1"
   },
   "devDependencies": {
+    "appmetrics-dash": "^5.3.0",
     "chai": "^4.2.0",
     "mocha": "~6.1.0",
-    "request": "^2.88.0",
-    "appmetrics-dash": "^5.0.0"
+    "request": "^2.88.0"
   }
 }
