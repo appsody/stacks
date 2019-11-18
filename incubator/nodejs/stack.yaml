@@ -1,5 +1,5 @@
 name: Node.js
-version: 0.2.5
+version: 0.2.6
 description: Runtime for Node.js applications
 license: Apache-2.0
 language: nodejs
@@ -11,3 +11,6 @@ maintainers:
     email: neeraj.laad@gmail.com
     github-id: neeraj-laad
 default-template: simple
+requirements:
+  docker-version: ">= 17.09.0"
+  appsody-version: ">= 0.2.7"
