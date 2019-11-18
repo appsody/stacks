@@ -25,7 +25,7 @@ spec:
     - name: mount-image          
       securityContext:
         privileged: true
-      image: appsody/appsody-buildah
+      image: appsody/appsody-buildah:0.2.1
 # Temporarily make copy of mounted image since the mounted image will be unmounted when the container for this task ends.
 # TODO: Determine another way to persist the mounted container image accross containers
       command: ['/bin/bash']
