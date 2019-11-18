@@ -1,5 +1,5 @@
 name: Node.js Functions
-version: 0.1.5
+version: 0.1.6
 description: Serverless runtime for Node.js functions
 license: Apache-2.0
 language: nodejs
@@ -8,3 +8,5 @@ maintainers:
     email: cnbailey@gmail.com
     github-id: seabaylea
 default-template: simple
+requirements:
+  appsody-version: ">= 0.2.7"
