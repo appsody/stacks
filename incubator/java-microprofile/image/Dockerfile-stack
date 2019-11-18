@@ -28,7 +28,7 @@ ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/target
 ENV APPSODY_WATCH_REGEX="^.*(.xml|.java|.properties)$"
 
-ENV APPSODY_INSTALL="../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository install -DskipTests && /project/install-dev-deps.sh"
+ENV APPSODY_PREP="../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository install -DskipTests && /project/install-dev-deps.sh"
 
 ENV APPSODY_RUN="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn -B -Dmaven.repo.local=/mvn/repository liberty:run"
 ENV APPSODY_RUN_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn -Dmaven.repo.local=/mvn/repository package -DskipTests"
