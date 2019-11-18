@@ -5,7 +5,7 @@
 
   <groupId>dev.appsody</groupId>
   <artifactId>spring-boot2-stack</artifactId>
-  <version>{{.StackMajorVersion}}.{{.StackMinorVersion}}.{{.StackPatchVersion}}</version>
+  <version>{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}</version>
   <packaging>pom</packaging>
 
   <name>Appsody Spring Boot2 stack</name>

@@ -1,4 +1,4 @@
-FROM {{.StackImageNamespace}}/{{.StackID}}:{{.StackMajorVersion}}.{{.StackMinorVersion}} as compile
+FROM {{.stack.image.namespace}}/{{.stack.id}}:{{.stack.semver.major}}.{{.stack.semver.minor}} as compile
 
 #setup project folder for java build step
 COPY . /project
@@ -24,7 +24,7 @@ ENV JVM_ARGS=""
 
 LABEL org.opencontainers.image.version="${version}"
 LABEL org.opencontainers.image.title="${artifactId}"
-LABEL appsody.stack={{.StackImageNamespace}}/{{.StackID}}:{{.StackMajorVersion}}.{{.StackMinorVersion}}.{{.StackPatchVersion}}
+LABEL appsody.stack={{.stack.image.namespace}}/{{.stack.id}}:{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}
 
 COPY --from=compile /project/user-app/target/app.jar /app.jar
 
