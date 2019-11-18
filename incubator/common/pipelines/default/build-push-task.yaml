@@ -23,7 +23,7 @@ spec:
   - name: assemble-extract
     securityContext:
       privileged: true
-    image: appsody/appsody-buildah
+    image: appsody/appsody-buildah:0.2.1
     command: ["/bin/bash"]
     args:
       - -c
@@ -104,7 +104,7 @@ spec:
   - name: build
     securityContext:
       privileged: true
-    image: appsody/appsody-buildah
+    image: appsody/appsody-buildah:0.2.1
     command: ['buildah', 'bud', '--tls-verify=false', '--format=docker', '-f', '$(inputs.params.pathToDockerFile)', '-t', '$(outputs.resources.docker-image.url)', '$(inputs.params.pathToContext)']
     env:
     - name: gitsource
@@ -115,7 +115,7 @@ spec:
   - name: push
     securityContext:
       privileged: true
-    image: appsody/appsody-buildah
+    image: appsody/appsody-buildah:0.2.1
     command: ['buildah', 'push', '--tls-verify=false', '$(outputs.resources.docker-image.url)', 'docker://$(outputs.resources.docker-image.url)']
     env:
     - name: gitsource
