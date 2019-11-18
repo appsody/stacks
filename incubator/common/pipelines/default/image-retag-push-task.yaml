@@ -23,7 +23,7 @@ spec:
     - name: buildah-pull
       securityContext:
         privileged: true
-      image: appsody/appsody-buildah
+      image: appsody/appsody-buildah:0.2.1
       command: ['buildah', 'pull', '--tls-verify=false', '$(inputs.resources.docker-src-image.url)']
       volumeMounts:
         - mountPath: /var/lib/containers
@@ -31,7 +31,7 @@ spec:
     - name: buildah-tag
       securityContext:
         privileged: true
-      image: appsody/appsody-buildah
+      image: appsody/appsody-buildah:0.2.1
       command: ['buildah', 'tag', '$(inputs.resources.docker-src-image.url)', '$(inputs.resources.docker-dest-image.url)']
       volumeMounts:
         - mountPath: /var/lib/containers
@@ -39,7 +39,7 @@ spec:
     - name: buildah-push
       securityContext:
         privileged: true
-      image: appsody/appsody-buildah
+      image: appsody/appsody-buildah:0.2.1
       command: ['buildah', 'push', '--tls-verify=false', '$(outputs.resources.docker-dest-image.url)', 'docker://$(outputs.resources.docker-dest-image.url)']
       volumeMounts:
         - mountPath: /var/lib/containers
