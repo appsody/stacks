@@ -8,8 +8,8 @@
     <packaging>pom</packaging>
 
   <properties>
-    <vertx.version>3.8.0</vertx.version>
-    <vertx-maven-plugin.version>1.0.20</vertx-maven-plugin.version>
+    <vertx.version>3.8.3</vertx.version>
+    <vertx-maven-plugin.version>1.0.22</vertx-maven-plugin.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
