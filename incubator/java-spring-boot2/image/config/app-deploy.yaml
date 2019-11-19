@@ -19,7 +19,6 @@ spec:
     endpoints:
     - path: '/actuator/prometheus'
   readinessProbe:
-    timeoutSeconds: 1
     failureThreshold: 12
     httpGet:
       path: /actuator/health
