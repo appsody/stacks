@@ -27,12 +27,10 @@ ENV APPSODY_WATCH_REGEX="^.*(.xml|.java|.properties)$"
 
 ENV APPSODY_INSTALL="../validate.sh && mvn -Dmaven.repo.local=/mvn/repository install -DskipTests"
 
-ENV APPSODY_RUN="mvn -Dmaven.repo.local=/mvn/repository liberty:run"
-ENV APPSODY_RUN_ON_CHANGE="mvn -Dmaven.repo.local=/mvn/repository package -DskipTests"
+ENV APPSODY_RUN="mvn -Dmaven.repo.local=/mvn/repository liberty:dev -DskipTests"
 ENV APPSODY_RUN_KILL=false
 
-ENV APPSODY_DEBUG="mvn -Dmaven.repo.local=/mvn/repository liberty:debug"
-ENV APPSODY_DEBUG_ON_CHANGE="mvn -Dmaven.repo.local=/mvn/repository package -DskipTests"
+ENV APPSODY_DEBUG="mvn -Dmaven.repo.local=/mvn/repository liberty:dev -DskipTests"
 ENV APPSODY_DEBUG_KILL=false
 
 ENV APPSODY_TEST="mvn -Dmaven.repo.local=/mvn/repository verify"

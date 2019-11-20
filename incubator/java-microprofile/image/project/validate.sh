@@ -51,13 +51,3 @@ Alternatively you could also use these properties:
   <assemblyArtifact>"
   exit 1
 fi
-
-# Enforcing loose application
-if ! grep -Gzq "<configuration.*<looseApplication>true</looseApplication>.*</configuration" pom.xml
-then
-  echo "Should be a loose application:
-  <configuration>
-    <looseApplication>true</looseApplication>
-  </configuration>"
-  exit 1
-fi
