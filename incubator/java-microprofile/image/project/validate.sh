@@ -86,13 +86,3 @@ Alternatively you could also use these properties:
   <assemblyArtifact>"
   exit 1
 fi
-
-# Enforcing loose application
-l_looseConfig=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:looseApplication" pom.xml)
-if ! [ "${l_looseConfig}" == "true" ]; then
-  echo "Should be a loose application:
-  <configuration>
-    <looseApplication>true</looseApplication>
-  </configuration>"
-  exit 1
-fi
