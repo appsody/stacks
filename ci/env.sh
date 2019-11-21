@@ -1,8 +1,8 @@
 #!/bin/bash
-set -e
 
 if [ ! -z "$assets_dir" ]
 then
+    # we've been here before
     return 0
 fi
 
@@ -10,10 +10,10 @@ export script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 export base_dir=$(cd "${script_dir}/.." && pwd)
 export assets_dir="${script_dir}/assets"
 export build_dir="${script_dir}/build"
+export prefetch_dir="${script_dir}/build/prefetch"
 
 mkdir -p $assets_dir
-mkdir -p $build_dir
-
+mkdir -p $prefetch_dir
 
 # ENVIRONMENT VARIABLES for controlling behavior of build, package, and release
 
@@ -59,11 +59,19 @@ mkdir -p $build_dir
 # Build the Codewind index when the value is 'true' (requires PyYaml)
 # export CODEWIND_INDEX
 
+# Prefix to be used on the display name of the stack in the Codewind index file
+# export DISPLAY_NAME_PREFIX="Appsody"
+
+# Specify a wrapper where required for long-running commands
+CI_WAIT_FOR=
+# Show output of commands
+VERBOSE=true
+
 exec_hooks() {
     local dir=$1
     if [ -d $dir ]
     then
-        echo "Running $(basename $dir) scripts"
+        echo " == Running $(basename $dir) scripts"
         for x in $dir/*
         do
             if [ -x $x ]
@@ -73,9 +81,31 @@ exec_hooks() {
                 echo skipping $(basename $x)
             fi
         done
+        echo " == Done $(basename $dir) scripts"
     fi
 }
 
+stderr() {
+    for x in "$@"
+    do
+        >&2 echo "$x"
+    done
+}
+
+trace() {
+    if [ "${VERBOSE}" == "true" ]
+    then
+        for x in "$@"
+        do
+            if [ -f "$x" ]
+            then
+                >&2 cat "$x"
+            else
+                >&2 echo "$x"
+            fi
+        done
+    fi
+}
 
 #expose an extension point for running before main 'env' processing
 exec_hooks $script_dir/ext/pre_env.d
@@ -93,37 +123,27 @@ fi
 
 if [ -z $GIT_BRANCH ]
 then
-    if [ -z $TRAVIS_BRANCH ]
-    then
-        export GIT_BRANCH=$(git for-each-ref --format='%(refname:lstrip=2)' "$(git symbolic-ref -q HEAD)")
-    else
-        export GIT_BRANCH=${TRAVIS_BRANCH}
-    fi
+    export GIT_BRANCH=$(git for-each-ref --format='%(refname:lstrip=2)' "$(git symbolic-ref -q HEAD)")
 fi
 
 # find github repository slug
 if [ -z $GIT_ORG_REPO ]
 then
-    if [ -z "$TRAVIS_REPO_SLUG" ]
-    then
-        # Find git organization for the current branch
-        git_remote=$(git for-each-ref --format='%(upstream:remotename)' "$(git symbolic-ref -q HEAD)")
-        git_remote=${git_remote:-origin}
+    # Find git organization for the current branch
+    git_remote=$(git for-each-ref --format='%(upstream:remotename)' "$(git symbolic-ref -q HEAD)")
+    git_remote=${git_remote:-origin}
 
-        git_remote_url=$(git remote get-url $git_remote)
-        git_remote_url=${git_remote_url:-https://github.com/appsody/stacks.git}
-        git_remote_url=${git_remote_url#*:}
+    git_remote_url=$(git remote get-url $git_remote)
+    git_remote_url=${git_remote_url:-https://github.com/appsody/stacks.git}
+    git_remote_url=${git_remote_url#*:}
 
-        git_repo=$(basename $git_remote_url .git)
-        git_repo=${git_repo:-stacks}
+    git_repo=$(basename $git_remote_url .git)
+    git_repo=${git_repo:-stacks}
 
-        git_org=$(basename $(dirname $git_remote_url))
-        git_org=${git_org:-appsody}
+    git_org=$(basename $(dirname $git_remote_url))
+    git_org=${git_org:-appsody}
 
-        export GIT_ORG_REPO=$git_org/$git_repo
-    else
-        export GIT_ORG_REPO=$TRAVIS_REPO_SLUG
-    fi
+    export GIT_ORG_REPO=$git_org/$git_repo
 fi
 
 if [ -z "$RELEASE_URL" ]
@@ -144,12 +164,7 @@ fi
 
 if [ -z "$INDEX_VERSION" ]
 then
-    if [ -z $TRAVIS_BUILD_NUMBER ]
-    then
-        export INDEX_VERSION=SNAPSHOT
-    else
-        export INDEX_VERSION=${TRAVIS_BUILD_NUMBER}
-    fi
+    export INDEX_VERSION=SNAPSHOT
 fi
 
 if [ -z "$INDEX_LIST" ]
@@ -176,18 +191,31 @@ then
     fi
 fi
 
+if [ -z "$DISPLAY_NAME_PREFIX" ]
+then
+    export DISPLAY_NAME_PREFIX="Appsody"
+fi
+
 image_build() {
+    local cmd="docker build"
     if [ "$USE_BUILDAH" == "true" ]; then
-        buildah bud $@
-    else
-        docker build $@
+        cmd="buildah bud"
+    fi
+
+    echo "> ${CI_WAIT_FOR} ${cmd} $@"
+    if ! ${CI_WAIT_FOR} ${cmd} $@
+    then
+      echo "Failed building image"
+      exit 1
     fi
 }
 
 image_tag() {
     if [ "$USE_BUILDAH" == "true" ]; then
+        echo "> buildah tag $@"
         buildah tag $1 $2
     else
+        echo "> docker tag $@"
         docker tag $1 $2
     fi
 }
@@ -210,6 +238,12 @@ image_push() {
         else
             docker push $name
         fi
+
+        if [ $? -ne 0 ]
+        then
+            stderr "ERROR: Push failed."
+            exit 1
+        fi
     else
         echo "IMAGE_REGISTRY_PUBLISH=${IMAGE_REGISTRY_PUBLISH}; Skipping push of $@"
     fi
@@ -227,7 +261,7 @@ image_registry_login() {
 
         if [ $? -ne 0 ]
         then
-            echo "ERROR: Registry login failed. Will not push images to registry."
+            stderr "ERROR: Registry login failed. Will not push images to registry."
             export IMAGE_REGISTRY_PUBLISH=false
         fi
     fi

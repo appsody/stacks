@@ -10,4 +10,7 @@ maintainers:
   - name: Neeraj Laad
     email: neeraj.laad@gmail.com
     github-id: neeraj-laad
+  - name: Ozzy
+    email: ozzy@ca.ibm.com
+    github-id: BarDweller
 default-template: default

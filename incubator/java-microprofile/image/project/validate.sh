@@ -21,20 +21,55 @@ eval $(mvn -q -Dexec.executable=echo -Dexec.args="${args}" --non-recursive -f ..
 echo "Installing parent ${PARENT_GROUP_ID}:${PARENT_ARTIFACT_ID}:${PARENT_VERSION}"
 mvn install -Dmaven.repo.local=/mvn/repository -Denforcer.skip=true -f ../pom.xml
 
+# Get parent pom information
+a_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:groupId" /project/pom.xml)
+a_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:artifactId" /project/pom.xml)
+a_version=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:version" /project/pom.xml)
+p_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:groupId" pom.xml)
+p_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:artifactId" pom.xml)
+p_version_range=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:version" pom.xml)
+
 # Check child pom for required parent project
-if ! grep -Gz "<parent>.*<groupId>${PARENT_GROUP_ID}</groupId>.*</parent>" pom.xml | grep -Gz "<parent>.*<artifactId>${PARENT_ARTIFACT_ID}</artifactId>.*</parent>" | grep -Gzq "<parent>.*<version>${PARENT_VERSION}</version>.*</parent>"
-then
-  echo "Project is missing required parent:
+if [ "${p_groupId}" != "${a_groupId}" ] || [ "${p_artifactId}" != "${a_artifactId}" ]; then
+  echo "Project pom.xml is missing the required parent:
+
   <parent>
-    <groupId>${PARENT_GROUP_ID}</groupId>
-    <artifactId>${PARENT_ARTIFACT_ID}</artifactId>
-    <version>${PARENT_VERSION}</version>
-  </parent>"
+    <groupId>${a_groupId}</groupId>
+    <artifactId>${a_artifactId}</artifactId>
+    <version>${a_range}</version>
+    <relativePath/>
+  </parent>
+  "
+  exit 1
+fi
+
+# Check parent version
+if ! /project/util/check_version contains "$p_version_range" "$a_version";  then
+  echo "Version mismatch
+
+The version of the appsody stack '${a_version}' does not match the
+parent version specified in pom.xml '${p_version_range}'. Please update
+the parent version in pom.xml, and test your changes.
+
+  <parent>
+    <groupId>${a_groupId}</groupId>
+    <artifactId>${a_artifactId}</artifactId>
+    <version>${a_range}</version>
+    <relativePath/>
+  </parent>
+  "
   exit 1
 fi
 
 # Check child pom for required liberty version, groupID and artifactId
-if ! grep -Gz "<plugin>.*<artifactId>liberty-maven-plugin</artifactId>.*<groupId>${LIBERTY_GROUP_ID}</groupId>\|<groupId>\${liberty.groupId}</groupId>.*</plugin>" pom.xml | grep -Gz "<plugin>.*<artifactId>liberty-maven-plugin</artifactId>.*<artifactId>${LIBERTY_ARTIFACT_ID}</artifactId>\|<artifactId>\${liberty.artifactId}</artifactId>.*</plugin>" | grep -Gzq "<plugin>.*<artifactId>liberty-maven-plugin</artifactId>.*<version>${LIBERTY_VERSION}</version>\|<version>\${version.openliberty-runtime}</version>.*</plugin>"
+l_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:assemblyArtifact/x:groupId" pom.xml)
+l_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:assemblyArtifact/x:artifactId" pom.xml)
+l_version=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:assemblyArtifact/x:version" pom.xml)
+if ! [[
+        ( "${l_groupId}" == "${LIBERTY_GROUP_ID}" && "${l_artifactId}" == "${LIBERTY_ARTIFACT_ID}" && "${l_version}" == "${LIBERTY_VERSION}"  )
+        ||
+        ( "${l_groupId}" == "\${liberty.groupId}" && "${l_artifactId}" == "\${liberty.artifactId}" && "${l_version}" == "\${version.openliberty-runtime}" )
+     ]]
 then
   echo "Project is not using the right OpenLiberty assembly artifact:
   <assemblyArtifact>

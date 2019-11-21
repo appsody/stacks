@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 # setup environment
 . $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
@@ -19,7 +18,7 @@ do
 
     if [ ! -d $stack_dir ]
     then
-        echo "ERROR: Missing stack directory: $1/$stack_name"
+        stderr "ERROR: Missing stack directory: $1/$stack_name"
         let "error=error+1"
     else
         image_dir="$stack_dir/image"
@@ -28,49 +27,49 @@ do
 
         if [ ! -f $stack_dir/stack.yaml ]
         then
-            echo "ERROR: Missing stack.yaml file in $stack_dir"
+            stderr "ERROR: Missing stack.yaml file in $stack_dir"
             let "error=error+1"
         fi
 
         if [ ! -f $stack_dir/README.md ]
         then
-            echo "ERROR: Missing README.md file in $stack_dir"
+            stderr "ERROR: Missing README.md file in $stack_dir"
             let "error=error+1"
         fi
 
         if [ ! -d $image_dir ]
         then
-            echo "ERROR: Missing image directory in $stack_dir"
+            stderr "ERROR: Missing image directory in $stack_dir"
             let "error=error+1"
         fi
 
         if [ ! -f $image_dir/Dockerfile-stack ]
         then
-            echo "ERROR: Missing Dockerfile-stack in $image_dir"
+            stderr "ERROR: Missing Dockerfile-stack in $image_dir"
             let "error=error+1"
         fi
 
         if [ ! -f $image_dir/LICENSE ]
         then
-            echo "ERROR: Missing LICENSE in $image_dir"
+            stderr "ERROR: Missing LICENSE in $image_dir"
             let "error=error+1"
         fi
 
         if [ ! -d $project_dir ]
         then
-            echo "ERROR: Missing project directory in $image_dir"
+            stderr "ERROR: Missing project directory in $image_dir"
             let "error=error+1"
         fi
 
         if [ ! -f $project_dir/Dockerfile ]
         then
-            echo "WARNING: Missing Dockerfile in $project_dir"
+            stderr "WARNING: Missing Dockerfile in $project_dir"
             let "warning=warning+1"
         fi
 
         if [ ! -d "$stack_dir/templates" ]
         then
-            echo "ERROR: Missing templates directory in $stack_dir"
+            stderr "ERROR: Missing templates directory in $stack_dir"
             let "error=error+1"
         fi
 
@@ -80,7 +79,7 @@ do
             then
                 templateName=$(basename -- "$template_list")
                 templateName="${templateName%.*}"
-                echo "ERROR: Unexpected appsody config file in template: $project_dir/templates/$templateName"
+                stderr "ERROR: Unexpected appsody config file in template: $project_dir/templates/$templateName"
                 let "error=error+1"
             fi
         done

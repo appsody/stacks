@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ "$TRAVIS" == "true" ]
+then
+    echo "Setting Travis environment"
+
+    export GIT_BRANCH=${TRAVIS_BRANCH}
+    export GIT_ORG_REPO=${TRAVIS_REPO_SLUG}
+    export INDEX_VERSION=${TRAVIS_BUILD_NUMBER}
+
+    export CI_WAIT_FOR='travis_wait'
+    export VERBOSE=
+
+    if [ $TRAVIS_TAG ] && [ "$TRAVIS_TAG" == "$TRAVIS_BRANCH" ]
+    then
+        echo "This is a release build for $TRAVIS_TAG"
+        IMAGE_REGISTRY_PUBLISH=true
+    else
+        IMAGE_REGISTRY_PUBLISH=false
+    fi
+fi
