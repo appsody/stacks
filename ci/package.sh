@@ -1,9 +1,4 @@
 #!/bin/bash
-<<<<<<< HEAD
-set -e
-#set -x
-=======
->>>>>>> appsody/master
 
 # setup environment
 . $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
@@ -66,9 +61,6 @@ do
                 then
                     echo -e "\n- BUILDING stack: $repo_name/$stack_id"
 
-                    # cygwin cannot handle the absolute context paths in the docker build
-                    cd $stack_dir/image
-
                     if [ -d $stack_dir/image ]
                     then
                         if ${CI_WAIT_FOR} image_build \
@@ -86,15 +78,10 @@ do
                             -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version \
                             -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major \
                             -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor \
-<<<<<<< HEAD
-                            -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor.$stack_version_patch \
-                            -f ./Dockerfile-stack .
-=======
                             -f $stack_dir/image/Dockerfile-stack $stack_dir/image \
                             > ${build_dir}/image.$stack_id.$stack_version.log 2>&1
                         then
                             trace  "Output from image build" "${build_dir}/image.$stack_id.$stack_version.log"
->>>>>>> appsody/master
 
                             echo "created $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
                             echo "$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
@@ -233,14 +220,6 @@ do
                 done
             fi
         done
-
-        ## Matches
-        # file:///cygdrive/c/Users/Blah
-        #  and
-        # file:///c/Users/Blah
-
-        # For Cygwin support, harmless on other distros
-        [[ `uname` == CYGWIN* ]] && sed -i "s|file:\/\/\/\(cygdrive\/\)\{0,1\}\([a-z]\)|file:\/\/\/\2:|1" $index_file_local
     else
         echo "SKIPPING: $repo_dir"
     fi
@@ -273,20 +252,6 @@ then
     nginx_arg="--build-arg NGINX_IMAGE=$NGINX_IMAGE"
 fi
 
-<<<<<<< HEAD
-# cygwin cannot handle the absolute context paths in the docker build
-cd $script_dir
-
-image_build $nginx_arg \
- -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE \
- -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION} \
- -f ./nginx/Dockerfile .
-
-echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE" >> $build_dir/image_list
-echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}" >> $build_dir/image_list
-
- 
-=======
 if ${CI_WAIT_FOR} image_build $nginx_arg \
     -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE \
     -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION} \
@@ -303,4 +268,3 @@ else
     cat "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
     exit 1
 fi
->>>>>>> appsody/master

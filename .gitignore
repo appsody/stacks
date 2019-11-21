@@ -10,8 +10,6 @@
 **/target
 **/.settings
 **/.project
-**/.vscode
-**/.classpath
 .*.swp
 __pycache__/
 *.py[cod]

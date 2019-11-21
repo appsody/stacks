@@ -1,1 +1,0 @@
-mvn install -Denforcer.skip=true
