@@ -2,7 +2,7 @@
 
 The Eclipse Vert.x stack is designed to provide a foundation for building and running Java applications on Eclipse Vert.x with Appsody.
 
-This stack is based on the `Eclipse Vert.x 3.8.0` runtime. It allows you to develop new or existing Java applications that run on Eclipse Vert.x.
+This stack is based on the `Eclipse Vert.x 3.8.3` runtime. It allows you to develop new or existing Java applications that run on Eclipse Vert.x.
 
 ## What is Eclipse Vert.x?
 
