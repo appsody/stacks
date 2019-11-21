@@ -31,7 +31,7 @@ spec:
               echo "Appsody yaml file $(inputs.params.appsody-yaml-file-path) exists."
           else
               echo "Appsody yaml file $(inputs.params.appsody-yaml-file-path) does not exists, we are creating it by running appsody list command."
-              appsody list
+              appsody version
           fi
           if [ -z "$DEFAULT_COLLECTION_IMAGE_REGISTRY_URL" ]
           then
