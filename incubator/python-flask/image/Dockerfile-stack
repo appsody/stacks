@@ -40,9 +40,9 @@ RUN python -m pip install ptvsd -t /project/deps
 # This constraints workaround will still cause an error on docker build, but this can be ignored.
 RUN python -m pip install -c constraints.txt flasgger==0.9.3
 
-# ENV PORT=8080
 ENV PYTHONPATH=/project/deps
 ENV FLASK_APP=/project/server/__init__.py
 
+ENV PORT=8080
 EXPOSE 8080
 EXPOSE 5678
