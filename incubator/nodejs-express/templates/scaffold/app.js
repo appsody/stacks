@@ -6,4 +6,3 @@ app.set('view engine', 'pug');
 app.use('/', require('./routes'));
  
 module.exports.app = app;
-  
