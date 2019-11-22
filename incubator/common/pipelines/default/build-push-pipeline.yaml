@@ -22,7 +22,7 @@ spec:
           resource: docker-image
     - name: image-scan-task
       taskRef:
-        name: image-scan-task
+        name: CollectionId-image-scan-task
       runAfter: [build-push-task]
       resources:
         inputs:
