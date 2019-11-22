@@ -7,6 +7,7 @@ COPY ./config /config
 
 WORKDIR /project
 
+RUN mvn -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 RUN mvn -B install dependency:go-offline -DskipTests
 
 ENV APPSODY_USER_RUN_AS_LOCAL=true
