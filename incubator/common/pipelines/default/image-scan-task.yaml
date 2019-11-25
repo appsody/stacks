@@ -1,9 +1,10 @@
+#Kabanero! on activate substitute CollectionId for text 'CollectionId'
 # This task scans the docker image using the specified command and arguments.
 # It requires an image that contains the scanner to be used to scan the docker-image image input.
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: image-scan-task
+  name: CollectionId-image-scan-task
 spec:
   inputs:
     resources:
