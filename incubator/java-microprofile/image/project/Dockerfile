@@ -14,7 +14,8 @@ RUN  /project/util/check_version build
 
 # Copy the user's application pom and resolve all dependencies
 COPY ./user-app/pom.xml /project/user-app/pom.xml
-RUN cd /project/user-app && mvn package -Dskip=true -DskipTests
+COPY ./validate.sh /project/user-app/validate.sh
+RUN cd /project/user-app && ./validate.sh  && mvn package -Dskip=true -DskipTests 
 
 # Download Open Liberty here to prevent redownloading each time the app is changed
 RUN cd /project/user-app && mvn liberty:install-server
