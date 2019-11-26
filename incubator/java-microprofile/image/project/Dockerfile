@@ -17,7 +17,7 @@ COPY ./user-app/pom.xml /project/user-app/pom.xml
 RUN cd /project/user-app && mvn package -Dskip=true -DskipTests
 
 # Download Open Liberty here to prevent redownloading each time the app is changed
-RUN cd /project/user-app && mvn liberty:install-server
+RUN cd /project/user-app && mvn -B liberty:install-server
 
 # Copy and build the application source
 COPY ./user-app/src /project/user-app/src
