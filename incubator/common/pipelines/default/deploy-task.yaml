@@ -17,7 +17,7 @@ spec:
       default: app-deploy.yaml
   steps:
   - name: modify-app-deploy-yaml
-    image: registry.access.redhat.com/ubi8/ubi:latest
+    image: registry.access.redhat.com/ubi8/ubi:8.1-277
     command: ['/bin/bash']
     args:
     - -cex
@@ -39,7 +39,7 @@ spec:
     - name: YAMLFILE
       value: $(inputs.params.app-deploy-file-name)
   - name: deploy-image
-    image: kabanero/kabanero-utils
+    image: kabanero/kabanero-utils:0.3.0
     command: ['/bin/sh']
     args: ['-c', 'find /workspace/git-source -name ${YAMLFILE} -type f|xargs kubectl apply -f']
     env:

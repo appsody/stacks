@@ -89,7 +89,7 @@ spec:
     - name: validate-collection-is-active
       securityContext:
         privileged: true
-      image: kabanero/validate-collection
+      image: kabanero/validate-collection:0.1
       command: ["/bin/bash"]
       args:
         - -c
