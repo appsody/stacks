@@ -8,3 +8,9 @@ maintainers:
    email: ozzy@ca.ibm.com
    github-id: bardweller
 default-template: default
+requirements:
+   appsody-version: ">= 0.5.0"
+templating-data:
+  parentpomgroup: dev.appsody
+  parentpomid: java-spring-boot2-liberty
+  parentpomrange: '[0.1, 0.2)'
