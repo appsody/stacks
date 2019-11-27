@@ -2,10 +2,13 @@ FROM rust:1.39
 
 RUN apt-get update && apt-get install -y lldb musl-tools
 RUN rustup target add x86_64-unknown-linux-musl
+RUN cargo install sccache
 
 ENV CARGO_HOME=/usr/local/cargo/deps
+ENV SCCACHE_DIR=/project/sccache
+ENV RUSTC_WRAPPER=sccache
 
-ENV APPSODY_MOUNTS=.:/project/user-app
+ENV APPSODY_MOUNTS=.:/project/user-app;~/.cache/sccache:/project/sccache
 ENV APPSODY_DEPS=$CARGO_HOME
 
 ENV APPSODY_WATCH_DIR="/project/user-app"
