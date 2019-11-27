@@ -37,6 +37,11 @@ run_mvn () {
   mvn --no-transfer-progress ${MVN_COLOR} "$@"
 }
 
+exec_run_mvn () {
+  echo -e "${GREEN}> mvn $@${NO_COLOR}"
+  exec mvn --no-transfer-progress ${MVN_COLOR} "$@"
+}
+
 common() {
   # Test pom.xml is present and a file.
   if [ ! -f ./pom.xml ]; then
@@ -114,30 +119,30 @@ the parent version in pom.xml, and test your changes.
 
 recompile() {
   note "Compile project in the foreground"
-  run_mvn compile
+  exec_run_mvn compile
 }
 
 package() {
   note "Package project in the foreground"
-  run_mvn clean package verify
+  exec_run_mvn clean package verify
 }
 
 debug() {
   note "Build and debug project in the foreground"
-  run_mvn -Dmaven.test.skip=true \
+  exec_run_mvn -Dmaven.test.skip=true \
     -Dspring-boot.run.jvmArguments='-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005' \
     spring-boot:run
 }
 
 run() {
   note "Build and run project in the foreground"
-  run_mvn -Dmaven.test.skip=true \
+  exec_run_mvn -Dmaven.test.skip=true \
     clean spring-boot:run
 }
 
 test() {
   note "Test project in the foreground"
-  run_mvn package test
+  exec_run_mvn package test
 }
 
 #set the action, default to fail text if none passed.
