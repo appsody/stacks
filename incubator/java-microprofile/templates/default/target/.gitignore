@@ -1,0 +1,11 @@
+# Ignore everything in this directory
+#
+# This file is here to make sure the target
+# directory is added to git.
+# This ensures that a target directory is
+# available to mount in the docker container
+# which will have the correct owner and group
+# when defined in the container.  
+*
+# Except this file
+!.gitignore
