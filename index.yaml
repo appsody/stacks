@@ -61,14 +61,14 @@ projects:
   nodejs-loopback:
   - updated: 2019-07-26T21:00:00+00:00
     name: nodejs-loopback
-    version: 0.1.7
+    version: 0.1.8
     description: LoopBack API framework for Node.js
     license: Apache-2.0
     maintainers:
     - enjoyjava@gmail.com
     default-template: scaffold
     urls:
-    - https://github.com/appsody/stacks/releases/download/nodejs-loopback-v0.1.4/incubator.nodejs-loopback.templates.scaffold.tar.gz
+    - https://github.com/appsody/stacks/releases/download/nodejs-loopback-v0.1.8/incubator.nodejs-loopback.templates.scaffold.tar.gz
   python-flask:
   - updated: 2019-07-26T21:00:00+00:00
     name: Python Flask
