@@ -15,7 +15,7 @@ ENV APPSODY_WATCH_DIR="/project/user-app"
 ENV APPSODY_WATCH_REGEX="^(Cargo.toml|.*.rs)$"
 
 ENV APPSODY_RUN="cargo run --target x86_64-unknown-linux-musl"
-ENV APPSODY_RUN_ON_CHANGE="cargo run"
+ENV APPSODY_RUN_ON_CHANGE="$APPSODY_RUN"
 ENV APPSODY_RUN_KILL=true
 
 ENV APPSODY_TEST="cargo test"
