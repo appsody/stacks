@@ -3,6 +3,10 @@ FROM {{.stack.image.namespace}}/{{.stack.id}}:{{.stack.semver.major}}.{{.stack.s
 #setup project folder for java build step
 COPY . /project
 
+USER root
+RUN chown -R java_user:java_group /project
+USER java_user
+
 WORKDIR /project/user-app
 
 RUN /project/util/check_version build \
@@ -13,7 +17,6 @@ FROM adoptopenjdk:8-jdk-openj9
 
 # Ensure up to date / patched OS
 RUN  apt-get -qq update \
-  && apt-get -qq install -y curl wget xmlstarlet unzip \
   && DEBIAN_FRONTEND=noninteractive apt-get -qq upgrade -y \
   && apt-get -qq clean \
   && rm -rf /tmp/* /var/lib/apt/lists/*
@@ -26,9 +29,16 @@ LABEL org.opencontainers.image.version="${version}"
 LABEL org.opencontainers.image.title="${artifactId}"
 LABEL appsody.stack={{.stack.image.namespace}}/{{.stack.id}}:{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}
 
-COPY --from=compile /project/user-app/target/app.jar /app.jar
+USER root
+RUN groupadd --gid 1000 java_group \
+ && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user
+ARG DEPENDENCY=/project/user-app/target/dependency
+COPY --from=compile ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=compile ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=compile ${DEPENDENCY}/BOOT-INF/classes /app
+RUN chown -R java_user:java_group /app
+USER java_user
 
 EXPOSE 8080
 EXPOSE 8443
-
-ENTRYPOINT [ "sh", "-c", "exec java $JVM_ARGS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
+ENTRYPOINT [ "sh", "-c", "exec java $JVM_ARGS -cp app:app/lib/* -Djava.security.egd=file:/dev/./urandom application.Main" ]
