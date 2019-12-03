@@ -64,8 +64,12 @@ mkdir -p $prefetch_dir
 
 # Specify a wrapper where required for long-running commands
 CI_WAIT_FOR=
+
 # Show output of commands
-VERBOSE=true
+if [ -z $VERBOSE ]; then
+    VERBOSE=false
+fi
+
 
 exec_hooks() {
     local dir=$1
@@ -224,14 +228,14 @@ image_push() {
     if [ "$IMAGE_REGISTRY_PUBLISH" == "true" ]
     then
         local name=$@
-        if [ -n "$IMAGE_REGISTRY" ]
-        then
-            echo "Tagging ${IMAGE_REGISTRY}/$name"
-            image_tag $name ${IMAGE_REGISTRY}/$name
+        if [ -n "$IMAGE_REGISTRY" ]	
+        then	
+            echo "Tagging ${IMAGE_REGISTRY}/$name"	
+            image_tag $name ${IMAGE_REGISTRY}/$name	
 
-            name=${IMAGE_REGISTRY}/$name
+            name=${IMAGE_REGISTRY}/$name	
         fi
-
+       
         echo "Pushing $name"
         if [ "$USE_BUILDAH" == "true" ]; then
             buildah push --tls-verify=false $name
