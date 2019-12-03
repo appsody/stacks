@@ -20,14 +20,17 @@ spec:
     image: registry.access.redhat.com/ubi8/ubi:8.1-277
     command: ['/bin/bash']
     args:
-    - -ce
+    - -cex
     - |
       echo "Checking for app-deploy.yaml"
       APP_DEPLOY_YAML=$(find /workspace/git-source -name ${YAMLFILE} -type f)
       if [ -z "$APP_DEPLOY_YAML" ]; then
-        echo "ERROR: app-deploy.yaml not found in your project after the build task ran which should have generated it.  Please verify before running the pipeline."
+        echo "ERROR: app-deploy.yaml not found in project.  Please run appsody deploy --generate-only in your appsody project to generate the app-deploy.yaml and check it into your repo before running the pipeline."
         exit 1
       fi
+      # Replace the image name
+      echo "Replacing image name in app-deploy.yaml ${IMG}"
+      sed -i -e 's#applicationImage: .*$#applicationImage: '"$IMG"'#g' ${APP_DEPLOY_YAML}
     env:
     - name: REPO
       value: $(inputs.params.repository-name)

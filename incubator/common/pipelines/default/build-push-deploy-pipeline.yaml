@@ -21,12 +21,13 @@ spec:
       inputs:
       - name: git-source
         resource: git-source
+      outputs:
       - name: docker-image
         resource: docker-image
   - name: image-scan-task
     taskRef:
       name: CollectionId-image-scan-task
-    runAfter: [build-push-task]
+    runAfter: [build-push-deploy-task]
     resources:
       inputs:
       - name: git-source
