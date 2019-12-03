@@ -2,12 +2,14 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: CollectionId-build-push-task
+  name: CollectionId-build-push-deploy-task
 spec:
   inputs:
     resources:
     - name: git-source
       type: git
+    - name: docker-image
+      type: image
     params:
     - name: pathToDockerFile
       default: /workspace/extracted/Dockerfile
@@ -15,12 +17,10 @@ spec:
       default: /workspace/extracted
     - name: appsody-yaml-file-path
       default: $HOME/.appsody/.appsody.yaml
+    - name: repository-name
+      default: CollectionId
     - name: app-deploy-file-name
       default: app-deploy.yaml
-  outputs:
-    resources:
-    - name: docker-image
-      type: image
   steps:
   - name: extract
     securityContext:
@@ -94,7 +94,7 @@ spec:
              ./cert-creation.sh
         fi
         cd /workspace/$gitsource
-        appsody build -t $(outputs.resources.docker-image.url) --buildah --buildah-options "--format=docker"
+        appsody build -t $(inputs.resources.docker-image.url) --buildah --buildah-options "--format=docker"
     env:
     - name: gitsource
       value: git-source
@@ -127,13 +127,39 @@ spec:
     securityContext:
       privileged: true
     image: appsody/appsody-buildah:0.5.0-buildah1.9.0
-    command: ['buildah', 'push', '--tls-verify=false', '$(outputs.resources.docker-image.url)', 'docker://$(outputs.resources.docker-image.url)']
+    command: ['buildah', 'push', '--tls-verify=false', '$(inputs.resources.docker-image.url)', 'docker://$(inputs.resources.docker-image.url)']
     env:
     - name: gitsource
       value: git-source
     volumeMounts:
     - mountPath: /var/lib/containers
       name: varlibcontainers
+  - name: modify-app-deploy-yaml
+    image: registry.access.redhat.com/ubi8/ubi:8.1-277
+    command: ['/bin/bash']
+    args:
+    - -ce
+    - |
+      echo "Checking for app-deploy.yaml"
+      APP_DEPLOY_YAML=$(find /workspace/git-source -name ${YAMLFILE} -type f)
+      if [ -z "$APP_DEPLOY_YAML" ]; then
+        echo "ERROR: app-deploy.yaml not found in your project after the build task ran which should have generated it.  Please verify before running the pipeline."
+        exit 1
+      fi
+    env:
+    - name: REPO
+      value: $(inputs.params.repository-name)
+    - name: IMG
+      value: $(inputs.resources.docker-image.url)
+    - name: YAMLFILE
+      value: $(inputs.params.app-deploy-file-name)
+  - name: deploy-image
+    image: kabanero/kabanero-utils:0.3.0
+    command: ['/bin/sh']
+    args: ['-c', 'find /workspace/git-source -name ${YAMLFILE} -type f|xargs kubectl apply -f']
+    env:
+    - name: YAMLFILE
+      value: $(inputs.params.app-deploy-file-name)
   volumes:
   - name: varlibcontainers
     emptyDir: {}

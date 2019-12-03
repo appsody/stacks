@@ -16,27 +16,16 @@ spec:
   tasks:
   - name: build-push-task
     taskRef:
-      name: CollectionId-build-push-task
+      name: CollectionId-build-push-deploy-task
     resources:
       inputs:
       - name: git-source
         resource: git-source
-      outputs:
       - name: docker-image
         resource: docker-image
   - name: image-scan-task
     taskRef:
       name: CollectionId-image-scan-task
-    runAfter: [build-push-task]
-    resources:
-      inputs:
-      - name: git-source
-        resource: git-source
-      - name: docker-image
-        resource: docker-image  
-  - name: deploy-task
-    taskRef:
-      name: CollectionId-deploy-task
     runAfter: [build-push-task]
     resources:
       inputs:
