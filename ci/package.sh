@@ -59,11 +59,11 @@ do
 
                 if [ $rebuild_local = true ]
                 then
-                    appsody_cmd="appsody stack validate"
                     if [ "$SKIP_TESTS" = "true" ]; then
                         appsody_cmd="appsody stack package"
                         echo -e "\n- PACKAGING stack: $repo_name/$stack_id"
                     else
+                        appsody_cmd="appsody stack validate"
                         echo -e "\n- VALIDATING stack: $repo_name/$stack_id"
                     fi
                     

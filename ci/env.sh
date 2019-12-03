@@ -125,12 +125,6 @@ then
     export IMAGE_REGISTRY_ORG=appsody
 fi
 
-# image registry for publishing stack
-if [ -z "$IMAGE_REGISTRY" ]
-then
-    export IMAGE_REGISTRY=docker.io
-fi
-
 if [ -z $GIT_BRANCH ]
 then
     export GIT_BRANCH=$(git for-each-ref --format='%(refname:lstrip=2)' "$(git symbolic-ref -q HEAD)")
@@ -234,6 +228,14 @@ image_push() {
     if [ "$IMAGE_REGISTRY_PUBLISH" == "true" ]
     then
         local name=$@
+        if [ -n "$IMAGE_REGISTRY" ]	
+        then	
+            echo "Tagging ${IMAGE_REGISTRY}/$name"	
+            image_tag $name ${IMAGE_REGISTRY}/$name	
+
+            name=${IMAGE_REGISTRY}/$name	
+        fi
+       
         echo "Pushing $name"
         if [ "$USE_BUILDAH" == "true" ]; then
             buildah push --tls-verify=false $name
