@@ -17,7 +17,7 @@ spec:
     labels:
       k8s-app: APPSODY_PROJECT_NAME
     endpoints:
-    - path: '/actuator/prometheus'        
+    - path: '/actuator/prometheus'
   readinessProbe:
     failureThreshold: 12
     httpGet:

@@ -44,7 +44,7 @@
       <name>Red Hat GA Repository</name>
       <url>https://maven.repository.redhat.com/ga/</url>
     </pluginRepository>
-  </pluginRepositories>  
+  </pluginRepositories>
 
   <!-- order of precedence of the artifact’s version is:
     * The version of the artifact’s direct declaration in project pom
