@@ -14,7 +14,7 @@ spec:
   - name: docker-image
     type: image
   tasks:
-  - name: build-push-task
+  - name: build-push-deploy-task
     taskRef:
       name: CollectionId-build-push-deploy-task
     resources:
