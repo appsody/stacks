@@ -13,6 +13,11 @@ spec:
     annotations:
       prometheus.io/scrape: 'true'
       prometheus.io/path: '/actuator/prometheus'
+  monitoring:
+    labels:
+      k8s-app: APPSODY_PROJECT_NAME
+    endpoints:
+    - path: '/actuator/prometheus'        
   readinessProbe:
     failureThreshold: 12
     httpGet:
