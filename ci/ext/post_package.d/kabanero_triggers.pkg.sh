@@ -35,7 +35,6 @@ do
                 asset_archive=$repo_name.$asset_type.tar.gz
 
                 # Create the triggers tar.gz file 
-                COPYFILE_DISABLE=1; export COPYFILE_DISABLE
                 tar -czf $assets_dir/$asset_archive -C $asset_dir .
 
                 # Add details of the asset tar.gz into the index file

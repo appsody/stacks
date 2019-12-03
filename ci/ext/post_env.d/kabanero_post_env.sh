@@ -22,6 +22,8 @@ else
     asset_list=$ASSET_LIST
 fi
 
+export COPYFILE_DISABLE=1
+
 # Unset the INDEX_LIST variable that wopuld have been set by the Apposdy build
 unset INDEX_LIST
 
