@@ -3,9 +3,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>dev.appsody</groupId>
-  <artifactId>spring-boot2-stack</artifactId>
-  <version>{{MAVEN_ARTIFACT_VERSION}}</version>
+  <groupId>{{.stack.parentpomgroup}}</groupId>
+  <artifactId>{{.stack.parentpomid}}</artifactId>
+  <version>{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}</version>
   <packaging>pom</packaging>
 
   <name>Appsody Spring Boot2 stack</name>
