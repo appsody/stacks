@@ -86,7 +86,7 @@ do
 
                             echo "created $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
                             echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version" >> $build_dir/image_list
-                            if [ $LATEST_RELEASE -eq true ]; then
+                            if [ $LATEST_RELEASE == true ]; then
                                 echo "$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
                                 echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
                                 echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
