@@ -1,5 +1,5 @@
 # Dockerfile for building the stack
-FROM quay.io/quarkus/centos-quarkus-maven:19.1.1
+FROM quay.io/quarkus/centos-quarkus-maven:19.2.1
 
 COPY ./LICENSE /licenses/
 COPY ./project /project
@@ -10,10 +10,8 @@ WORKDIR /project
 RUN mvn -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 RUN mvn -B install dependency:go-offline -DskipTests
 
-ENV APPSODY_USER_RUN_AS_LOCAL=true
-
-ENV APPSODY_MOUNTS=".:/project/user-app/;~/.m2/repository:/home/$(id -un)/.m2/repository"
-ENV APPSODY_DEPS=
+ENV APPSODY_MOUNTS=".:/project/user-app"
+ENV APPSODY_DEPS="/home/quarkus/.m2"
 
 ENV APPSODY_RUN="./mvnw -B compile quarkus:dev"
 ENV APPSODY_RUN_ON_CHANGE=""
