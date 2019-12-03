@@ -40,6 +40,4 @@ then
   . $script_dir/list.sh
 fi
 
-. $script_dir/lint.sh
 . $script_dir/package.sh
-. $script_dir/test.sh
