@@ -20,11 +20,13 @@ RUN groupadd --gid 1000 java_group \
   && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user
 
 COPY ./LICENSE /licenses/
-
 COPY ./project /project
 COPY ./config /config
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 COPY ./mvn-stack-settings.xml /project/mvn-stack-settings.xml
+
+# Verify properties used to control versions match between this stack and official spring dependencies.
+RUN /project/verify-property-versions.sh
 
 # Build utility for version range processing
 # Install maven wrapper in /project
