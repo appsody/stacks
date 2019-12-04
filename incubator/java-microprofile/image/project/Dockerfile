@@ -18,7 +18,7 @@ COPY ./validate.sh /project/user-app/validate.sh
 RUN cd /project/user-app && ./validate.sh  && mvn package -Dskip=true -DskipTests 
 
 # Download Open Liberty here to prevent redownloading each time the app is changed
-RUN cd /project/user-app && mvn liberty:install-server
+RUN cd /project/user-app && mvn -B liberty:install-server
 
 # Copy and build the application source
 COPY ./user-app/src /project/user-app/src
