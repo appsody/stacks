@@ -8,6 +8,9 @@ ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/functions/node_modules
 
 ENV APPSODY_INSTALL="npm install --prefix user-app/functions && npm audit fix --prefix user-app/functions"
 
+ENV APPSODY_RUN="npm start"
+ENV APPSODY_RUN_ON_CHANGE="npm start"
+
 ENV APPSODY_TEST="npm test && npm test --prefix user-app/functions"
 
 COPY ./LICENSE /licenses/
