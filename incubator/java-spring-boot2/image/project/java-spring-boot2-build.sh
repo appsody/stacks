@@ -134,6 +134,7 @@ package() {
   note "Packaging and verifying application ${group_id}:${artifact_id}:${artifact_version}"
   run_mvn clean package verify
   mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
+  cat target/dependency/META-INF/MANIFEST.MF | grep 'Start-Class: ' | cut -d' ' -f2 | tr -d '\r\n' > target/mainclass
 }
 
 debug() {
