@@ -73,7 +73,12 @@ common() {
   then
     # Install parent pom
     note "Installing parent ${a_groupId}:${a_artifactId}:${a_version}"
-    run_mvn install -q -f /project/appsody-boot2-pom.xml
+    if [ -z "${APPSODY_DEV_MODE}" ]
+    then
+        run_mvn install -f /project/appsody-boot2-pom.xml
+    else
+        run_mvn install -q -f /project/appsody-boot2-pom.xml
+    fi
   fi
 
   local p_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:groupId" pom.xml)
