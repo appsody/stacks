@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 # setup environment
 . $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
 
@@ -17,6 +15,7 @@ exec_hooks $script_dir/ext/pre_package.d
 for repo_name in $REPO_LIST
 do
     repo_dir=$base_dir/$repo_name
+    useCachedIndex=""
     if [ -d $repo_dir ]
     then
         echo -e "\nProcessing repo: $repo_name"
@@ -27,12 +26,6 @@ do
         # flat index used by static appsody-index and local test repo
         index_src=$build_dir/index-src/$repo_name-index.yaml
 
-        echo "apiVersion: v2" > $index_file
-        echo "stacks:" >> $index_file
-
-        echo "apiVersion: v2" > $index_src
-        echo "stacks:" >> $index_src
-        
         # iterate over each stack
         for stack in $repo_dir/*/stack.yaml
         do
@@ -92,61 +85,53 @@ do
                         fi
                         echo "created $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
                     fi
+
                     echo "$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
                     echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version" >> $build_dir/image_list
                     echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
                     echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
-                else
-                    echo -e "\n- SKIPPING stack image: $repo_name/$stack_id"
-                fi
 
-                echo "File containing output from add-to-repo: ${build_dir}/add-to-repo.$stack_id.$stack_version.log"
-                if ${CI_WAIT_FOR} appsody stack add-to-repo $repo_name -v --release-url $RELEASE_URL/$stack_id-v$stack_version/$repo_name. --use-local-cache \
-                    > ${build_dir}/add-to-repo.$stack_id.$stack_version.log 2>&1
-                then
-                    trace  "Output from add-to-repo command" "${build_dir}/add-to-repo.$stack_id.$stack_version.log"
-                else
-                    echo "Error running `appsody stack add-to-repo` command"
-                    cat ${build_dir}/add-to-repo.$stack_id.$stack_version.log
-                    exit 1
-                fi
-               
-                for template_dir in $stack_dir/templates/*/
-                do
-                    if [ -d $template_dir ]
+                    echo "File containing output from add-to-repo: ${build_dir}/add-to-repo.$stack_id.$stack_version.log"
+                    if ${CI_WAIT_FOR} appsody stack add-to-repo $repo_name -v --release-url $RELEASE_URL/$stack_id-v$stack_version/$repo_name. $useCachedIndex \
+                        > ${build_dir}/add-to-repo.$stack_id.$stack_version.log 2>&1
                     then
-                        template_id=$(basename $template_dir)
-                        old_archive=$repo_name.$stack_id.templates.$template_id.tar.gz
-                        versioned_archive=$repo_name.$stack_id.v$stack_version.templates.$template_id.tar.gz
-                        packaged_archive=$stack_id.v$stack_version.templates.$template_id.tar.gz
+                        useCachedIndex="--use-local-cache"
+                        trace  "Output from add-to-repo command" "${build_dir}/add-to-repo.$stack_id.$stack_version.log"
+                    else
+                        echo "Error running `appsody stack add-to-repo` command"
+                        cat ${build_dir}/add-to-repo.$stack_id.$stack_version.log
+                        exit 1
+                    fi
 
-                        build=$rebuild_local
-                        if [ "$PACKAGE_WHEN_MISSING" = "true" ] &&
-                            [ ! -f $assets_dir/$versioned_archive ] &&
-                            [ ! -f $prefetch_dir/$old_archive ] &&
-                            [ ! -f $prefetch_dir/$versioned_archive ]
+                    for template_dir in $stack_dir/templates/*/
+                    do
+                        if [ -d $template_dir ]
                         then
-                            # force build of template archive if it doesn't exist
-                            build=true
-                        fi
-
-                        if [ $build = true ]
-                        then
+                            template_id=$(basename $template_dir)
+                            versioned_archive=$repo_name.$stack_id.v$stack_version.templates.$template_id.tar.gz
+                            packaged_archive=$stack_id.v$stack_version.templates.$template_id.tar.gz
                             if [ -f $HOME/.appsody/stacks/dev.local/$packaged_archive ]; then
                                 echo "--- Copying $HOME/.appsody/stacks/dev.local/$packaged_archive to $assets_dir/$versioned_archive"
                                 cp $HOME/.appsody/stacks/dev.local/$packaged_archive $assets_dir/$versioned_archive
                             fi
                         fi
+                    done
+                else
+                    echo -e "\n- SKIPPING stack image: $repo_name/$stack_id"
+                fi
 
-                    fi
-                done
                 popd
             fi
         done
-        if [ -f $HOME/.appsody/stacks/dev.local/$repo_name-index.yaml ]; then
-            cp $HOME/.appsody/stacks/dev.local/$repo_name-index.yaml $index_file
-            sed -e "s|${RELEASE_URL}/.*/|{{EXTERNAL_URL}}/|" $index_file > $index_src
+        if [ "$useCachedIndex" != "" ]; then
+            if [ -f $HOME/.appsody/stacks/dev.local/$repo_name-index.yaml ]; then
+                cp $HOME/.appsody/stacks/dev.local/$repo_name-index.yaml $index_file
+            fi
+        else
+            url="$RELEASE_URL/../latest/download/$repo_name-index.yaml"
+            curl -s -L ${url} -o $index_file
         fi
+        sed -e "s|${RELEASE_URL}/.*/|{{EXTERNAL_URL}}/|" $index_file > $index_src
     else
         echo "SKIPPING: $repo_dir"
     fi
