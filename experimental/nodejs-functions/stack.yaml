@@ -8,3 +8,5 @@ maintainers:
     email: cnbailey@gmail.com
     github-id: seabaylea
 default-template: simple
+requirements:
+  appsody-version: ">= 0.2.7"
