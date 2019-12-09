@@ -1,10 +1,4 @@
 #!/bin/bash
-which java 2>&1 >/dev/null ; JAVA_KNOWN=$?
-if [ ! -z "$JAVA_HOME" ] || [ $JAVA_KNOWN = "0" ]; then
-  ./mvnw install -Denforcer.skip=true
-fi
-
-#!/bin/bash
 if [ -n "$TERM" ] && [ "$TERM" != "dumb" ] && [ -x /usr/bin/tput ] && [[ `tput colors` != "0" ]]; then
   color_prompt="yes"
 else
