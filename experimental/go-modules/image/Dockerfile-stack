@@ -20,8 +20,6 @@ COPY ./config /config
 
 WORKDIR /project/user-app
 
-RUN go get -u github.com/go-delve/delve/cmd/dlv
-
 ENV PORT=3000
 
 EXPOSE 3000
