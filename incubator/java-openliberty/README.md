@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Open Liberty Stack
 
 The Open Liberty stack provides a consistent way of developing microservices based upon the [Jakarta EE](https://jakarta.ee/) and [Eclipse MicroProfile](https://microprofile.io) specifications. This stack lets you use [Maven](https://maven.apache.org) to develop applications for [Open Liberty](https://openliberty.io) runtime, that is running on OpenJDK with container-optimizations in OpenJ9.
@@ -5,6 +6,17 @@ The Open Liberty stack provides a consistent way of developing microservices bas
 The Open Liberty stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins.
 
 This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.12`. It provides live reloading during development by utilizing the "dev mode" capability in the liberty-maven-plugin.  To see dev mode in action (though not in Appsody) check out this [shorter demo](https://openliberty.io/blog/2019/10/22/liberty-dev-mode.html) and this  [a bit longer demo](https://blog.sebastian-daschner.com/entries/openliberty-plugin-dev-mode).
+=======
+# Java OpenLiberty Stack
+
+The Java OpenLiberty stack provides a consistent way of developing microservices based upon the [Eclipse MicroProfile specifications](https://microprofile.io). This stack lets you use [Maven](https://maven.apache.org) to develop applications for [Open Liberty](https://openliberty.io) runtime, that is running on OpenJDK with container-optimizations in OpenJ9.
+
+The Java OpenLiberty stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins.
+
+This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.8`. It provides live reloading during development by utilizing `loose application` capabilities.
+
+The stack also provides a in-built application monitoring dashboard based on [javametrics](https://github.com/runtimetools/javametrics). This dashboard is only included during development and is not included in the image built using `appsody build`.
+>>>>>>> java-openliberty: Create Openliberty stack
 
 **Note:** Maven is provided by the Appsody stack container, allowing you to build, test, and debug your Java application without installing Maven locally. However, we recommend installing Maven locally for the best IDE experience.
 
@@ -12,7 +24,11 @@ This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open 
 
 Templates are used to create your local project and start your development. When initializing your project you will be provided with an Open Liberty template application.
 
+<<<<<<< HEAD
 The default template provides a `pom.xml` file that references the parent POM defined by the stack and enables Liberty features that support [Eclipse MicroProfile 3.2](https://openliberty.io/docs/ref/feature/#microProfile-3.2.html). Specifically, this template includes:
+=======
+The default template provides a `pom.xml` file that references the parent POM defined by the stack and enables Liberty features that support [Eclipse MicroProfile 3.0](https://openliberty.io/docs/ref/feature/#microProfile-3.0.html). Specifically, this template includes:
+>>>>>>> java-openliberty: Create Openliberty stack
 
 ### Health
 
@@ -43,10 +59,17 @@ OpenAPI endpoints:
     ```bash
     mkdir my-project
     cd my-project
+<<<<<<< HEAD
     appsody init java-openliberty
     ```
 
     This will initialize an Open Liberty project using the default template. This will also install all parent pom dependencies into your local .m2 directory.
+=======
+    appsody init java-OpenLiberty
+    ```
+
+    This will initialize a Java OpenLiberty project using the default template. This will also install all parent pom dependencies into your local .m2 directory.
+>>>>>>> java-openliberty: Create Openliberty stack
 
 1. Once your project has been initialized, you can run your application using the following command:
 
@@ -65,6 +88,7 @@ OpenAPI endpoints:
     - Metrics endpoint: http://localhost:9080/metrics (login as `admin` user with `adminpwd` password)
     - OpenAPI endpoint: http://localhost:9080/openapi
     - Swagger UI endpoint: http://localhost:9080/openapi/ui
+<<<<<<< HEAD
 
 ## Stack Usage Notes
 
@@ -86,6 +110,9 @@ This problem seems to be resolved for some, though not all users by installing a
 It may be worked around by making the changes from the host, and then doing a `touch` of the corresponding files from within the container.
 
 See [this issue](https://github.com/OpenLiberty/ci.maven/issues/617) for more tracking information.
+=======
+    - Javametrics Dashboard endpoint: http://localhost:9080/javametrics-dash/ (development-time only)
+>>>>>>> java-openliberty: Create Openliberty stack
 
 ## License
 
