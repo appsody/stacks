@@ -55,7 +55,9 @@ if (!process.env.NODE_ENV || !process.env.NODE_ENV === 'production') {
 }
 
 RED.init(server,appSettings);
-app.use(appSettings.httpAdminRoot,RED.httpAdmin);
+if (appSettings.httpAdminRoot) {
+    app.use(appSettings.httpAdminRoot,RED.httpAdmin);
+}
 app.use('/',RED.httpNode);
 
 const healthcheck = new health.HealthChecker();

@@ -40,7 +40,7 @@ The `package.json` file will have the structure:
 {
     "name": "AppsodyProject",
     "description": "A Node-RED Project",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "dependencies": {},
     "node-red": {
         "settings": {
