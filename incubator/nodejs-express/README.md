@@ -2,7 +2,7 @@
 
 The Node.js Express stack extends the [Node.js stack](../nodejs/README.md) and provides a consistent way of developing web applications using [Express](https://expressjs.com). Express is a fast, minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.
 
-This stack is based on `Node.js v10` and `Express v4.16.0` and enables health checking and application metrics out of the box. The stack also provides a set of tests written using [Mocha](https://mochajs.org) test framework, while the application metadata is provided via a `package.json` file.
+This stack is based on `Node.js v10` and `Express v4.17.x` and enables health checking and application metrics out of the box. The stack also provides a set of tests written using the [Mocha](https://mochajs.org) test framework, while the application metadata is provided via a `package.json` file.
 
 ## Health checking
 
@@ -32,7 +32,7 @@ This stack also comes with Prometheus metrics, which has been preconfigured to w
 
 During development of your application, the nodejs-express stack provides a built-in application performance dashboard using the [appmetrics-dash](https://github.com/runtimetools/appmetrics-dash) module. This makes it easy to see the resource usage and HTTP endpoint performance of your application as it is developed.
 
-The dashboard is only included during development, and is not included in images build using `appsody build`.
+The dashboard is only included during development, and is not included in images built using `appsody build`.
 
 ## Templates
 
