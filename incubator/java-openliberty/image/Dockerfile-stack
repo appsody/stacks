@@ -1,0 +1,50 @@
+FROM adoptopenjdk/openjdk8-openj9
+
+USER root
+RUN  apt-get -qq update \
+  && apt-get -qq install -y curl maven xmlstarlet wget \
+  && DEBIAN_FRONTEND=noninteractive apt-get -qq upgrade -y \
+  && apt-get -qq clean \
+  && rm -rf /tmp/* /var/lib/apt/lists/*
+
+COPY ./LICENSE /licenses/
+COPY ./project /project
+COPY ./config /config
+
+RUN  /project/util/check_version build
+
+WORKDIR /project/
+RUN mkdir -p /mvn/repository
+RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
+RUN mvn -B -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipTests
+RUN mvn -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipTests -f pom-dev.xml
+
+WORKDIR /project/user-app
+
+ENV APPSODY_MOUNTS="~/.m2/repository:/mvn/repository;.:/project/user-app"
+ENV APPSODY_DEPS=
+
+ENV APPSODY_WATCH_DIR=/project/user-app
+ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/target
+ENV APPSODY_WATCH_REGEX="^.*(.xml)$"
+ENV APPSODY_USER_RUN_AS_LOCAL=true
+
+ENV APPSODY_INSTALL="../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository install -DskipTests && /project/install-dev-deps.sh"
+
+ENV APPSODY_RUN="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository liberty:dev -DskipTests"
+ENV APPSODY_RUN_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -Dmaven.repo.local=/mvn/repository liberty:dev -DskipTests"
+ENV APPSODY_RUN_KILL=true
+
+ENV APPSODY_DEBUG="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository liberty:dev -DskipTests"
+ENV APPSODY_DEBUG_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -Dmaven.repo.local=/mvn/repository liberty:dev -DskipTests"
+ENV APPSODY_DEBUG_KILL=true
+
+ENV APPSODY_TEST="mvn -B -Dmaven.repo.local=/mvn/repository verify"
+ENV APPSODY_TEST_ON_CHANGE=""
+ENV APPSODY_TEST_KILL=false
+
+ENV PORT=9080
+
+EXPOSE 9080
+EXPOSE 9443
+EXPOSE 7777
