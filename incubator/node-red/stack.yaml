@@ -1,0 +1,10 @@
+name: Node-RED
+version: 0.1.0
+description: Node-RED runtime for running flows
+license: Apache-2.0
+language: nodejs
+maintainers:
+  - name: Nick O'Leary
+    email: nick.oleary@gmail.com
+    github-id: knolleary
+default-template: simple
