@@ -16,8 +16,9 @@ The stack is based on the Node.js v12 runtime.
 
 ## Templates
 
-This stack provides a single template - `simple`. It is the most minimal template
-to get started.
+This stack provides a single template - `simple`. It is a minimal template
+with a default flow file to get started with. However, the typical usage will be
+to take an existing Node-RED project and package it ready for deployment.
 
 ## Getting Started
 
