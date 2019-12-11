@@ -2,7 +2,7 @@
 
 The Swift stack is designed to provide a foundation for building and running Swift applications in Appsody.
 
-This stack is based on the `Swift 5.0` runtime and allows you to develop new or existing Swift applications using Appsody.
+This stack is based on the `Swift 5.1` runtime and allows you to develop new or existing Swift applications using Appsody.
 
 ## Templates
 

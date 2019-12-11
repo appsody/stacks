@@ -50,25 +50,25 @@ projects:
   swift:
   - updated: 2019-08-02T23:12:19+0000
     name: Swift
-    version: 0.1.4
+    version: 0.2.1
     description: Runtime for Swift applications
     license: Apache-2.0
     maintainers:
       - i.partridge@uk.ibm.com
     default-template: simple
     urls:
-    - https://github.com/appsody/stacks/releases/download/swift-v0.1.4/incubator.swift.templates.simple.tar.gz
+    - https://github.com/appsody/stacks/releases/download/swift-v0.2.1/incubator.swift.v0.2.1.templates.simple.tar.gz
   nodejs-loopback:
   - updated: 2019-07-26T21:00:00+00:00
     name: nodejs-loopback
-    version: 0.1.4
+    version: 0.1.8
     description: LoopBack API framework for Node.js
     license: Apache-2.0
     maintainers:
     - enjoyjava@gmail.com
     default-template: scaffold
     urls:
-    - https://github.com/appsody/stacks/releases/download/nodejs-loopback-v0.1.4/incubator.nodejs-loopback.templates.scaffold.tar.gz
+    - https://github.com/appsody/stacks/releases/download/nodejs-loopback-v0.1.8/incubator.nodejs-loopback.templates.scaffold.tar.gz
   python-flask:
   - updated: 2019-07-26T21:00:00+00:00
     name: Python Flask
