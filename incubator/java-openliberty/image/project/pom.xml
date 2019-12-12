@@ -22,8 +22,9 @@
         <version.maven-failsafe-plugin>3.0.0-M1</version.maven-failsafe-plugin>
         <!-- OpenLiberty runtime -->
         <liberty.groupId>io.openliberty</liberty.groupId>
-        <liberty.artifactId>openliberty-runtime</liberty.artifactId>
+        <liberty.artifactId>openliberty-kernel</liberty.artifactId>
         <version.openliberty-runtime>19.0.0.12</version.openliberty-runtime>
+        <version.liberty-maven-plugin>3.1</version.liberty-maven-plugin>
         <http.port>9080</http.port>
         <https.port>9443</https.port>
         <packaging.type>usr</packaging.type>
@@ -37,9 +38,18 @@
         </repository>
     </repositories>
 
-    <!-- maven-enforcer-plugin -->
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>io.openliberty.tools</groupId>
+                    <artifactId>liberty-maven-plugin</artifactId>
+                    <version>${version.liberty-maven-plugin}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
+            <!-- maven-enforcer-plugin -->
             <!-- Enforcing OpenLiberty and JDK Version -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
