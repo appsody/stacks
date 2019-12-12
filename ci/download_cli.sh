@@ -13,7 +13,7 @@ then
     fi
     if [ -z "${APPSODY_CLI_FALLBACK}" ]
     then
-        APPSODY_CLI_FALLBACK=0.5.3
+        APPSODY_CLI_FALLBACK=0.5.4
     fi
 
     script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )

@@ -8,13 +8,13 @@ then
     then
         # check for changed files
         echo "Listing new/updated stacks in this pull request ($TRAVIS_PULL_REQUEST) or commit range ($TRAVIS_COMMIT_RANGE)"
-        CHANGED_FILES=$(git diff --name-only "$TRAVIS_COMMIT_RANGE" 2>/dev/null)
+        CHANGED_FILES=$(git diff --name-only --no-renames "$TRAVIS_COMMIT_RANGE" 2>/dev/null)
         rc=$?
         if [ $rc -ne 0 ]
         then
             stderr "WARNING: unable to find differences in $TRAVIS_COMMIT_RANGE, using last commit"
             # Fall back to single commit: https://github.com/travis-ci/travis-ci/issues/5133
-            CHANGED_FILES=$(git diff --name-only "HEAD~..HEAD" 2>/dev/null)
+            CHANGED_FILES=$(git diff --name-only --no-renames "HEAD~..HEAD" 2>/dev/null)
             rc=$?
         fi
 
@@ -31,7 +31,7 @@ then
         else
             stderr "ERROR: unable to identify changed files in $TRAVIS_COMMIT_RANGE"
             # show original error
-            git diff --name-only "$TRAVIS_COMMIT_RANGE"
+            git diff --name-only --no-renames "$TRAVIS_COMMIT_RANGE"
         fi
     elif [ $TRAVIS_TAG ]
     then
