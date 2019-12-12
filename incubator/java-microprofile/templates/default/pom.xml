@@ -8,7 +8,7 @@
     <parent><!--required parent POM-->
         <groupId>dev.appsody</groupId>
         <artifactId>java-microprofile</artifactId>
-        <version>[0.2, 0.3)</version>
+        <version>{{.stack.parentpomrange}}</version>
         <relativePath/>
     </parent>
 
