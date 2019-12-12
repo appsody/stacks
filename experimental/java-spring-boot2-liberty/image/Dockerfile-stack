@@ -11,13 +11,16 @@ COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
 
-RUN  /project/util/check_version build
+WORKDIR /project
 
-WORKDIR /project/
-
-RUN mkdir -p /mvn/repository
-RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
-RUN mvn -B -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipTests
+# Build utility for version range processing
+# Install parent pom
+# Install maven wrapper in /project
+RUN mkdir -p /mvn/repository \
+ && /project/util/check_version build \
+ && cd /project \
+ && mvn -B -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipTests \
+ && mvn -B -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 
 WORKDIR /project/user-app
 

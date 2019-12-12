@@ -62,7 +62,14 @@ the parent version in pom.xml, and test your changes.
 fi
 
 # Check child pom for required liberty version, groupID and artifactId
-if ! grep -Gz "<plugin>.*<artifactId>liberty-maven-plugin</artifactId>.*<groupId>${LIBERTY_GROUP_ID}</groupId>\|<groupId>\${liberty.groupId}</groupId>.*</plugin>" pom.xml | grep -Gz "<plugin>.*<artifactId>liberty-maven-plugin</artifactId>.*<artifactId>${LIBERTY_ARTIFACT_ID}</artifactId>\|<artifactId>\${liberty.artifactId}</artifactId>.*</plugin>" | grep -Gzq "<plugin>.*<artifactId>liberty-maven-plugin</artifactId>.*<version>${LIBERTY_VERSION}</version>\|<version>\${version.openliberty-runtime}</version>.*</plugin>"
+l_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:assemblyArtifact/x:groupId" pom.xml)
+l_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:assemblyArtifact/x:artifactId" pom.xml)
+l_version=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:assemblyArtifact/x:version" pom.xml)
+if ! [[
+        ( "${l_groupId}" == "${LIBERTY_GROUP_ID}" && "${l_artifactId}" == "${LIBERTY_ARTIFACT_ID}" && "${l_version}" == "${LIBERTY_VERSION}"  )
+        ||
+        ( "${l_groupId}" == "\${liberty.groupId}" && "${l_artifactId}" == "\${liberty.artifactId}" && "${l_version}" == "\${version.openliberty-runtime}" )
+     ]]
 then
   echo "Project is not using the right OpenLiberty assembly artifact:
   <assemblyArtifact>
@@ -81,8 +88,8 @@ Alternatively you could also use these properties:
 fi
 
 # Enforcing loose application
-if ! grep -Gzq "<configuration.*<looseApplication>true</looseApplication>.*</configuration" pom.xml
-then
+l_looseConfig=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:looseApplication" pom.xml)
+if ! [ "${l_looseConfig}" == "true" ]; then
   echo "Should be a loose application:
   <configuration>
     <looseApplication>true</looseApplication>
