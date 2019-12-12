@@ -1,5 +1,5 @@
 name: Node.js Express
-version: 0.2.10
+version: 0.3.0
 description: Express web framework for Node.js
 license: Apache-2.0
 language: nodejs
