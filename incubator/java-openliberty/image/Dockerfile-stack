@@ -26,17 +26,22 @@ ENV APPSODY_DEPS=
 
 ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/target
+
+# Work around v3.1 issues with dev mode reacting to pom.xml change but should eventually not require this.
 ENV APPSODY_WATCH_REGEX="^.*(.xml)$"
+
 ENV APPSODY_USER_RUN_AS_LOCAL=true
 
-ENV APPSODY_INSTALL="../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository install -DskipTests && /project/install-dev-deps.sh"
+ENV APPSODY_PREP="../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository install -DskipTests && /project/install-dev-deps.sh"
 
-ENV APPSODY_RUN="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository liberty:dev -DskipTests"
-ENV APPSODY_RUN_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -Dmaven.repo.local=/mvn/repository liberty:dev -DskipTests"
+ENV APPSODY_RUN="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository liberty:dev"
+# See ENV APPSODY_WATCH_REGEX comment
+ENV APPSODY_RUN_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -Dmaven.repo.local=/mvn/repository liberty:dev"
 ENV APPSODY_RUN_KILL=true
 
-ENV APPSODY_DEBUG="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository liberty:dev -DskipTests"
-ENV APPSODY_DEBUG_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -Dmaven.repo.local=/mvn/repository liberty:dev -DskipTests"
+ENV APPSODY_DEBUG="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository liberty:dev"
+# See ENV APPSODY_WATCH_REGEX comment
+ENV APPSODY_DEBUG_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -Dmaven.repo.local=/mvn/repository liberty:dev"
 ENV APPSODY_DEBUG_KILL=true
 
 ENV APPSODY_TEST="mvn -B -Dmaven.repo.local=/mvn/repository verify"
