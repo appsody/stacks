@@ -18,11 +18,13 @@
     <packaging>war</packaging>
 
     <dependencies>
-        <!-- Open Liberty Features -->
+        <!-- Aggregate of MicroProfile APIs -->
         <dependency>
             <groupId>org.eclipse.microprofile</groupId>
             <artifactId>microprofile</artifactId>
             <version>3.2</version>
+            <type>pom</type>
+            <scope>provided</scope>
         </dependency>
         <!-- For tests -->
         <dependency>
@@ -99,11 +101,7 @@
                         <version>${version.openliberty-runtime}</version>
                         <type>zip</type>
                     </assemblyArtifact>
-                    <serverName>defaultServer</serverName>
                     <stripVersion>true</stripVersion>
-                    <configFile>src/main/liberty/config/server.xml</configFile>
-                    <packageFile>${package.file}</packageFile>
-                    <include>${packaging.type}</include>
                     <serverStartTimeout>120</serverStartTimeout>
                     <bootstrapProperties>
                         <default.http.port>${http.port}</default.http.port>

@@ -5,13 +5,6 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>io.openliberty.tools</groupId>
-        <artifactId>liberty-maven-app-parent</artifactId>
-        <version>3.1</version>
-        <relativePath></relativePath>
-    </parent>
-
     <groupId>dev.appsody</groupId>
     <artifactId>java-openliberty</artifactId>
     <version>0.1.0</version>
@@ -35,7 +28,6 @@
         <https.port>9443</https.port>
         <packaging.type>usr</packaging.type>
         <app.name>${project.artifactId}</app.name>
-        <package.file>${project.build.directory}/${app.name}.zip</package.file>
     </properties>
 
     <repositories>
