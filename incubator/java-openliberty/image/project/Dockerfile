@@ -24,10 +24,9 @@ RUN cd /project/user-app && mvn liberty:install-server
 COPY ./user-app/src /project/user-app/src
 RUN cd /project/user-app && mvn package -DskipTests
 
-RUN cd /project/user-app/target && \
-    unzip *.zip && \
+RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
     mkdir /config && \
-    mv wlp/usr/servers/*/* /config/
+    mv defaultServer/* /config/
 
 # Step 2: Package Open Liberty image
 FROM open-liberty:kernel-java8-openj9
