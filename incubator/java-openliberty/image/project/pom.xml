@@ -13,6 +13,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <openliberty.install.dir>/opt/ibm/wlp</openliberty.install.dir>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <!-- Plugins -->
@@ -49,7 +50,6 @@
             </plugins>
         </pluginManagement>
         <plugins>
-            <!-- maven-enforcer-plugin -->
             <!-- Enforcing OpenLiberty and JDK Version -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -78,4 +78,28 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+              <property>
+                <name>env.APPSODY_DEV_MODE</name>
+              </property>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>io.openliberty.tools</groupId>
+                            <artifactId>liberty-maven-plugin</artifactId>
+                            <version>${version.liberty-maven-plugin}</version>
+                            <configuration>
+                                <installDirectory>${openliberty.install.dir}</installDirectory>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
 </project>
