@@ -32,14 +32,14 @@ ENV APPSODY_WATCH_REGEX="^.*(.xml)$"
 
 ENV APPSODY_USER_RUN_AS_LOCAL=true
 
-ENV APPSODY_PREP="../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository install -DskipTests && /project/install-dev-deps.sh"
+ENV APPSODY_PREP="export APPSODY_DEV_MODE=prep;  ../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository install -DskipTests && /project/install-dev-deps.sh"
 
-ENV APPSODY_RUN="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository liberty:dev"
+ENV APPSODY_RUN="export APPSODY_DEV_MODE=run; JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository liberty:dev"
 # See ENV APPSODY_WATCH_REGEX comment
 ENV APPSODY_RUN_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -Dmaven.repo.local=/mvn/repository liberty:dev"
 ENV APPSODY_RUN_KILL=true
 
-ENV APPSODY_DEBUG="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository liberty:dev"
+ENV APPSODY_DEBUG="APPSODY_DEV_MODE=debug && JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository liberty:dev"
 # See ENV APPSODY_WATCH_REGEX comment
 ENV APPSODY_DEBUG_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' ../validate.sh && mvn -Dmaven.repo.local=/mvn/repository liberty:dev"
 ENV APPSODY_DEBUG_KILL=true
