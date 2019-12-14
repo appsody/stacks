@@ -20,6 +20,7 @@ RUN chmod -R 777 /opt/ol
 
 
 WORKDIR /project/user-app
+RUN /project/install-dev-deps.sh
 
 ENV APPSODY_MOUNTS="~/.m2/repository:/mvn/repository;.:/project/user-app"
 
