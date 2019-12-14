@@ -13,7 +13,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <openliberty.install.dir>/opt/ibm/wlp</openliberty.install.dir>
+        <openliberty.install.dir>/opt/ibm</openliberty.install.dir>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <!-- Plugins -->
@@ -94,7 +94,7 @@
                             <artifactId>liberty-maven-plugin</artifactId>
                             <version>${version.liberty-maven-plugin}</version>
                             <configuration>
-                                <installDirectory>${openliberty.install.dir}</installDirectory>
+                                <runtimeInstallDirectory>${openliberty.install.dir}</runtimeInstallDirectory>
                             </configuration>
                         </plugin>
                     </plugins>
