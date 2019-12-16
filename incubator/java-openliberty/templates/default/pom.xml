@@ -141,7 +141,7 @@
                 <executions>
                     <execution>
                         <phase>integration-test</phase>
-                        <id>integration-test</id>
+                        <id>it-exec</id>
                         <goals>
                             <goal>integration-test</goal>
                         </goals>
