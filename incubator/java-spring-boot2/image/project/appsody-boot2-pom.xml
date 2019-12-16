@@ -150,8 +150,6 @@
                     <systemPropertyVariables>
                         <spring.devtools.restart.additional-paths>./target</spring.devtools.restart.additional-paths>
                         <spring.devtools.restart.trigger-file>.appsody-spring-trigger</spring.devtools.restart.trigger-file>
-<!--                        <management.endpoints.web.exposure.include>health,metrics,prometheus,liveness</management.endpoints.web.exposure.include>-->
-<!--                        <opentracing.spring.web.skipPattern>"/api-docs.*|/actuator.*"</opentracing.spring.web.skipPattern>-->
                     </systemPropertyVariables>
                 </configuration>
                 <executions>
