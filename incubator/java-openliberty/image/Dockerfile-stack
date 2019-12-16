@@ -18,9 +18,6 @@ RUN mkdir -p /mvn/repository
 RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 RUN mvn -B -Pdev -Dmaven.repo.local=/mvn/repository liberty:install-server install dependency:go-offline
 
-## NO NEED?
- ## RUN mvn -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipTests -f pom-dev.xml
-
 WORKDIR /project/user-app
 RUN /project/install-dev-deps.sh
 
@@ -37,7 +34,6 @@ ENV APPSODY_USER_RUN_AS_LOCAL=true
 
 # Set APPSODY_DEV_MODE to get in the habit in case we need it someday
 ENV APPSODY_PREP="export APPSODY_DEV_MODE=prep;  ../validate.sh"
-#ENV APPSODY_PREP="export APPSODY_DEV_MODE=prep;  ../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository install -DskipTests && /project/install-dev-deps.sh"
 
 ENV APPSODY_RUN="export APPSODY_DEV_MODE=run JVM_ARGS='-javaagent:resources/javametrics-agent.jar'; mvn -B -Dmaven.repo.local=/mvn/repository liberty:dev"
 # See ENV APPSODY_WATCH_REGEX comment
