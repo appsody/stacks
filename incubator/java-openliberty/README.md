@@ -4,7 +4,7 @@ The Java OpenLiberty stack provides a consistent way of developing microservices
 
 The Java OpenLiberty stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins.
 
-This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.8`. It provides live reloading during development by utilizing `loose application` capabilities.
+This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.12`. It provides live reloading during development by utilizing the "dev mode" capability in the liberty-maven-plugin.
 
 The stack also provides a in-built application monitoring dashboard based on [javametrics](https://github.com/runtimetools/javametrics). This dashboard is only included during development and is not included in the image built using `appsody build`.
 
@@ -14,7 +14,7 @@ The stack also provides a in-built application monitoring dashboard based on [ja
 
 Templates are used to create your local project and start your development. When initializing your project you will be provided with an Open Liberty template application.
 
-The default template provides a `pom.xml` file that references the parent POM defined by the stack and enables Liberty features that support [Eclipse MicroProfile 3.0](https://openliberty.io/docs/ref/feature/#microProfile-3.0.html). Specifically, this template includes:
+The default template provides a `pom.xml` file that references the parent POM defined by the stack and enables Liberty features that support [Eclipse MicroProfile 3.2](https://openliberty.io/docs/ref/feature/#microProfile-3.2.html). Specifically, this template includes:
 
 ### Health
 
@@ -45,7 +45,7 @@ OpenAPI endpoints:
     ```bash
     mkdir my-project
     cd my-project
-    appsody init java-OpenLiberty
+    appsody init java-openliberty
     ```
 
     This will initialize a Java OpenLiberty project using the default template. This will also install all parent pom dependencies into your local .m2 directory.
