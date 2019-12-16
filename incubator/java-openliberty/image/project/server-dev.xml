@@ -1,6 +1,0 @@
-<server>
-    <featureManager>
-        <feature>managedBeans-1.0</feature>
-        <feature>websocket-1.1</feature>
-    </featureManager>
-</server>
