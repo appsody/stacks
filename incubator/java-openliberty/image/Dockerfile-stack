@@ -18,7 +18,6 @@ RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven
 RUN mvn -B -Pstack-package -Dmaven.repo.local=/mvn/repository liberty:install-server install dependency:go-offline
 RUN chmod -R 777 /opt/ol
 
-
 WORKDIR /project/user-app
 RUN /project/install-dev-deps.sh
 

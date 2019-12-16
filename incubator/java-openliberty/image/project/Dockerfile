@@ -6,7 +6,7 @@ RUN apt-get update && \
 
 # Copy and build the dev.appsody:java-openliberty parent pom
 COPY ./pom.xml /project/pom.xml
-RUN cd /project && mvn -B install dependency:go-offline -DskipTests
+RUN cd /project && mvn -Pbuild -B install dependency:go-offline -DskipTests
 
 # Copy and run a simple version check
 COPY ./util /project/util
