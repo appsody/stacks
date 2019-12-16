@@ -19,7 +19,6 @@ RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven
 RUN mvn -B -Pdev -Dmaven.repo.local=/mvn/repository liberty:install-server install dependency:go-offline
 
 WORKDIR /project/user-app
-RUN /project/install-dev-deps.sh
 
 ENV APPSODY_MOUNTS="~/.m2/repository:/mvn/repository;.:/project/user-app"
 ENV APPSODY_DEPS=
