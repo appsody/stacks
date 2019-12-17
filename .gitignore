@@ -14,3 +14,7 @@
 .*.swp
 __pycache__/
 *.py[cod]
+
+### Intellij ###
+*.iml
+.idea
