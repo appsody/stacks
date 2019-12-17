@@ -8,7 +8,12 @@ then
     export GIT_ORG_REPO=${TRAVIS_REPO_SLUG}
     export INDEX_VERSION=${TRAVIS_BUILD_NUMBER}
 
-    export CI_WAIT_FOR='travis_wait'
+    # Either enable or customize how long-running tasks are watched
+    export CI_WAIT_FOR="true"
+  # export CI_WAIT_FOR="$script_dir/ci_wait.sh --interval 3 --limit 30"
+
+    # Trim all output to ensure max log length is not exceeded
+    export VERBOSE=false
 
     if [ $TRAVIS_TAG ] && [ "$TRAVIS_TAG" == "$TRAVIS_BRANCH" ]
     then
