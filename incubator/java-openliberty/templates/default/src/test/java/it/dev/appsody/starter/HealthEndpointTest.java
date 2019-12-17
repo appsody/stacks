@@ -41,7 +41,7 @@ public class HealthEndpointTest {
     }
 
     @Test
-    public void testLivessEndpoint() {
+    public void testLivenessEndpoint() {
         checkHealthEndpoint(LIVENESS_ENDPOINT, "alive");
 
     }
