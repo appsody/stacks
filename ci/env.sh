@@ -97,7 +97,27 @@ stderr() {
 }
 
 trace() {
-    if [ "${VERBOSE}" == "true" ]
+    for x in "$@"
+    do
+        if [ -f "$x" ]
+        then
+            if [ "${VERBOSE}" == "true" ]
+            then
+                >&2 cat "$x"
+            else
+                >&2 echo -e "\n--- Last 20 lines ---"
+                >&2 tail -n 20 "$x"
+                >&2 echo "--- ---"
+            fi
+        elif [ -z "${CI_WAIT_FOR}" ]
+        then
+            >&2 echo "$x"
+        fi
+    done
+}
+
+error_cat() {
+    if [ -z "${CI_WAIT_FOR}" ]
     then
         for x in "$@"
         do
@@ -193,12 +213,7 @@ fi
 
 if [ -z "$IMAGE_REGISTRY_PUBLISH" ]
 then
-    if [ -z "$TRAVIS_TAG" ]
-    then
-        export IMAGE_REGISTRY_PUBLISH=false
-    else
-        export IMAGE_REGISTRY_PUBLISH=true
-    fi
+    export IMAGE_REGISTRY_PUBLISH=false
 fi
 
 if [ -z "$DISPLAY_NAME_PREFIX" ]
