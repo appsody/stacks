@@ -4,14 +4,10 @@ USER root
 
 # Install OS updates
 RUN yum upgrade --disableplugin=subscription-manager -y \
+ && yum install --disableplugin=subscription-manager python2 -y \
  && yum clean --disableplugin=subscription-manager packages \
- && echo 'Finished installing dependencies'
-
- RUN groupadd --gid 1000 node \
-  && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
-
- RUN yum install --disableplugin=subscription-manager python2 -y
- RUN ln -s /usr/bin/python2 /usr/bin/python
+ && ln -s /usr/bin/python2 /usr/bin/python \
+ && useradd --uid 1000 --gid 0 --shell /bin/bash --create-home node
 
 # Install stack dependencies
 WORKDIR /project
@@ -24,7 +20,8 @@ COPY ./user-app/package*.json ./
 RUN npm install --production
 
 COPY . /project
-RUN chown -hR node:node /project
+RUN chown -hR node:0 /project \
+ && chmod -R g=u /project
 
 WORKDIR /project
 
