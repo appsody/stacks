@@ -11,7 +11,7 @@ ENV APPSODY_RUN_ON_CHANGE="go run ."
 ENV APPSODY_RUN_KILL=false
 
 
-ENV APPSODY_TEST="go test ."
+ENV APPSODY_TEST="go test ./..."
 ENV APPSODY_TEST_KILL=false
 
 COPY ./LICENSE /licenses/
