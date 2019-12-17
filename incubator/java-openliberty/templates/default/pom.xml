@@ -95,12 +95,6 @@
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
                 <configuration>
-                    <assemblyArtifact>
-                        <groupId>${liberty.groupId}</groupId>
-                        <artifactId>${liberty.artifactId}</artifactId>
-                        <version>${version.openliberty-runtime}</version>
-                        <type>zip</type>
-                    </assemblyArtifact>
                     <stripVersion>true</stripVersion>
                     <serverStartTimeout>120</serverStartTimeout>
                     <bootstrapProperties>
