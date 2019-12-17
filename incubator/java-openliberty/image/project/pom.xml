@@ -82,8 +82,8 @@
         <!--
             Note for this stack, there are three "modes" through the POMs:
             In addition to:
-               1) the standard appsody "local dev" mode, (activated by the presence of the APPSODY_DEV_MODE env var)
-               2) the `appsody build` Docker build
+               1) the standard appsody "local dev" mode, (activated by the presence of the env var: APPSODY_DEV_MODE)
+               2) the `appsody build` Docker biuld
 
             there is also the possiblity to run from:
                3) the host system ("natively" in the sense of not using appsody at all).
@@ -108,6 +108,12 @@
                             <artifactId>liberty-maven-plugin</artifactId>
                             <version>${version.liberty-maven-plugin}</version>
                             <configuration>
+                                <assemblyArtifact>
+                                    <groupId>${liberty.groupId}</groupId>
+                                    <artifactId>${liberty.artifactId}</artifactId>
+                                    <version>${version.openliberty-runtime}</version>
+                                    <type>zip</type>
+                                </assemblyArtifact>
                                 <runtimeInstallDirectory>${openliberty.install.dir}</runtimeInstallDirectory>
                             </configuration>
                         </plugin>
