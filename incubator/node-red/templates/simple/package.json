@@ -1,0 +1,12 @@
+{
+    "name": "SampleAppsody-Node-RED-Project",
+    "description": "A sample Node-RED Project created with Appsody",
+    "version": "0.1.0",
+    "dependencies": {},
+    "node-red": {
+        "settings": {
+            "flowFile": "flow.json",
+            "credentialsFile": "flow_cred.json"
+        }
+    }
+}

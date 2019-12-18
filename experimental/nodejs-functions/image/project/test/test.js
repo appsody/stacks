@@ -6,7 +6,7 @@ const server = require('../server').server;
 const PORT = require('../server').PORT;
 const url = "http://localhost:" + PORT;
 
-describe("Node.js Express stack", function () {
+describe("Node.js Functions stack", function () {
 
     // Testing /metrics enpoint, metrics are up
     describe('/metrics endpoint', function () {
