@@ -94,11 +94,9 @@
             far for this particular stack.
         -->
         <profile>
-            <id>dev</id>
+            <id>stack-package</id>
             <activation>
-              <property>
-                <name>env.APPSODY_DEV_MODE</name>
-              </property>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <build>
                 <pluginManagement>
