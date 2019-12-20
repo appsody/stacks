@@ -1,12 +1,10 @@
-# Java OpenLiberty Stack
+# Open Liberty Stack
 
-The Java OpenLiberty stack provides a consistent way of developing microservices based upon the [Eclipse MicroProfile specifications](https://microprofile.io). This stack lets you use [Maven](https://maven.apache.org) to develop applications for [Open Liberty](https://openliberty.io) runtime, that is running on OpenJDK with container-optimizations in OpenJ9.
+The Open Liberty stack provides a consistent way of developing microservices based upon the [Jakarta EE](https://jakarta.ee/) and [Eclipse MicroProfile](https://microprofile.io) specifications. This stack lets you use [Maven](https://maven.apache.org) to develop applications for [Open Liberty](https://openliberty.io) runtime, that is running on OpenJDK with container-optimizations in OpenJ9.
 
-The Java OpenLiberty stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins.
+The Open Liberty stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins.
 
-This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.12`. It provides live reloading during development by utilizing the "dev mode" capability in the liberty-maven-plugin.
-
-The stack also provides a in-built application monitoring dashboard based on [javametrics](https://github.com/runtimetools/javametrics). This dashboard is only included during development and is not included in the image built using `appsody build`.
+This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.12`. It provides live reloading during development by utilizing the "dev mode" capability in the liberty-maven-plugin.  To see dev mode in action (though not in Appsody) check out this [shorter demo](https://openliberty.io/blog/2019/10/22/liberty-dev-mode.html) and this  [a bit longer demo](https://blog.sebastian-daschner.com/entries/openliberty-plugin-dev-mode).
 
 **Note:** Maven is provided by the Appsody stack container, allowing you to build, test, and debug your Java application without installing Maven locally. However, we recommend installing Maven locally for the best IDE experience.
 
@@ -48,7 +46,7 @@ OpenAPI endpoints:
     appsody init java-openliberty
     ```
 
-    This will initialize a Java OpenLiberty project using the default template. This will also install all parent pom dependencies into your local .m2 directory.
+    This will initialize an Open Liberty project using the default template. This will also install all parent pom dependencies into your local .m2 directory.
 
 1. Once your project has been initialized, you can run your application using the following command:
 
@@ -68,6 +66,27 @@ OpenAPI endpoints:
     - OpenAPI endpoint: http://localhost:9080/openapi
     - Swagger UI endpoint: http://localhost:9080/openapi/ui
     - Javametrics Dashboard endpoint: http://localhost:9080/javametrics-dash/ (development-time only)
+
+## Stack Usage Notes
+
+1. There is no difference now between the commands: `appsody run` and `appsody debug`, since "run" also launches the Open Liberty server in debug mode.
+1. If you launch via `appsody run` then the liberty-maven-plugin will launch dev mode in "hot test" mode, where unit tests and integration tests get automatically re-executed after each detected change.  
+1. You can alternatively launch the container with `appsody run --interactive`, in which case the tests will only execute after you input `<Enter>` from the terminal, allowing you to make a set of application and/or test changes, and only execute the tests by pressing `<Enter>` when ready. 
+1. The command `appsody test` launches the Open Liberty server, runs integration tests, and then exists with a "success" or "failure" return code (and message).  If you want to run tests interactively, then just use `appsody run`, since dev mode will run allow you to iteratively test and develop interactively.
+
+## Notes to Windows 10 Users
+
+### Shared Drive and Permission Setup 
+* See the instructions [here](https://appsody.dev/docs/docker-windows-aad/) for information on setting up "Shared Drives" and permissions to enable mounting the host filesystem from the appsody container.
+
+### Changes from host side not detected by dev mode (on Win10)
+Because of an issue in Docker for Windows 10, changes made from the host side to the application may not be detected by the liberty-maven-plugin dev mode watcher running inside the Appsody Docker container, and thus the normal expected compile, app update, test execution etc. may not run.
+
+This problem seems to be resolved for some, though not all users by installing a newer Docker Windows Edge release:  **Docker Desktop Edge 2.1.6.1**.
+
+It may be worked around by making the changes from the host, and then doing a `touch` of the corresponding files from within the container.
+
+See [this issue](https://github.com/OpenLiberty/ci.maven/issues/617) for more tracking information.
 
 ## License
 
