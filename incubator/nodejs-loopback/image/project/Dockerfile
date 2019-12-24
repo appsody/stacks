@@ -27,26 +27,26 @@ USER root
 # Install OS updates
 RUN yum upgrade --disableplugin=subscription-manager -y \
  && yum clean --disableplugin=subscription-manager packages \
- && echo 'Finished installing dependencies'
-
-RUN groupadd --gid 1000 node \
-  && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
+ && useradd --uid 1000 --gid 0 --shell /bin/bash --create-home node
 
 RUN mkdir ~/.npm-global
 
 ENV NPM_CONFIG_PREFIX=~/.npm-global
 
 # Copy the project
-COPY --chown=node:node . /project
+COPY . /project
 
 # Copy all dependencies
-COPY --chown=node:node --from=0 /project/node_modules /project/node_modules
-COPY --chown=node:node --from=0 /project/user-app/node_modules /project/user-app/node_modules
+COPY --from=0 /project/node_modules /project/node_modules
+COPY --from=0 /project/user-app/node_modules /project/user-app/node_modules
 
 WORKDIR /project
 
 # Make sure TypeScript source code is transpiled
-RUN npm run build && npm run build --prefix user-app
+RUN npm run build \
+ && npm run build --prefix user-app \
+ && chown -hR node:0 /project \
+ && chmod -R g=u /project 
 
 ENV NODE_ENV production
 ENV PORT 3000
