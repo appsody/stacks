@@ -26,7 +26,7 @@ RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
     mv defaultServer/* /config/
 
 # Step 2: Package Open Liberty image
-FROM open-liberty:kernel-java8-openj9
+FROM open-liberty:19.0.0.2-kernel-java8-openj9
 
 COPY --chown=1001:0 --from=0 /config/ /config/
 

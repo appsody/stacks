@@ -24,7 +24,7 @@
         <!-- OpenLiberty runtime -->
         <liberty.groupId>io.openliberty</liberty.groupId>
         <liberty.artifactId>openliberty-runtime</liberty.artifactId>
-        <version.openliberty-runtime>19.0.0.12</version.openliberty-runtime>
+        <version.openliberty-runtime>{{.stack.liberty_version}}</version.openliberty-runtime>
         <version.liberty-maven-plugin>3.1</version.liberty-maven-plugin>
         <http.port>9080</http.port>
         <https.port>9443</https.port>

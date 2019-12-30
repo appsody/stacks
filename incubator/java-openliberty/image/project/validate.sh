@@ -62,27 +62,27 @@ the parent version in pom.xml, and test your changes.
 fi
 
 # Check child pom for required liberty version, groupID and artifactId
-l_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:assemblyArtifact/x:groupId" pom.xml)
-l_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:assemblyArtifact/x:artifactId" pom.xml)
-l_version=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:assemblyArtifact/x:version" pom.xml)
-if ! [[
-        ( "${l_groupId}" == "${LIBERTY_GROUP_ID}" && "${l_artifactId}" == "${LIBERTY_ARTIFACT_ID}" && "${l_version}" == "${LIBERTY_VERSION}"  )
-        ||
-        ( "${l_groupId}" == "\${liberty.groupId}" && "${l_artifactId}" == "\${liberty.artifactId}" && "${l_version}" == "\${version.openliberty-runtime}" )
-     ]]
-then
-  echo "Project is not using the right OpenLiberty assembly artifact:
-  <assemblyArtifact>
-    <groupId>${LIBERTY_GROUP_ID}</groupId>
-    <artifactId>${LIBERTY_ARTIFACT_ID}</artifactId>
-    <version>${LIBERTY_VERSION}</version>
-  </assemblyArtifact>
-
-Alternatively you could also use these properties:
-  <assemblyArtifact>
-    <groupId>\${liberty.groupId}</groupId>
-    <artifactId>\${liberty.artifactId}</artifactId>
-    <version>\${version.openliberty-runtime}</version>
-  <assemblyArtifact>"
-  exit 1
-fi
+#l_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:assemblyArtifact/x:groupId" pom.xml)
+#l_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:assemblyArtifact/x:artifactId" pom.xml)
+#l_version=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:assemblyArtifact/x:version" pom.xml)
+#if ! [[
+#        ( "${l_groupId}" == "${LIBERTY_GROUP_ID}" && "${l_artifactId}" == "${LIBERTY_ARTIFACT_ID}" && "${l_version}" == "${LIBERTY_VERSION}"  )
+#        ||
+#        ( "${l_groupId}" == "\${liberty.groupId}" && "${l_artifactId}" == "\${liberty.artifactId}" && "${l_version}" == "\${version.openliberty-runtime}" )
+#     ]]
+#then
+#  echo "Project is not using the right OpenLiberty assembly artifact:
+#  <assemblyArtifact>
+#    <groupId>${LIBERTY_GROUP_ID}</groupId>
+#    <artifactId>${LIBERTY_ARTIFACT_ID}</artifactId>
+#    <version>${LIBERTY_VERSION}</version>
+#  </assemblyArtifact>
+#
+#Alternatively you could also use these properties:
+#  <assemblyArtifact>
+#    <groupId>\${liberty.groupId}</groupId>
+#    <artifactId>\${liberty.artifactId}</artifactId>
+#    <version>\${version.openliberty-runtime}</version>
+#  <assemblyArtifact>"
+#  exit 1
+#fi

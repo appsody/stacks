@@ -14,6 +14,7 @@ RUN  /project/util/check_version build
 
 WORKDIR /project/
 RUN mkdir -p /mvn/repository
+#RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=3.6.2
 RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 RUN mvn -B -Pdev -Dmaven.repo.local=/mvn/repository liberty:install-server install dependency:go-offline
 

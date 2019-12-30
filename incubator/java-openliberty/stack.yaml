@@ -17,3 +17,5 @@ maintainers:
     email: awisniew@us.ibm.com 
     github: awisniew90
 default-template: default
+templating-data:
+   liberty_version: '19.0.0.12'   
