@@ -1,104 +1,46 @@
 settings:
   dryrun: false
-variables:
-# Initialize
-  - name: kabanero
-    value: 'kabaneroConfig()'
-#   Customize these
-  - name: build.pr.allowedBranches
-    value: ' [ "master" ] '
-  - name: build.push.allowedBranches
-    value: ' [ "master" ] '
-  - name: build.tag.pattern
-    value: '"\\d\\.\\d\\.\\d"'
-  - name: build.tag.promoteNamespaceSuffix # suffix for promoted namespace. Default is project-test.
-    value: '"-test"'
-  - name: build.registry
-    value: ' "image-registry.openshift-image-registry.svc:5000" '
-  - name: build.namespace
-    value: ' kabanero.namespace ' 
-  - name: build.serviceAccount
-    value: ' "kabanero-operator" '
-  - name: build.timeout
-    value: ' "1h0m0s" '
-# Setting Variqables 
-  - when: ' has(message.webhook)' # webhook event
-    variables: 
-      - name: build.repositoryEvent
-        value: ' message.webhook.header["X-Github-Event"][0] ' # push, pull_request, tag, etc
-      - name: build.jobid
-        value: ' jobID() '
-      - name: build.appsodyConfig
-        value: ' downloadYAML(message.webhook, ".appsody-config.yaml") '
-      - when: ' has(build.appsodyConfig.content) '
-        name: build.collectionID
-        value: ' split( split(build.appsodyConfig.content.stack, "/")[1], ":" )[0]' 
-      - name: build.repositoryName
-        value: 'toDomainName(message.webhook.body.repository.name)'
-      - name: build.nameSuffix
-        value: |-
-          toDomainName(
-              message.webhook.body.repository.owner.login 
-              + "-" 
-              + build.repositoryName 
-              + "-" 
-              + (build.repositoryEvent == "pull_request" ? "pr" : 
-                  (build.repositoryEvent == "push" && message.webhook.body.ref.startsWith("refs/tags/")? "tag": 
-                      build.repositoryEvent) )
-              + "-" 
-              + build.jobid)
-      - name: build.repoURL
-        value: 'message.webhook.body.repository.clone_url'
-      - when: 'build.repositoryEvent == "pull_request"' 
-        variables:
-          - name: build.pr.url
-            value: ' message.webhook.body.pull_request.url '
-          - name: build.pr.action
-            value: ' message.webhook.body.action '
-          - name: build.pr.branch
-            value: 'message.webhook.body.pull_request.base.ref'
-          - name: build.pr.revision
-            value: ' "refs/pull/" + string(message.webhook.body.pull_request.number) + "/head" '
-          - name: build.pr.success.event
-            value: ' { "build-status": { "repositoryEvent" : "pull_request", "status": "succeeded", "name" :  build.nameSuffix } } '
-      - when: 'build.repositoryEvent == "push" '
-        variables:
-          - name: temp.refArray
-            value: ' split(message.webhook.body.ref, "/") '
-          - when: ' temp.refArray[1] == "heads" '
-            variables:  
-              - name: build.push.sha
-                value: ' message.webhook.body.after '
-              - name: build.push.branch
-                value: ' temp.refArray[2] '
-              - name: build.push.toRegistry
-                value: ' build.registry + "/" + build.namespace +  "/" +  build.repositoryName + ":" + build.push.sha'
-          - when: ' temp.refArray[1] == "tags" && temp.refArray[2].matches(build.tag.pattern)'
-            variables:
-              - name: build.tag.sha
-                value: ' message.webhook.body.after '
-              - name: build.tag.promoteToNamespace
-                value: ' build.repositoryName + build.tag.promoteNamespaceSuffix '
-              - name: build.tag.version
-                value: ' temp.refArray[2] '
-              - name: build.tag.fromRegistry
-                value: ' build.registry+ "/" + build.namespace +  "/" +  build.repositoryName + ":" + build.tag.sha '
-              - name: build.tag.toRegistry
-                value: 'build.registry+ "/" + build.tag.promoteToNamespace + "/" +  build.repositoryName + ":" + build.tag.version '
 eventTriggers:
-  - when: 'has(build.collectionID) && has(build.push.branch) && build.push.branch in build.push.allowedBranches'
-    action:
-      applyResources:
-        directory: push
-  - when: |-
-      has(build.collectionID) && 
-      has(build.pr.branch) && 
-      build.pr.branch in build.pr.allowedBranches  &&
-      (build.pr.action == "opened" || build.pr.action == "synchronize") 
-    action:
-      applyResources:
-        directory: pull
-  - when: 'has(build.tag.sha) '
-    action:
-      applyResources:
-        directory: tag
+  - eventSource: github
+    input: message
+    body:
+      # Initialize
+      - build: 'call("preprocessGithubWebhook", message)'
+      - kabanero : 'kabaneroConfig()'
+      # *** General Build Related ***
+      - build.namespace : ' kabanero.namespace '
+      - build.timeout : ' "1h0m0s" '
+      - build.jobid : ' jobID() '
+      - build.nameSuffix: toDomainName( build.ownerLogin + "-" + build.repositoryName + "-" + build.event + "-" + build.jobid)
+      - build.defaultRegistry : ' "image-registry.openshift-image-registry.svc:5000" '
+      - build.serviceAccount : ' "kabanero-operator" '
+
+      #### Push ####
+      - if: ' build.event == "push" '
+        body:
+          - build.push.allowedBranches : ' [ "master" ] '
+          - build.push.toRegistry: ' build.defaultRegistry + "/" + build.namespace + "/" + build.repositoryName + ":" + build.push.sha'
+
+      #### Pull Request ####
+      - if: ' build.event == "pr" '
+        body:
+          - build.pr.allowedBranches: ' [ "master" ] '
+
+      #### Tag ####
+      - if: ' build.event == "tag" '
+        body:
+          - build.tag.pattern : '"\\d\\.\\d\\.\\d"' # only tags that follow this pattern are processed.
+          - build.tag.promoteToNamespace : ' build.repositoryName + "-test" ' # suffix for promoted namespace. Default is project-test.
+          - build.tag.fromRegistry : ' build.defaultRegistry+ "/" + build.namespace + "/" + build.repositoryName + ":" + build.tag.sha '
+          - build.tag.toRegistry : 'build.defaultRegistry+ "/" + build.tag.promoteToNamespace + "/" + build.repositoryName + ":" + build.tag.version '
+
+      - if : 'has(build.collectionID) '
+        #****************** Appsody Build ************************
+        switch:
+          - if: 'build.event == "push" && build.push.branch in build.push.allowedBranches'
+            resultPush: ' applyResources("push", build) '
+          - if : 'build.event == "pr" && build.pr.branch in build.pr.allowedBranches && (build.pr.action == "opened" || build.pr.action == "synchronize") '
+            resultPR: ' applyResources("pull", build) '
+          - if: ' build.event == "tag" '
+            resultTag: ' applyResources("tag", build) '
+

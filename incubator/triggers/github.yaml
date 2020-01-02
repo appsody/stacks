@@ -1,0 +1,88 @@
+# Preprocess github messages to extract useful information
+# Input: webhook message from github
+# {
+#      body: the JSON data from Github POST
+#      header: The header from the Github POST
+# }
+# Output:
+#   {
+#      event: push, pr, tag: processed event name
+#      passthroughHeader: filtered github header  that can be used for passthrough
+#      repositoryEvent: push, pull_request, etc : actual github events
+#      appsodyConfig: {
+#          error: error message encountered reading appsody config.
+#          exists: true if .appsody-config.yaml is found to exist, even if there are errors reading it.
+#          content:   {  # Content of the appsody-config if successfully read.
+#              stack: "kabanero/<stack>:<version>  # e.g., kabanero/nodejs-express:0.2
+#          }
+#      }
+#      collectionID: collection ID of appsody-config.yaml, if it exists
+#      repositoryName: name of the repository
+#      clone_url: The clone_url of the repository
+#      ssh_url: the ssh_url of the repository
+#      ownerLogin: owner of the repository
+#
+#      # For pull requests
+#      pr: {
+#        url:  from message.body.pull_request.url
+#        action: from message.body.action
+#        branch: The base branch to pull into
+#        revision: "refs/pull/<pull request number/head". This is the revision to use to pull the repository
+#      }
+#
+#      # For push:
+#      push: {
+#         sha: the sha representing the change
+#         branch: branch to push
+#      }
+#
+#      # For tag
+#      tag: {
+#          sha: SHA of the change being tagged
+#          version: the tag itself
+#      }
+#
+#
+#   }
+functions:
+  - name: preprocessGithubWebhook
+    input: message
+    output: build
+    body:
+      - if: ' has(message.body) && has(message.header) '  # webhook event
+        body:
+          - build.passthroughHeader: ' filter(message.header, "key.startsWith(\"X-Github\") || key == \"X-Hub-Signature\" " )'
+          - build.repositoryEvent: ' message.header["X-Github-Event"][0] ' # push, pull_request, tag, etc
+          - build.event: build.repositoryEvent
+          - build.appsodyConfig : ' downloadYAML(message, ".appsody-config.yaml") '
+          - if: ' has(build.appsodyConfig.content) '
+            body:
+              - build.collectionID : ' split(split(build.appsodyConfig.content.stack, "/")[1], ":" )[0]'
+          - build.repositoryName : 'message.body.repository.name'
+          - build.clone_url : 'message.body.repository.clone_url'
+          - build.ssh_url : 'message.body.repository.ssh_url'
+          - build.ownerLogin: 'message.body.repository.owner.login'
+          - switch:
+              - if: 'build.repositoryEvent == "pull_request"'
+                body:
+                  - build.event: '"pr"'
+                  - build.pr.url : ' message.body.pull_request.url '
+                  - build.pr.action : ' message.body.action '
+                  - build.pr.branch : 'message.body.pull_request.base.ref'
+                  - build.pr.revision : ' "refs/pull/" + string(message.body.pull_request.number) + "/head" '
+              - if: 'build.repositoryEvent == "push" '
+                body:
+                  - temp.refArray : ' split(message.body.ref, "/") '
+                  - switch:
+                      - if: ' temp.refArray[1] == "heads" '
+                        body:
+                          # push
+                          - build.event: '"push"'
+                          - build.push.sha : ' message.body.after '
+                          - build.push.branch : ' temp.refArray[2] '
+                      - if: ' temp.refArray[1] == "tags" '
+                        body:
+                          # tag
+                          - bulid.event: '"tag"'
+                          - build.tag.sha : ' message.body.after '
+                          - build.tag.version : ' temp.refArray[2] '

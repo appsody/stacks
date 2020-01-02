@@ -1,0 +1,10 @@
+messageProviders:
+- name: nats-provider
+  providerType: nats
+  url: nats://kabanero-nats-cluster.kabanero.svc:4222
+  timeout: 8760h
+
+eventDestinations:
+- name: github
+  providerRef: nats-provider
+  topic: github
