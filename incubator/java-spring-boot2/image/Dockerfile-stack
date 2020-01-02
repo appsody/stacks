@@ -1,61 +1,34 @@
 FROM kabanero/ubi8-maven:0.3.0
 
-# passed in via package script
-ARG GIT_ORG_REPO=appsody/stacks
-ARG IMAGE_REGISTRY_ORG=appsody
-ARG STACK_ID=java-spring-boot2
-ARG MAJOR_VERSION=0
-ARG MINOR_VERSION=1
-ARG PATCH_VERSION=0
-
 LABEL vendor="Kabanero" \
     name="kabanero/java-spring-boot2" \
     version="0.2.10" \
     summary="Image for Kabanero java-spring-boot2 development" \
     description="This image contains the Kabanero development stack for the java-spring-boot2 collection"
 
-USER root
-
 RUN groupadd --gid 1000 java_group \
-  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user
+ && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user \
+ && mkdir -p /mvn/repository \
+ && chown -R java_user:java_group /mvn
 
 COPY ./LICENSE /licenses/
-COPY ./project /project
-COPY ./config /config
+COPY --chown=java_user:java_group ./project /project
+COPY --chown=java_user:java_group ./config /config
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 COPY ./mvn-stack-settings.xml /project/mvn-stack-settings.xml
 
 # Verify properties used to control versions match between this stack and official spring dependencies.
 RUN /project/verify-property-versions.sh
 
+USER java_user
+
 # Build utility for version range processing
 # Install maven wrapper in /project
-RUN mkdir -p /mvn/repository \
- && /project/util/check_version build \
+RUN /project/util/check_version build \
  && cd /project \
  && mvn --no-transfer-progress -B -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 
-# Update maven artifacts to use stack version information
-# Update Dockerfile to build from this appsody stack image (by range)
-RUN if [ ${MAJOR_VERSION} -eq 0 ]; then \
-      export IMAGE_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}; \
-    else \
-      export IMAGE_VERSION=${MAJOR_VERSION}; \
-    fi \
- && export MAVEN_ARTIFACT_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" \
- && sed -i -e "s|{{APPSODY_STACK}}|${IMAGE_REGISTRY_ORG}/${STACK_ID}:${IMAGE_VERSION}|" \
-           -e "s|{{APPSODY_STACK_FULL}}|${IMAGE_REGISTRY_ORG}/${STACK_ID}:${MAVEN_ARTIFACT_VERSION}|" /project/Dockerfile \
- && sed -i -e "s|{{MAVEN_ARTIFACT_VERSION}}|${MAVEN_ARTIFACT_VERSION}|" /project/appsody-boot2-pom.xml
-
 WORKDIR /project/user-app
-
-RUN mkdir -p /mvn/repository
-RUN chown -R java_user:java_group /project
-RUN chown -R java_user:java_group /config
-RUN chown -R java_user:java_group /mvn
-
-USER java_user
-ENV MAVEN_CONFIG "~/.m2"
 
 ENV APPSODY_USER_RUN_AS_LOCAL=true
 ENV APPSODY_PROJECT_DIR="/project"

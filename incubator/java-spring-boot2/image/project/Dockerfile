@@ -1,16 +1,30 @@
 FROM kabanero/ubi8-maven:0.3.0 as compile
 
-USER root
+RUN  groupadd --gid 1000 java_group \
+  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user \
+  && mkdir -p /mvn/repository \
+  && chown -R java_user:java_group /mvn
 
-COPY . /project
+#setup project folder for java build step
+USER java_user
+
+# Layer caching for stack dependencies
+LABEL appsody.stack={{.stack.image.namespace}}/{{.stack.id}}:{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}
+COPY --chown=java_user:java_group appsody-boot2-pom.xml /mvn/appsody-boot2-pom.xml
+RUN mvn --no-transfer-progress -B dependency:go-offline install -f /mvn/appsody-boot2-pom.xml
+
+# Layer caching for application dependencies
+COPY --chown=java_user:java_group user-app/pom.xml /mvn/pom.xml
+RUN mvn --no-transfer-progress -B dependency:go-offline -f /mvn/pom.xml
+
+# Copy and build project
+COPY --chown=java_user:java_group . /project
 
 WORKDIR /project/user-app
 
-RUN mkdir -p /mvn/repository \
- && /project/util/check_version build \
- && /project/java-spring-boot2-build.sh package
-
-USER java_user
+RUN /project/util/check_version build \
+ && /project/java-spring-boot2-build.sh package \
+ && /project/java-spring-boot2-build.sh createStartScript
 
 ### Base image for app.
 
@@ -22,16 +36,26 @@ USER java_user
 
 FROM kabanero/ubi8-openjdk:0.3.0
 
+RUN groupadd --gid 1000 java_group \
+ && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user
+
+ARG artifactId=appsody-spring
+ARG version=1.0-SNAPSHOT
 ENV JVM_ARGS=""
 
-RUN groupadd --gid 1000 java_group \
-  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user
+LABEL org.opencontainers.image.version="${version}"
+LABEL org.opencontainers.image.title="${artifactId}"
+LABEL appsody.stack={{.stack.image.namespace}}/{{.stack.id}}:{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}
 
-COPY --from=compile /project/user-app/target/app.jar /app.jar
+COPY --chown=java_user:java_group --from=compile /project/user-app/target/start.sh /start.sh
+
+ARG DEPENDENCY=/project/user-app/target/dependency
+COPY --chown=java_user:java_group --from=compile ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --chown=java_user:java_group --from=compile ${DEPENDENCY}/META-INF /app/META-INF
+COPY --chown=java_user:java_group --from=compile ${DEPENDENCY}/BOOT-INF/classes /app
 
 USER java_user
 
 EXPOSE 8080
 EXPOSE 8443
-
-ENTRYPOINT [ "sh", "-c", "exec java $JVM_ARGS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
+ENTRYPOINT [ "/start.sh" ]
