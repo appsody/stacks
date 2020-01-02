@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$TRAVIS" == "true" ] && [ -z $BUILD_ALL ]
+if [ "$TRAVIS" == "true" ] && [ "$BUILD_ALL" == "false" ]
 then
     echo "Selecting stacks to build based on Travis environment"
 

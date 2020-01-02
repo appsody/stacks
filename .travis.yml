@@ -16,6 +16,9 @@ branches:
 before_install:
     - sudo snap install yq
 
+before_script:
+  - ./ci/download_cli.sh
+
 script:
   - . ./ci/build.sh
 

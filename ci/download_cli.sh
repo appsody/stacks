@@ -1,5 +1,5 @@
 #!/bin/bash
-# invoked from ci/test.env
+# invoked from .travis.yml
 
 if [ "$TRAVIS" == "true" ]
 then
@@ -9,14 +9,17 @@ then
     fi
     if [ -z "${APPSODY_CLI_DOWNLOAD_URL}" ]
     then
-        APPSODY_CLI_DOWNLOAD_URL=https://github.com/appsody/appsody/releases/download/
+        APPSODY_CLI_DOWNLOAD_URL=https://github.com/appsody/appsody/releases/download
     fi
     if [ -z "${APPSODY_CLI_FALLBACK}" ]
     then
-        APPSODY_CLI_FALLBACK=0.4.7
+        APPSODY_CLI_FALLBACK=0.5.3
     fi
 
-    cli_dir=$build_dir/cli
+    script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+    base_dir=$(cd "${script_dir}/.." && pwd)
+
+    cli_dir=$base_dir/cli
     mkdir -p $cli_dir
 
     curl -L -s -o $cli_dir/release.json "$APPSODY_CLI_RELEASE_URL"
@@ -29,7 +32,7 @@ then
     fi
 
     cli_deb="appsody_${release_tag}_amd64.deb"
-    cli_dist=https://github.com/appsody/appsody/releases/download/${release_tag}/${cli_deb}
+    cli_dist=$APPSODY_CLI_DOWNLOAD_URL/${release_tag}/${cli_deb}
 
     echo " release_tag=${release_tag}"
     echo " cli_deb=${cli_deb}"
