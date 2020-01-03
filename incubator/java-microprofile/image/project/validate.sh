@@ -19,7 +19,7 @@ eval $(mvn -q -Dexec.executable=echo -Dexec.args="${args}" --non-recursive -f ..
 
 # Install parent pom
 echo "Installing parent ${PARENT_GROUP_ID}:${PARENT_ARTIFACT_ID}:${PARENT_VERSION}"
-mvn install -Dmaven.repo.local=/mvn/repository -Denforcer.skip=true -f ../pom.xml
+mvn -B install -Dmaven.repo.local=/mvn/repository -Denforcer.skip=true -f ../pom.xml
 
 # Get parent pom information
 a_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:groupId" /project/pom.xml)

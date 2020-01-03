@@ -2,16 +2,16 @@ FROM kabanero/ubi8-maven:0.3.0
 
 LABEL vendor="Kabanero" \
     name="kabanero/java-microprofile" \
-    version="0.2.10" \
+    version="0.2.21" \
     summary="Image for Kabanero java-microprofile development" \
     description="This image contains the Kabanero development stack for the java-microprofile collection"
 
 USER root
 
-RUN groupadd --gid 1000 java_group \
- && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user
-# Dependency install
+RUN groupadd --gid 2000 java_group \
+ && useradd --uid 2000 --gid java_group --shell /bin/bash --create-home java_user
 
+# Dependency install
 COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
@@ -28,6 +28,7 @@ WORKDIR /project/user-app
 RUN chown -R java_user:java_group /project
 RUN chown -R java_user:java_group /config
 RUN chown -R java_user:java_group /mvn
+RUN chmod -R 0777 /mvn
 
 USER java_user
 ENV MAVEN_CONFIG "~/.m2"
