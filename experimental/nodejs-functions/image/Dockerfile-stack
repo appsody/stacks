@@ -1,4 +1,4 @@
-FROM appsody/nodejs-express:0.2
+FROM appsody/nodejs-express:0.3
 
 ENV APPSODY_MOUNTS=/:/project/user-app/functions
 ENV APPSODY_DEPS=/project/user-app/functions/node_modules
