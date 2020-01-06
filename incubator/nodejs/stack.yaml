@@ -1,13 +1,10 @@
 name: Node.js
-version: 0.3.0
+version: 0.3.1
 description: Runtime for Node.js applications
 license: Apache-2.0
 language: nodejs
 maintainers:
-  - name: Chris Bailey
-    email: cnbailey@gmail.com
-    github-id: seabaylea
-  - name: Neeraj Laad
-    email: neeraj.laad@gmail.com
-    github-id: neeraj-laad
+  - name: Sam Roberts
+    email: vieuxtech@gmail.com
+    github-id: sam-github
 default-template: simple
