@@ -144,6 +144,12 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>${spring-boot.version}</version>
+        <configuration>
+          <systemPropertyVariables>
+            <spring.devtools.restart.additional-paths>./target</spring.devtools.restart.additional-paths>
+            <spring.devtools.restart.trigger-file>.appsody-spring-trigger</spring.devtools.restart.trigger-file>
+          </systemPropertyVariables>
+        </configuration>
         <executions>
           <execution>
             <goals>
