@@ -1,22 +1,30 @@
 FROM kabanero/ubi8-maven:0.3.0
 
-USER root
-
-COPY . /project
-
-RUN  /project/util/check_version build
-
+# Copy and build the dev.appsody:java-microprofile parent pom
+COPY ./pom.xml /project/pom.xml
 RUN cd /project && mvn -B install dependency:go-offline -DskipTests
 
-WORKDIR /project/user-app
+# Copy and run a simple version check
+COPY ./util /project/util
+RUN  /project/util/check_version build
 
-RUN mvn -B install -DskipTests
+# Copy the user's application pom and resolve all dependencies
+COPY ./user-app/pom.xml /project/user-app/pom.xml
+RUN cd /project/user-app && mvn package -Dskip=true -DskipTests
 
-RUN cd target && \
+# Download Open Liberty here to prevent redownloading each time the app is changed
+RUN cd /project/user-app && mvn -B liberty:install-server
+
+# Copy and build the application source
+COPY ./user-app/src /project/user-app/src
+RUN cd /project/user-app && mvn package -DskipTests
+
+RUN cd /project/user-app/target && \
     unzip *.zip && \
     mkdir /config && \
     mv wlp/usr/servers/*/* /config/
 
+# Step 2: Package Open Liberty image
 FROM openliberty/open-liberty:19.0.0.9-microProfile3-ubi-min
 
 COPY --chown=1001:0 --from=0 /config/ /opt/ol/wlp/usr/servers/defaultServer/
