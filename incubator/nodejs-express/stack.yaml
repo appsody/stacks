@@ -1,13 +1,10 @@
 name: Node.js Express
-version: 0.3.0
+version: 0.4.0
 description: Express web framework for Node.js
 license: Apache-2.0
 language: nodejs
 maintainers:
-  - name: Chris Bailey
-    email: cnbailey@gmail.com
-    github-id: seabaylea
-  - name: Neeraj Laad
-    email: neeraj.laad@gmail.com
-    github-id: neeraj-laad
+  - name: Sam Roberts
+    email: vieuxtech@gmail.com
+    github-id: sam-github
 default-template: simple
