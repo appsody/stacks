@@ -55,7 +55,7 @@
                   </goals>
                   <configuration>
                   <stripVersion>true</stripVersion>
-                  <outputDirectory>${project.build.directory}/../user-app/target/liberty/wlp/usr/servers/defaultServer/dropins</outputDirectory>
+                  <outputDirectory>/opt/ol/wlp/usr/servers/defaultServer/dropins</outputDirectory>
                   <includeArtifactIds>javametrics-dash,javametrics-rest</includeArtifactIds>
               </configuration>
               </execution>
@@ -67,7 +67,7 @@
                   </goals>
                   <configuration>
                   <stripVersion>true</stripVersion>
-                  <outputDirectory>${project.build.directory}/../user-app/target/liberty/wlp/usr/servers/defaultServer/resources/</outputDirectory>
+                  <outputDirectory>/opt/ol/wlp/usr/servers/defaultServer/resources/</outputDirectory>
                   <includeArtifactIds>javametrics-agent</includeArtifactIds>
               </configuration>
               </execution>
@@ -78,7 +78,7 @@
                       <goal>copy-dependencies</goal>
                   </goals>
                   <configuration>
-                  <outputDirectory>${project.build.directory}/../user-app/target/liberty/wlp/usr/servers/defaultServer/resources/asm</outputDirectory>
+                  <outputDirectory>/opt/ol/wlp/usr/servers/defaultServer/resources/asm</outputDirectory>
                   <includeGroupIds>org.ow2.asm</includeGroupIds>
                   <includeArtifactIds>asm,asm-commons</includeArtifactIds>
               </configuration>
