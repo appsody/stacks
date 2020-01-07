@@ -61,6 +61,17 @@ do
                         echo "Error linting $repo_name/$stack_id"
                         exit 1
                     fi
+                    
+                    BUILDAH=""
+                    BUILDAH_OPTIONS=""
+                    if [ -n "${USE_BUILDAH}" ] && [ "${USE_BUILDAH}" == "true" ]
+                    then 
+                        BUILDAH="--buildah"
+                        if [ -n "${BUILDAH_FORMAT}" ]
+                        then 
+                            BUILDAH_OPTIONS="--buildah-options '--format=$BUILDAH_FORMAT'"
+                        fi
+                    fi
 
                     rm -f ${build_dir}/*.$stack_id.$stack_version.log
 
@@ -69,7 +80,9 @@ do
                     if logged ${build_dir}/package.$stack_id.$stack_version.log \
                         appsody stack package \
                         --image-registry $IMAGE_REGISTRY \
-                        --image-namespace $IMAGE_REGISTRY_ORG
+                        --image-namespace $IMAGE_REGISTRY_ORG \
+                        $BUILDAH $BUILDAH_OPTIONS \
+                        > ${build_dir}/package.$stack_id.$stack_version.log 2>&1
                     then
                         echo "appsody stack package: ok, $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
                         trace "${build_dir}/package.$stack_id.$stack_version.log"

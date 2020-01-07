@@ -41,6 +41,10 @@ spec:
           # install git
           yum install -y git which findutils
 
+          curl -L -s -o "appsody-0.5.4-1.x86_64.rpm" "https://github.com/groeges/appsody/releases/download/0.5.4/appsody-0.5.4-1.x86_64.rpm"
+          sudo yum install -y appsody-0.5.4-1.x86_64.rpm
+          rm appsody-0.5.4-1.x86_64.rpm
+                
           # install pyyaml
           curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
           python3 get-pip.py
