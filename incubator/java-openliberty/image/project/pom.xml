@@ -83,9 +83,9 @@
             Note for this stack, there are three "modes" through the POMs:
             In addition to:
                1) the standard appsody "local dev" mode, (activated by the presence of the env var: APPSODY_DEV_MODE)
-               2) the `appsody build` Docker biuld
+               2) the `appsody build` Docker build
 
-            there is also the possiblity to run from:
+            there is also the possibility to run from:
                3) the host system ("natively" in the sense of not using appsody at all).
 
             It is tempting to consider adding profile-specific behavior for 2) and 3)

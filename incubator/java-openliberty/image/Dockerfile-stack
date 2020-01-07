@@ -22,7 +22,6 @@ RUN chmod -R 777 /opt/ol
 WORKDIR /project/user-app
 
 ENV APPSODY_MOUNTS="~/.m2/repository:/mvn/repository;.:/project/user-app"
-ENV APPSODY_DEPS=
 
 ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/target
