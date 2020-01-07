@@ -9,38 +9,19 @@ spec:
     - name: git-source
       type: git
     params:
-    - name: pathToDockerFile
-      default: /workspace/extracted/Dockerfile
     - name: pathToContext
       default: /workspace/extracted
     - name: appsody-yaml-file-path
       default: $HOME/.appsody/.appsody.yaml
     - name: app-deploy-file-name
       default: app-deploy.yaml
+    - name: collection-image-registry-url
+      default: docker.io
   outputs:
     resources:
     - name: docker-image
       type: image
   steps:
-  - name: extract
-    securityContext:
-      privileged: true
-    image: appsody/appsody-buildah:0.5.0-buildah1.9.0
-    command: ["/bin/bash"]
-    args:
-      - -c
-      - |
-        echo "running appsody extract"
-        appsody extract --buildah --target-dir /workspace/$gitsource -v
-        echo "extract completed"
-        ls -la /workspace/$gitsource
-        cat /workspace/git-source/$(inputs.params.app-deploy-file-name)
-    env:
-    - name: gitsource
-      value: git-source
-    volumeMounts:
-    - mountPath: /var/lib/containers
-      name: varlibcontainers
   - name: validate-collection-is-active
     securityContext:
       privileged: true
@@ -55,28 +36,21 @@ spec:
   - name: build
     securityContext:
       privileged: true
-    image: appsody/appsody-buildah:0.5.0-buildah1.9.0
+    image: appsody/appsody-buildah:0.5.3 
     command: ["/bin/bash"]
     args:
       - -c
       - |
         echo "Checking for configmap value....DEFAULT_COLLECTION_IMAGE_REGISTRY_URL=$DEFAULT_COLLECTION_IMAGE_REGISTRY_URL"
-        echo "appsody-yaml-file-path=$(inputs.params.appsody-yaml-file-path)"
+        COLLECTION_IMAGE_REGISTRY_URL=$(inputs.params.collection-image-registry-url)
         if [ -z "$DEFAULT_COLLECTION_IMAGE_REGISTRY_URL" ]
         then
-            echo "DEFAULT_COLLECTION_IMAGE_REGISTRY_URL=$DEFAULT_COLLECTION_IMAGE_REGISTRY_URL given as input by user is empty, so using the registry for collection image download from $(inputs.params.appsody-yaml-file-path)"
+            echo "DEFAULT_COLLECTION_IMAGE_REGISTRY_URL=$DEFAULT_COLLECTION_IMAGE_REGISTRY_URL given as input by user is empty, so using the registry=$COLLECTION_IMAGE_REGISTRY_URL for collection image download"
         else
-            if [ -f "$(inputs.params.appsody-yaml-file-path)" ]
-            then
-               echo "Appsody yaml file $(inputs.params.appsody-yaml-file-path) exists."
-            else
-               echo "Appsody yaml file $(inputs.params.appsody-yaml-file-path) does not exists, we are creating it by running appsody list command."
-               appsody version
-            fi
-            #Replacing the container registry from index.docker.io to DEFAULT_COLLECTION_IMAGE_REGISTRY_URL for collection image download in the file inputs.params.appsody-yaml-file-path
-            sed -i -e 's#images: .*$#images: $(DEFAULT_COLLECTION_IMAGE_REGISTRY_URL)#g' $(inputs.params.appsody-yaml-file-path)
-            echo "sed command completed successfully"
-              
+
+            echo " collection image registry url setup by user is $DEFAULT_COLLECTION_IMAGE_REGISTRY_URL"            
+            COLLECTION_IMAGE_REGISTRY_URL=$DEFAULT_COLLECTION_IMAGE_REGISTRY_URL
+             
             #Creating a cert for authentication of buildah login of the DEFAULT_COLLECTION_IMAGE_REGISTRY_URL registry url 
             echo "HOST=$DEFAULT_COLLECTION_IMAGE_REGISTRY_URL" > cert-creation.sh
             echo "sudo mkdir -p /etc/docker/certs.d/\${HOST}" >> cert-creation.sh
@@ -94,7 +68,7 @@ spec:
              ./cert-creation.sh
         fi
         cd /workspace/$gitsource
-        appsody build -t $(outputs.resources.docker-image.url) --buildah --buildah-options "--format=docker"
+        appsody build -t $(outputs.resources.docker-image.url) --buildah --buildah-options "--format=docker" --stack-registry "$COLLECTION_IMAGE_REGISTRY_URL"
     env:
     - name: gitsource
       value: git-source
@@ -126,7 +100,7 @@ spec:
   - name: push
     securityContext:
       privileged: true
-    image: appsody/appsody-buildah:0.5.0-buildah1.9.0
+    image: appsody/appsody-buildah:0.5.3 
     command: ['buildah', 'push', '--tls-verify=false', '$(outputs.resources.docker-image.url)', 'docker://$(outputs.resources.docker-image.url)']
     env:
     - name: gitsource
