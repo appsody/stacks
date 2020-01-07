@@ -66,10 +66,10 @@ do
                     retcode=0
                     
                     if [ "$CI_WAIT_FOR" != "" ]; then
-                        $appsody_cmd -v --image-namespace $IMAGE_REGISTRY_ORG  2>&1 || retcode=$?
+                        $appsody_cmd -v --image-registry $IMAGE_REGISTRY --image-namespace $IMAGE_REGISTRY_ORG  2>&1 || retcode=$?
                     else
                         echo "File containing output from image build: $logFileName"
-                        $appsody_cmd -v --image-namespace $IMAGE_REGISTRY_ORG  > $logFileName 2>&1 || retcode=$?
+                        $appsody_cmd -v --image-registry $IMAGE_REGISTRY --image-namespace $IMAGE_REGISTRY_ORG  > $logFileName 2>&1 || retcode=$?
                     fi
                    
                     if [ $retcode != 0 ]; then
@@ -86,10 +86,10 @@ do
                         echo "created $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
                     fi
 
-                    echo "$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
-                    echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version" >> $build_dir/image_list
-                    echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
-                    echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
+                    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
+                    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id:$stack_version" >> $build_dir/image_list
+                    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
+                    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
 
                     echo "File containing output from add-to-repo: ${build_dir}/add-to-repo.$stack_id.$stack_version.log"
                     if ${CI_WAIT_FOR} appsody stack add-to-repo $repo_name -v --release-url $RELEASE_URL/$stack_id-v$stack_version/$repo_name. $useCachedIndex \
@@ -164,18 +164,18 @@ fi
 
 echo "File containing output from $INDEX_IMAGE build: ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
 if ${CI_WAIT_FOR} image_build $nginx_arg \
-    -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE \
-    -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION} \
+    -t $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE \
+    -t $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION} \
     -f $script_dir/nginx/Dockerfile $script_dir \
     > ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log
 then
     trace  "Output from $INDEX_IMAGE build" "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
 
     echo "created $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
-    echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE" >> $build_dir/image_list
-    echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}" >> $build_dir/image_list
+    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE" >> $build_dir/image_list
+    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}" >> $build_dir/image_list
 else
-    echo "failed building $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
+    echo "failed building $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
     cat "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
     exit 1
 fi

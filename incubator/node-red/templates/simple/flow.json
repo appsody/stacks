@@ -1,0 +1,49 @@
+[
+    {
+        "id": "52e8921e.7f230c",
+        "type": "template",
+        "z": "87cbf546.13e278",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<html>\n    <head>\n        \n    </head>\n    <body>\n        <h1>Hello World!</h1>\n        <p>This is the default flow created by the Appsody Simple Node-RED template.</p>\n    </body>\n</html>",
+        "output": "str",
+        "x": 280,
+        "y": 80,
+        "wires": [
+            [
+                "5e79c431.71fdcc"
+            ]
+        ]
+    },
+    {
+        "id": "14f94ef9.eeaba1",
+        "type": "http in",
+        "z": "87cbf546.13e278",
+        "name": "",
+        "url": "/",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 80,
+        "wires": [
+            [
+                "52e8921e.7f230c"
+            ]
+        ]
+    },
+    {
+        "id": "5e79c431.71fdcc",
+        "type": "http response",
+        "z": "87cbf546.13e278",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 470,
+        "y": 80,
+        "wires": []
+    }
+]

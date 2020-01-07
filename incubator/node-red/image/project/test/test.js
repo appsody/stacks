@@ -2,11 +2,13 @@ const expect = require('chai').expect;
 const request = require('request');
 
 // Start the server before testing
-const server = require('../server').server;
+const SERVER = require('../server').SERVER;
+const STARTED = require('../server').STARTED;
+const RED = require('../server').RED;
 const PORT = require('../server').PORT;
 const url = "http://localhost:" + PORT;
 
-describe("Node.js Express stack", function () {
+describe("Node-RED Stack", function () {
 
     // Testing /metrics enpoint, metrics are up
     describe('/metrics endpoint', function () {
@@ -73,7 +75,12 @@ describe("Node.js Express stack", function () {
     });
 });
 
+before(done => {
+    STARTED.then(done);
+})
 // Stop the server after testing
 after(done => {
-    server.close(done);
+    RED.stop().then(() => {
+        SERVER.close(done);
+    });
 });
