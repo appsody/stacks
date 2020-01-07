@@ -1,12 +1,12 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
-  name: git-{{.build.nameSuffix}}
-  namespace: {{.build.namespace}}
+  name: git-{{.nameSuffix}}
+  namespace: {.namespace}}
 spec:
   type: git
   params:
     - name: url
-      value: {{.build.repoURL}}
+      value: {{.clone_url}}
     - name: revision
-      value: {{.build.pr.revision}}
+      value: {.pr.revision}}

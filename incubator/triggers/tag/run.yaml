@@ -1,17 +1,17 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineRun
 metadata:
-  name: {{.build.nameSuffix}}
-  namespace: {{.build.namespace}}
+  name: {{.nameSuffix}}
+  namespace: {{.namespace}}
 spec:
-  serviceAccount: {{.build.serviceAccount}}
+  serviceAccount: {{.serviceAccount}}
   timeout: 
   pipelineRef:
-    name: {{.build.collectionID}}-image-retag-push-pipeline
+    name: {{.collectionID}}-image-retag-push-pipeline
   resources:
     - name: docker-src-image
       resourceRef:
-        name: docker-src-{{.build.nameSuffix}}
+        name: docker-src-{{.nameSuffix}}
     - name: docker-dest-image
       resourceRef:
-        name: docker-dest-{{.build.nameSuffix}}
+        name: docker-dest-{{.nameSuffix}}

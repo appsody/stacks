@@ -1,14 +1,14 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineRun
 metadata:
-  name:  {{.build.nameSuffix}}
-  namespace: {{.build.namespace}}
+  name:  {{.nameSuffix}}
+  namespace: {{.namespace}}
 spec:
   pipelineRef:
-    name: {{.build.collectionID}}-build-pipeline
+    name: {{.collectionID}}-build-pipeline
   resources:
   - name: git-source
     resourceRef:
-      name: git-{{.build.nameSuffix}}
-  serviceAccount: {{.build.serviceAccount}}
-  timeout: {{.build.timeout}}
+      name: git-{{.nameSuffix}}
+  serviceAccount: {{.serviceAccount}}
+  timeout: {{.timeout}}
