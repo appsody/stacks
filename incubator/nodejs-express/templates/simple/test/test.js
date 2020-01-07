@@ -4,7 +4,7 @@ var request = require('request');
 // Start the server before testing
 const server = require('../../server').server;
 const PORT = require('../../server').PORT;
-const url = "http://localhost:" + PORT;
+const url = 'http://localhost:' + PORT;
 
 describe('Node.js Express Simple template', function () {
     // Testing / endpoint, should return 200

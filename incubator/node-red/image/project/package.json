@@ -1,7 +1,7 @@
 {
-  "name": "nodejs-express",
-  "version": "0.4.0",
-  "description": "Node.js Express Stack",
+  "name": "node-red-stack",
+  "version": "0.1.0",
+  "description": "Node-RED Stack",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -14,16 +14,15 @@
     "test": "mocha"
   },
   "dependencies": {
+    "node-red": "1.x",
     "@cloudnative/health-connect": "^2.0.0",
-    "appmetrics-prometheus": "~3.1.0",
-    "express": "~4.17.1",
-    "express-pino-logger": "^4.0.0",
-    "pino": "^5.14.0"
+    "appmetrics-prometheus": "^3.0.0",
+    "express": "~4.16.0"
   },
   "devDependencies": {
-    "appmetrics-dash": "^5.3.0",
     "chai": "^4.2.0",
     "mocha": "~6.1.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "appmetrics-dash": "^5.0.0"
   }
 }
