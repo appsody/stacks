@@ -65,7 +65,6 @@ OpenAPI endpoints:
     - Metrics endpoint: http://localhost:9080/metrics (login as `admin` user with `adminpwd` password)
     - OpenAPI endpoint: http://localhost:9080/openapi
     - Swagger UI endpoint: http://localhost:9080/openapi/ui
-    - Javametrics Dashboard endpoint: http://localhost:9080/javametrics-dash/ (development-time only)
 
 ## Stack Usage Notes
 
