@@ -1,0 +1,10 @@
+name: Go Modules
+version: 0.1.0
+description: Runtime for Go using Go 1.11+ modules for dependencies
+license: Apache-2.0
+language: go
+maintainers:
+  - name: John Pape
+    email: jpapejr@icloud.com
+    github-id: jpapejr
+default-template: default

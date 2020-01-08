@@ -90,24 +90,53 @@ exec_hooks() {
 }
 
 stderr() {
-    for x in "$@"
-    do
-        >&2 echo "$x"
-    done
+    if [ -f "$1" ]
+    then
+        if [ "${VERBOSE}" = "true" ]
+        then
+            >&2 cat "$1"
+        else
+            # Work around CI log limits
+            >&2 echo -e "\n--- Output (at most 4000 lines) ---"
+            >&2 tail -n 4000 "$1"
+            >&2 echo "--- ---"
+        fi
+    else
+        >&2 echo "$1"
+    fi
 }
 
 trace() {
-    if [ "${VERBOSE}" == "true" ]
+    if [ -f "$1" ]
     then
-        for x in "$@"
-        do
-            if [ -f "$x" ]
-            then
-                >&2 cat "$x"
-            else
-                >&2 echo "$x"
-            fi
-        done
+        if [ "${VERBOSE}" = "true" ]
+        then
+            cat "$1"
+        else
+            # Work around CI log limits
+            echo -e "\n--- Output (at most 4000 lines) ---"
+            tail -n 4000 "$1"
+            echo "--- ---"
+        fi
+    else
+        echo "$1"
+    fi
+}
+
+logged() {
+    local log=$1
+    shift
+
+    if [ "${CI_WAIT_FOR}" = "true" ]
+    then
+        # check every 30 seconds for a max of 40 minutes
+        $script_dir/ci_wait.sh --interval 30 --limit 2400 --append 1 --output "$log" $@
+    elif [ -n "${CI_WAIT_FOR}" ]
+    then
+        # custom interval/limit for environment
+        ${CI_WAIT_FOR} --append 1 --output "$log" $@
+    else
+        $@ >> ${log} 2>&1
     fi
 }
 
@@ -193,12 +222,7 @@ fi
 
 if [ -z "$IMAGE_REGISTRY_PUBLISH" ]
 then
-    if [ -z "$TRAVIS_TAG" ]
-    then
-        export IMAGE_REGISTRY_PUBLISH=false
-    else
-        export IMAGE_REGISTRY_PUBLISH=true
-    fi
+    export IMAGE_REGISTRY_PUBLISH=false
 fi
 
 if [ -z "$DISPLAY_NAME_PREFIX" ]
@@ -207,13 +231,15 @@ then
 fi
 
 image_build() {
+    local log=$1
+    shift 
+
     local cmd="docker build"
     if [ "$USE_BUILDAH" == "true" ]; then
         cmd="buildah bud"
     fi
 
-    echo "> ${CI_WAIT_FOR} ${cmd} $@"
-    if ! ${CI_WAIT_FOR} ${cmd} $@
+    if ! logged "${log}" ${cmd} $@
     then
       echo "Failed building image"
       exit 1
