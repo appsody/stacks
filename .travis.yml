@@ -15,16 +15,12 @@ branches:
 
 before_install:
     - sudo snap install yq
-    - |
-      wget -qO- "https://github.com/crazy-max/travis-wait-enhanced/releases/download/v1.1.0/travis-wait-enhanced_1.1.0_linux_x86_64.tar.gz" | tar -zxvf - travis-wait-enhanced
-      mv travis-wait-enhanced /home/travis/bin/
-      travis-wait-enhanced --version
 
 before_script:
   - ./ci/download_cli.sh
 
 script:
-  - travis-wait-enhanced --interval=1m --timeout=45m --print-timestamp -- ./ci/build.sh
+  - . ./ci/build.sh
     
 # note before_deploy will run before each deploy provider
 before_deploy:
