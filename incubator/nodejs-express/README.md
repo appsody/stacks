@@ -2,7 +2,7 @@
 
 The Node.js Express stack extends the [Node.js stack](../nodejs/README.md) and provides a consistent way of developing web applications using [Express](https://expressjs.com). Express is a fast, minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.
 
-This stack is based on `Node.js v10` and `Express v4.16.0` and enables health checking and application metrics out of the box. The stack also provides a set of tests written using [Mocha](https://mochajs.org) test framework, while the application metadata is provided via a `package.json` file.
+This stack is based on `Node.js v12` and `Express v4.17.x` and enables health checking and application metrics out of the box. The stack also provides a set of tests written using the [Mocha](https://mochajs.org) test framework, while the application metadata is provided via a `package.json` file.
 
 ## Health checking
 
@@ -32,7 +32,7 @@ This stack also comes with Prometheus metrics, which has been preconfigured to w
 
 During development of your application, the nodejs-express stack provides a built-in application performance dashboard using the [appmetrics-dash](https://github.com/runtimetools/appmetrics-dash) module. This makes it easy to see the resource usage and HTTP endpoint performance of your application as it is developed.
 
-The dashboard is only included during development, and is not included in images build using `appsody build`.
+The dashboard is only included during development, and is not included in images built using `appsody build`.
 
 ## Templates
 
@@ -41,6 +41,27 @@ Templates are used to create your local project and start your development. This
 Simple, the default template, provides you with a basic Express app and a sample test in a test sub directory.
 
 The scaffold template provides you with an Express application and additional subdirectories for separate routes and views with sample files for each. This gives the user the ability to easily add multiple routes and views, and implement them in the Express application in the `app.js` file provided in this template. This template also comes with a sample test in a test sub directory.
+
+The application must have a top-level package.json file, and it must contain a
+property `"main": APP` (the templates all set `APP` to `"app.js"` and include a
+skeleton implementation in that file). The `APP` will be required, and must
+export a function returning an express router or application.
+
+The function will be called with an `options` argument, which may be ignored.
+The app will be mounted at the application root, [somewhat like](https://github.com/appsody/stacks/blob/master/incubator/nodejs-express/image/project/server.js):
+```javascript
+const app = require('express')();
+app.use('/', require('.../app.js')(options);
+```
+
+Options contains:
+- `server` {http.Server} applications that use WebSockets require access
+  to the server. For example, with [socket.io](https://socket.io/):
+  `io = require('socket.io')(options.server)`.
+
+The [`express-pino-logger`](https://registry.npmjs.org/express-pino-logger) has been registered as middleware, so:
+1. All requests will be logged as JSON, for easy consumability by log aggregators.
+2. All `req` objects will be decorated with a `req.log` property, an instance of [`pino`](https://registry.npmjs.org/pino). It can be used for application specific logging. The default log level is `'info'` in production, and `'debug'` in non-production.
 
 ## Getting Started
 

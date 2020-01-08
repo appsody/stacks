@@ -1,0 +1,27 @@
+FROM golang:1.12
+
+ENV APPSODY_MOUNTS=/:/project/user-app
+
+ENV APPSODY_WATCH_DIR=/project/user-app
+ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/vendor
+ENV APPSODY_WATCH_REGEX="^.*.(go|mod)$"
+
+ENV APPSODY_RUN="go run ."
+ENV APPSODY_RUN_ON_CHANGE="go run ."
+ENV APPSODY_RUN_KILL=false
+
+
+ENV APPSODY_TEST="go test ./..."
+ENV APPSODY_TEST_KILL=false
+
+COPY ./LICENSE /licenses/
+COPY ./project /project
+COPY ./config /config
+
+WORKDIR /project/user-app
+
+ENV PORT=3000
+
+EXPOSE 3000
+EXPOSE 9229
+

@@ -1,4 +1,4 @@
-FROM {{APPSODY_STACK}} as compile
+FROM {{.stack.image.namespace}}/{{.stack.id}}:{{.stack.semver.major}}.{{.stack.semver.minor}} as compile
 
 COPY . /project
 
@@ -41,7 +41,7 @@ ENV JVM_ARGS=""
 
 LABEL org.opencontainers.image.version="${version}"
 LABEL org.opencontainers.image.title="${artifactId}"
-LABEL appsody.stack="{{APPSODY_STACK_FULL}}"
+LABEL appsody.stack="{{.stack.image.namespace}}/{{.stack.id}}:{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}"
 
 EXPOSE 9080
 EXPOSE 9443

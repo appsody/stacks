@@ -24,9 +24,9 @@
         <relativePath></relativePath>
     </parent>
 
-    <groupId>dev.appsody</groupId>
-    <artifactId>java-spring-boot2-liberty</artifactId>
-    <version>{{MAVEN_ARTIFACT_VERSION}}</version>
+    <groupId>{{.stack.parentpomgroup}}</groupId>
+    <artifactId>{{.stack.parentpomid}}</artifactId>
+    <version>{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}</version>
     <packaging>pom</packaging>
 
     <properties>

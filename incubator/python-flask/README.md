@@ -2,7 +2,7 @@
 
 The Python Flask stack provides a consistent way of developing web applications using [Flask](http://flask.pocoo.org). "Flask is a lightweight WSGI web application framework. It is designed to make getting started quick and easy, with the ability to scale up to complex applications."
 
-This stack is based on Python 3.7 and Flask 1.1.1 and enables health checking and application metrics out of the box. The stack also provides a set of unit tests. The stack also uses [flasgger](https://github.com/rochacbruno-archive/flasgger) to auto-generate swagger ui documentation and specification.
+This stack is based on Python 3.7 and Flask 1.1.1 and enables health checking and application metrics out of the box. The stack also provides a set of unit tests. The stack also uses [flasgger](https://github.com/rochacbruno-archive/flasgger) to auto-generate swagger ui documentation and specification. The stack will run flask and your application as non-root (it creates a user called `worker` for this purpose).
 
 Note that the use of the Python Flask stack requires that `pipenv` is installed, which is used for both version management of Python versions (ensuring you are using the same version locally as used in the stack), and to allow you to specify your own dependencies in a Pipfile.
 
