@@ -1,4 +1,4 @@
-FROM maven:3.6-ibmjava-8
+FROM {{.stack.baseimage}}
 
 # Ensure up to date / patched OS
 RUN  apt-get -qq update \
@@ -7,17 +7,22 @@ RUN  apt-get -qq update \
   && apt-get -qq clean \
   && rm -rf /tmp/* /var/lib/apt/lists/*
 
-COPY ./LICENSE /licenses/
+RUN  groupadd --gid 1000 java_group \
+  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user \
+  && mkdir -p /mvn/repository \
+  && chown -R java_user:java_group /mvn
 
-COPY ./project /project
-COPY ./config /config
+COPY ./LICENSE /licenses/
+COPY --chown=java_user:java_group ./project /project
+COPY --chown=java_user:java_group ./config /config
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 COPY ./mvn-stack-settings.xml /project/mvn-stack-settings.xml
 
+USER java_user
+
 # Build utility for version range processing
 # Install maven wrapper in /project
-RUN mkdir -p /mvn/repository \
- && /project/util/check_version build \
+RUN /project/util/check_version build \
  && cd /project \
  && mvn --no-transfer-progress -B -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 
