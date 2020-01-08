@@ -9,6 +9,9 @@ dist: bionic
 services:
   - docker
 
+before_script:
+  - ./ci/download_cli.sh
+
 script:
   - . ./ci/build.sh
 

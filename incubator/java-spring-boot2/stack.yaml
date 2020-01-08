@@ -1,5 +1,5 @@
 name: Spring Boot®
-version: 0.3.16
+version: 0.3.21
 description: Spring Boot using OpenJ9 and Maven
 license: Apache-2.0
 language: java
@@ -7,4 +7,14 @@ maintainers:
   - name: Erin Schnabel
     email: schnabel@us.ibm.com
     github-id: ebullient
+  - name: Ozzy
+    email: ozzy@ca.ibm.com
+    github-id: bardweller
 default-template: default
+requirements:
+   appsody-version: ">= 0.5.0"
+templating-data:
+  parentpomgroup: dev.appsody
+  parentpomid: spring-boot2-stack
+  parentpomrange: '[0.3, 0.4)'
+

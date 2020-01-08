@@ -1,12 +1,15 @@
 FROM python:3.7
 
-RUN pip install --upgrade pip \
-  && pip install --upgrade --user pipenv
-ENV PATH=/root/.local/bin:$PATH
+RUN pip install --upgrade pip
 
+RUN useradd -m worker
+USER worker
 WORKDIR /project
 
-COPY . ./
+RUN pip install --upgrade --user pipenv
+ENV PATH=/home/worker/.local/bin:$PATH
+
+COPY --chown=worker:worker . ./
 # First we get the dependencies for the stack itself
 RUN pipenv lock -r > requirements.txt
 # Now add in any for the app, that the developer has added (there seems to be

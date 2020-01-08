@@ -8,8 +8,13 @@ based on [LoopBack 4](https://github.com/strongloop/loopback-next).
 ## Image
 
 The image contains the main code that loads the user application and configures
-with cloud native components such as `@loopback/extension-health` which exposes
-`/health` endpoint for health checks including with `/ready` for readiness and `/live` for liveness checks.
+with the following components to help the application become cloud native:
+
+- `@loopback/extension-health`: exposes `/health` endpoint for health checks
+  including with `/ready` for readiness and `/live` for liveness checks.
+
+- `@loopback/extension-metrics`: exposes `/metrics` endpoint for metrics data
+  that can be scraped by (Prometheus)[https://prometheus.io/].
 
 The project layout is structured as follows:
 
@@ -55,13 +60,14 @@ The project layout is structured as follows:
 
    You should now be able to access the following endpoints, as they are exposed by your application by default:
 
-      - Application endpoint: http://localhost:3000/
-      - API explorer: http://localhost:3000/explorer
-      - Open API Spec: http://localhost:3000/openapi.json
-      - API endpoint: http://localhost:3000/ping
-      - Health endpoint: http://localhost:3000/health
-      - Liveness endpoint: http://localhost:3000/live
-      - Readiness endpoint: http://localhost:3000/ready
+   - Application endpoint: http://localhost:3000/
+   - API explorer: http://localhost:3000/explorer
+   - Open API Spec: http://localhost:3000/openapi.json
+   - API endpoint: http://localhost:3000/ping
+   - Health endpoint: http://localhost:3000/health
+   - Liveness endpoint: http://localhost:3000/live
+   - Readiness endpoint: http://localhost:3000/ready
+   - Metrics endpoint: http://localhost:3000/metrics
 
    You can continue to edit the application in your preferred IDE (VSCode or
    others) and your changes will be reflected in the running container within a
