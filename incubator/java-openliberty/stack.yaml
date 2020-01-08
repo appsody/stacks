@@ -1,0 +1,21 @@
+name: Open Liberty
+version: 0.1.0
+description: Open Liberty & OpenJ9 using Maven
+license: Apache-2.0
+language: java
+maintainers:
+  - name: Mike Andrasak
+    email: andrasak@us.ibm.com
+    github-id: uberskigeek
+  - name: Andy Mauer
+    email: ajmauer@us.ibm.com
+    github-id: ajm01
+  - name: Scott Kurz
+    email: skurz@us.ibm.com
+    github: scottkurz
+  - name: Adam Wisniewski
+    email: awisniew@us.ibm.com 
+    github: awisniew90
+default-template: default
+requirements:
+    docker-version: ">= 17.09.0"
