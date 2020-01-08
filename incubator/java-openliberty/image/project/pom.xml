@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.appsody</groupId>
+    <artifactId>java-openliberty</artifactId>
+    <version>0.1.0</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <openliberty.install.dir>/opt/ol</openliberty.install.dir>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- Plugins -->
+        <version.maven-war-plugin>3.2.2</version.maven-war-plugin>
+        <version.dockerfile-maven-plugin>1.4.10</version.dockerfile-maven-plugin>
+        <version.maven-surefire-plugin>3.0.0-M1</version.maven-surefire-plugin>
+        <version.maven-failsafe-plugin>3.0.0-M1</version.maven-failsafe-plugin>
+        <!-- OpenLiberty runtime -->
+        <liberty.groupId>io.openliberty</liberty.groupId>
+        <liberty.artifactId>openliberty-runtime</liberty.artifactId>
+        <version.openliberty-runtime>19.0.0.12</version.openliberty-runtime>
+        <version.liberty-maven-plugin>3.1</version.liberty-maven-plugin>
+        <http.port>9080</http.port>
+        <https.port>9443</https.port>
+        <packaging.type>usr</packaging.type>
+        <app.name>${project.artifactId}</app.name>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>localrepository</id>
+            <url>/mvn/repository</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>io.openliberty.tools</groupId>
+                    <artifactId>liberty-maven-plugin</artifactId>
+                    <version>${version.liberty-maven-plugin}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <!-- Enforcing OpenLiberty and JDK Version -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M2</version>
+                <executions>
+                <execution>
+                    <id>enforce-versions</id>
+                    <goals>
+                        <goal>enforce</goal>
+                    </goals>
+                    <configuration>
+                        <rules>
+                            <requireJavaVersion>
+                                <version>[1.8,1.9)</version>
+                            </requireJavaVersion>
+                            <requireProperty>
+                                <property>version.openliberty-runtime</property>
+                                <regex>19.0.0.12</regex>
+                                <regexMessage>OpenLiberty runtime version must be 19.0.0.12</regexMessage>
+                            </requireProperty>
+                        </rules>
+                    </configuration>
+                </execution>
+            </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <!--
+            Note for this stack, there are three "modes" through the POMs:
+            In addition to:
+               1) the standard appsody "local dev" mode, (activated by the presence of the env var: APPSODY_DEV_MODE)
+               2) the `appsody build` Docker build
+
+            there is also the possibility to run from:
+               3) the host system ("natively" in the sense of not using appsody at all).
+
+            It is tempting to consider adding profile-specific behavior for 2) and 3)
+            as we add the profile for 1), but perhaps this should be
+            discussed more within the appsody community before going this
+            far for this particular stack.
+        -->
+        <profile>
+            <id>stack-package</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>io.openliberty.tools</groupId>
+                            <artifactId>liberty-maven-plugin</artifactId>
+                            <version>${version.liberty-maven-plugin}</version>
+                            <configuration>
+                                <assemblyArtifact>
+                                    <groupId>${liberty.groupId}</groupId>
+                                    <artifactId>${liberty.artifactId}</artifactId>
+                                    <version>${version.openliberty-runtime}</version>
+                                    <type>zip</type>
+                                </assemblyArtifact>
+                                <runtimeInstallDirectory>${openliberty.install.dir}</runtimeInstallDirectory>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
+</project>
