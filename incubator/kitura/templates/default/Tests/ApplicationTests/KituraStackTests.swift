@@ -3,6 +3,10 @@ import Kitura
 import KituraNet
 import XCTest
 import AppsodyKitura
+#if canImport(FoundationNetworking)
+   import FoundationNetworking
+#endif
+
 
 @testable import Application
 
