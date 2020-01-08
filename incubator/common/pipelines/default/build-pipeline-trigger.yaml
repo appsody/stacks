@@ -1,0 +1,79 @@
+#Kabanero! on activate substitute CollectionId for text 'CollectionId'
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: CollectionId-build-pipeline-pullrequest-binding
+  namespace: tekton-pipelines
+spec:
+  params:
+  - name: gitrevision
+    value: $(body.pull_request.head.sha)
+  - name: gitrepositoryurl
+    value: $(body.repository.clone_url)
+  - name: docker-tag
+    value: $(body.repository.name):$(body.pull_request.head.sha)
+  - name: event-type
+    value: $(header.X-Github-Event)
+  - name: webhooks-tekton-git-branch
+    value: $(body.webhooks-tekton-git-branch)
+---
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: CollectionId-build-pipeline-push-binding
+  namespace: tekton-pipelines
+spec:
+  params:
+  - name: gitrevision
+    value: $(body.head_commit.id)
+  - name: gitrepositoryurl
+    value: $(body.repository.clone_url)
+  - name: docker-tag
+    value: $(body.repository.name):$(body.head_commit.id)
+  - name: event-type
+    value: $(header.X-Github-Event)
+  - name: webhooks-tekton-git-branch
+    value: $(body.webhooks-tekton-git-branch)
+---
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: CollectionId-build-pipeline-template
+  namespace: tekton-pipelines
+spec:
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1alpha1
+    kind: PipelineResource
+    metadata:
+      name: git-source-$(uid)
+      namespace: $(params.webhooks-tekton-target-namespace)
+    spec:
+      type: git
+      params:
+      - name: revision
+        value: $(params.gitrevision)
+      - name: url
+        value: $(params.gitrepositoryurl)
+  - apiVersion: tekton.dev/v1alpha1
+    kind: PipelineRun
+    metadata:
+      generateName: CollectionId-pipeline-run-
+      namespace: $(params.webhooks-tekton-target-namespace)
+      labels:
+        webhooks.tekton.dev/gitServer: $(params.webhooks-tekton-git-server)
+        webhooks.tekton.dev/gitOrg: $(params.webhooks-tekton-git-org)
+        webhooks.tekton.dev/gitRepo: $(params.webhooks-tekton-git-repo)
+        webhooks.tekton.dev/gitBranch: $(params.webhooks-tekton-git-branch)
+    spec:
+      serviceAccountName: $(params.webhooks-tekton-service-account)
+      pipelineRef:
+        name: CollectionId-build-pipeline
+      params:
+      - name: event-type
+        value: $(params.event-type)
+      resources:
+      - name: git-source
+        resourceRef:
+          name: git-source-$(uid)
+
+
