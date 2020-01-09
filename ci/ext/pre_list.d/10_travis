@@ -104,6 +104,6 @@ then
     if [ -z "${STACKS_LIST}" ]
     then
         echo "Choosing a subset of stacks to test with CI/CD changes"
-        export STACKS_LIST="incubator/java-microprofile incubator/java-spring-boot2 incubator/nodejs experimental/java-spring-boot2-liberty"
+        export STACKS_LIST="incubator/java-openliberty incubator/java-spring-boot2 incubator/nodejs-express"
     fi
 fi
