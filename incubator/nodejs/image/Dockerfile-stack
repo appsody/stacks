@@ -1,8 +1,8 @@
-FROM registry.access.redhat.com/ubi8/nodejs-10:1-54
+FROM registry.access.redhat.com/ubi8/nodejs-12:1-21
 
 LABEL vendor="Kabanero" \
     name="kabanero/nodejs" \
-    version="0.2.6" \
+    version="0.3.1" \
     summary="Image for Kabanero Nodejs development" \
     description="This image contains the Kabanero development stack for the Nodejs collection"
 
@@ -17,7 +17,7 @@ ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/node_modules
 ENV APPSODY_WATCH_REGEX="^.*.js$"
 
-ENV APPSODY_INSTALL="npm install"
+ENV APPSODY_PREP="npm install && npm audit fix"
 
 ENV APPSODY_RUN="npm start --node-options --require=appmetrics-dash/attach"
 ENV APPSODY_RUN_ON_CHANGE="npm start --node-options --require=appmetrics-dash/attach"
