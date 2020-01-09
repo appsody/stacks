@@ -17,10 +17,6 @@ args='export PARENT_GROUP_ID=${project.groupId}; export PARENT_ARTIFACT_ID=${pro
 export LIBERTY_GROUP_ID=${liberty.groupId}; export LIBERTY_ARTIFACT_ID=${liberty.artifactId}; export LIBERTY_VERSION=${version.openliberty-runtime}'
 eval $(mvn -q -Dexec.executable=echo -Dmaven.repo.local=/mvn/repository -Dexec.args="${args}" --non-recursive -f ../pom.xml exec:exec 2>/dev/null)
 
-# Install parent pom
-echo "Installing parent ${PARENT_GROUP_ID}:${PARENT_ARTIFACT_ID}:${PARENT_VERSION}"
-mvn install -Dmaven.repo.local=/mvn/repository -Denforcer.skip=true -f ../pom.xml
-
 # Get parent pom information
 a_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:groupId" /project/pom.xml)
 a_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:artifactId" /project/pom.xml)
