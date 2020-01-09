@@ -1,5 +1,5 @@
 #!/bin/bash
-# invoked from ci/test.env
+# invoked from .travis.yml
 
 if [ "$TRAVIS" == "true" ]
 then
@@ -13,10 +13,13 @@ then
     fi
     if [ -z "${APPSODY_CLI_FALLBACK}" ]
     then
-        APPSODY_CLI_FALLBACK=0.4.7
+        APPSODY_CLI_FALLBACK=0.5.3
     fi
 
-    cli_dir=$build_dir/cli
+    script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+    base_dir=$(cd "${script_dir}/.." && pwd)
+
+    cli_dir=$base_dir/cli
     mkdir -p $cli_dir
 
     curl -L -s -o $cli_dir/release.json "$APPSODY_CLI_RELEASE_URL"

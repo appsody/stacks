@@ -1,13 +1,5 @@
 FROM adoptopenjdk/openjdk8-openj9
 
-# passed in via package script
-ARG GIT_ORG_REPO=appsody/stacks
-ARG IMAGE_REGISTRY_ORG=appsody
-ARG STACK_ID=java-spring-boot2-liberty
-ARG MAJOR_VERSION=0
-ARG MINOR_VERSION=1
-ARG PATCH_VERSION=0
-
 USER root
 RUN  apt-get -qq update \
   && apt-get -qq install -y curl maven wget unzip xmlstarlet \
@@ -20,18 +12,6 @@ COPY ./project /project
 COPY ./config /config
 
 WORKDIR /project
-
-# Update maven artifacts to use stack version information
-# Update Dockerfile to build from this appsody stack image (by range)
-RUN if [ ${MAJOR_VERSION} -eq 0 ]; then \
-      export IMAGE_VERSION=${MAJOR_VERSION}.${MINOR_VERSION}; \
-    else \
-      export IMAGE_VERSION=${MAJOR_VERSION}; \
-    fi \
- && export MAVEN_ARTIFACT_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" \
- && sed -i -e "s|{{APPSODY_STACK}}|${IMAGE_REGISTRY_ORG}/${STACK_ID}:${IMAGE_VERSION}|" \
-           -e "s|{{APPSODY_STACK_FULL}}|${IMAGE_REGISTRY_ORG}/${STACK_ID}:${MAVEN_ARTIFACT_VERSION}|" /project/Dockerfile \
- && sed -i -e "s|{{MAVEN_ARTIFACT_VERSION}}|${MAVEN_ARTIFACT_VERSION}|" /project/pom.xml
 
 # Build utility for version range processing
 # Install parent pom
