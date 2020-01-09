@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # setup environment
 . $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
@@ -15,6 +15,7 @@ exec_hooks $script_dir/ext/pre_package.d
 for repo_name in $REPO_LIST
 do
     repo_dir=$base_dir/$repo_name
+    useCachedIndex=""
     if [ -d $repo_dir ]
     then
         echo -e "\nProcessing repo: $repo_name"
@@ -24,23 +25,16 @@ do
 
         # flat index used by static appsody-index and local test repo
         index_src=$build_dir/index-src/$repo_name-index.yaml
-        index_file_local=$assets_dir/$repo_name-index-local.yaml
-
-        echo "apiVersion: v2" > $index_src
-        echo "stacks:" >> $index_src
-
-        echo "apiVersion: v2" > $index_file_local
-        echo "stacks:" >> $index_file_local
-
-        echo "apiVersion: v2" > $index_file
-        echo "stacks:" >> $index_file
 
         # iterate over each stack
-        for stack in $repo_dir/*/stack.yaml
+        for stack in $(ls $repo_dir/*/stack.yaml 2>/dev/null | sort)
         do
+            echo $stack
             stack_dir=$(dirname $stack)
             if [ -d $stack_dir ]
             then
+                pushd $stack_dir
+
                 stack_id=$(basename $stack_dir)
                 stack_version=$(awk '/^version *:/ { gsub("version:","",$NF); gsub("\"","",$NF); print $NF}' $stack)
                 stack_version_major=`echo $stack_version | cut -d. -f1`
@@ -59,171 +53,99 @@ do
 
                 if [ $rebuild_local = true ]
                 then
-                    echo -e "\n- BUILDING stack: $repo_name/$stack_id"
-
-                    if [ -d $stack_dir/image ]
+                    echo -e "\n- LINTING stack: $repo_name/$stack_id"
+                    if appsody stack lint 
                     then
-                        if ${CI_WAIT_FOR} image_build \
-                            --build-arg GIT_ORG_REPO=$GIT_ORG_REPO \
-                            --build-arg IMAGE_REGISTRY_ORG=$IMAGE_REGISTRY_ORG \
-                            --build-arg STACK_ID=$stack_id \
-                            --build-arg MAJOR_VERSION=$stack_version_major \
-                            --build-arg MINOR_VERSION=$stack_version_minor \
-                            --build-arg PATCH_VERSION=$stack_version_patch \
-                            --label "org.opencontainers.image.created=$(date +%Y-%m-%dT%H:%M:%S%z)" \
-                            --label "org.opencontainers.image.version=${stack_version}" \
-                            --label "org.opencontainers.image.revision=$(git log -1 --pretty=%H)" \
-                            --label "appsody.stack=$IMAGE_REGISTRY_ORG/$stack_id:$stack_version" \
-                            -t $IMAGE_REGISTRY_ORG/$stack_id \
-                            -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version \
-                            -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major \
-                            -t $IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor \
-                            -f $stack_dir/image/Dockerfile-stack $stack_dir/image \
-                            > ${build_dir}/image.$stack_id.$stack_version.log 2>&1
-                        then
-                            trace  "Output from image build" "${build_dir}/image.$stack_id.$stack_version.log"
-
-                            echo "created $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
-                            echo "$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
-                            echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version" >> $build_dir/image_list
-                            echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
-                            echo "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
-                        else
-                            echo "Error building $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
-                            cat ${build_dir}/image.$stack_id.$stack_version.log
-                            exit 1
-                        fi
+                        echo "appsody stack lint: ok"
+                    else
+                        echo "Error linting $repo_name/$stack_id"
+                        exit 1
                     fi
+
+                    rm -f ${build_dir}/*.$stack_id.$stack_version.log
+
+                    echo -e "\n- PACKAGING stack: $repo_name/$stack_id, log: ${build_dir}/package.$stack_id.$stack_version.log"
+                    echo "PACKAGING stack: $repo_name/$stack_id" > ${build_dir}/package.$stack_id.$stack_version.log
+                    if logged ${build_dir}/package.$stack_id.$stack_version.log \
+                        appsody stack package \
+                        --image-registry $IMAGE_REGISTRY \
+                        --image-namespace $IMAGE_REGISTRY_ORG
+                    then
+                        echo "appsody stack package: ok, $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
+                        trace "${build_dir}/package.$stack_id.$stack_version.log"
+
+                        if [ "$SKIP_TESTS" != "true" ]
+                        then
+                            echo -e "\n- VALIDATING stack: $repo_name/$stack_id, log: ${build_dir}/validate.$stack_id.$stack_version.log"
+                            echo "VALIDATING stack: $repo_name/$stack_id" > ${build_dir}/validate.$stack_id.$stack_version.log
+                            if logged ${build_dir}/validate.$stack_id.$stack_version.log \
+                                appsody stack validate \
+                                --no-lint --no-package \
+                                --image-registry $IMAGE_REGISTRY \
+                                --image-namespace $IMAGE_REGISTRY_ORG
+                            then
+                                echo "appsody stack validate: ok"
+                                trace "${build_dir}/validate.$stack_id.$stack_version.log"
+                            else
+                                stderr "${build_dir}/validate.$stack_id.$stack_version.log" 
+                                stderr "appsody stack validate: error"
+                                exit 1
+                            fi
+                        fi
+                    else
+                        stderr "${build_dir}/package.$stack_id.$stack_version.log"
+                        stderr "appsody stack package: error" 
+                        exit 1
+                    fi
+
+                    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
+                    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id:$stack_version" >> $build_dir/image_list
+                    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
+                    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
+
+                    echo -e "\n- ADD $repo_name with release URL prefix $RELEASE_URL/$stack_id-v$stack_version/$repo_name."
+                    if appsody stack add-to-repo $repo_name \
+                        --release-url $RELEASE_URL/$stack_id-v$stack_version/$repo_name. \
+                        $useCachedIndex
+                    then
+                        useCachedIndex="--use-local-cache"
+                    else
+                        echo "Error running 'appsody stack add-to-repo' command"
+                        exit 1
+                    fi
+
+                    for template_dir in $stack_dir/templates/*/
+                    do
+                        if [ -d $template_dir ]
+                        then
+                            template_id=$(basename $template_dir)
+                            versioned_archive=$repo_name.$stack_id.v$stack_version.templates.$template_id.tar.gz
+                            packaged_archive=$stack_id.v$stack_version.templates.$template_id.tar.gz
+                            if [ -f $HOME/.appsody/stacks/dev.local/$packaged_archive ]; then
+                                echo "--- Copying $HOME/.appsody/stacks/dev.local/$packaged_archive to $assets_dir/$versioned_archive"
+                                cp $HOME/.appsody/stacks/dev.local/$packaged_archive $assets_dir/$versioned_archive
+                            fi
+                        fi
+                    done
                 else
                     echo -e "\n- SKIPPING stack image: $repo_name/$stack_id"
                 fi
 
-                echo "  - id: $stack_id" >> $index_src
-                sed 's/^/    /' $stack >> $index_src
-                [ -n "$(tail -c1 $index_src)" ] && echo >> $index_src
-                echo "    templates:" >> $index_src
-
-                if [ $rebuild_local = true ]
-                then
-                    echo "  - id: $stack_id" >> $index_file_local
-                    sed 's/^/    /' $stack >> $index_file_local
-                    [ -n "$(tail -c1 $index_file_local)" ] && echo >> $index_file_local
-                    echo "    templates:" >> $index_file_local
-                fi
-
-                echo "  - id: $stack_id" >> $index_file
-                sed 's/^/    /' $stack >> $index_file
-                [ -n "$(tail -c1 $index_file)" ] && echo >> $index_file
-                echo "    templates:" >> $index_file
-
-                for template_dir in $stack_dir/templates/*/
-                do
-                    if [ -d $template_dir ]
-                    then
-                        template_id=$(basename $template_dir)
-                        old_archive=$repo_name.$stack_id.templates.$template_id.tar.gz
-                        versioned_archive=$repo_name.$stack_id.v$stack_version.templates.$template_id.tar.gz
-
-                        build=$rebuild_local
-                        if [ "$PACKAGE_WHEN_MISSING" = "true" ] &&
-                            [ ! -f $assets_dir/$versioned_archive ] &&
-                            [ ! -f $prefetch_dir/$old_archive ] &&
-                            [ ! -f $prefetch_dir/$versioned_archive ]
-                        then
-                            # force build of template archive if it doesn't exist
-                            build=true
-                        fi
-
-                        if [ $build = true ]
-                        then
-                            # build template archive; include version in the file name
-                            if [ $stack_version_major -gt 0 ]
-                            then
-                                echo "stack: "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major > $template_dir/.appsody-config.yaml
-                            else
-                                echo "stack: "$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor > $template_dir/.appsody-config.yaml
-                            fi
-
-                            tar -cz -f $assets_dir/$versioned_archive -C $template_dir .
-                            rm $template_dir/.appsody-config.yaml
-                            echo -e "--- Created template archive: $versioned_archive"
-
-                            # clean up prefetched resources if they exist
-                            rm -f $prefetch_dir/${old_archive%.tar.gz}*
-                        fi
-
-                        # Update index yaml based on archive file name (prefer versioned archives)
-                        if [ -f $assets_dir/$versioned_archive ]
-                        then
-                            echo "      - id: $template_id" >> $index_src
-                            echo "        url: {{EXTERNAL_URL}}/$versioned_archive" >> $index_src
-
-                            if [ $rebuild_local = true ]
-                            then
-                                echo "      - id: $template_id" >> $index_file_local
-                                echo "        url: file://$assets_dir/$versioned_archive" >> $index_file_local
-                            fi
-
-                            echo "      - id: $template_id" >> $index_file
-                            echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file
-                        elif [ -f $prefetch_dir/$versioned_archive ]
-                        then
-                            echo "$template_id template ok"
-
-                            # Add references to existing template archive.
-                            echo "      - id: $template_id" >> $index_src
-                            echo "        url: {{EXTERNAL_URL}}/$versioned_archive" >> $index_src
-
-                            echo "      - id: $template_id" >> $index_file
-                            echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$versioned_archive" >> $index_file
-                        elif [ -f $prefetch_dir/$old_archive ]
-                        then
-                            verify="$build_dir/prefetch-${repo_name}-${stack_id}-${template_id}"
-
-                            # If an archive exists with no version in the name,
-                            # check for a prefetch script that can verify it
-                            # matches this stack. This helps ensure that the new
-                            # stack image
-                            if [ -f ${verify} ]
-                            then
-                                result=$(${verify} ${stack_version})
-                                if [ "$result" == "ok" ]
-                                then
-                                    echo "$template_id template ok"
-                                else
-                                    if [ "$result" == "nomatch" ]
-                                    then
-                                        stderr "WARNING: checksum for $old_archive doesn't match." \
-                                               "         The archive contents don't match what was fetched." \
-                                               "         Pre-fetched checksum is in ${verify}"
-                                    else
-                                        stderr "WARNING: Version mismatch using $template_id for ${stack_id}-v${stack_version}." \
-                                               "         Pre-fetched archive built for ${stack_id}-v${result}."
-                                    fi
-                                fi
-                            fi
-
-                            # Add references to existing/old template archives.
-
-                            echo "      - id: $template_id" >> $index_src
-                            echo "        url: {{EXTERNAL_URL}}/$old_archive" >> $index_src
-
-                            echo "      - id: $template_id" >> $index_file
-                            echo "        url: $RELEASE_URL/$stack_id-v$stack_version/$old_archive" >> $index_file
-
-                        else
-                            stderr "ERROR: Could not find an archive for $stack_id/$template_id:" \
-                                   "       $versioned_archive not found." \
-                                   "       $old_archive not found."
-                        fi
-                    fi
-                done
+                popd
             fi
         done
+        if [ "$useCachedIndex" != "" ]; then
+            if [ -f $HOME/.appsody/stacks/dev.local/$repo_name-index.yaml ]; then
+                cp $HOME/.appsody/stacks/dev.local/$repo_name-index.yaml $index_file
+            fi
+        else
+            url="$RELEASE_URL/../latest/download/$repo_name-index.yaml"
+            curl -s -L ${url} -o $index_file
+        fi
+        sed -e "s|${RELEASE_URL}/.*/|{{EXTERNAL_URL}}/|" $index_file > $index_src
     else
         echo "SKIPPING: $repo_dir"
     fi
-
 done
 
 # expose an extension point for running after main 'package' processing
@@ -242,9 +164,8 @@ if [ "$CODEWIND_INDEX" == "true" ]; then
     done
 fi
 
-
 # create appsody-index from contents of assets directory after post-processing
-echo -e "\nBUILDING: $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
+echo -e "\n- BUILDING: $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}, log: ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
 
 nginx_arg=
 if [ -n "$NGINX_IMAGE" ]
@@ -252,19 +173,19 @@ then
     nginx_arg="--build-arg NGINX_IMAGE=$NGINX_IMAGE"
 fi
 
-if ${CI_WAIT_FOR} image_build $nginx_arg \
-    -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE \
-    -t $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION} \
-    -f $script_dir/nginx/Dockerfile $script_dir \
-    > ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log
+echo "BUILDING: $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}" > ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log
+if image_build ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log \
+    $nginx_arg \
+    -t $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE \
+    -t $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION} \
+    -f $script_dir/nginx/Dockerfile $script_dir
 then
-    trace  "Output from appsody index build" "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
-
+    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE" >> $build_dir/image_list
+    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}" >> $build_dir/image_list
     echo "created $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
-    echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE" >> $build_dir/image_list
-    echo "$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}" >> $build_dir/image_list
+    trace "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
 else
-    echo "failed building $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
-    cat "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
+    stderr "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
+    stderr "failed building $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
     exit 1
 fi

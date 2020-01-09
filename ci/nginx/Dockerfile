@@ -8,8 +8,6 @@ COPY build/prefetch    /opt/www/public
 COPY assets            /opt/www/public
 COPY build/index-src   /opt/www/public
 
-RUN rm /opt/www/public/*-local.yaml
-
 EXPOSE 8080
 EXPOSE 8443
 

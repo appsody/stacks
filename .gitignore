@@ -10,6 +10,11 @@
 **/target
 **/.settings
 **/.project
+**/.classpath
 .*.swp
 __pycache__/
 *.py[cod]
+
+### Intellij ###
+*.iml
+.idea

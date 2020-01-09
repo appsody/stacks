@@ -6,6 +6,8 @@ import {ApplicationConfig, Constructor} from '@loopback/core';
 import {Bootable} from '@loopback/boot';
 import {RestApplication} from '@loopback/rest';
 import {HealthComponent} from '@loopback/extension-health';
+import {MetricsComponent} from '@loopback/extension-metrics';
+import * as path from 'path';
 
 // The user-app is mounted from the template
 const userAppModule = '../user-app';
@@ -15,8 +17,11 @@ export type BootableRestApplication = RestApplication & Bootable;
 export const DemoApplication: Constructor<BootableRestApplication> = userApp.DemoApplication;
 
 export async function main(options: ApplicationConfig = {}) {
+  // Set the current directory to the user-app module
+  process.chdir(path.join(__dirname, userAppModule));
   const app = new DemoApplication(options);
   app.component(HealthComponent);
+  app.component(MetricsComponent);
   await app.boot();
   await app.start();
 
