@@ -98,10 +98,12 @@ do
                         exit 1
                     fi
 
-                    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
                     echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id:$stack_version" >> $build_dir/image_list
-                    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
-                    echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
+                    if [ "${LATEST_RELEASE}" == "true" ]; then
+                        echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
+                        echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
+                        echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
+                    fi
 
                     echo -e "\n- ADD $repo_name with release URL prefix $RELEASE_URL/$stack_id-v$stack_version/$repo_name."
                     if appsody stack add-to-repo $repo_name \
