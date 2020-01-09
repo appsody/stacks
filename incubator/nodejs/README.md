@@ -2,7 +2,7 @@
 
 The Node.js stack provides a consistent way of developing [Node.js](https://nodejs.org/) applications. As an asynchronous event-driven JavaScript runtime, Node is designed to build scalable network applications.
 
-This stack is based on the `Node.js v10` runtime and allows you to develop new or existing Node.js application using Appsody.
+This stack is based on the `Node.js v12` runtime and allows you to develop new or existing Node.js application using Appsody.
 
 Additionally, if you are developing an application that includes a HTTP server or a web framework such as Express.js,the stack provides a built-in application performance dashboard using the [appmetrics-dash](https://github.com/runtimetools/appmetrics-dash) module. This makes it easy to see the resource usage and HTTP endpoint performance of your application as it is developed.
 
@@ -21,6 +21,7 @@ Templates are used to create your local project and start your development. When
     cd my-project
     appsody init nodejs
     ```
+
     This will initialize a Node.js project using the default template.
 
 1. After your project has been initialized you can then run your application using the following command:
@@ -35,7 +36,7 @@ Templates are used to create your local project and start your development. When
 
 1. You should see a message printed on the console:
 
-    ```Hello from Node.js 10!```
+    ```Hello from Node.js 12!```
 
     **NOTE:** Currently the `appsody deploy` command only works for deploying web applications.
 

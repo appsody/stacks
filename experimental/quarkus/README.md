@@ -2,7 +2,7 @@
 
 The Quarkus stack is designed to provide a foundation for building and running Java applications on Quarkus with Appsody.
 
-This stack is based on the `Quarkus 1.0.0.CR1` runtime. It allows you to develop new or existing Java applications that run on Quarkus and can be turned into a native executable for a low memory footprint and near instantaneous (< 10ms) start times.
+This stack is based on the `Quarkus 1.0.0.Final` runtime. It allows you to develop new or existing Java applications that run on Quarkus and can be turned into a native executable for a low memory footprint and near instantaneous (< 10ms) start times.
 
 ## What is Quarkus?
 
@@ -63,7 +63,7 @@ docker run -i --rm -p 8080:8080 <my-project>:latest
 Running the production container should give you an output similar to:
 
 ```bash
-2019-07-16 12:43:21,918 INFO  [io.quarkus] (main) Quarkus 1.0.0.CR1 started in 0.006s. Listening on: http://0.0.0.0:8080
+2019-07-16 12:43:21,918 INFO  [io.quarkus] (main) Quarkus 1.0.0.Final started in 0.006s. Listening on: http://0.0.0.0:8080
 2019-07-16 12:43:21,918 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
 ```
 

@@ -12,7 +12,7 @@ then
         rc=$?
         if [ $rc -ne 0 ]
         then
-            stderr "WARNING: unable to find differences in "$TRAVIS_COMMIT_RANGE", using last commit"
+            stderr "WARNING: unable to find differences in $TRAVIS_COMMIT_RANGE, using last commit"
             # Fall back to single commit: https://github.com/travis-ci/travis-ci/issues/5133
             CHANGED_FILES=$(git diff --name-only "HEAD~..HEAD" 2>/dev/null)
             rc=$?
@@ -104,6 +104,6 @@ then
     if [ -z "${STACKS_LIST}" ]
     then
         echo "Choosing a subset of stacks to test with CI/CD changes"
-        export STACKS_LIST="incubator/java-microprofile incubator/java-spring-boot2 incubator/nodejs experimental/java-spring-boot2-liberty"
+        export STACKS_LIST="incubator/java-openliberty incubator/java-spring-boot2 incubator/nodejs-express"
     fi
 fi

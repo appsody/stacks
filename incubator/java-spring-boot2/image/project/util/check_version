@@ -12,6 +12,13 @@ else
     shift
 fi
 
+download() {
+    if ! wget -nv https://repo1.maven.org/maven2/org/osgi/org.osgi.core/6.0.0/org.osgi.core-6.0.0.jar; then
+        echo "Version range validation utility: unable to download org.osgi.core-6.0.0.jar"
+        exit 1
+    fi
+}
+
 range_check() {
     java -cp .:org.osgi.core-6.0.0.jar RangeIncludesVersion "$1" "$2"
     return $?
@@ -20,19 +27,22 @@ range_check() {
 sniff() {
     range_check "$1" "$2"
     if [ $? -ne $3 ]; then
-        echo "Test |'$1' contains '$2'| should return $3. Got $?"
+        echo "Version range validation utility: Test |'$1' contains '$2'| should return $3. Got $?"
         exit 1
     fi
 }
 
 case "$ACTION" in
   build)
-    wget -q https://repo1.maven.org/maven2/org/osgi/org.osgi.core/6.0.0/org.osgi.core-6.0.0.jar
-    javac -cp org.osgi.core-6.0.0.jar *.java
+    download
 
+    echo "Version range validation utility: build"
+    javac -cp org.osgi.core-6.0.0.jar *.java
+    echo "Version range validation utility: test"
     sniff "[0.3,0.4)" "0.3.7" 0
     sniff "[0.3,0.4)" "0.4" 1
     sniff "[0.3,0.4)" "0.2" 1
+    echo "Version range validation utility: done"
     exit 0
   ;;
   contains)

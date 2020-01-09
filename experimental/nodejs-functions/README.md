@@ -10,7 +10,7 @@ var handler = function handler(req, res, next) {
 
 These are then applied onto the pre-configured Express.js from the Node.js Express stack, which provides pre-configured cloud-native capabilities include health checking and application metrics, along with installing a performance monitoring and analysis dashboard during development.
 
-This stack is based on `Node.js v10` and `Express v4.16.0`, as derived from the  [Node.js Express stack](../../incubator/nodejs-express/README.md).
+This stack is based on `Node.js v12` and `Express v4.16.0`, as derived from the  [Node.js Express stack](../../incubator/nodejs-express/README.md).
 
 ## Templates
 
