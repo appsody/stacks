@@ -24,9 +24,15 @@ if [ -f $index_src/incubator-index.yaml ]; then
     mv $index_src/incubator-index.yaml $index_src/kabanero-index.yaml
 fi
 
+echo "BUILDING: $NGINX_IMAGE" > ${build_dir}/image.$NGINX_IMAGE.log
 NGINX_IMAGE=nginx-ubi
-image_build -t $NGINX_IMAGE \
- -f $script_dir/nginx-ubi/Dockerfile $script_dir \
-> ${build_dir}/image.$NGINX_IMAGE.log
-echo "File containing output from nginx image build: ${build_dir}/image.$NGINX_IMAGE.log"
-trace  "Output from nginx index build" "${build_dir}/image.$NGINX_IMAGE.log"
+if image_build ${build_dir}/image.$NGINX_IMAGE.log -t $NGINX_IMAGE \
+ -f $script_dir/nginx-ubi/Dockerfile $script_dir
+then
+    echo "created $NGINX_IMAGE"
+    trace "${build_dir}/image.$NGINX_IMAGE.log"
+else
+    stderr "${build_dir}/image.$NGINX_IMAGE.log"
+    stderr "failed building $NGINX_IMAGE"
+    exit 1
+fi
