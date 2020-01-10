@@ -1,6 +1,7 @@
 FROM appsody/nodejs:0.3
 
-RUN chown -R node /project
+RUN mkdir -p  /project
+RUN chown -R node:node /project
 USER node
 
 ENV APPSODY_PROJECT_DIR=/project
