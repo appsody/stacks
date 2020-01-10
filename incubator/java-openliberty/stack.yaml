@@ -19,3 +19,5 @@ maintainers:
 default-template: default
 requirements:
     docker-version: ">= 17.09.0"
+templating-data:
+   liberty_version: '19.0.0.12'  
