@@ -1,5 +1,8 @@
 FROM appsody/nodejs:0.3
 
+RUN chown -R node /project
+USER node
+
 ENV APPSODY_PROJECT_DIR=/project
 ENV APPSODY_MOUNTS=/:/project/user-app
 ENV APPSODY_DEPS=/project/user-app/node_modules
@@ -26,6 +29,7 @@ COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
 WORKDIR /project
+
 RUN npm install && npm audit fix
 
 ENV PORT=3000
