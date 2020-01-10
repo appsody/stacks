@@ -7,7 +7,7 @@
 
     <groupId>dev.appsody</groupId>
     <artifactId>java-openliberty</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -24,7 +24,7 @@
         <!-- OpenLiberty runtime -->
         <liberty.groupId>io.openliberty</liberty.groupId>
         <liberty.artifactId>openliberty-runtime</liberty.artifactId>
-        <version.openliberty-runtime>19.0.0.12</version.openliberty-runtime>
+        <version.openliberty-runtime>{{.stack.libertyVersion}}</version.openliberty-runtime>
         <version.liberty-maven-plugin>3.1</version.liberty-maven-plugin>
         <http.port>9080</http.port>
         <https.port>9443</https.port>
@@ -68,8 +68,8 @@
                             </requireJavaVersion>
                             <requireProperty>
                                 <property>version.openliberty-runtime</property>
-                                <regex>19.0.0.12</regex>
-                                <regexMessage>OpenLiberty runtime version must be 19.0.0.12</regexMessage>
+                                <regex>{{.stack.libertyVersion}}</regex>
+                                <regexMessage>OpenLiberty runtime version must be {{.stack.libertyVersion}}</regexMessage>
                             </requireProperty>
                         </rules>
                     </configuration>
