@@ -18,14 +18,14 @@ collection_temp2=$stack_dir/collection_temp2.yaml
 process_assets () {
     asset_types=$1
     asset_type="${asset_types%?}"
-    
+
     #check to see whether we have a directory for the specific asset
     if [ -d $stack_dir/$asset_types ]
     then
         added_asset_type=0
-        
+
         # For all of the assets get the list of subdirectories
-        # these will be the different grouping of the assets, ie default, prototype 
+        # these will be the different grouping of the assets, ie default, prototype
         for asset_dir in $stack_dir/$asset_types/*/
         do
             if [ -d $asset_dir ]
@@ -37,14 +37,14 @@ process_assets () {
                         # put the asset_types value into the yaml, ie pipelines:
                         echo "$asset_types:" >> $index_file
                         added_asset_type=1
-                    fi 
-                    # determine the assest id based on the subdirectory 
+                    fi
+                    # determine the assest id based on the subdirectory
                     asset_id=$(basename $asset_dir)
-                    
-                    # Determine the asset tar.gz filename to be used 
+
+                    # Determine the asset tar.gz filename to be used
                     # to contain all of the asset files
-#                    asset_archive=$repo_name.$stack_id.v$stack_version.$asset_type.$asset_id.tar.gz
-                    asset_archive=$stack_id.v$stack_version.$asset_type.$asset_id.tar.gz
+                    asset_archive=$repo_name.$stack_id.v$stack_version.$asset_type.$asset_id.tar.gz
+#                    asset_archive=$stack_id.v$stack_version.$asset_type.$asset_id.tar.gz
 
                     # Only process the assets if we are building
                     if [ $build = true ]
@@ -64,7 +64,7 @@ process_assets () {
                 fi
             fi
         done
-       
+
         if [ -d $base_dir/$repo_name/common/$asset_types ]; then
             for asset_dir in $base_dir/$repo_name/common/$asset_types/*/
             do
@@ -75,14 +75,14 @@ process_assets () {
                         # put the asset_types value into the yaml, ie pipelines:
                         echo "$asset_types:" >> $index_file
                         added_asset_type=1
-                    fi 
-                    # determine the assest id based on the subdirectory 
+                    fi
+                    # determine the assest id based on the subdirectory
                     asset_id=$(basename $asset_dir)
-                
-                    # Determine the asset tar.gz filename to be used 
+
+                    # Determine the asset tar.gz filename to be used
                     # to contain all of the asset files
-#                    asset_archive=$repo_name.common.$asset_type.$asset_id.tar.gz
-                    asset_archive=common.$asset_type.$asset_id.tar.gz
+                    asset_archive=$repo_name.common.$asset_type.$asset_id.tar.gz
+#                    asset_archive=common.$asset_type.$asset_id.tar.gz
 
                     # Add details of the asset tar.gz into the index file
                     echo "- id: $asset_id" >> $index_file
@@ -102,20 +102,20 @@ process_assets () {
 if [ -f $collection ]
 then
     # check to see if we have maintainers in the collection.yaml
-    # if we do then we need to remove the maintainers from the 
+    # if we do then we need to remove the maintainers from the
     # index file before merging the collection.yaml, otherwise
-    # retain the maintainers from the index file 
+    # retain the maintainers from the index file
     if [ "$(yq r $collection stacks.[0].maintainers)" != "null" ]; then
         yq d -i $index_file stacks.[0].maintainers
     fi
 
     # Replace the IMAGE_REGISTRY_ORG placeholder with the actual value of the env var
-    # and store into a temporary file for use in merging into kabanero-index.yaml 
+    # and store into a temporary file for use in merging into kabanero-index.yaml
     sed -e "s|\$IMAGE_REGISTRY_ORG|${IMAGE_REGISTRY_ORG}|" -e "s|\$IMAGE_REGISTRY|${IMAGE_REGISTRY}|" $collection > $collection_temp
-    
+
     # Merge the collection yaml file into the index file
     yq m -x -i $index_file $collection_temp
-    
+
     # Remove the temporary file
     rm -fr $collection_temp
 
@@ -150,8 +150,8 @@ then
 #            if [ -f $assets_dir/$template_archive ]; then
 #                tar -xzf $assets_dir/$template_archive -C $template_temp
 #                if [ -f $template_temp/.appsody-config.yaml ]
-#                then 
-#                    yq w -i $template_temp/.appsody-config.yaml stack $default_image 
+#                then
+#                    yq w -i $template_temp/.appsody-config.yaml stack $default_image
 #                else
 #                    echo "stack: $default_image" > $template_temp/.appsody-config.yaml
 #                fi
