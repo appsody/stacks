@@ -31,5 +31,4 @@ FROM open-liberty:kernel-java8-openj9
 COPY --chown=1001:0 --from=0 /config/ /config/
 COPY --chown=1001:0 --from=0 /project/user-app/target/*.war /config/apps
 
-EXPOSE 9080
-EXPOSE 9443
+RUN configure.sh
