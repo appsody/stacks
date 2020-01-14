@@ -2,4 +2,4 @@ default-image: java-spring-boot2
 default-pipeline: default
 images:
 - id: java-spring-boot2
-  image: $IMAGE_REGISTRY_ORG/java-spring-boot2:0.3
+  image: $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/java-spring-boot2:0.3
