@@ -8,3 +8,5 @@ maintainers:
     email: vieuxtech@gmail.com
     github-id: sam-github
 default-template: simple
+requirements:
+  docker-version: ">= 17.09.0"
