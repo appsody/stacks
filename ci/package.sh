@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # setup environment
 . $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
@@ -27,9 +27,11 @@ do
         index_src=$build_dir/index-src/$repo_name-index.yaml
 
         # iterate over each stack
-        for stack in $repo_dir/*/stack.yaml
+        for stack in $(ls $repo_dir/*/stack.yaml 2>/dev/null | sort)
         do
+            echo $stack
             stack_dir=$(dirname $stack)
+
             if [ -d $stack_dir ]
             then
                 pushd $stack_dir
@@ -52,38 +54,49 @@ do
 
                 if [ $rebuild_local = true ]
                 then
-                    if [ "$SKIP_TESTS" = "true" ]; then
-                        appsody_cmd="appsody stack package"
-                        echo -e "\n- PACKAGING stack: $repo_name/$stack_id"
+                    echo -e "\n- LINTING stack: $repo_name/$stack_id"
+                    if appsody stack lint 
+                    then
+                        echo "appsody stack lint: ok"
                     else
-                        appsody_cmd="appsody stack validate"
-                        echo -e "\n- VALIDATING stack: $repo_name/$stack_id"
-                    fi
-                    
-                    logFileName=${build_dir}/image.$stack_id.$stack_version.log
-                    rm -f $logFileName &> /dev/null
-                    
-                    retcode=0
-                    
-                    if [ "$CI_WAIT_FOR" != "" ]; then
-                        $appsody_cmd -v --image-registry $IMAGE_REGISTRY --image-namespace $IMAGE_REGISTRY_ORG  2>&1 || retcode=$?
-                    else
-                        echo "File containing output from image build: $logFileName"
-                        $appsody_cmd -v --image-registry $IMAGE_REGISTRY --image-namespace $IMAGE_REGISTRY_ORG  > $logFileName 2>&1 || retcode=$?
-                    fi
-                   
-                    if [ $retcode != 0 ]; then
-                        echo "Error building $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
-                        if [ "$TRAVIS" != "true" ] && [ -f $logFileName ]; then
-                           cat $logFileName
-                        fi
+                        echo "Error linting $repo_name/$stack_id"
                         exit 1
-                    else
-                        echo "Successfully built $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
-                        if [ "$TRAVIS" != "true" ] && [ -f $logFileName ]; then
-                            trace  "Output from image build" "$logFileName"
+                    fi
+
+                    rm -f ${build_dir}/*.$stack_id.$stack_version.log
+
+                    echo -e "\n- PACKAGING stack: $repo_name/$stack_id, log: ${build_dir}/package.$stack_id.$stack_version.log"
+                    echo "PACKAGING stack: $repo_name/$stack_id" > ${build_dir}/package.$stack_id.$stack_version.log
+                    if logged ${build_dir}/package.$stack_id.$stack_version.log \
+                        appsody stack package \
+                        --image-registry $IMAGE_REGISTRY \
+                        --image-namespace $IMAGE_REGISTRY_ORG
+                    then
+                        echo "appsody stack package: ok, $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
+                        trace "${build_dir}/package.$stack_id.$stack_version.log"
+
+                        if [ "$SKIP_TESTS" != "true" ]
+                        then
+                            echo -e "\n- VALIDATING stack: $repo_name/$stack_id, log: ${build_dir}/validate.$stack_id.$stack_version.log"
+                            echo "VALIDATING stack: $repo_name/$stack_id" > ${build_dir}/validate.$stack_id.$stack_version.log
+                            if logged ${build_dir}/validate.$stack_id.$stack_version.log \
+                                appsody stack validate \
+                                --no-lint --no-package \
+                                --image-registry $IMAGE_REGISTRY \
+                                --image-namespace $IMAGE_REGISTRY_ORG
+                            then
+                                echo "appsody stack validate: ok"
+                                trace "${build_dir}/validate.$stack_id.$stack_version.log"
+                            else
+                                stderr "${build_dir}/validate.$stack_id.$stack_version.log" 
+                                stderr "appsody stack validate: error"
+                                exit 1
+                            fi
                         fi
-                        echo "created $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
+                    else
+                        stderr "${build_dir}/package.$stack_id.$stack_version.log"
+                        stderr "appsody stack package: error" 
+                        exit 1
                     fi
 
                     echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id" >> $build_dir/image_list
@@ -91,15 +104,14 @@ do
                     echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major" >> $build_dir/image_list
                     echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$stack_id:$stack_version_major.$stack_version_minor" >> $build_dir/image_list
 
-                    echo "File containing output from add-to-repo: ${build_dir}/add-to-repo.$stack_id.$stack_version.log"
-                    if ${CI_WAIT_FOR} appsody stack add-to-repo $repo_name -v --release-url $RELEASE_URL/$stack_id-v$stack_version/$repo_name. $useCachedIndex \
-                        > ${build_dir}/add-to-repo.$stack_id.$stack_version.log 2>&1
+                    echo -e "\n- ADD $repo_name with release URL prefix $RELEASE_URL/$stack_id-v$stack_version/$repo_name."
+                    if appsody stack add-to-repo $repo_name \
+                        --release-url $RELEASE_URL/$stack_id-v$stack_version/$repo_name. \
+                        $useCachedIndex
                     then
                         useCachedIndex="--use-local-cache"
-                        trace  "Output from add-to-repo command" "${build_dir}/add-to-repo.$stack_id.$stack_version.log"
                     else
-                        echo "Error running `appsody stack add-to-repo` command"
-                        cat ${build_dir}/add-to-repo.$stack_id.$stack_version.log
+                        echo "Error running 'appsody stack add-to-repo' command"
                         exit 1
                     fi
 
@@ -123,6 +135,30 @@ do
                 popd
             fi
         done
+
+        for repo_stack in $STACKS_LIST
+        do
+            stack_dir=$(dirname $repo_stack)
+            stack_id=$(basename $repo_stack)
+            if [ "${stack_dir}" == "${repo_name}" ]; then
+                if [ ! -d $repo_stack ]
+                then
+                    echo -e "\n- REMOVING stack image: $stack_dir/$stack_id"
+                    echo "File containing output from remove-from-repo: ${build_dir}/remove-from-repo.$stack_id.log"
+                    if ${CI_WAIT_FOR} appsody stack remove-from-repo $stack_dir $stack_id -v $useCachedIndex \
+                        > ${build_dir}/remove-from-repo.$stack_id.log 2>&1
+                    then
+                        useCachedIndex="--use-local-cache"
+                        trace  "Output from remove-from-repo command" "${build_dir}/remove-from-repo.$stack_id.log"
+                    else
+                        echo "Error running `appsody stack remove-from-repo` command"
+                        cat ${build_dir}/remove-from-repo.$stack_id.log
+                        exit 1
+                    fi
+                fi
+            fi
+        done
+
         if [ "$useCachedIndex" != "" ]; then
             if [ -f $HOME/.appsody/stacks/dev.local/$repo_name-index.yaml ]; then
                 cp $HOME/.appsody/stacks/dev.local/$repo_name-index.yaml $index_file
@@ -131,6 +167,7 @@ do
             url="$RELEASE_URL/../latest/download/$repo_name-index.yaml"
             curl -s -L ${url} -o $index_file
         fi
+        
         sed -e "s|${RELEASE_URL}/.*/|{{EXTERNAL_URL}}/|" $index_file > $index_src
     else
         echo "SKIPPING: $repo_dir"
@@ -154,7 +191,7 @@ if [ "$CODEWIND_INDEX" == "true" ]; then
 fi
 
 # create appsody-index from contents of assets directory after post-processing
-echo -e "\nBUILDING: $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
+echo -e "\n- BUILDING: $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}, log: ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
 
 nginx_arg=
 if [ -n "$NGINX_IMAGE" ]
@@ -162,20 +199,19 @@ then
     nginx_arg="--build-arg NGINX_IMAGE=$NGINX_IMAGE"
 fi
 
-echo "File containing output from $INDEX_IMAGE build: ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
-if ${CI_WAIT_FOR} image_build $nginx_arg \
+echo "BUILDING: $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}" > ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log
+if image_build ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log \
+    $nginx_arg \
     -t $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE \
     -t $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION} \
-    -f $script_dir/nginx/Dockerfile $script_dir \
-    > ${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log
+    -f $script_dir/nginx/Dockerfile $script_dir
 then
-    trace  "Output from $INDEX_IMAGE build" "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
-
-    echo "created $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
     echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE" >> $build_dir/image_list
     echo "$IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}" >> $build_dir/image_list
+    echo "created $IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
+    trace "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
 else
-    echo "failed building $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
-    cat "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
+    stderr "${build_dir}/image.$INDEX_IMAGE.${INDEX_VERSION}.log"
+    stderr "failed building $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/$INDEX_IMAGE:${INDEX_VERSION}"
     exit 1
 fi
