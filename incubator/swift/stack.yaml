@@ -1,5 +1,5 @@
 name: Swift
-version: 0.2.3
+version: 0.2.4
 description: Appsody runtime for Swift applications
 license: Apache-2.0
 language: swift
@@ -11,3 +11,5 @@ maintainers:
     email: djones6@uk.ibm.com
     github-id: djones6
 default-template: simple
+requirements:
+  appsody-version: ">= 0.2.7"

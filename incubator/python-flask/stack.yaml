@@ -1,5 +1,5 @@
 name: Python Flask
-version: 0.2.0
+version: 0.2.1
 description: Flask web Framework for Python
 language: python
 maintainers:
@@ -12,4 +12,5 @@ maintainers:
 default-template: simple
 license: Apache-2.0
 requirements:
+  appsody-version: ">= 0.2.7"
   docker-version: ">= 17.09.0"
