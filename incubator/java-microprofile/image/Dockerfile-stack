@@ -21,8 +21,10 @@ RUN mvn -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipT
 
 WORKDIR /project/user-app
 
-ENV APPSODY_MOUNTS="~/.m2/repository:/mvn/repository;src:/project/user-app/src;pom.xml:/project/user-app/pom.xml"
+ENV APPSODY_MOUNTS="~/.m2/repository:/mvn/repository;.:/project/user-app"
 ENV APPSODY_DEPS=
+
+ENV APPSODY_USER_RUN_AS_LOCAL=true
 
 ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/target

@@ -14,7 +14,7 @@
 
     <groupId>dev.appsody</groupId>
     <artifactId>java-microprofile</artifactId>
-    <version>0.2.21</version>
+    <version>{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}</version>
     <packaging>pom</packaging>
 
     <properties>
