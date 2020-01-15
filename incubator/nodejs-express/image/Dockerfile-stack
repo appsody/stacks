@@ -33,7 +33,7 @@ COPY ./config /config
 
 WORKDIR /project
 
-RUN mkdir -p /project/user-app/node_modules
+RUN mkdir -p /project/user-app
 RUN npm install && npm audit fix
 
 ENV PORT=3000
