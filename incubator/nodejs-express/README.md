@@ -42,6 +42,27 @@ Simple, the default template, provides you with a basic Express app and a sample
 
 The scaffold template provides you with an Express application and additional subdirectories for separate routes and views with sample files for each. This gives the user the ability to easily add multiple routes and views, and implement them in the Express application in the `app.js` file provided in this template. This template also comes with a sample test in a test sub directory.
 
+The application must have a top-level package.json file, and it must contain a
+property `"main": APP` (the templates all set `APP` to `"app.js"` and include a
+skeleton implementation in that file). The `APP` will be required, and must
+export a function returning an express router or application.
+
+The function will be called with an `options` argument, which may be ignored.
+The app will be mounted at the application root, [somewhat like](https://github.com/appsody/stacks/blob/master/incubator/nodejs-express/image/project/server.js):
+```javascript
+const app = require('express')();
+app.use('/', require('.../app.js')(options);
+```
+
+Options contains:
+- `server` {http.Server} applications that use WebSockets require access
+  to the server. For example, with [socket.io](https://socket.io/):
+  `io = require('socket.io')(options.server)`.
+
+The [`express-pino-logger`](https://registry.npmjs.org/express-pino-logger) has been registered as middleware, so:
+1. All requests will be logged as JSON, for easy consumability by log aggregators.
+2. All `req` objects will be decorated with a `req.log` property, an instance of [`pino`](https://registry.npmjs.org/pino). It can be used for application specific logging. The default log level is `'info'` in production, and `'debug'` in non-production.
+
 ## Getting Started
 
 1. Create a new folder in your local directory and initialize it using the Appsody CLI, e.g.:

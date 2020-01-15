@@ -16,7 +16,7 @@ ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/.build
 ENV APPSODY_WATCH_REGEX="^.*.swift$"
 
-ENV APPSODY_INSTALL="swift build"
+ENV APPSODY_PREP="swift build"
 
 ENV APPSODY_RUN="swift run"
 ENV APPSODY_RUN_ON_CHANGE="swift run"
