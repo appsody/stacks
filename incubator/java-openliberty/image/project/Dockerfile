@@ -19,7 +19,7 @@ RUN cd /project/user-app && ./validate.sh
 
 # Copy and build the application source, and run unit tests
 COPY ./user-app/src /project/user-app/src
-RUN cd /project/user-app && mvn liberty:create package
+RUN cd /project/user-app && mvn -B liberty:create package
 
 RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
     mkdir /config && \
@@ -31,5 +31,4 @@ FROM open-liberty:kernel-java8-openj9
 COPY --chown=1001:0 --from=0 /config/ /config/
 COPY --chown=1001:0 --from=0 /project/user-app/target/*.war /config/apps
 
-EXPOSE 9080
-EXPOSE 9443
+RUN configure.sh
