@@ -1,5 +1,5 @@
 FROM node:12
-
+  
 ENV APPSODY_MOUNTS=/:/project/user-app
 ENV APPSODY_DEPS=/project/user-app/node_modules
 ENV APPSODY_PROJECT_DIR=/project
@@ -22,10 +22,13 @@ ENV APPSODY_TEST="npm test"
 ENV APPSODY_TEST_ON_CHANGE=""
 ENV APPSODY_TEST_KILL=false
 
-COPY ./LICENSE /licenses/
-COPY ./project /project
-COPY ./config /config
+COPY --chown=node:node ./LICENSE /licenses/
+COPY --chown=node:node ./project /project
+COPY --chown=node:node ./config /config
 
+USER node
+
+RUN mkdir -p /project/user-app/node_modules
 WORKDIR /project
 RUN npm install && npm audit fix
 
