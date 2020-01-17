@@ -18,7 +18,6 @@
     <packaging>war</packaging>
 
     <dependencies>
-        <!-- Aggregate of MicroProfile APIs -->
         <dependency>
             <groupId>org.eclipse.microprofile</groupId>
             <artifactId>microprofile</artifactId>

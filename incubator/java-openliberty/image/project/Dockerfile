@@ -23,7 +23,6 @@ COPY ./user-app/pom.xml /project/user-app/pom.xml
 RUN cd /project/user-app && ./validate.sh
 
 # Copy and build the application source, and run unit tests
-
 COPY ./user-app /project/user-app
 RUN cd /project/user-app && mvn -B package
 

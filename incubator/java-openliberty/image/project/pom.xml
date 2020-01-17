@@ -38,7 +38,6 @@
             <url>/mvn/repository</url>
         </repository>
     </repositories>
-
     <build>
         <pluginManagement>
             <plugins>
