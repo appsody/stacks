@@ -1,5 +1,5 @@
 name: LoopBack 4
-version: 0.2.0
+version: 0.2.1
 description: LoopBack 4 API Framework for Node.js
 maintainers:
   - name: Raymond Feng
@@ -8,3 +8,6 @@ maintainers:
 default-template: scaffold
 language: nodejs
 license: Apache-2.0
+requirements:
+  docker-version: ">= 17.09.0"
+  appsody-version: ">= 0.2.7"
