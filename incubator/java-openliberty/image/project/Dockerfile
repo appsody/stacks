@@ -13,8 +13,8 @@ COPY ./util /project/util
 RUN  /project/util/check_version build
 
 # Copy the user's application pom and resolve all dependencies, also trigger Open Liberty install
-COPY ./user-app/pom.xml /project/user-app/pom.xml
 COPY ./validate.sh /project/user-app/validate.sh
+COPY ./user-app/pom.xml /project/user-app/pom.xml
 RUN cd /project/user-app && ./validate.sh
 
 # Copy and build the application source, and run unit tests
@@ -22,14 +22,35 @@ RUN cd /project/user-app && ./validate.sh
 COPY ./user-app /project/user-app
 RUN cd /project/user-app && mvn -B liberty:create package
 
+# process any resources or shared libraries - if they are present in the dependencies block for this project (there may be none potentially)
+# test to see if each is present and move to a well known location for later processing in the next stage
 RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
+	# make a well known place for shared library jars seperate from the rest of the defaultServer contents (to help with caching)
+	mkdir /configlibdir && \
+	if [ -d ./defaultServer/lib ]; then mv ./defaultServer/lib /configlibdir; fi && \
     mkdir /config && \
-    mv defaultServer/* /config/
+    mv -f defaultServer/* /config/ && \
+    mkdir /shared && \
+    if [ -d ../shared ]; then mv ../shared/* /shared/; fi
 
 # Step 2: Package Open Liberty image
 FROM open-liberty:kernel-java8-openj9
 
-COPY --chown=1001:0 --from=0 /config/ /config/
+#2a) copy any resources 
+#    but, can't assume shared/resources contains files - copy from previous stage to a tmp holding place and test
+COPY --chown=1001:1001 --from=0 /shared /tmp/shared
+RUN if [ -d /tmp/shared/resources ]; then cp -R /tmp/shared/resources /opt/ol/wlp/usr/shared/ && chmod -R 777 /tmp/shared && rm -rf /tmp/shared; fi
+
+# 2b) next copy shared library
+#     but can't assume config/lib exists - copy from previous stage to a tmp holding place and test
+COPY --chown=1001:0 --from=0 /configlibdir/ /tmp/cfglib
+RUN if [ "$(ls -A /tmp/cfglib/lib)" ]; then cp -R /tmp/cfglib/lib /config && chmod -R 777 /tmp/cfglib && rm -rf /tmp/cfglib; fi
+
+# 2c) Server config, bootstrap.properties, and everything else
+COPY --chown=1001:1001 --from=0 /config/ /config/
+
+
+# 2d) Changes to the application binary
 COPY --chown=1001:0 --from=0 /project/user-app/target/*.war /config/apps
 
 RUN configure.sh
