@@ -8,7 +8,7 @@
         <!--required parent POM-->
         <groupId>dev.appsody</groupId>
         <artifactId>java-openliberty</artifactId>
-        <version>[0.1, 0.2)</version>
+        <version>{{.stack.parentpomrange}}</version>
     </parent>
 
     <groupId>dev.appsody.starter.java-openliberty</groupId>
@@ -30,14 +30,6 @@
     </repositories>
 
     <dependencies>
-        <!-- Aggregate of MicroProfile APIs -->
-        <dependency>
-            <groupId>org.eclipse.microprofile</groupId>
-            <artifactId>microprofile</artifactId>
-            <version>3.2</version>
-            <type>pom</type>
-            <scope>provided</scope>
-        </dependency>
         <!-- example of adding a war file dependency -->
         <!--
         <dependency>
