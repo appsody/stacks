@@ -15,7 +15,8 @@ RUN  /project/util/check_version build
 WORKDIR /project/
 RUN mkdir -p /mvn/repository
 RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
-RUN mvn -B -Pstack-image-package -Dmaven.repo.local=/mvn/repository liberty:install-server liberty:create install dependency:go-offline
+RUN mvn -B -Pstack-image-package -Dmaven.repo.local=/mvn/repository liberty:install-server install 
+RUN mvn -B -Pstack-image-run -Dmaven.repo.local=/mvn/repository -DserverXmlFile=init-server.xml liberty:create liberty:start liberty:stop
 RUN chmod -R 777 /opt/ol
 
 
