@@ -97,7 +97,7 @@
     		property is configured in the Liberty Maven plugin to specify 
     		where to install the Open Liberty runtime in the Docker image. --> 
         <profile>
-            <id>stack-image-package</id>
+            <id>image-install</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
@@ -121,7 +121,7 @@
         	The installDirectory property is configured in the Liberty Maven plugin to specify 
     		where the existing Open Liberty installation is in the Docker image. --> 
         <profile>
-            <id>stack-image-run</id>
+            <id>image-run</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
