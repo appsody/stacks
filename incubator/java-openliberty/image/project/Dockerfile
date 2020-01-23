@@ -51,6 +51,8 @@ COPY --chown=1001:1001 --from=0 /config/ /config/
 
 
 # 2d) Changes to the application binary
-COPY --chown=1001:0 --from=0 /project/user-app/target/*.war /config/apps
+COPY --chown=1001:0 --from=0 /project/user-app/target/* /tmp/wars/
+RUN if [ -e /tmp/wars/*.war ]; then cp /tmp/wars/* /config/apps && chmod -R 777 /tmp/wars && rm -rf /tmp/wars; fi
+#COPY --chown=1001:0 --from=0 /project/user-app/target/*.war /config/apps
 
 RUN configure.sh
