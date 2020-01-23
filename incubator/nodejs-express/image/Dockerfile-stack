@@ -26,6 +26,9 @@ COPY --chown=node:node ./LICENSE /licenses/
 COPY --chown=node:node ./project /project
 COPY --chown=node:node ./config /config
 
+USER node
+
+RUN mkdir -p /project/user-app/node_modules
 WORKDIR /project
 
 RUN npm install && npm audit fix
