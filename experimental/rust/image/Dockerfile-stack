@@ -23,9 +23,9 @@ ENV APPSODY_DEBUG_KILL=true
 RUN useradd rust
 USER rust
 
-COPY ./LICENSE /licenses
-COPY ./project /project
-COPY ./config /config
+COPY --chown=rust:rust ./LICENSE /licenses
+COPY --chown=rust:rust ./project /project
+COPY --chown=rust:rust ./config /config
 
 WORKDIR /project/user-app
 
