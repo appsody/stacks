@@ -8,3 +8,5 @@ maintainers:
     email: sandy.koh@ibm.com
     github-id: skoh7645
 default-template: simple
+requirements:
+  docker-version: ">= 17.09.0"
