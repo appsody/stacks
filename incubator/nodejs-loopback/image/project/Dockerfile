@@ -1,5 +1,5 @@
 # Install the app dependencies in a full Node docker image
-FROM node:10
+FROM node:12
 
 # Install OS updates
 RUN apt-get update \
@@ -21,7 +21,7 @@ RUN npm install
 WORKDIR /project/user-app/node_modules
 
 # Copy the dependencies into a slim Node docker image
-FROM node:10-slim
+FROM node:12-slim
 
 # Install OS updates
 RUN apt-get update \

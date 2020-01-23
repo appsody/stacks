@@ -8,7 +8,7 @@
     <parent><!--required parent POM-->
         <groupId>dev.appsody</groupId>
         <artifactId>java-openliberty</artifactId>
-        <version>[0.1, 0.2)</version>
+        <version>{{.stack.parentpomrange}}</version>
         <relativePath/>
     </parent>
 

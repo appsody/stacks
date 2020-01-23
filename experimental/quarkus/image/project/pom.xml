@@ -4,7 +4,7 @@
 
     <groupId>dev.appsody</groupId>
     <artifactId>quarkus</artifactId>
-    <version>0.2.2</version>
+    <version>{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}</version>
     <packaging>pom</packaging>
 
     <properties>
