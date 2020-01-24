@@ -1,5 +1,5 @@
 name: Quarkus
-version: 0.2.3
+version: 0.2.4
 description: Quarkus runtime for running Java applications
 license: Apache-2.0
 language: java
@@ -8,3 +8,8 @@ maintainers:
     email: probinso@redhat.com
     github-id: paulrobinson
 default-template: default
+requirements:
+  docker-version: ">= 17.09.0"
+  appsody-version: ">= 0.5.0"
+templating-data:
+  parentpomrange: '[0.2,0.3)'
