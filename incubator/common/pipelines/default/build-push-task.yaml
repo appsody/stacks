@@ -36,7 +36,7 @@ spec:
   - name: build
     securityContext:
       privileged: true
-    image: appsody/appsody-buildah:0.5.3 
+    image: appsody/appsody-buildah:0.5.6-buildah1.9.0
     command: ["/bin/bash"]
     args:
       - -c
@@ -68,7 +68,8 @@ spec:
              ./cert-creation.sh
         fi
         cd /workspace/$gitsource
-        appsody build -t $(outputs.resources.docker-image.url) --buildah --buildah-options "--format=docker" --stack-registry "$COLLECTION_IMAGE_REGISTRY_URL"
+        OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE=$( echo $(outputs.resources.docker-image.url) |  tr '[:upper:]' '[:lower:]' )
+        appsody build -t "$OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE" --buildah --buildah-options "--format=docker" --stack-registry "$COLLECTION_IMAGE_REGISTRY_URL"
     env:
     - name: gitsource
       value: git-source
@@ -100,8 +101,13 @@ spec:
   - name: push
     securityContext:
       privileged: true
-    image: appsody/appsody-buildah:0.5.3 
-    command: ['buildah', 'push', '--tls-verify=false', '$(outputs.resources.docker-image.url)', 'docker://$(outputs.resources.docker-image.url)']
+    image: appsody/appsody-buildah:0.5.6-buildah1.9.0
+    command: ["/bin/bash"]
+    args:
+      - -c
+      - |
+        OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE=$( echo $(outputs.resources.docker-image.url) |  tr '[:upper:]' '[:lower:]' )
+        buildah push --tls-verify=false "$OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE" "docker://$OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE"
     env:
     - name: gitsource
       value: git-source
@@ -119,3 +125,4 @@ spec:
     secret:
       secretName: default-collection-image-registry-secret
       optional: true
+

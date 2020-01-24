@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: CollectionId-image-retag-push-task
+  name: CollectionId-image-retag-task
 spec:
   inputs:
     resources:
