@@ -30,6 +30,12 @@ then
         cat $cli_dir/release.json
         release_tag=${APPSODY_CLI_FALLBACK}
     fi
+    
+    # force to be a specific fallback version
+    if [ -n $FORCE_APPSODY_CLI_FALLBACK ]
+    then
+        release_tag=$FORCE_APPSODY_CLI_FALLBACK
+    fi
 
     cli_deb="appsody_${release_tag}_amd64.deb"
     cli_dist=$APPSODY_CLI_DOWNLOAD_URL/${release_tag}/${cli_deb}
