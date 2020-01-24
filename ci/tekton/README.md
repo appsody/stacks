@@ -62,4 +62,4 @@ Use these steps to trigger a Tekton pipeline build of your collections repositor
     echo $COLLECTIONS_URL
     ```
 
-1. Follow the [configuring a Kabanero CR instance](https://kabanero.io/docs/ref/general/kabanero-cr-config.html) documentation to configure or deploy a Kabanero instance with the `COLLECTIONS_URL` obtained in the previous step. 
+1. Follow the [configuring a Kabanero CR instance](https://kabanero.io/docs/ref/general/configuration/kabanero-cr-config.html) documentation to configure or deploy a Kabanero instance with the `COLLECTIONS_URL` obtained in the previous step. 
