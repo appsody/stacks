@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: CollectionId-build-push-pipeline
+  name: CollectionId-build-push-pl
 spec:
   resources:
     - name: git-source

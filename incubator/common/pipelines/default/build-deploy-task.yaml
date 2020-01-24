@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: CollectionId-build-push-deploy-task
+  name: CollectionId-build-deploy-task
 spec:
   inputs:
     resources:
@@ -38,7 +38,7 @@ spec:
   - name: build
     securityContext:
       privileged: true
-    image: appsody/appsody-buildah:0.5.3
+    image: appsody/appsody-buildah:0.5.6-buildah1.9.0
     command: ["/bin/bash"]
     args:
       - -c
@@ -49,27 +49,28 @@ spec:
         then
             echo "DEFAULT_COLLECTION_IMAGE_REGISTRY_URL=$DEFAULT_COLLECTION_IMAGE_REGISTRY_URL given as input by user is empty, so using the registry=$COLLECTION_IMAGE_REGISTRY_URL for collection image download"
         else
-            echo "Collection image registry url setup by user is $DEFAULT_COLLECTION_IMAGE_REGISTRY_URL"            
-            COLLECTION_IMAGE_REGISTRY_URL=$DEFAULT_COLLECTION_IMAGE_REGISTRY_URL 
-            
-            #Creating a cert for authentication of buildah login of the DEFAULT_COLLECTION_IMAGE_REGISTRY_URL registry url 
+            echo "Collection image registry url setup by user is $DEFAULT_COLLECTION_IMAGE_REGISTRY_URL"
+            COLLECTION_IMAGE_REGISTRY_URL=$DEFAULT_COLLECTION_IMAGE_REGISTRY_URL
+
+            #Creating a cert for authentication of buildah login of the DEFAULT_COLLECTION_IMAGE_REGISTRY_URL registry url
             echo "HOST=$DEFAULT_COLLECTION_IMAGE_REGISTRY_URL" > cert-creation.sh
             echo "sudo mkdir -p /etc/docker/certs.d/\${HOST}" >> cert-creation.sh
             echo "openssl s_client -connect \${HOST} -servername \${HOST} 2>/dev/null </dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/docker/certs.d/\${HOST}/ca.crt" >> cert-creation.sh
-            
+
             if [[ ( -z "$DEFAULT_COLLECTION_IMAGE_REGISTRY_SECRET_USERNAME" ) || ( -z "$DEFAULT_COLLECTION_IMAGE_REGISTRY_SECRET_PASSWORD" ) ]]
             then
                echo "DEFAULT_COLLECTION_IMAGE_REGISTRY_SECRET_USERNAME or DEFAULT_COLLECTION_IMAGE_REGISTRY_SECRET_PASSWORD is empty ,Assumption is $DEFAULT_COLLECTION_IMAGE_REGISTRY_URL is internal registry, skipping the login to the registry"
             else
                echo "Both DEFAULT_COLLECTION_IMAGE_REGISTRY_URL and Secrets are provided"
                echo "Adding buildah login command to cert-creation.sh script"
-               echo "buildah login -u $DEFAULT_COLLECTION_IMAGE_REGISTRY_SECRET_USERNAME -p $DEFAULT_COLLECTION_IMAGE_REGISTRY_SECRET_PASSWORD \${HOST}" >> cert-creation.sh  
+               echo "buildah login -u $DEFAULT_COLLECTION_IMAGE_REGISTRY_SECRET_USERNAME -p $DEFAULT_COLLECTION_IMAGE_REGISTRY_SECRET_PASSWORD \${HOST}" >> cert-creation.sh
             fi
              chmod 755 cert-creation.sh
              ./cert-creation.sh
         fi
         cd /workspace/$gitsource
-        appsody build -t $(outputs.resources.docker-image.url) --buildah --buildah-options "--format=docker" --stack-registry "$COLLECTION_IMAGE_REGISTRY_URL"
+        OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE=$( echo $(outputs.resources.docker-image.url) |  tr '[:upper:]' '[:lower:]' )
+        appsody build -t "$OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE" --buildah --buildah-options "--format=docker" --stack-registry "$COLLECTION_IMAGE_REGISTRY_URL"
     env:
     - name: gitsource
       value: git-source
@@ -101,8 +102,13 @@ spec:
   - name: push
     securityContext:
       privileged: true
-    image: appsody/appsody-buildah:0.5.3
-    command: ['buildah', 'push', '--tls-verify=false', '$(outputs.resources.docker-image.url)', 'docker://$(outputs.resources.docker-image.url)']
+    image: appsody/appsody-buildah:0.5.6-buildah1.9.0
+    command: ["/bin/bash"]
+    args:
+      - -c
+      - |
+        OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE=$( echo $(outputs.resources.docker-image.url) |  tr '[:upper:]' '[:lower:]' )
+        buildah push --tls-verify=false "$OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE" "docker://$OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE"
     env:
     - name: gitsource
       value: git-source

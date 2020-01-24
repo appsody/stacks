@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: CollectionId-build-pipeline-pullrequest-binding
+  name: CollectionId-build-push-pl-pullrequest-binding
   namespace: tekton-pipelines
 spec:
   params:
@@ -20,7 +20,7 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: CollectionId-build-pipeline-push-binding
+  name: CollectionId-build-push-pl-push-binding
   namespace: tekton-pipelines
 spec:
   params:
@@ -38,7 +38,7 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: CollectionId-build-pipeline-template
+  name: CollectionId-build-push-pl-template
   namespace: tekton-pipelines
 spec:
   resourcetemplates:
@@ -55,9 +55,19 @@ spec:
       - name: url
         value: $(params.gitrepositoryurl)
   - apiVersion: tekton.dev/v1alpha1
+    kind: PipelineResource
+    metadata:
+      name: docker-image-$(uid)
+      namespace: $(params.webhooks-tekton-target-namespace)
+    spec:
+      type: image
+      params:
+      - name: url
+        value: $(params.webhooks-tekton-docker-registry)/$(params.docker-tag)
+  - apiVersion: tekton.dev/v1alpha1
     kind: PipelineRun
     metadata:
-      generateName: CollectionId-pipeline-run-
+      generateName: CollectionId-build-push-pl-run-
       namespace: $(params.webhooks-tekton-target-namespace)
       labels:
         webhooks.tekton.dev/gitServer: $(params.webhooks-tekton-git-server)
@@ -67,7 +77,7 @@ spec:
     spec:
       serviceAccountName: $(params.webhooks-tekton-service-account)
       pipelineRef:
-        name: CollectionId-build-pipeline
+        name: CollectionId-build-push-pl
       params:
       - name: event-type
         value: $(params.event-type)
@@ -75,5 +85,8 @@ spec:
       - name: git-source
         resourceRef:
           name: git-source-$(uid)
+      - name: docker-image
+        resourceRef: 
+          name: docker-image-$(uid)
 
 
