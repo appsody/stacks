@@ -72,7 +72,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/liberty/wlp/usr/servers/shared/resources</outputDirectory>
+                            <outputDirectory>${project.build.directory}/liberty/wlp/usr/shared/resources</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                             <excludeTransitive>true</excludeTransitive>
