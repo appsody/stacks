@@ -1,6 +1,8 @@
 FROM appsody/nodejs:0.3
 
+USER root
 RUN useradd -m node_user && groupadd node_group
+RUN chown -R node_user:node_group /project
 
 ENV APPSODY_PROJECT_DIR=/project
 ENV APPSODY_MOUNTS=/:/project/user-app
