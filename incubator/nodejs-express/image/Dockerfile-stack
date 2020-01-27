@@ -1,5 +1,7 @@
 FROM appsody/nodejs:0.3
 
+RUN useradd -m node_user && groupadd node_group
+
 ENV APPSODY_PROJECT_DIR=/project
 ENV APPSODY_MOUNTS=/:/project/user-app
 ENV APPSODY_DEPS=/project/user-app/node_modules
@@ -22,15 +24,14 @@ ENV APPSODY_TEST="npm test && npm test --prefix user-app"
 ENV APPSODY_TEST_ON_CHANGE=""
 ENV APPSODY_TEST_KILL=false
 
-COPY --chown=node:node ./LICENSE /licenses/
-COPY --chown=node:node ./project /project
-COPY --chown=node:node ./config /config
+COPY --chown=node_user:node_group ./LICENSE /licenses/
+COPY --chown=node_user:node_group ./project /project
+COPY --chown=node_user:node_group ./config /config
 
+WORKDIR /project
 USER node
 
 RUN mkdir -p /project/user-app/node_modules
-WORKDIR /project
-
 RUN npm install && npm audit fix
 
 ENV PORT=3000
