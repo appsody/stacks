@@ -32,7 +32,7 @@ then
     fi
     
     # force to be a specific fallback version
-    if [ -n $FORCE_APPSODY_CLI_FALLBACK ]
+    if [ ! -z $FORCE_APPSODY_CLI_FALLBACK ]
     then
         release_tag=$FORCE_APPSODY_CLI_FALLBACK
     fi
