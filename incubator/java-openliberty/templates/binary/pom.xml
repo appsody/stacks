@@ -71,11 +71,10 @@
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/liberty/wlp/usr/servers/shared/resources</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                            <excludeTransitive>true</excludeTransitive>
+						<configuration>
+							<outputDirectory>${project.build.directory}/liberty/wlp/usr/shared/resources</outputDirectory>
+							<includeGroupIds>com.ibm.db2.jcc</includeGroupIds>
+                            <includeArtifactIds>db2jcc</includeArtifactIds>
                             <includeTypes>jar</includeTypes>
                         </configuration>
                     </execution>
@@ -87,13 +86,12 @@
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/liberty/wlp/usr/servers/defaultServer/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                            <excludeTransitive>true</excludeTransitive>
-                            <includeTypes>jar</includeTypes>
-                        </configuration>
+						<configuration>
+							<outputDirectory>${project.build.directory}/liberty/wlp/usr/servers/defaultServer/lib</outputDirectory>
+							<includeGroupIds>some.shared.lib.groupid</includeGroupIds>
+							<includeArtifactIds>some.shared.lib.artifactId</includeArtifactIds>
+							<includeTypes>jar</includeTypes>
+						</configuration>
                     </execution>
                     -->
                 </executions>

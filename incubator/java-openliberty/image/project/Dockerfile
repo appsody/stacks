@@ -37,9 +37,7 @@ RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
 FROM open-liberty:kernel-java8-openj9
 
 #2a) copy any resources 
-#    but, can't assume shared/resources contains files - copy from previous stage to a tmp holding place and test
-COPY --chown=1001:1001 --from=0 /shared /tmp/shared
-RUN if [ -d /tmp/shared/resources ]; then cp -R /tmp/shared/resources /opt/ol/wlp/usr/shared/ && chmod -R 777 /tmp/shared && rm -rf /tmp/shared; fi
+COPY --chown=1001:1001 --from=0 /shared /opt/ol/wlp/usr/shared/
 
 # 2b) next copy shared library
 #     but can't assume config/lib exists - copy from previous stage to a tmp holding place and test
