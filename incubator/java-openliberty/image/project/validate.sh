@@ -31,18 +31,15 @@ p_version_range=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t 
 
 # Check child pom for required parent project
 if [ "${p_groupId}" != "${a_groupId}" ] || [ "${p_artifactId}" != "${a_artifactId}" ]; then
-	if [! -e ./.appsody-nolocal  ]; then
-		echo "Project pom.xml is missing the required parent:
-
-		<parent>
-			<groupId>${a_groupId}</groupId>
-			<artifactId>${a_artifactId}</artifactId>
-			<version>${a_range}</version>
-			<relativePath/>
-		</parent>
-		"
-	fi	
-  exit 1
+	echo "Project pom.xml is missing the required parent:
+	<parent>
+		<groupId>${a_groupId}</groupId>
+		<artifactId>${a_artifactId}</artifactId>
+		<version>${a_range}</version>
+		<relativePath/>
+	</parent>
+	"
+exit 1
 fi
 
 # Check parent version
