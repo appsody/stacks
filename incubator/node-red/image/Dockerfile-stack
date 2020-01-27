@@ -1,4 +1,6 @@
 FROM node:12
+  
+RUN useradd -m node_user && groupadd node_group
 
 ENV APPSODY_MOUNTS=/:/project/user-app
 ENV APPSODY_DEPS=/project/user-app/node_modules
@@ -7,7 +9,7 @@ ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/node_modules
 ENV APPSODY_WATCH_REGEX="^.*.json$"
 
-ENV APPSODY_INSTALL="npm install --prefix user-app && npm audit fix --prefix user-app"
+ENV APPSODY_PREP="npm install --prefix user-app && npm audit fix --prefix user-app"
 
 ENV APPSODY_RUN="npm start"
 ENV APPSODY_RUN_ON_CHANGE="npm start"
@@ -19,10 +21,14 @@ ENV APPSODY_DEBUG_KILL=true
 
 ENV APPSODY_TEST="npm test"
 
-COPY ./LICENSE /licenses/
-COPY ./project /project
-COPY ./config /config
+COPY --chown=node_user:node_group ./LICENSE /licenses/
+COPY --chown=node_user:node_group ./project /project
+COPY --chown=node_user:node_group ./config /config
+
 WORKDIR /project
+USER node_user
+
+RUN mkdir -p /project/user-app/node_modules
 RUN npm install && npm audit fix
 
 ENV PORT=3000
