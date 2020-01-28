@@ -13,7 +13,7 @@ eventTriggers:
       - build.jobid : ' jobID() '
       - build.nameSuffix: toDomainName( build.ownerLogin + "-" + build.repositoryName + "-" + build.event + "-" + build.jobid)
       - build.defaultRegistry : ' "image-registry.openshift-image-registry.svc:5000" '
-      - build.serviceAccount : ' "kabanero-operator" '
+      - build.serviceAccountName : ' "kabanero-operator" '
 
       #### Push ####
       - if: ' build.event == "push" '

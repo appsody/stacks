@@ -5,7 +5,7 @@ metadata:
   namespace: {{.namespace}}
 spec:
   pipelineRef:
-    name: {{.collectionID}}-build-push-pipeline
+    name: {{.collectionID}}-build-push-pl
   resources:
   - name: git-source
     resourceRef:
@@ -13,5 +13,5 @@ spec:
   - name: docker-image
     resourceRef:
       name: docker-{{.nameSuffix}}
-  serviceAccount: {{.serviceAccount}}
+  serviceAccountName: {{.serviceAccountName}}
   timeout: {{.timeout}}

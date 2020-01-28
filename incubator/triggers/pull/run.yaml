@@ -5,10 +5,10 @@ metadata:
   namespace: {{.namespace}}
 spec:
   pipelineRef:
-    name: {{.collectionID}}-build-pipeline
+    name: {{.collectionID}}-build-pl
   resources:
   - name: git-source
     resourceRef:
       name: git-{{.nameSuffix}}
-  serviceAccount: {{.serviceAccount}}
+  serviceAccountName: {{.serviceAccountName}}
   timeout: {{.timeout}}
