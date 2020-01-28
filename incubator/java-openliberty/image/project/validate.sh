@@ -12,6 +12,11 @@ if [ ! -f ./pom.xml ]; then
   exit 1   
 fi
 
+# 
+# During `appsody build`, we just want to use the same ~/.m2/repository with these mvn
+# commands that we use otherwise, so as to avoid extra downloads.  It's only during local dev
+# mode that we want to use /mvn/repository, mounted to the host ~/.m2/repository.
+#
 M2_LOCAL_REPO=
 if [ ! -z "$APPSODY_DEV_MODE" ]; then
     M2_LOCAL_REPO="-Dmaven.repo.local=/mvn/repository"

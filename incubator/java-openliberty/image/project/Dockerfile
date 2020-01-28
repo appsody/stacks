@@ -12,14 +12,28 @@ RUN cd /project && mvn -B install dependency:go-offline -DskipTests
 COPY ./util /project/util
 RUN  /project/util/check_version build
 
-# Copy the user's application pom and resolve all dependencies, also trigger Open Liberty install
-COPY ./user-app/pom.xml /project/user-app/pom.xml
-COPY ./validate.sh /project/user-app/validate.sh
-RUN cd /project/user-app && ./validate.sh
+#-----
+# Before copying any app file:
+#   - Prime .m2/repository with common artifacts 
+#   - Create target/liberty/wlp/usr/servers/defaultServer dir
+#-----
+COPY ./preload-m2-pom.xml /project/user-app/preload-m2-pom.xml
+RUN cd /project/user-app && \ 
+    mvn -B -f /project/user-app/preload-m2-pom.xml liberty:install-server dependency:resolve-plugins && \
+    rm /project/user-app/preload-m2-pom.xml
 
-# Copy and build the application source, and run unit tests
+COPY ./validate.sh /project/user-app/validate.sh
+
+# Copy the application pom.xml
+COPY ./user-app/pom.xml /project/user-app/pom.xml
+# Validate 
+RUN cd /project/user-app && ./validate.sh
+# Copy the rest of the application source
 COPY ./user-app/src /project/user-app/src
-RUN cd /project/user-app && mvn -B liberty:create package
+
+# Build (and run unit tests); also liberty:create copies config from src->target
+RUN cd /project/user-app && \
+    mvn -B liberty:create package
 
 RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
     mkdir /config && \
