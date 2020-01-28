@@ -2,7 +2,7 @@
 FROM adoptopenjdk/openjdk8-openj9
 
 RUN apt-get update && \
-    apt-get install -y maven unzip wget xmlstarlet
+	apt-get install -y maven unzip wget xmlstarlet
 
 # Copy and build the dev.appsody:java-openliberty parent pom
 COPY ./pom.xml /project/pom.xml
@@ -10,7 +10,7 @@ RUN cd /project && mvn -B install dependency:go-offline -DskipTests
 
 # Copy and run a simple version check
 COPY ./util /project/util
-RUN  /project/util/check_version build
+RUN	 /project/util/check_version build
 
 # Copy the user's application pom and resolve all dependencies, also trigger Open Liberty install
 COPY ./validate.sh /project/user-app/validate.sh
@@ -28,10 +28,10 @@ RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
 	# make a well known place for shared library jars seperate from the rest of the defaultServer contents (to help with caching)
 	mkdir /configlibdir && \
 	if [ -d ./defaultServer/lib ]; then mv ./defaultServer/lib /configlibdir; fi && \
-    mkdir /config && \
-    mv -f defaultServer/* /config/ && \
-    mkdir /shared && \
-    if [ -d ../shared ]; then mv ../shared/* /shared/; fi
+	mkdir /config && \
+	mv -f defaultServer/* /config/ && \
+	mkdir /shared && \
+	if [ -d ../shared ]; then mv ../shared/* /shared/; fi
 
 # Step 2: Package Open Liberty image
 FROM open-liberty:kernel-java8-openj9
@@ -40,7 +40,7 @@ FROM open-liberty:kernel-java8-openj9
 COPY --chown=1001:1001 --from=0 /shared /opt/ol/wlp/usr/shared/
 
 # 2b) next copy shared library
-#     but can't assume config/lib exists - copy from previous stage to a tmp holding place and test
+#	  but can't assume config/lib exists - copy from previous stage to a tmp holding place and test
 COPY --chown=1001:0 --from=0 /configlibdir/ /tmp/cfglib
 RUN if [ "$(ls -A /tmp/cfglib/lib)" ]; then cp -R /tmp/cfglib/lib /config && chmod -R 777 /tmp/cfglib && rm -rf /tmp/cfglib; fi
 

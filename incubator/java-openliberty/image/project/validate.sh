@@ -12,14 +12,14 @@ fi
 
 # Test pom.xml is present and a file.
 if [ ! -f ./pom.xml ]; then
-  echo "Error: Could not find Maven pom.xml
+	echo "Error: Could not find Maven pom.xml
 
-  * The project directory (containing an .appsody-conf.yaml file) must contain a pom.xml file.
-  * On Windows and MacOS, the project directory should also be shared with Docker: 
-    - Win: https://docs.docker.com/docker-for-windows/#shared-drives
-    - Mac: https://docs.docker.com/docker-for-mac/#file-sharing
-  "
-  exit 1   
+		* The project directory (containing an .appsody-conf.yaml file) must contain a pom.xml file.
+		* On Windows and MacOS, the project directory should also be shared with Docker: 
+		- Win: https://docs.docker.com/docker-for-windows/#shared-drives
+		- Mac: https://docs.docker.com/docker-for-mac/#file-sharing
+		"
+	exit 1
 fi
 
 # Get parent pom information (../pom.xml)
@@ -53,24 +53,24 @@ exit 1
 fi
 
 # Check parent version
-if ! /project/util/check_version contains "$p_version_range" "$a_version";  then
-  echo "Version mismatch
+if ! /project/util/check_version contains "$p_version_range" "$a_version";	then
+	echo "Version mismatch
 
 The version of the appsody stack '${a_version}' does not match the
 parent version specified in pom.xml '${p_version_range}'. Please update
 the parent version in pom.xml, and test your changes.
 
-  <parent>
-    <groupId>${a_groupId}</groupId>
-    <artifactId>${a_artifactId}</artifactId>
-    <version>${a_range}</version>
-    <relativePath/>
-  </parent>
-  "
-  exit 1
+	<parent>
+		<groupId>${a_groupId}</groupId>
+		<artifactId>${a_artifactId}</artifactId>
+		<version>${a_range}</version>
+		<relativePath/>
+	</parent>
+	"
+	exit 1
 fi
 
-# Skip check below, not sure if we should fix or just remove.   It doesn't account for the fact that
+# Skip check below, not sure if we should fix or just remove.	It doesn't account for the fact that
 # the stack now uses pluginManagement, so we could fix to allow this as an acceptable usage too... but what if Jane introduces a profile?
 exit 0
 
@@ -79,23 +79,23 @@ l_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x
 l_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:assemblyArtifact/x:artifactId" pom.xml)
 l_version=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:build/x:plugins/x:plugin[x:artifactId='liberty-maven-plugin']/x:configuration/x:assemblyArtifact/x:version" pom.xml)
 if ! [[
-        ( "${l_groupId}" == "${LIBERTY_GROUP_ID}" && "${l_artifactId}" == "${LIBERTY_ARTIFACT_ID}" && "${l_version}" == "${LIBERTY_VERSION}"  )
-        ||
-        ( "${l_groupId}" == "\${liberty.groupId}" && "${l_artifactId}" == "\${liberty.artifactId}" && "${l_version}" == "\${version.openliberty-runtime}" )
-     ]]
+		( "${l_groupId}" == "${LIBERTY_GROUP_ID}" && "${l_artifactId}" == "${LIBERTY_ARTIFACT_ID}" && "${l_version}" == "${LIBERTY_VERSION}"  )
+		||
+		( "${l_groupId}" == "\${liberty.groupId}" && "${l_artifactId}" == "\${liberty.artifactId}" && "${l_version}" == "\${version.openliberty-runtime}" )
+	]]
 then
-  echo "Project is not using the right OpenLiberty assembly artifact:
-  <assemblyArtifact>
-    <groupId>${LIBERTY_GROUP_ID}</groupId>
-    <artifactId>${LIBERTY_ARTIFACT_ID}</artifactId>
-    <version>${LIBERTY_VERSION}</version>
-  </assemblyArtifact>
+	echo "Project is not using the right OpenLiberty assembly artifact:
+		<assemblyArtifact>
+			<groupId>${LIBERTY_GROUP_ID}</groupId>
+			<artifactId>${LIBERTY_ARTIFACT_ID}</artifactId>
+			<version>${LIBERTY_VERSION}</version>
+		</assemblyArtifact>
 
-Alternatively you could also use these properties:
-  <assemblyArtifact>
-    <groupId>\${liberty.groupId}</groupId>
-    <artifactId>\${liberty.artifactId}</artifactId>
-    <version>\${version.openliberty-runtime}</version>
-  <assemblyArtifact>"
-  exit 1
+		Alternatively you could also use these properties:
+		<assemblyArtifact>
+			<groupId>\${liberty.groupId}</groupId>
+			<artifactId>\${liberty.artifactId}</artifactId>
+			<version>\${version.openliberty-runtime}</version>
+		<assemblyArtifact>"
+ exit 1
 fi
