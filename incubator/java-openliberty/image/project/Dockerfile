@@ -14,13 +14,17 @@ RUN  /project/util/check_version build
 
 # Copy the user's application pom and resolve all dependencies, also trigger Open Liberty install
 COPY ./validate.sh /project/user-app/validate.sh
+
+COPY ./default-pom.xml /project/default-pom.xml
+RUN cd /project/user-app && mvn -f /project/default-pom.xml -B liberty:install-server liberty:create
+
 COPY ./user-app/pom.xml /project/user-app/pom.xml
 RUN cd /project/user-app && ./validate.sh
 
 # Copy and build the application source, and run unit tests
 
 COPY ./user-app /project/user-app
-RUN cd /project/user-app && mvn -B liberty:create package
+RUN cd /project/user-app && mvn -B clean liberty:create package
 
 # process any resources or shared libraries - if they are present in the dependencies block for this project (there may be none potentially)
 # test to see if each is present and move to a well known location for later processing in the next stage
@@ -36,7 +40,7 @@ RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
 # Step 2: Package Open Liberty image
 FROM open-liberty:kernel-java8-openj9
 
-#2a) copy any resources 
+# 2a) copy any resources 
 #    but, can't assume shared/resources contains files - copy from previous stage to a tmp holding place and test
 COPY --chown=1001:1001 --from=0 /shared /tmp/shared
 RUN if [ -d /tmp/shared/resources ]; then cp -R /tmp/shared/resources /opt/ol/wlp/usr/shared/ && chmod -R 777 /tmp/shared && rm -rf /tmp/shared; fi
