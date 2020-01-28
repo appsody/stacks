@@ -12,14 +12,19 @@ if [ ! -f ./pom.xml ]; then
   exit 1   
 fi
 
+M2_LOCAL_REPO=
+if [ ! -z "$APPSODY_DEV_MODE" ]; then
+    M2_LOCAL_REPO="-Dmaven.repo.local=/mvn/repository"
+fi
+
 # Get parent pom information (../pom.xml)
 args='export PARENT_GROUP_ID=${project.groupId}; export PARENT_ARTIFACT_ID=${project.artifactId}; export PARENT_VERSION=${project.version}
 export LIBERTY_GROUP_ID=${liberty.groupId}; export LIBERTY_ARTIFACT_ID=${liberty.artifactId}; export LIBERTY_VERSION=${version.openliberty-runtime}'
-eval $(mvn -q -Dexec.executable=echo -Dmaven.repo.local=/mvn/repository -Dexec.args="${args}" --non-recursive -f ../pom.xml exec:exec 2>/dev/null)
+eval $(mvn -q -Dexec.executable=echo $M2_LOCAL_REPO -Dexec.args="${args}" --non-recursive -f ../pom.xml exec:exec 2>/dev/null)
 
 # Install parent pom
 echo "Installing parent ${PARENT_GROUP_ID}:${PARENT_ARTIFACT_ID}:${PARENT_VERSION}"
-mvn install -Dmaven.repo.local=/mvn/repository -Denforcer.skip=true -f ../pom.xml
+mvn install  $M2_LOCAL_REPO -Denforcer.skip=true -f ../pom.xml
 
 # Get parent pom information
 a_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:groupId" /project/pom.xml)
