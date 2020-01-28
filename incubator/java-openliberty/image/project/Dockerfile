@@ -15,8 +15,9 @@ RUN  /project/util/check_version build
 # Copy the user's application pom and resolve all dependencies, also trigger Open Liberty install
 COPY ./validate.sh /project/user-app/validate.sh
 
-COPY ./default-pom.xml /project/default-pom.xml
-RUN cd /project/user-app && mvn -f /project/default-pom.xml -B liberty:install-server liberty:create
+# Prime .m2/repository with common artifacts before copying any app file
+COPY ./preload-m2-pom.xml /project/preload-m2-pom.xml
+RUN cd /project/user-app && mvn -f /project/preload-m2-pom.xml -B liberty:install-server liberty:create dependency:resolve-plugins
 
 COPY ./user-app/pom.xml /project/user-app/pom.xml
 RUN cd /project/user-app && ./validate.sh
