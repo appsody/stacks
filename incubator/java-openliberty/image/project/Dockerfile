@@ -25,7 +25,7 @@ RUN cd /project/user-app && ./validate.sh
 # Copy and build the application source, and run unit tests
 
 COPY ./user-app /project/user-app
-RUN cd /project/user-app && mvn -B clean liberty:create package
+RUN cd /project/user-app && mvn -B package
 
 # process any resources or shared libraries - if they are present in the dependencies block for this project (there may be none potentially)
 # test to see if each is present and move to a well known location for later processing in the next stage
