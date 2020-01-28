@@ -1,5 +1,15 @@
 #!/bin/bash
 
+#can we even run the appsody command?
+if [ -e /project/user-app/.appsody-binary ]
+then 
+	if [ $APPSODY_DEV_MODE == 'prep' ]
+	then
+		echo appsody run/debug/test not supported when using binary template.
+		exit 1
+	fi
+fi
+
 # Test pom.xml is present and a file.
 if [ ! -f ./pom.xml ]; then
   echo "Error: Could not find Maven pom.xml
