@@ -76,33 +76,34 @@
             <version>1.1.1</version>
             <scope>test</scope>
         </dependency>
-    </dependencies>
 
-    <build>
-        <finalName>${project.artifactId}</finalName>
-        <plugins>
-            <plugin>
+            <dependency>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${version.maven-war-plugin}</version>
-            </plugin>
+            </dependency>
             <!-- Enable liberty-maven plugin -->
-            <plugin>
+            <dependency>
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
-            </plugin>
+                <version>${version.liberty-maven-plugin}</version>
+            </dependency>
             <!-- Plugin to run unit tests -->
-            <plugin>
+            <dependency>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${version.maven-surefire-plugin}</version>
-            </plugin>
+            </dependency>
             <!-- Plugin to run functional tests -->
-            <plugin>
+            <dependency>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${version.maven-failsafe-plugin}</version>
-            </plugin>
-        </plugins>
-    </build>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M2</version>
+            </dependency>
+        </dependencies>
 </project>
