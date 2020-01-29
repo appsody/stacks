@@ -1,6 +1,6 @@
 package it.dev.appsody.starter;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
@@ -8,10 +8,10 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class HealthEndpointTest {
     
@@ -21,20 +21,20 @@ public class HealthEndpointTest {
     private Client client;
     private Response response;
     
-    @BeforeClass
+    @BeforeAll
     public static void oneTimeSetup() {
         String port = System.getProperty("liberty.test.port");
         baseUrl = "http://localhost:" + port;
     }
     
-    @Before
+    @BeforeEach
     public void setup() {
         response = null;
         client = ClientBuilder.newClient();
         client.register(JsrJsonpProvider.class);
     }
     
-    @After
+    @AfterEach
     public void teardown() {
         response.close();
         client.close();
@@ -61,10 +61,10 @@ public class HealthEndpointTest {
         
         String expectedOutcome = "UP";
         String actualOutcome = healthJson.getString("status");
-        assertEquals("Application should be " + state, expectedOutcome, actualOutcome);
+        assertEquals(expectedOutcome, actualOutcome, "Application should be " + state);
         
         actualOutcome = healthJson.getJsonArray("checks").getJsonObject(0).getString("status");
-        assertEquals("First array element was expected to be SystemResource and it wasn't healthy", expectedOutcome, actualOutcome);
+        assertEquals(expectedOutcome, actualOutcome, "First array element was expected to be SystemResource and it wasn't healthy");
     
     }
     
@@ -92,7 +92,7 @@ public class HealthEndpointTest {
      *          - response received from the target URL.
      */
     private void assertResponse(String url, Response response) {
-        assertEquals("Incorrect response code from " + url, 200, response.getStatus());
+        assertEquals(200, response.getStatus(), "Incorrect response code from " + url);
     }
 
 }
