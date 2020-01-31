@@ -28,7 +28,8 @@ COPY ./user-app/pom.xml /project/user-app/pom.xml
 RUN cd /project/user-app && ./validate.sh
 
 # Copy the rest of the application source
-COPY ./user-app/src /project/user-app/src
+#COPY ./user-app/src /project/user-app/src
+COPY ./user-app /project/user-app
 
 # Build (and run unit tests) 
 #  also liberty:create copies config from src->target
