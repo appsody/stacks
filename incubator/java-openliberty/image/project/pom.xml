@@ -30,6 +30,9 @@
         <https.port>9443</https.port>
         <packaging.type>usr</packaging.type>
         <app.name>${project.artifactId}</app.name>
+
+        <!-- Gets overridden in run/debug/test -->
+        <wlp.user.dir>${project.build.directory}/liberty/wlp/usr/</wlp.user.dir>
     </properties>
 
     <repositories>
@@ -92,7 +95,7 @@
         </plugins>
     </build>
     <profiles>
-    	<!-- This profile is used when the stack image is initially built 
+<!-- This profile is used when the stack image is initially built 
     		during "appsody stack package". The runtimeInstallDirectory 
     		property is configured in the Liberty Maven plugin to specify 
     		where to install the Open Liberty runtime in the Docker image. --> 
@@ -101,6 +104,9 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
+            <properties>
+                <wlp.user.dir>${openliberty.install.dir}/wlp/usr</wlp.user.dir>
+            </properties>
             <build>
                 <pluginManagement>
                     <plugins>
@@ -125,6 +131,9 @@
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
+            <properties>
+                <wlp.user.dir>${openliberty.install.dir}/wlp/usr</wlp.user.dir>
+            </properties>
             <build>
                 <pluginManagement>
                     <plugins>

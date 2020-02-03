@@ -34,14 +34,14 @@ ENV APPSODY_USER_RUN_AS_LOCAL=true
 # Set APPSODY_DEV_MODE to get in the habit in case we need it someday
 ENV APPSODY_PREP="export APPSODY_DEV_MODE=prep;  ../validate.sh"
 
-ENV APPSODY_RUN="export APPSODY_DEV_MODE=run; mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository liberty:dev"
+ENV APPSODY_RUN="export APPSODY_DEV_MODE=run; mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository package liberty:dev"
 # See ENV APPSODY_WATCH_REGEX comment
-ENV APPSODY_RUN_ON_CHANGE="export APPSODY_DEV_MODE=run; ../validate.sh && mvn -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository liberty:dev"
+ENV APPSODY_RUN_ON_CHANGE="export APPSODY_DEV_MODE=run; ../validate.sh && mvn -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository package liberty:dev"
 ENV APPSODY_RUN_KILL=true
 
-ENV APPSODY_DEBUG="export APPSODY_DEV_MODE=debug; mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository liberty:dev"
+ENV APPSODY_DEBUG="export APPSODY_DEV_MODE=debug; mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository package liberty:dev"
 # See ENV APPSODY_WATCH_REGEX comment
-ENV APPSODY_DEBUG_ON_CHANGE="export APPSODY_DEV_MODE=debug; ../validate.sh && mvn -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository liberty:dev"
+ENV APPSODY_DEBUG_ON_CHANGE="export APPSODY_DEV_MODE=debug; ../validate.sh && mvn -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository package liberty:dev"
 ENV APPSODY_DEBUG_KILL=true
 
 ENV APPSODY_TEST="export APPSODY_DEV_MODE=test; exec mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository clean package liberty:create liberty:install-feature liberty:start liberty:deploy failsafe:integration-test@it-exec liberty:stop failsafe:verify"
