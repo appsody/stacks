@@ -27,9 +27,11 @@ then
     do
         echo "== $url"
         index=$(curl -s -L ${url})
-        for x in $(echo "$index" | grep 'url:' )
+
+        # Determine and fetch all the template tar.gz and source tar.gz files
+        for x in $(echo "$index" | grep -E 'url:|src:' )
         do
-            if [ $x != 'url:' ]
+            if [ $x != 'url:' ] && [ $x != 'src:' ] && [ $x != '""' ]
             then
                 echo "   $x"
                 curl -s -L -O $x
