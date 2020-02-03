@@ -9,7 +9,7 @@ then
     fi
     if [ -z "${APPSODY_CLI_DOWNLOAD_URL}" ]
     then
-        APPSODY_CLI_DOWNLOAD_URL=https://github.com/appsody/appsody/releases/download/
+        APPSODY_CLI_DOWNLOAD_URL=https://github.com/appsody/appsody/releases/download
     fi
     if [ -z "${APPSODY_CLI_FALLBACK}" ]
     then
@@ -32,7 +32,7 @@ then
     fi
 
     cli_deb="appsody_${release_tag}_amd64.deb"
-    cli_dist=https://github.com/appsody/appsody/releases/download/${release_tag}/${cli_deb}
+    cli_dist=${APPSODY_CLI_DOWNLOAD_URL}/${release_tag}/${cli_deb}
 
     echo " release_tag=${release_tag}"
     echo " cli_deb=${cli_deb}"
