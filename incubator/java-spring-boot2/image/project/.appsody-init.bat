@@ -9,6 +9,6 @@ robocopy .mvn ..\.mvn /e /njh /njs /ndl /nc /ns >nul
 where java >nul 2>nul
 if %ERRORLEVEL% EQU 0 (
   if defined JAVA_HOME (
-    ..\mvnw install -q -f ./appsody-boot2-pom.xml
+    ..\mvnw install -q -f ./{{.stack.parentpomfilename}}
   )
 )

@@ -1,10 +1,8 @@
-FROM kabanero/ubi8-maven:0.3.0
+FROM {{.stack.baseimage}}
 
-LABEL vendor="Kabanero" \
-    name="kabanero/java-spring-boot2" \
-    version="0.2.10" \
-    summary="Image for Kabanero java-spring-boot2 development" \
-    description="This image contains the Kabanero development stack for the java-spring-boot2 collection"
+# Ensure up to date / patched OS
+COPY ./project/update.sh /update.sh
+RUN  /update.sh --system
 
 RUN groupadd --gid 1000 java_group \
  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user \
