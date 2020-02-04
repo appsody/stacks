@@ -1,5 +1,5 @@
 name: Open Liberty
-version: 0.1.4
+version: 0.1.6
 description: Open Liberty & OpenJ9 using Maven
 license: Apache-2.0
 language: java
@@ -23,3 +23,4 @@ requirements:
 templating-data:
     libertyVersion: '19.0.0.12'
     parentpomrange: '[0.1, 0.2)'
+
