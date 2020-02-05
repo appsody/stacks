@@ -10,8 +10,6 @@ services:
   - docker
 
 before_script:
-  - git remote -v
-  - git config --get remote.origin.url
   - ./ci/download_cli.sh
 
 script:
