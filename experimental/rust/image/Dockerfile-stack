@@ -15,6 +15,7 @@ ENV APPSODY_DEPS=$CARGO_HOME
 
 ENV APPSODY_WATCH_DIR="/project/user-app"
 ENV APPSODY_WATCH_REGEX="^(Cargo.toml|.*.rs)$"
+ENV APPSODY_USER_RUN_AS_LOCAL=true
 
 ENV APPSODY_RUN="cargo run"
 ENV APPSODY_RUN_ON_CHANGE="cargo run"
@@ -31,8 +32,6 @@ COPY --chown=rust_user:0 ./project /project
 COPY --chown=rust_user:0 ./config /config
 
 WORKDIR /project/user-app
-
-USER rust_user
 
 ENV PORT=8000
 
