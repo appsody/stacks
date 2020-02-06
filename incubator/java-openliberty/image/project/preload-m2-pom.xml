@@ -13,9 +13,9 @@
     </parent>
 
     <groupId>dev.appsody.starter.java-openliberty</groupId>
-    <artifactId>starter-app</artifactId>
+    <artifactId>default</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <dependencies>
         <!-- Aggregate of MicroProfile APIs -->
@@ -28,12 +28,11 @@
         </dependency>
         <!-- For tests -->
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.6.0</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-rs-client</artifactId>
@@ -78,31 +77,23 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <build>
-        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${version.maven-war-plugin}</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <packagingExcludes>pom.xml</packagingExcludes>
-                </configuration>
             </plugin>
             <!-- Enable liberty-maven plugin -->
             <plugin>
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
+                <version>${version.liberty-maven-plugin}</version>
+                <!-- Since we're mainly using the install dir layout and not actually running anything in stage 1, we don't
+                     hugely care what version of Open Liberty we install.   That seems like the kind of thing that could make
+                     somewhat a bit nervous, so we call this out here in this comment. -->
                 <configuration>
-                    <stripVersion>true</stripVersion>
-                    <serverStartTimeout>120</serverStartTimeout>
-                    <bootstrapProperties>
-                        <default.http.port>${http.port}</default.http.port>
-                        <default.https.port>${https.port}</default.https.port>
-                        <app.context.root>${app.name}</app.context.root>
-                    </bootstrapProperties>
+                    <runtimeInstallDirectory>/project/user-app/target/liberty</runtimeInstallDirectory>
                 </configuration>
             </plugin>
             <!-- Plugin to run unit tests -->
@@ -110,61 +101,22 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${version.maven-surefire-plugin}</version>
-                <executions>
-                    <execution>
-                        <phase>test</phase>
-                        <id>default-test</id>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/it/**</exclude>
-                            </excludes>
-                            <reportsDirectory>
-                                ${project.build.directory}/test-reports/unit
-                            </reportsDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <skipTests>${skipTests}</skipTests>
-                </configuration>
             </plugin>
             <!-- Plugin to run functional tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${version.maven-failsafe-plugin}</version>
-                <executions>
-                    <execution>
-                        <phase>integration-test</phase>
-                        <id>it-exec</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>**/it/**</include>
-                            </includes>
-                            <systemPropertyVariables>
-                                <liberty.test.port>${http.port}</liberty.test.port>
-                                <war.name>${app.name}</war.name>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>verify-results</id>
-                        <goals>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <summaryFile>
-                        ${project.build.directory}/test-reports/it/failsafe-summary.xml
-                    </summaryFile>
-                    <reportsDirectory>
-                        ${project.build.directory}/test-reports/it
-                    </reportsDirectory>
-                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
             </plugin>
         </plugins>
     </build>
