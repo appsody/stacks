@@ -2,6 +2,8 @@ FROM rust:1.37 as builder
 
 WORKDIR "/project/user-app"
 
+RUN useradd --gid 0 --create-home rust_user
+
 # copy dependency files 
 COPY /user-app/Cargo.toml Cargo.toml
 
@@ -20,14 +22,17 @@ RUN cargo build --release \
 
 FROM rust:1.37-slim-stretch
 
-RUN useradd rust
+RUN useradd --gid 0 --create-home rust_user
 
 WORKDIR "/project/user-app"
 
 # get files and built binary from previous image
 COPY --from=builder /project/user-app/run.sh /project/user-app/Cargo.toml /project/user-app/target/release/ ./
 
-USER rust
+RUN chown -R rust_user:0 /project \
+ && chmod -R g=u /project 
+
+USER rust_user
 
 ENV PORT 8000
 
