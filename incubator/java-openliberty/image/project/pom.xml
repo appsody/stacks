@@ -25,7 +25,7 @@
         <liberty.groupId>io.openliberty</liberty.groupId>
         <liberty.artifactId>openliberty-runtime</liberty.artifactId>
         <version.openliberty-runtime>{{.stack.libertyVersion}}</version.openliberty-runtime>
-        <version.liberty-maven-plugin>3.1</version.liberty-maven-plugin>
+        <version.liberty-maven-plugin>3.2</version.liberty-maven-plugin>
         <http.port>9080</http.port>
         <https.port>9443</https.port>
         <packaging.type>usr</packaging.type>
@@ -54,31 +54,44 @@
         </pluginManagement>
         <plugins>
             <!-- Enforcing OpenLiberty and JDK Version -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0-M2</version>
-                <executions>
-                <execution>
-                    <id>enforce-versions</id>
-                    <goals>
-                        <goal>enforce</goal>
-                    </goals>
-                    <configuration>
-                        <rules>
-                            <requireJavaVersion>
-                                <version>[1.8,1.9)</version>
-                            </requireJavaVersion>
-                            <requireProperty>
-                                <property>version.openliberty-runtime</property>
-                                <regex>{{.stack.libertyVersion}}</regex>
-                                <regexMessage>OpenLiberty runtime version must be {{.stack.libertyVersion}}</regexMessage>
-                            </requireProperty>
-                        </rules>
-                    </configuration>
-                </execution>
-            </executions>
-            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0-M3</version>
+				<executions>
+					<execution>
+						<id>default-cli</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireJavaVersion>
+									<version>[1.8,1.9)</version>
+								</requireJavaVersion>
+								<requireProperty>
+									<property>version.openliberty-runtime</property>
+									<regex>{{.stack.libertyVersion}}</regex>
+									<regexMessage>OpenLiberty runtime version must be {{.stack.libertyVersion}}</regexMessage>
+								</requireProperty>
+						
+								<!-- Restrict the Liberty Maven plugin version -->
+								<bannedPlugins>
+									<message>This project is only permitted to use Liberty Maven Plugin version ${version.liberty-maven-plugin} from io.openliberty.tools. i.e. io.openliberty.tools:liberty-maven-plugin:3.2</message>
+									<excludes>
+										<exclude>io.openliberty.tools:liberty-maven-plugin:*</exclude>
+										<exclude>net.wasdev.wlp.maven.plugins:liberty-maven-plugin:*</exclude>
+									</excludes>
+									<includes>
+										<include>io.openliberty.tools:liberty-maven-plugin:${version.liberty-maven-plugin}</include>
+									</includes>
+								</bannedPlugins>
+							</rules>
+							<fail>true</fail>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
             <plugin>
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
