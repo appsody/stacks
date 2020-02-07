@@ -14,7 +14,7 @@ branches:
   - update-from-appsody
 
 before_install:
-    - sudo snap install yq
+    - ./ci/install_yq.sh
 
 before_script:
   - ./ci/download_cli.sh
