@@ -1,22 +1,22 @@
 FROM {{.stack.baseimage}}
 
 # Ensure up to date / patched OS
-RUN  apt-get -qq update \
-  && apt-get -qq install -y curl wget xmlstarlet unzip \
-  && DEBIAN_FRONTEND=noninteractive apt-get -qq upgrade -y \
-  && apt-get -qq clean \
-  && rm -rf /tmp/* /var/lib/apt/lists/*
+COPY ./project/update.sh /update.sh
+RUN  /update.sh --system
 
-RUN  groupadd --gid 1000 java_group \
-  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user \
-  && mkdir -p /mvn/repository \
-  && chown -R java_user:java_group /mvn
+RUN groupadd --gid 1000 java_group \
+ && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user \
+ && mkdir -p /mvn/repository \
+ && chown -R java_user:java_group /mvn
 
 COPY ./LICENSE /licenses/
 COPY --chown=java_user:java_group ./project /project
 COPY --chown=java_user:java_group ./config /config
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
 COPY ./mvn-stack-settings.xml /project/mvn-stack-settings.xml
+
+# Verify properties used to control versions match between this stack and official spring dependencies.
+RUN /project/verify-property-versions.sh
 
 USER java_user
 
