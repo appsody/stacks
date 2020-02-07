@@ -11,7 +11,10 @@ eventTriggers:
       - build.namespace : ' kabanero.namespace '
       - build.timeout : ' "1h0m0s" '
       - build.jobid : ' jobID() '
-      - build.nameSuffix: toDomainName( build.ownerLogin + "-" + build.repositoryName + "-" + build.event + "-" + build.jobid)
+      # orgRepoMaxLen limits the owner-repo string to so k8s resource names do not exceed the 63 character limit.
+      # - build.orgRepoMaxLen: 63 - size("docker-dest-") - size("-pull-") - size("YYYYMMDDHHMMSSL") # = 30
+      - build.orgRepoMaxLen: 30
+      - build.nameSuffix: substring(toDomainName( build.ownerLogin + "-" + build.repositoryName), build.orgRepoMaxLen) + "-" + build.event + "-" + build.jobid
       - build.defaultRegistry : ' "image-registry.openshift-image-registry.svc:5000" '
       - build.serviceAccountName : ' "kabanero-operator" '
 
@@ -25,6 +28,7 @@ eventTriggers:
       - if: ' build.event == "pr" '
         body:
           - build.pr.allowedBranches: ' [ "master" ] '
+          - build.pr.toRegistry: ' build.defaultRegistry + "/" + build.namespace + "/" + build.repositoryName + ":" + build.pr.sha'
 
       #### Tag ####
       - if: ' build.event == "tag" '

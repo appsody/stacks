@@ -57,7 +57,7 @@ functions:
           - build.appsodyConfig : ' downloadYAML(message, ".appsody-config.yaml") '
           - if: ' has(build.appsodyConfig.content) '
             body:
-              - build.collectionID : ' split(split(build.appsodyConfig.content.stack, "/")[1], ":" )[0]'
+              - build.collectionID : ' split(split(build.appsodyConfig.content.stack, "/")[2], ":" )[0]'
           - build.repositoryName : 'message.body.repository.name'
           - build.clone_url : 'message.body.repository.clone_url'
           - build.ssh_url : 'message.body.repository.ssh_url'
@@ -66,6 +66,7 @@ functions:
               - if: 'build.repositoryEvent == "pull_request"'
                 body:
                   - build.event: '"pr"'
+                  - build.pr.sha : ' message.body.pull_request.head.sha '
                   - build.pr.url : ' message.body.pull_request.url '
                   - build.pr.action : ' message.body.action '
                   - build.pr.branch : 'message.body.pull_request.base.ref'
@@ -83,6 +84,6 @@ functions:
                       - if: ' temp.refArray[1] == "tags" '
                         body:
                           # tag
-                          - bulid.event: '"tag"'
+                          - build.event: '"tag"'
                           - build.tag.sha : ' message.body.after '
                           - build.tag.version : ' temp.refArray[2] '
