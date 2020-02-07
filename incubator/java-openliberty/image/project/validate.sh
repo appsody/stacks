@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #can we even run the appsody command?
-if [ -e /project/user-app/.appsody-binary ]
+if [ -e /project/user-app/.appsody-nodev ]
 then 
 	if [ $APPSODY_DEV_MODE == 'prep' ]
 	then
