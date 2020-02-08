@@ -18,6 +18,7 @@
     <packaging>war</packaging>
 
     <dependencies>
+
         <!-- Aggregate of MicroProfile APIs -->
         <dependency>
             <groupId>org.eclipse.microprofile</groupId>
@@ -26,6 +27,14 @@
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
+        <!-- Aggregate of Jakarta EE APIs -->
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>8.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- For tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -33,7 +42,6 @@
             <version>5.6.0</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-rs-client</artifactId>
