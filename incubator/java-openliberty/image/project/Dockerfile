@@ -33,7 +33,7 @@ COPY ./user-app /project/user-app
 # Build (and run unit tests) 
 #  also liberty:create copies config from src->target
 RUN cd /project/user-app && \
-    mvn -B liberty:create package
+    mvn -Pappsody-build -B liberty:create package
 
 # process any resources or shared libraries - if they are present in the dependencies block for this project (there may be none potentially)
 # test to see if each is present and move to a well known location for later processing in the next stage
