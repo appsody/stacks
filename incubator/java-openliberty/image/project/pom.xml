@@ -24,7 +24,7 @@
         <!-- OpenLiberty runtime -->
         <liberty.groupId>io.openliberty</liberty.groupId>
         <liberty.artifactId>openliberty-runtime</liberty.artifactId>
-        <version.openliberty-runtime>{{.stack.liberty-version}}</version.openliberty-runtime>
+        <version.openliberty-runtime>{{.stack.libertyversion}}</version.openliberty-runtime>
         <version.liberty-maven-plugin>3.2</version.liberty-maven-plugin>
         <http.port>9080</http.port>
         <https.port>9443</https.port>
@@ -71,8 +71,8 @@
 								</requireJavaVersion>
 								<requireProperty>
 									<property>version.openliberty-runtime</property>
-									<regex>{{.stack.liberty-version}}</regex>
-									<regexMessage>OpenLiberty runtime version must be {{.stack.liberty-version}}</regexMessage>
+									<regex>{{.stack.libertyversion}}</regex>
+									<regexMessage>OpenLiberty runtime version must be {{.stack.libertyversion}}</regexMessage>
 								</requireProperty>
 						
 								<!-- Restrict the Liberty Maven plugin version -->

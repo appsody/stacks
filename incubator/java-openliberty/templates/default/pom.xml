@@ -121,7 +121,7 @@
                 <executions>
                     <execution>
                         <phase>test</phase>
-                        <id>default-cli</id>
+                        <id>default-test</id>
                         <configuration>
                             <excludes>
                                 <exclude>**/it/**</exclude>

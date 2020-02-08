@@ -47,7 +47,7 @@ RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
 	if [ -d ../shared ]; then mv ../shared/* /shared/; fi
 
 # Step 2: Package Open Liberty image
-FROM open-liberty:{{.stack.liberty-version}}-kernel-java8-openj9
+FROM open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9
 
 #2a) copy any resources 
 COPY --chown=1001:1001 --from=0 /shared /opt/ol/wlp/usr/shared/
