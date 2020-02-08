@@ -185,13 +185,13 @@
                             <artifactId>liberty-maven-plugin</artifactId>
                             <version>${version.liberty-maven-plugin}</version>
                             <configuration>
-                                <installDirectory>${openliberty.install.dir}/wlp</installDirectory>
                                 <runtimeArtifact>
                                     <groupId>${liberty.groupId}</groupId>
                                     <artifactId>openliberty-kernel</artifactId>
                                     <version>${version.openliberty-runtime}</version>
                                     <type>zip</type>
                                 </runtimeArtifact>
+                                <installDirectory>/project/user-app/target/liberty/wlp</installDirectory>
                             </configuration>
                         </plugin>
                     </plugins>
