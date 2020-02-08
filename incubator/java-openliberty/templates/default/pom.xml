@@ -121,7 +121,7 @@
                 <executions>
                     <execution>
                         <phase>test</phase>
-                        <id>default-test</id>
+                        <id>default-cli</id>
                         <configuration>
                             <excludes>
                                 <exclude>**/it/**</exclude>
@@ -132,9 +132,6 @@
                         </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <skipTests>${skipTests}</skipTests>
-                </configuration>
             </plugin>
             <!-- Plugin to run functional tests -->
             <plugin>
@@ -144,7 +141,7 @@
                 <executions>
                     <execution>
                         <phase>integration-test</phase>
-                        <id>it-exec</id>
+                        <id>default-cli</id>
                         <goals>
                             <goal>integration-test</goal>
                         </goals>
