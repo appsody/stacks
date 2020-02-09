@@ -13,7 +13,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <openliberty.install.dir>/opt/ol</openliberty.install.dir>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <!-- Plugins -->
@@ -32,7 +31,7 @@
         <app.name>${project.artifactId}</app.name>
 
         <!-- Gets overridden in run/debug/test -->
-        <wlp.user.dir>${project.build.directory}/liberty/wlp/usr/</wlp.user.dir>
+        <wlp.install.dir>${project.build.directory}/liberty/wlp</wlp.install.dir>
     </properties>
 
     <repositories>
@@ -112,7 +111,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <wlp.user.dir>${openliberty.install.dir}/wlp/usr</wlp.user.dir>
+                <wlp.install.dir>/opt/ol/wlp</wlp.install.dir>
             </properties>
             <build>
                 <pluginManagement>
@@ -122,7 +121,7 @@
                             <artifactId>liberty-maven-plugin</artifactId>
                             <version>${version.liberty-maven-plugin}</version>
                             <configuration>
-                                <runtimeInstallDirectory>${openliberty.install.dir}</runtimeInstallDirectory>
+                                <runtimeInstallDirectory>/opt/ol</runtimeInstallDirectory>
                                 <runtimeArtifact>
                                     <groupId>${liberty.groupId}</groupId>
                                     <artifactId>${liberty.artifactId}</artifactId>
@@ -145,7 +144,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <wlp.user.dir>${openliberty.install.dir}/wlp/usr</wlp.user.dir>
+                <wlp.install.dir>/opt/ol/wlp</wlp.install.dir>
             </properties>
             <build>
                 <pluginManagement>
@@ -155,7 +154,7 @@
                             <artifactId>liberty-maven-plugin</artifactId>
                             <version>${version.liberty-maven-plugin}</version>
                             <configuration>
-                                <installDirectory>${openliberty.install.dir}/wlp</installDirectory>
+                                <installDirectory>/opt/ol/wlp</installDirectory>
                                 <runtimeArtifact>
                                     <groupId>${liberty.groupId}</groupId>
                                     <artifactId>${liberty.artifactId}</artifactId>
