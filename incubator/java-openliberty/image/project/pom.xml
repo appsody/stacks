@@ -100,6 +100,7 @@
             </plugin>
         </plugins>
     </build>
+
     <profiles>
         <!-- This profile is used when the stack image is initially built 
             during "appsody stack package". The runtimeInstallDirectory 
@@ -170,7 +171,7 @@
 
 
         <!-- This profile is used during "appsody build" where just any image will do, so it's
-            better to start small, and there's no benefit in caching a more complete artifact. --> 
+            better to start small, and there's no benefit in caching a more complete artifact.  -->
         <profile>
             <id>appsody-build</id>
             <activation>
@@ -190,7 +191,35 @@
                                     <version>${version.openliberty-runtime}</version>
                                     <type>zip</type>
                                 </runtimeArtifact>
-                                <installDirectory>/project/user-app/target/liberty/wlp</installDirectory>
+                                <installDirectory>${project.build.directory}/liberty/wlp</installDirectory>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+
+        <!-- Last, if no other profile is activated, we are in host mode, where we don't assumed an already-installed OL -->
+        <profile>
+            <id>default-profile</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>io.openliberty.tools</groupId>
+                            <artifactId>liberty-maven-plugin</artifactId>
+                            <version>${version.liberty-maven-plugin}</version>
+                            <configuration>
+                                <runtimeArtifact>
+                                    <groupId>${liberty.groupId}</groupId>
+                                    <artifactId>openliberty-kernel</artifactId>
+                                    <version>${version.openliberty-runtime}</version>
+                                    <type>zip</type>
+                                </runtimeArtifact>
+                                <runtimeInstallDirectory>${project.build.directory}/liberty</runtimeInstallDirectory>
                             </configuration>
                         </plugin>
                     </plugins>

@@ -25,7 +25,7 @@ ENV APPSODY_MOUNTS="~/.m2/repository:/mvn/repository;.:/project/user-app"
 
 ENV APPSODY_USER_RUN_AS_LOCAL=true
 
-# Set APPSODY_DEV_MODE to get in the habit in case we need it someday
+# Allow validate to distinguish build via APPSODY_DEV_MODE
 ENV APPSODY_PREP="export APPSODY_DEV_MODE=prep;  ../validate.sh"
 
 ENV APPSODY_RUN="export APPSODY_DEV_MODE=run; mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository pre-integration-test liberty:dev"
