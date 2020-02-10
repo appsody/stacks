@@ -41,7 +41,7 @@ if [ $USINGAPT = "0" ] ; then
 	apt-get -qq clean \
 	  && rm -rf /tmp/* /var/lib/apt/lists/*
 else
-	EPEL=https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+	EPEL=https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 	yum install --disableplugin=subscription-manager -y $EPEL || exit 1
 	yum install --disableplugin=subscription-manager -y $XTRAPKGS || exit 1	   
 
