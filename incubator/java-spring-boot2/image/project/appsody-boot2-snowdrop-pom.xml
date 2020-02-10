@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>{{.stack.parentpomgroup}}</groupId>
-  <artifactId>{{.stack.parentpomid}}-snowdrop</artifactId>
+  <artifactId>{{.stack.parentpomid}}</artifactId>
   <version>{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}</version>
   <packaging>pom</packaging>
 
