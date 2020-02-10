@@ -27,13 +27,16 @@ then
     do
         echo "== $url"
         index=$(curl -s -L ${url})
-        for x in $(echo "$index" | grep 'url:' )
+        for x in $(echo "$index" | grep -E 'url:|src:' )
         do
-            if [ $x != 'url:' ]
+            if [ $x != 'url:' ] && [ $x != 'src:' ] && [ $x != '""' ]
             then
-                echo "   $x"
-                curl -s -L -O $x
                 filename=$(basename $x)
+                if [ ! -f $filename ]
+                then
+                    echo "   $x"
+                    curl -s -L -O $x
+                fi
                 if ! [[ "$filename" =~  v[0-9]+\.[0-9]+\.[0-9]+ ]]
                 then
                     # the stack version is in the directory name

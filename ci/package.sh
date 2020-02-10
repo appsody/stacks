@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # setup environment
 . $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
@@ -15,7 +15,7 @@ exec_hooks $script_dir/ext/pre_package.d
 for repo_name in $REPO_LIST
 do
     repo_dir=$base_dir/$repo_name
-    useCachedIndex=""
+    useCachedIndex="--use-local-cache"
     if [ -d $repo_dir ]
     then
         echo -e "\nProcessing repo: $repo_name"
@@ -142,6 +142,12 @@ do
                             fi
                         fi
                     done
+                    source_archive=$repo_name.$stack_id.v$stack_version.source.tar.gz
+                    packaged_source_archive=$stack_id.v$stack_version.source.tar.gz
+                    if [ -f $HOME/.appsody/stacks/dev.local/$packaged_source_archive ]; then
+                        echo "--- Copying $HOME/.appsody/stacks/dev.local/$packaged_source_archive to $assets_dir/$source_archive"
+                        cp $HOME/.appsody/stacks/dev.local/$packaged_source_archive $assets_dir/$source_archive
+                    fi
                 else
                     echo -e "\n- SKIPPING stack image: $repo_name/$stack_id"
                 fi

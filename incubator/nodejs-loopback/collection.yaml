@@ -1,5 +1,0 @@
-default-image: nodejs-loopback
-default-pipeline: default
-images:
-- id: nodejs-loopback
-  image: $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/nodejs-loopback:0.1
