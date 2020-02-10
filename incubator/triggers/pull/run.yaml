@@ -10,5 +10,8 @@ spec:
   - name: git-source
     resourceRef:
       name: git-{{.nameSuffix}}
+  - name: docker-image
+    resourceRef:
+      name: docker-{{.nameSuffix}}
   serviceAccountName: {{.serviceAccountName}}
   timeout: {{.timeout}}
