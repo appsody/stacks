@@ -1,5 +1,5 @@
 name: Spring Boot®
-version: 0.3.22
+version: 0.3.23
 description: Spring Boot using OpenJ9 and Maven
 license: Apache-2.0
 language: java
@@ -16,7 +16,8 @@ requirements:
    docker-version: ">= 17.09.0"
 templating-data:
   baseimage: maven:3.6-ibmjava-8
+  finalimage: adoptopenjdk/openjdk8-openj9:ubi-jre
   parentpomgroup: dev.appsody
   parentpomid: spring-boot2-stack
   parentpomrange: '[0.3, 0.4)'
-
+  parentpomfilename: appsody-boot2-pom.xml
