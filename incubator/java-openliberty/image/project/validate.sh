@@ -22,6 +22,7 @@ if [ ! -z "$APPSODY_DEV_MODE" ]; then
     M2_LOCAL_REPO="-Dmaven.repo.local=/mvn/repository"
 fi
 
+
 # Get parent pom information (../pom.xml)
 args='export PARENT_GROUP_ID=${project.groupId}; export PARENT_ARTIFACT_ID=${project.artifactId}; export PARENT_VERSION=${project.version}
 export LIBERTY_GROUP_ID=${liberty.groupId}; export LIBERTY_ARTIFACT_ID=${liberty.artifactId}; export LIBERTY_VERSION=${version.openliberty-runtime}'
