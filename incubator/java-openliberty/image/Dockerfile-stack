@@ -1,18 +1,23 @@
-FROM adoptopenjdk/openjdk8-openj9
+FROM kabanero/ubi8-maven:0.3.1
+
 USER root
-RUN  apt-get -qq update \
-  && apt-get -qq install -y curl maven xmlstarlet wget \
-  && DEBIAN_FRONTEND=noninteractive apt-get -qq upgrade -y \
-  && apt-get -qq clean \
-  && rm -rf /tmp/* /var/lib/apt/lists/*
+
+RUN  groupadd --gid 1000 java_group \
+  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user \
+  && mkdir -p /mvn/repository \
+  && chown -R java_user:java_group /mvn \
+  && mkdir -p /opt/ol \
+  && chown -R java_user:java_group /opt
+
 
 COPY ./LICENSE /licenses/
-COPY ./project /project
-COPY ./config /config
+COPY --chown=java_user:java_group ./project /project
+COPY --chown=java_user:java_group ./config /config
 
 RUN  /project/util/check_version build
 
 WORKDIR /project/
+
 RUN mkdir -p /mvn/repository
 RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 RUN mvn -B -Pstack-image-package -Dmaven.repo.local=/mvn/repository liberty:install-server liberty:create install dependency:go-offline
@@ -20,6 +25,8 @@ RUN chmod -R 777 /opt/ol
 
 
 WORKDIR /project/user-app
+
+USER java_user
 
 ENV APPSODY_MOUNTS="~/.m2/repository:/mvn/repository;.:/project/user-app"
 

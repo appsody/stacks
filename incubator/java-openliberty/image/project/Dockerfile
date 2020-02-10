@@ -1,8 +1,5 @@
 # Step 1: Build the user's application
-FROM adoptopenjdk/openjdk8-openj9
-
-RUN apt-get update && \
-	apt-get install -y maven unzip wget xmlstarlet
+FROM kabanero/ubi8-maven:0.3.1
 
 # Copy and build the dev.appsody:java-openliberty parent pom
 COPY ./pom.xml /project/pom.xml
@@ -47,7 +44,7 @@ RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
 	if [ -d ../shared ]; then mv ../shared/* /shared/; fi
 
 # Step 2: Package Open Liberty image
-FROM open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9
+FROM openliberty/open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9-ubi
 
 #2a) copy any resources 
 COPY --chown=1001:1001 --from=0 /shared /opt/ol/wlp/usr/shared/
