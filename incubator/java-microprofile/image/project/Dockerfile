@@ -29,7 +29,7 @@ RUN cd /project/user-app/target && \
     mv wlp/usr/servers/*/* /config/
 
 # Step 2: Package Open Liberty image
-FROM open-liberty:kernel-java8-openj9
+FROM open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9
 
 COPY --chown=1001:0 --from=0 /config/ /config/
 
