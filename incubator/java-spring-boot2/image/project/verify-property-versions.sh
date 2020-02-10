@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Where is the parent pom located?
-PARENT_POM=/project/appsody-boot2-pom.xml
+PARENT_POM=/project/{{.stack.parentpomfilename}}
 
 # Read the Spring boot version from our parent pom
 SPRING_BOOT_VERSION=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:properties/x:spring-boot.version" $PARENT_POM)
@@ -16,7 +16,7 @@ xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -m "/x:project/x:p
 grep -Fxf /tmp/springprops /tmp/parentprops > /tmp/matchingprops
 
 RC=0
-# Compare the value of interesected property names, report mismatches.
+# Compare the value of intersected property names, report mismatches.
 for prop in $(cat /tmp/matchingprops); do
   echo -n "Evaluating $prop "
   PARENTVER=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:properties/x:$prop" $PARENT_POM)

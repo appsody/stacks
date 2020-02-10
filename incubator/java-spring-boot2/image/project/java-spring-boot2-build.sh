@@ -65,10 +65,10 @@ common() {
     exit 1
   fi
 
-  # Get parent pom information (appsody-boot2-pom.xml)
-  local a_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:groupId" /project/appsody-boot2-pom.xml)
-  local a_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:artifactId" /project/appsody-boot2-pom.xml)
-  local a_version=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:version" /project/appsody-boot2-pom.xml)
+  # Get parent pom information 
+  local a_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:groupId" /project/{{.stack.parentpomfilename}})
+  local a_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:artifactId" /project/{{.stack.parentpomfilename}})
+  local a_version=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:version" /project/{{.stack.parentpomfilename}})
   local a_major=$(echo ${a_version} | cut -d'.' -f1)
   local a_minor=$(echo ${a_version} | cut -d'.' -f2)
   ((next=a_minor+1))
@@ -78,7 +78,12 @@ common() {
   then
     # Install parent pom
     note "Installing parent ${a_groupId}:${a_artifactId}:${a_version} and required dependencies..."
-    run_mvn install -q -f /project/appsody-boot2-pom.xml
+    if [ -z "${APPSODY_DEV_MODE}" ]
+    then
+      run_mvn install -q -f /project/{{.stack.parentpomfilename}}
+    else
+      run_mvn install -f /project/{{.stack.parentpomfilename}}
+    fi
   fi
 
   local p_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:groupId" pom.xml)
@@ -119,7 +124,7 @@ the parent version in pom.xml, and test your changes.
 
 recompile() {
   note "Compile project in the foreground"
-  exec_run_mvn compile
+  exec_run_mvn compile 
 }
 
 package() {
