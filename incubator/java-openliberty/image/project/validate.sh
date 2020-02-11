@@ -2,14 +2,14 @@
 
 # Test pom.xml is present and a file.
 if [ ! -f ./pom.xml ]; then
-  echo "Error: Could not find Maven pom.xml
+	echo "Error: Could not find Maven pom.xml
 
-  * The project directory (containing an .appsody-conf.yaml file) must contain a pom.xml file.
-  * On Windows and MacOS, the project directory should also be shared with Docker: 
-    - Win: https://docs.docker.com/docker-for-windows/#shared-drives
-    - Mac: https://docs.docker.com/docker-for-mac/#file-sharing
-  "
-  exit 1   
+		* The project directory (containing an .appsody-conf.yaml file) must contain a pom.xml file.
+		* On Windows and MacOS, the project directory should also be shared with Docker: 
+		- Win: https://docs.docker.com/docker-for-windows/#shared-drives
+		- Mac: https://docs.docker.com/docker-for-mac/#file-sharing
+		"
+	exit 1
 fi
 
 # 
@@ -17,8 +17,15 @@ fi
 # commands that we use otherwise, so as to avoid extra downloads.  It's only during local dev
 # mode that we want to use /mvn/repository, mounted to the host ~/.m2/repository.
 #
+
 M2_LOCAL_REPO=
-if [ ! -z "$APPSODY_DEV_MODE" ]; then
+
+if [ $# -eq 0 ]; then
+  echo "ERROR: no argument supplied to script"
+  exit 1
+fi
+
+if [ "$1" == "dev" ]; then
     M2_LOCAL_REPO="-Dmaven.repo.local=/mvn/repository"
 fi
 

@@ -26,14 +26,13 @@ ENV APPSODY_MOUNTS="~/.m2/repository:/mvn/repository;.:/project/user-app"
 ENV APPSODY_USER_RUN_AS_LOCAL=true
 
 # Allow validate to distinguish build via APPSODY_DEV_MODE
-ENV APPSODY_PREP="export APPSODY_DEV_MODE=prep;  ../validate.sh"
+ENV APPSODY_PREP="/project/run-stack.sh prep"
 
-ENV APPSODY_RUN="export APPSODY_DEV_MODE=run; mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository pre-integration-test liberty:dev"
+ENV APPSODY_RUN="/project/run-stack.sh run"
 
-ENV APPSODY_DEBUG="export APPSODY_DEV_MODE=debug; mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository pre-integration-test liberty:dev"
+ENV APPSODY_DEBUG="/project/run-stack.sh debug"
 
-# Keep liberty:create before 'package' phase to be consistent with "Dockerfile" for 'appsody build'
-ENV APPSODY_TEST="export APPSODY_DEV_MODE=test; exec mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository clean liberty:create pre-integration-test liberty:install-feature liberty:start liberty:deploy failsafe:integration-test liberty:stop failsafe:verify"
+ENV APPSODY_TEST="/project/run-stack.sh test"
 
 ENV PORT=9080
 

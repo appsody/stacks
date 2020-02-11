@@ -25,7 +25,7 @@ COPY ./validate.sh /project/user-app/validate.sh
 # -- This is the first app-specific piece --
 COPY ./user-app/pom.xml /project/user-app/pom.xml
 # Validate 
-RUN cd /project/user-app && ./validate.sh
+RUN cd /project/user-app && ./validate.sh build
 
 # Copy the rest of the application source
 COPY ./user-app /project/user-app
