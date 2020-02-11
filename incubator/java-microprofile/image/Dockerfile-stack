@@ -7,38 +7,53 @@ RUN  apt-get -qq update \
   && apt-get -qq clean \
   && rm -rf /tmp/* /var/lib/apt/lists/*
 
+RUN groupadd java_group \
+ && useradd --gid java_group --shell /bin/bash --create-home java_user \
+ && mkdir -p /mvn/repository \
+ && chown -R java_user:java_group /mvn
+
+# Dependency install
 COPY ./LICENSE /licenses/
-COPY ./project /project
-COPY ./config /config
+COPY --chown=java_user:java_group ./project /project
+COPY --chown=java_user:java_group ./config /config
+
+USER java_user
 
 RUN  /project/util/check_version build
 
 WORKDIR /project/
-RUN mkdir -p /mvn/repository
-RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
-RUN mvn -B -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipTests
-RUN mvn -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipTests -f pom-dev.xml
+# using -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn as version of maven installed
+# doesnt allow for using the simplified --no-transfer-progress option
+RUN mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
+RUN mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipTests
+RUN mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipTests -f pom-dev.xml
 
 WORKDIR /project/user-app
+RUN chown -R java_user:java_group /project
+RUN chown -R java_user:java_group /config
+RUN chown -R java_user:java_group /mvn
 
-ENV APPSODY_MOUNTS="~/.m2/repository:/mvn/repository;src:/project/user-app/src;pom.xml:/project/user-app/pom.xml"
+ENV APPSODY_USER_RUN_AS_LOCAL=true
+ENV APPSODY_PROJECT_DIR="/project"
+
+ENV APPSODY_MOUNTS=".:/project/user-app;~/.m2/repository:/mvn/repository"
 ENV APPSODY_DEPS=
 
 ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/target
 ENV APPSODY_WATCH_REGEX="^.*(.xml|.java|.properties)$"
 
-ENV APPSODY_INSTALL="../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository install -DskipTests && /project/install-dev-deps.sh"
+ENV APPSODY_INSTALL="../validate.sh && mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dmaven.repo.local=/mvn/repository install -DskipTests && /project/install-dev-deps.sh"
 
-ENV APPSODY_RUN="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn -B -Dmaven.repo.local=/mvn/repository liberty:run"
-ENV APPSODY_RUN_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn -Dmaven.repo.local=/mvn/repository package -DskipTests"
+ENV APPSODY_RUN="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dmaven.repo.local=/mvn/repository liberty:run"
+ENV APPSODY_RUN_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dmaven.repo.local=/mvn/repository package -DskipTests"
 ENV APPSODY_RUN_KILL=false
 
-ENV APPSODY_DEBUG="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn -B -Dmaven.repo.local=/mvn/repository liberty:debug"
-ENV APPSODY_DEBUG_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn -Dmaven.repo.local=/mvn/repository package -DskipTests"
+ENV APPSODY_DEBUG="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dmaven.repo.local=/mvn/repository liberty:debug"
+ENV APPSODY_DEBUG_ON_CHANGE="JVM_ARGS='-javaagent:resources/javametrics-agent.jar' mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dmaven.repo.local=/mvn/repository package -DskipTests"
 ENV APPSODY_DEBUG_KILL=false
 
-ENV APPSODY_TEST="mvn -B -Dmaven.repo.local=/mvn/repository verify"
+ENV APPSODY_TEST="mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dmaven.repo.local=/mvn/repository verify"
 ENV APPSODY_TEST_ON_CHANGE=""
 ENV APPSODY_TEST_KILL=false
 

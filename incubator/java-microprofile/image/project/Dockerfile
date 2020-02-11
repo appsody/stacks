@@ -4,28 +4,36 @@ FROM adoptopenjdk/openjdk8-openj9
 RUN apt-get update && \
     apt-get install -y maven unzip wget xmlstarlet
 
+RUN  groupadd java_group \
+  && useradd --gid java_group --shell /bin/bash --create-home java_user \
+  && mkdir -p /mvn/repository \
+  && chown -R java_user:java_group /mvn \
+  && mkdir -p /config \
+  && chown -R java_user:java_group /config
+
+USER java_user
+
 # Copy and build the dev.appsody:java-microprofile parent pom
-COPY ./pom.xml /project/pom.xml
-RUN cd /project && mvn -B install dependency:go-offline -DskipTests
+COPY --chown=java_user:java_group ./pom.xml /project/pom.xml
+RUN cd /project && mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn install dependency:go-offline -DskipTests
 
 # Copy and run a simple version check
-COPY ./util /project/util
+COPY --chown=java_user:java_group ./util /project/util
 RUN  /project/util/check_version build
 
 # Copy the user's application pom and resolve all dependencies
-COPY ./user-app/pom.xml /project/user-app/pom.xml
-RUN cd /project/user-app && mvn package -Dskip=true -DskipTests
+COPY --chown=java_user:java_group ./user-app/pom.xml /project/user-app/pom.xml
+RUN cd /project/user-app && mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn package -Dskip=true -DskipTests
 
 # Download Open Liberty here to prevent redownloading each time the app is changed
-RUN cd /project/user-app && mvn -B liberty:install-server
+RUN cd /project/user-app && mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn liberty:install-server
 
 # Copy and build the application source
-COPY ./user-app/src /project/user-app/src
-RUN cd /project/user-app && mvn package -DskipTests
+COPY --chown=java_user:java_group ./user-app/src /project/user-app/src
+RUN cd /project/user-app && mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warns package -DskipTests
 
 RUN cd /project/user-app/target && \
     unzip *.zip && \
-    mkdir /config && \
     mv wlp/usr/servers/*/* /config/
 
 # Step 2: Package Open Liberty image

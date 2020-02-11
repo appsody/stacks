@@ -24,11 +24,11 @@ LABEL "stack.appsody.dev/version"="{{.stack.semver.major}}.{{.stack.semver.minor
 
 # Layer caching for stack dependencies
 COPY --chown=java_user:java_group {{.stack.parentpomfilename}} /mvn/{{.stack.parentpomfilename}}
-RUN mvn --no-transfer-progress -B dependency:go-offline install -f /mvn/{{.stack.parentpomfilename}}
+RUN mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn dependency:go-offline install -f /mvn/{{.stack.parentpomfilename}}
 
 # Layer caching for application dependencies
 COPY --chown=java_user:java_group user-app/pom.xml /mvn/pom.xml
-RUN mvn --no-transfer-progress -B dependency:go-offline -f /mvn/pom.xml
+RUN mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -B dependency:go-offline -f /mvn/pom.xml
 
 # Copy and build project
 COPY --chown=java_user:java_group . /project
