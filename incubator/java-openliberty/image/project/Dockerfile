@@ -1,31 +1,45 @@
 # Step 1: Build the user's application
 FROM kabanero/ubi8-maven:0.3.1
 
+RUN  groupadd java_group \
+   && useradd --gid java_group --shell /bin/bash --create-home java_user \
+   && mkdir -p /mvn/repository \
+   && chown -R java_user:java_group /mvn \
+   && mkdir -p /config \
+   && chown -R java_user:java_group /config \
+# make a well known place for shared library jars seperate from the rest of the defaultServer contents (to help with caching)
+   && mkdir /configlibdir \
+   && chown -R java_user:java_group /configlibdir \
+   &&  mkdir /shared \
+   && chown -R java_user:java_group /shared 
+
+ USER java_user
+
 # Copy and build the dev.appsody:java-openliberty parent pom
-COPY ./pom.xml /project/pom.xml
+COPY --chown=java_user:java_group ./pom.xml /project/pom.xml
 RUN cd /project && mvn -B install dependency:go-offline -DskipTests
 
 # Prime image
 #   a) Prime .m2/repository with common artifacts 
 #   b) Create target/liberty/wlp/usr/servers/defaultServer dir
-COPY ./preload-m2-pom.xml /project/user-app/preload-m2-pom.xml
+COPY --chown=java_user:java_group ./preload-m2-pom.xml /project/user-app/preload-m2-pom.xml
 RUN cd /project/user-app && \ 
     mvn -B -f /project/user-app/preload-m2-pom.xml liberty:install-server dependency:go-offline && \
     rm /project/user-app/preload-m2-pom.xml
 
 # Copy and run a simple version check
-COPY ./util /project/util
+COPY --chown=java_user:java_group ./util /project/util
 RUN	 /project/util/check_version build
 
 # Copy the validate.sh script and application pom.xml
-COPY ./validate.sh /project/user-app/validate.sh
+COPY --chown=java_user:java_group ./validate.sh /project/user-app/validate.sh
 # -- This is the first app-specific piece --
-COPY ./user-app/pom.xml /project/user-app/pom.xml
+COPY --chown=java_user:java_group ./user-app/pom.xml /project/user-app/pom.xml
 # Validate 
 RUN cd /project/user-app && ./validate.sh build
 
 # Copy the rest of the application source
-COPY ./user-app /project/user-app
+COPY --chown=java_user:java_group ./user-app /project/user-app
 
 # Build (and run unit tests) 
 #  also liberty:create copies config from src->target
@@ -35,12 +49,8 @@ RUN cd /project/user-app && \
 # process any resources or shared libraries - if they are present in the dependencies block for this project (there may be none potentially)
 # test to see if each is present and move to a well known location for later processing in the next stage
 RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
-	# make a well known place for shared library jars seperate from the rest of the defaultServer contents (to help with caching)
-	mkdir /configlibdir && \
 	if [ -d ./defaultServer/lib ]; then mv ./defaultServer/lib /configlibdir; fi && \
-	mkdir /config && \
 	mv -f defaultServer/* /config/ && \
-	mkdir /shared && \
 	if [ -d ../shared ]; then mv ../shared/* /shared/; fi
 
 # Step 2: Package Open Liberty image
