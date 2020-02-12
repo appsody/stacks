@@ -1,5 +1,5 @@
 name: Node-RED
-version: 0.1.0
+version: 0.1.1
 description: Node-RED runtime for running flows
 license: Apache-2.0
 language: nodejs
