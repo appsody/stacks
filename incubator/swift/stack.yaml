@@ -1,5 +1,5 @@
 name: Swift
-version: 0.2.4
+version: 0.2.5
 description: Appsody runtime for Swift applications
 license: Apache-2.0
 language: swift
