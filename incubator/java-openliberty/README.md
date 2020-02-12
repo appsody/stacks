@@ -37,7 +37,9 @@ OpenAPI endpoints:
 - http://localhost:9080/openapi (the RESTful APIs of the inventory service)
 - http://localhost:9080/openapi/ui (Swagger UI of the deployed APIs)
 
-Note: The default template uses JUnit 5. You may be used to JUnit 4, but here are some great reasons to make the switch https://developer.ibm.com/dwblog/2017/top-five-reasons-to-use-junit-5-java/
+### Junit 5
+
+The default template uses JUnit 5. You may be used to JUnit 4, but here are some great reasons to make the switch https://developer.ibm.com/dwblog/2017/top-five-reasons-to-use-junit-5-java/
 
 
 ## Getting Started
@@ -71,24 +73,28 @@ Note: The default template uses JUnit 5. You may be used to JUnit 4, but here ar
 
 ## Stack Usage Notes
 
-1. There is no difference now between the commands: `appsody run` and `appsody debug`, since "run" also launches the Open Liberty server in debug mode.
-1. If you launch via `appsody run` then the liberty-maven-plugin will launch dev mode in "hot test" mode, where unit tests and integration tests get automatically re-executed after each detected change.  
-1. You can alternatively launch the container with `appsody run --interactive`, in which case the tests will only execute after you input `<Enter>` from the terminal, allowing you to make a set of application and/or test changes, and only execute the tests by pressing `<Enter>` when ready. 
-1. The command `appsody test` launches the Open Liberty server, runs integration tests, and then exists with a "success" or "failure" return code (and message).  If you want to run tests interactively, then just use `appsody run`, since dev mode will run allow you to iteratively test and develop interactively.
+
+### RUN
+If you launch via `appsody run` then the liberty-maven-plugin will launch dev mode in "hot test" mode, where unit tests and integration tests get automatically re-executed after each detected change.  
+
+You can alternatively launch the container with `appsody run --interactive`, in which case the tests will only execute after you input `<Enter>` from the terminal, allowing you to make a set of application and/or test changes, and only execute the tests by pressing `<Enter>` when ready. 
+### DEBUG
+The `appsody debug` launches the Open Liberty server in debug mode, listening for the debugger on port 7777 (but not waiting, suspended).  Otherwise it allows you to perform the same iteractive, interactive testing as the `appsody run` command.
+
+### TEST
+The command `appsody test` launches the Open Liberty server, runs integration tests, and then exists with a "success" or "failure" return code (and message).  If you want to run tests interactively, then just use `appsody run`, since dev mode will run allow you to iteratively test and develop interactively.
 
 ## Notes to Windows 10 Users
 
 ### Shared Drive and Permission Setup 
 * See the instructions [here](https://appsody.dev/docs/docker-windows-aad/) for information on setting up "Shared Drives" and permissions to enable mounting the host filesystem from the appsody container.
 
-### Changes from host side not detected by dev mode (on Win10)
-Because of an issue in Docker for Windows 10, changes made from the host side to the application may not be detected by the liberty-maven-plugin dev mode watcher running inside the Appsody Docker container, and thus the normal expected compile, app update, test execution etc. may not run.
+### Changes from Windows 10 host side not detected within container
+* Because of an issue in Docker for Windows 10, changes made from the host side to the application may not be detected by the liberty-maven-plugin dev mode watcher running inside the Appsody Docker container, and thus the normal expected compile, app update, test execution etc. may not run.
+* At the time of the release of this java-openliberty stack, this problem seems to be getting the active attention of the Docker Desktop for Windows developement team, (e.g. see [this issue](https://github.com/docker/for-win/issues/5530)). Naturally, updating your Docker Desktop for Windows installation might help, however, we can not simply point to a recommended version that is known to work for all users.   
+* **Workaround**: This may be worked around by making the changes from the host, and then doing a `touch` of the corresponding files from within the container.
 
-This problem seems to be resolved for some, though not all users by installing a newer Docker Windows Edge release:  **Docker Desktop Edge 2.1.6.1**.
 
-It may be worked around by making the changes from the host, and then doing a `touch` of the corresponding files from within the container.
-
-See [this issue](https://github.com/OpenLiberty/ci.maven/issues/617) for more tracking information.
 
 ## License
 

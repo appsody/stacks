@@ -52,6 +52,7 @@ RUN cd /project/user-app && \
 # Also remove quick-start-security.xml since it's convenient for local dev mode but should not be in the production image.
 RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
 	if [ -d ./defaultServer/lib ]; then mv ./defaultServer/lib /configlibdir; fi && \
+	if [ ! -d /configlibdir/lib ]; then mkdir /configlibdir/lib; fi && \
 	rm -f defaultServer/configDropins/defaults/quick-start-security.xml && \
 	mv -f defaultServer/* /config/ && \
 
@@ -61,15 +62,14 @@ RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
 FROM openliberty/open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9-ubi
 
 #2a) copy any resources 
-COPY --chown=1001:1001 --from=compile /shared /opt/ol/wlp/usr/shared/
+COPY --chown=1001:0 --from=compile /shared /opt/ol/wlp/usr/shared/
 
 # 2b) next copy shared library
 #	  but can't assume config/lib exists - copy from previous stage to a tmp holding place and test
-COPY --chown=1001:0 --from=compile /configlibdir/ /tmp/cfglib
-RUN if [ "$(ls -A /tmp/cfglib/lib)" ]; then cp -R /tmp/cfglib/lib /config && chmod -R 777 /tmp/cfglib && rm -rf /tmp/cfglib; fi
+COPY --chown=1001:0 --from=compile /configlibdir/ /config
 
 # 2c) Server config, bootstrap.properties, and everything else
-COPY --chown=1001:1001 --from=compile /config/ /config/
+COPY --chown=1001:0 --from=compile /config/ /config/
 
 
 # 2d) Changes to the application binary
