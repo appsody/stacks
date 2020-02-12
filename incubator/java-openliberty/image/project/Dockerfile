@@ -1,5 +1,5 @@
 # Step 1: Build the user's application
-FROM kabanero/ubi8-maven:0.3.1
+FROM kabanero/ubi8-maven:0.3.1 as compile
 
 RUN  groupadd java_group \
    && useradd --gid java_group --shell /bin/bash --create-home java_user \
@@ -48,28 +48,32 @@ RUN cd /project/user-app && \
 
 # process any resources or shared libraries - if they are present in the dependencies block for this project (there may be none potentially)
 # test to see if each is present and move to a well known location for later processing in the next stage
+# 
+# Also remove quick-start-security.xml since it's convenient for local dev mode but should not be in the production image.
 RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
 	if [ -d ./defaultServer/lib ]; then mv ./defaultServer/lib /configlibdir; fi && \
+	rm -f defaultServer/configDropins/defaults/quick-start-security.xml && \
 	mv -f defaultServer/* /config/ && \
+
 	if [ -d ../shared ]; then mv ../shared/* /shared/; fi
 
 # Step 2: Package Open Liberty image
 FROM openliberty/open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9-ubi
 
 #2a) copy any resources 
-COPY --chown=1001:1001 --from=0 /shared /opt/ol/wlp/usr/shared/
+COPY --chown=1001:1001 --from=compile /shared /opt/ol/wlp/usr/shared/
 
 # 2b) next copy shared library
 #	  but can't assume config/lib exists - copy from previous stage to a tmp holding place and test
-COPY --chown=1001:0 --from=0 /configlibdir/ /tmp/cfglib
+COPY --chown=1001:0 --from=compile /configlibdir/ /tmp/cfglib
 RUN if [ "$(ls -A /tmp/cfglib/lib)" ]; then cp -R /tmp/cfglib/lib /config && chmod -R 777 /tmp/cfglib && rm -rf /tmp/cfglib; fi
 
 # 2c) Server config, bootstrap.properties, and everything else
-COPY --chown=1001:1001 --from=0 /config/ /config/
+COPY --chown=1001:1001 --from=compile /config/ /config/
 
 
 # 2d) Changes to the application binary
-COPY --chown=1001:0 --from=0 /project/user-app/target/* /tmp/wars/
+COPY --chown=1001:0 --from=compile /project/user-app/target/* /tmp/wars/
 RUN if [ -e /tmp/wars/*.war ]; then cp /tmp/wars/*.war /config/apps; fi && if [ -e /tmp/wars/*.ear ]; then cp /tmp/wars/*.ear /config/apps; fi && chmod -R 777 /tmp/wars && rm -rf /tmp/wars
 
 RUN configure.sh
