@@ -73,7 +73,6 @@ COPY --chown=1001:0 --from=compile /config/ /config/
 
 
 # 2d) Changes to the application binary
-COPY --chown=1001:0 --from=compile /project/user-app/target/* /tmp/wars/
-RUN if [ -e /tmp/wars/*.war ]; then cp /tmp/wars/*.war /config/apps; fi && if [ -e /tmp/wars/*.ear ]; then cp /tmp/wars/*.ear /config/apps; fi && chmod -R 777 /tmp/wars && rm -rf /tmp/wars
+COPY --chown=1001:0 --from=compile /project/user-app/target/*.[ew]ar /config/apps
 
 RUN configure.sh
