@@ -23,7 +23,7 @@ case $ACTION in
             exit 0
         else
             set -x
-            mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository pre-integration-test liberty:dev
+            mvn -B -Plocal-dev -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository pre-integration-test liberty:dev
             set +x
         fi
         ;;
@@ -34,7 +34,7 @@ case $ACTION in
             exit 0
         else
             set -x
-            mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository pre-integration-test liberty:dev
+            mvn -B -Plocal-dev -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository pre-integration-test liberty:dev
             set +x
         fi
         ;;
@@ -46,7 +46,7 @@ case $ACTION in
         else
             # Keep liberty:create before 'pre-integration-test' phase to be consistent with "Dockerfile" for 'appsody build'
             set -x
-            mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository clean liberty:create pre-integration-test liberty:install-feature liberty:start liberty:deploy failsafe:integration-test liberty:stop failsafe:verify
+            mvn -B -Plocal-dev -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository clean liberty:create pre-integration-test liberty:install-feature liberty:start liberty:deploy failsafe:integration-test liberty:stop failsafe:verify
             set +x
         fi
         ;;

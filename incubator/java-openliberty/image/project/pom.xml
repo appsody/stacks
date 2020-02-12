@@ -48,6 +48,7 @@
                     <groupId>io.openliberty.tools</groupId>
                     <artifactId>liberty-maven-plugin</artifactId>
                     <version>${version.liberty-maven-plugin}</version>
+                    <!--  No common plugin configuration currently in this stack, but it could be added here. -->
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -91,13 +92,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>io.openliberty.tools</groupId>
-                <artifactId>liberty-maven-plugin</artifactId>
-                <version>${version.liberty-maven-plugin}</version>
-                <configuration>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -140,7 +134,7 @@
             The installDirectory property is configured in the Liberty Maven plugin to specify 
             where the existing Open Liberty installation is in the Docker image. --> 
         <profile>
-            <id>stack-image-run</id>
+            <id>local-dev</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
@@ -228,3 +222,4 @@
         </profile>
     </profiles>
 </project>
+
