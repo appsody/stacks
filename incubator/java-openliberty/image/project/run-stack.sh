@@ -23,7 +23,7 @@ case $ACTION in
             exit 0
         else
             set -x
-            mvn -B -Plocal-dev -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository pre-integration-test liberty:dev
+            mvn -B -Plocal-dev -DappsDirectory=apps -Ddebug=false -Dmaven.repo.local=/mvn/repository pre-integration-test liberty:dev
             set +x
         fi
         ;;
