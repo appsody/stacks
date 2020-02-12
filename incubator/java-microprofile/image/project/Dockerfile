@@ -25,9 +25,8 @@ RUN cd /project/user-app/target && \
     mv wlp/usr/servers/*/* /config/
 
 # Step 2: Package Open Liberty image
-FROM openliberty/open-liberty:19.0.0.9-microProfile3-ubi-min
+FROM openliberty/open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9-ubi
 
 COPY --chown=1001:0 --from=0 /config/ /opt/ol/wlp/usr/servers/defaultServer/
 
-EXPOSE 9080
-EXPOSE 9443
+RUN configure.sh
