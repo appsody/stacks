@@ -29,7 +29,7 @@ RUN cd /project/user-app && \
 
 # Copy and run a simple version check
 COPY --chown=java_user:java_group ./util /project/util
-RUN	 /project/util/check_version build
+RUN     /project/util/check_version build
 
 # Copy the validate.sh script and application pom.xml
 COPY --chown=java_user:java_group ./validate.sh /project/user-app/validate.sh
@@ -43,19 +43,19 @@ COPY --chown=java_user:java_group ./user-app /project/user-app
 
 # Build (and run unit tests) 
 #  also liberty:create copies config from src->target
+#  also remove quick-start-security.xml since it's convenient for local dev mode but should not be in the production image.
 RUN cd /project/user-app && \
+    rm -f src/main/liberty/config/configDropins/defaults/quick-start-security.xml && \
     mvn -Pappsody-build -B liberty:create package
 
 # process any resources or shared libraries - if they are present in the dependencies block for this project (there may be none potentially)
 # test to see if each is present and move to a well known location for later processing in the next stage
 # 
-# Also remove quick-start-security.xml since it's convenient for local dev mode but should not be in the production image.
 RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
-	if [ -d ./defaultServer/lib ]; then mv ./defaultServer/lib /configlibdir; fi && \
-	if [ ! -d /configlibdir/lib ]; then mkdir /configlibdir/lib; fi && \
-	rm -f defaultServer/configDropins/defaults/quick-start-security.xml && \
-	mv -f defaultServer/* /config/ && \
-	if [ -d ../shared ]; then mv ../shared/* /shared/; fi
+    if [ -d ./defaultServer/lib ]; then mv ./defaultServer/lib /configlibdir; fi && \
+    if [ ! -d /configlibdir/lib ]; then mkdir /configlibdir/lib; fi && \
+    mv -f defaultServer/* /config/ && \
+    if [ -d ../shared ]; then mv ../shared/* /shared/; fi
 
 # Step 2: Package Open Liberty image
 FROM openliberty/open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9-ubi
@@ -64,7 +64,7 @@ FROM openliberty/open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9-ubi
 COPY --chown=1001:0 --from=compile /shared /opt/ol/wlp/usr/shared/
 
 # 2b) next copy shared library
-#	  but can't assume config/lib exists - copy from previous stage to a tmp holding place and test
+#      but can't assume config/lib exists - copy from previous stage to a tmp holding place and test
 COPY --chown=1001:0 --from=compile /configlibdir/ /config
 
 # 2c) Server config, bootstrap.properties, and everything else
