@@ -1,0 +1,3 @@
+<server>
+    <quickStartSecurity userName="admin" userPassword="${keystore_password}" />
+</server>
