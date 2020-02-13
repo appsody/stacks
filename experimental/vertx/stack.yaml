@@ -1,5 +1,5 @@
 name: Eclipse Vert.x
-version: 0.1.4
+version: 0.1.5
 description: Eclipse Vert.x runtime for running Java applications
 license: EPL-2.0
 language: java
