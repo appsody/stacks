@@ -184,7 +184,7 @@ done
 exec_hooks $script_dir/ext/post_package.d
 
 if [ "$CODEWIND_INDEX" == "true" ]; then
-    python3 $script_dir/create_codewind_index.py $DISPLAY_NAME_PREFIX
+    python3 $script_dir/create_codewind_index.py -n Appsody -f $assets_dir
     
     # iterate over each repo
     for codewind_file in $assets_dir/*.json

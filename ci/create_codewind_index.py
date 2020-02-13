@@ -4,21 +4,23 @@ import yaml
 import json
 import os
 import fnmatch
-import sys
 from collections import OrderedDict
+import argparse
+from argparse import ArgumentDefaultsHelpFormatter
 
-base_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
+parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
-displayNamePrefix = "Appsody"
-if len(sys.argv) > 1:
-    displayNamePrefix = sys.argv[1]
+parser.add_argument("-n", "--namePrefix", help="Display name prefix.", default="Appsody")
+parser.add_argument("-f", "--file", help="Location of yaml files.", default=os.getcwd())
 
-# directory to store assets for test or release
-assets_dir = base_dir + "/assets/"
+args = parser.parse_args()
 
-for file in os.listdir(assets_dir):
-    if fnmatch.fnmatch(file, '*index.yaml'):
-        with open(assets_dir + file, 'r') as yamlFile, open(assets_dir + os.path.splitext(file)[0] + ".json", 'wb') as jsonFile:
+displayNamePrefix = args.namePrefix
+
+yaml_dir = args.file + "/"
+
+def generate_json():
+    with open(yaml_dir + file, 'r') as yamlFile, open(yaml_dir + os.path.splitext(file)[0] + ".json", 'wb') as jsonFile:
             try:
                 doc = yaml.safe_load(yamlFile)
                 list = []
@@ -53,3 +55,12 @@ for file in os.listdir(assets_dir):
 
             except yaml.YAMLError as exc:
                 print(exc)
+
+if os.path.isdir(yaml_dir):
+    for file in os.listdir(yaml_dir):
+        if fnmatch.fnmatch(file, '*.yaml'):
+            generate_json()
+else:
+    yaml_dir = yaml_dir.rsplit('/', 2)[0] + "/"
+    file = args.file.split('/')[-1]
+    generate_json()
