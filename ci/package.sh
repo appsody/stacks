@@ -128,6 +128,12 @@ do
                             fi
                         fi
                     done
+                    source_archive=$repo_name.$stack_id.v$stack_version.source.tar.gz
+                    packaged_source_archive=$stack_id.v$stack_version.source.tar.gz
+                    if [ -f $HOME/.appsody/stacks/dev.local/$packaged_source_archive ]; then
+                        echo "--- Copying $HOME/.appsody/stacks/dev.local/$packaged_source_archive to $assets_dir/$source_archive"
+                        cp $HOME/.appsody/stacks/dev.local/$packaged_source_archive $assets_dir/$source_archive
+                    fi
                 else
                     echo -e "\n- SKIPPING stack image: $repo_name/$stack_id"
                 fi

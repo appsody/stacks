@@ -37,6 +37,9 @@ OpenAPI endpoints:
 - http://localhost:9080/openapi (the RESTful APIs of the inventory service)
 - http://localhost:9080/openapi/ui (Swagger UI of the deployed APIs)
 
+Note: The default template uses JUnit 5. You may be used to JUnit 4, but here are some great reasons to make the switch https://developer.ibm.com/dwblog/2017/top-five-reasons-to-use-junit-5-java/
+
+
 ## Getting Started
 
 1. Create a new folder in your local directory and initialize it using the Appsody CLI, e.g.:
