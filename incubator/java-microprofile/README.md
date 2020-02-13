@@ -29,7 +29,12 @@ The `mpMetrics` feature enables MicroProfile Metrics support in Open Liberty. No
 
 Metrics endpoint: http://localhost:9080/metrics
 
-Log in as the `admin` user with `adminpwd` as the password to see both the system and application metrics in a text format.
+The log in user is `admin` and the password is randomly generated at startup by Open Liberty. You can use the following command to retrieve the password from the container which is listed as the `keystore_password` variable:
+```bash
+docker exec -it <container_id>  bash -c "cat /project/user-app/target/liberty/wlp/usr/servers/defaultServer/server.env"
+```
+
+Once logged in, you can see both the system and application metrics in a text format.
 
 ### OpenAPI
 

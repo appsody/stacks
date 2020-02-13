@@ -1,4 +1,4 @@
-FROM kabanero/ubi8-maven:0.3.1
+FROM kabanero/ubi8-maven:0.3.1 as compile
 
 RUN  groupadd java_group \
   && useradd --gid java_group --shell /bin/bash --create-home java_user \
@@ -25,8 +25,11 @@ RUN cd /project/user-app && mvn -B --no-transfer-progress package -Dskip=true -D
 RUN cd /project/user-app && mvn -B --no-transfer-progress liberty:install-server
 
 # Copy and build the application source
+# Remove quick-start-security.xml since it is only needed during local development.
 COPY --chown=java_user:java_group ./user-app/src /project/user-app/src
-RUN cd /project/user-app && mvn -B --no-transfer-progress package -DskipTests
+RUN cd /project/user-app && \
+    rm -f src/main/liberty/config/configDropins/defaults/quick-start-security.xml && \
+    mvn -B --no-transfer-progress package -DskipTests
 
 RUN cd /project/user-app/target && \
     unzip *.zip && \
@@ -35,6 +38,6 @@ RUN cd /project/user-app/target && \
 # Step 2: Package Open Liberty image
 FROM openliberty/open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9-ubi
 
-COPY --chown=1001:0 --from=0 /config/ /opt/ol/wlp/usr/servers/defaultServer/
+COPY --chown=1001:0 --from=compile /config/ /opt/ol/wlp/usr/servers/defaultServer/
 
 RUN configure.sh
