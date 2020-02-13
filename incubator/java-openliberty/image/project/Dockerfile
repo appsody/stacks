@@ -55,7 +55,6 @@ RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
 	if [ ! -d /configlibdir/lib ]; then mkdir /configlibdir/lib; fi && \
 	rm -f defaultServer/configDropins/defaults/quick-start-security.xml && \
 	mv -f defaultServer/* /config/ && \
-
 	if [ -d ../shared ]; then mv ../shared/* /shared/; fi
 
 # Step 2: Package Open Liberty image
