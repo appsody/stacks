@@ -1,5 +1,0 @@
-default-image: nodejs
-default-pipeline: default
-images:
-- id: nodejs
-  image: $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/nodejs:0.3

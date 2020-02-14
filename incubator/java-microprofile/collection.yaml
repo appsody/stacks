@@ -1,5 +1,0 @@
-default-image: java-microprofile
-default-pipeline: default
-images:
-- id: java-microprofile
-  image: $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/java-microprofile:0.2

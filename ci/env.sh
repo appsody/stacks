@@ -129,7 +129,7 @@ logged() {
     if [ "${CI_WAIT_FOR}" = "true" ]
     then
         # check every 30 seconds for a max of 40 minutes
-        $script_dir/ci_wait.sh --interval 30 --limit 2400 --append 1 --output "$log" $@
+        $script_dir/ci_wait.sh --interval 30 --limit 3600 --append 1 --output "$log" $@
     elif [ -n "${CI_WAIT_FOR}" ]
     then
         # custom interval/limit for environment

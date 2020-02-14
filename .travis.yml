@@ -21,6 +21,7 @@ before_script:
 
 script:
   - . ./ci/build.sh
+  - . ./ci/list_artifacts.sh
     
 # note before_deploy will run before each deploy provider
 before_deploy:

@@ -1,5 +1,0 @@
-default-image: nodejs-express
-default-pipeline: default
-images:
-- id: nodejs-express
-  image: $IMAGE_REGISTRY/$IMAGE_REGISTRY_ORG/nodejs-express:0.2

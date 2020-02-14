@@ -14,12 +14,6 @@ set -e
     fi
 #fi
 
-if [ -z $ASSET_LIST ]; then
-    asset_list="pipelines dashboards deploys"
-else 
-    asset_list=$ASSET_LIST
-fi
-
 export COPYFILE_DISABLE=1
 
 mkdir -p $HOME/.appsody/stacks/dev.local
