@@ -17,10 +17,7 @@ args = parser.parse_args()
 
 displayNamePrefix = args.namePrefix
 
-yaml_dir = args.file
-#remove trailing "/" from file arg if exists
-if args.file[-1] == "/":
-    yaml_dir = args.file[:-1]
+yaml_dir = os.path.normpath(args.file)
 
 def generate_json():
     with open(inputFile, 'r') as yamlFile, open(inputFile.rsplit('.', 1)[0] + ".json", 'wb') as jsonFile:
