@@ -1,6 +1,6 @@
 {
   "name": "nodejs-loopback",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Node.js LoopBack 4 Stack",
   "license": "Apache-2.0",
   "repository": {

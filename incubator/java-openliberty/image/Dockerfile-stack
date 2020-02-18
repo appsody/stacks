@@ -1,52 +1,42 @@
-FROM adoptopenjdk/openjdk8-openj9
-USER root
-RUN  apt-get -qq update \
-  && apt-get -qq install -y curl maven xmlstarlet wget \
-  && DEBIAN_FRONTEND=noninteractive apt-get -qq upgrade -y \
-  && apt-get -qq clean \
-  && rm -rf /tmp/* /var/lib/apt/lists/*
+FROM kabanero/ubi8-maven:0.3.1
+RUN  groupadd --gid 1000 java_group \
+  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user \
+  && mkdir -p /mvn/repository \
+  && chown -R java_user:java_group /mvn \
+  && mkdir -p /opt/ol \
+  && chown -R java_user:java_group /opt
+
 
 COPY ./LICENSE /licenses/
-COPY ./project /project
-COPY ./config /config
+COPY --chown=java_user:java_group ./project /project
+COPY --chown=java_user:java_group ./config /config
 
 RUN  /project/util/check_version build
 
 WORKDIR /project/
+
 RUN mkdir -p /mvn/repository
 RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 RUN mvn -B -Pstack-image-package -Dmaven.repo.local=/mvn/repository liberty:install-server liberty:create install dependency:go-offline
-RUN chmod -R 777 /opt/ol
+RUN chmod -R 777 /opt/ol 
 
 
 WORKDIR /project/user-app
 
+USER java_user
+
 ENV APPSODY_MOUNTS="~/.m2/repository:/mvn/repository;.:/project/user-app"
-
-ENV APPSODY_WATCH_DIR=/project/user-app
-ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/target
-
-# Work around v3.1 issues with dev mode reacting to pom.xml change but should eventually not require this.
-ENV APPSODY_WATCH_REGEX="^pom\.xml$"
 
 ENV APPSODY_USER_RUN_AS_LOCAL=true
 
-# Set APPSODY_DEV_MODE to get in the habit in case we need it someday
-ENV APPSODY_PREP="export APPSODY_DEV_MODE=prep;  ../validate.sh"
+# Allow validate to distinguish build via APPSODY_DEV_MODE
+ENV APPSODY_PREP="/project/run-stack.sh prep"
 
-ENV APPSODY_RUN="export APPSODY_DEV_MODE=run; mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository package liberty:dev"
-# See ENV APPSODY_WATCH_REGEX comment
-ENV APPSODY_RUN_ON_CHANGE="export APPSODY_DEV_MODE=run; ../validate.sh && mvn -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository package liberty:dev"
-ENV APPSODY_RUN_KILL=true
+ENV APPSODY_RUN="/project/run-stack.sh run"
 
-ENV APPSODY_DEBUG="export APPSODY_DEV_MODE=debug; mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository package liberty:dev"
-# See ENV APPSODY_WATCH_REGEX comment
-ENV APPSODY_DEBUG_ON_CHANGE="export APPSODY_DEV_MODE=debug; ../validate.sh && mvn -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository package liberty:dev"
-ENV APPSODY_DEBUG_KILL=true
+ENV APPSODY_DEBUG="/project/run-stack.sh debug"
 
-ENV APPSODY_TEST="export APPSODY_DEV_MODE=test; exec mvn -B -Pstack-image-run -DappsDirectory=apps -Dmaven.repo.local=/mvn/repository clean package liberty:create liberty:install-feature liberty:start liberty:deploy failsafe:integration-test@it-exec liberty:stop failsafe:verify"
-ENV APPSODY_TEST_ON_CHANGE=""
-ENV APPSODY_TEST_KILL=true
+ENV APPSODY_TEST="/project/run-stack.sh test"
 
 ENV PORT=9080
 

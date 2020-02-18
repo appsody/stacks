@@ -1,5 +1,5 @@
 # Step 1: Build the user's application
-FROM adoptopenjdk/openjdk8-openj9
+FROM adoptopenjdk/openjdk8-openj9 as compile
 
 RUN apt-get update && \
     apt-get install -y maven unzip wget xmlstarlet
@@ -19,9 +19,12 @@ RUN cd /project/user-app && mvn package -Dskip=true -DskipTests
 # Download Open Liberty here to prevent redownloading each time the app is changed
 RUN cd /project/user-app && mvn -B liberty:install-server
 
-# Copy and build the application source
+# Copy and build the application source. 
+# Remove quick-start-security.xml since it is only needed during local development.
 COPY ./user-app/src /project/user-app/src
-RUN cd /project/user-app && mvn package -DskipTests
+RUN cd /project/user-app && \
+    rm -f src/main/liberty/config/configDropins/defaults/quick-start-security.xml && \
+    mvn package -DskipTests
 
 RUN cd /project/user-app/target && \
     unzip *.zip && \
@@ -29,9 +32,8 @@ RUN cd /project/user-app/target && \
     mv wlp/usr/servers/*/* /config/
 
 # Step 2: Package Open Liberty image
-FROM open-liberty:kernel-java8-openj9
+FROM open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9
 
-COPY --chown=1001:0 --from=0 /config/ /config/
+COPY --chown=1001:0 --from=compile /config/ /config/
 
-EXPOSE 9080
-EXPOSE 9443
+RUN configure.sh

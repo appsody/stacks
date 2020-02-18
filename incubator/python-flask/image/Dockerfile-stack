@@ -13,6 +13,7 @@ ENV PATH=/home/worker/.local/bin:$PATH
 
 ENV APPSODY_MOUNTS=/:/project/userapp
 ENV APPSODY_DEPS=/project/deps
+ENV APPSODY_USER_RUN_AS_LOCAL=true
 
 ENV APPSODY_WATCH_DIR=/project/userapp
 ENV APPSODY_WATCH_REGEX="^.*.py$"
