@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: stacks-build-pipeline
+spec:
+  resources:
+    - name: git-source
+      type: git
+  params:
+    - name: registry
+      type: string
+      description: Docker registry
+      default: image-registry.openshift-image-registry.svc:5000
+    - name: registryNamespace
+      type: string
+      description: Namespace
+      default: kabanero
+    - name: stacks
+      type: string
+      description: List of stacks to build. Specify 'all' to build all stacks.
+      default: all
+  tasks:
+    - name: build-task
+      taskRef:
+        name: stacks-build-task
+      resources:
+        inputs:
+        - name: git-source
+          resource: git-source
+      params:
+        - name: registry
+          value: "$(params.registry)"
+        - name: registryNamespace
+          value: "$(params.registryNamespace)"
+        - name: stacks
+          value: "$(params.stacks)"

@@ -238,11 +238,7 @@ image_build() {
         cmd="buildah bud"
     fi
 
-    if ! logged "${log}" ${cmd} $@
-    then
-      echo "Failed building image"
-      exit 1
-    fi
+    logged "${log}" ${cmd} $@
 }
 
 image_tag() {

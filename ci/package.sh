@@ -69,7 +69,7 @@ do
                         BUILDAH="--buildah"
                         if [ -n "${BUILDAH_FORMAT}" ]
                         then 
-                            BUILDAH_OPTIONS="--buildah-options '--format=$BUILDAH_FORMAT'"
+                            BUILDAH_OPTIONS="--buildah-options --format=$BUILDAH_FORMAT"
                         fi
                     fi
 

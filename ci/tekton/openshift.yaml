@@ -18,15 +18,46 @@ spec:
         date: "DATE"
         sidecar.istio.io/inject: "false"
     spec:
+      serviceAccountName: kabanero-index
+      initContainers:
+      - name: init
+        image: kabanero/kabanero-utils:0.3.0
+        command: ['/bin/sh']
+        args:
+          - -cex
+          - |
+            for i in 1 2 3; do
+              ROUTE=$(kubectl get route kabanero-index --no-headers -o=jsonpath='{.status.ingress[0].host}')
+              if [ -z "$ROUTE" ]; then
+                sleep 1
+              else
+                echo "http://$ROUTE" >> /usr/share/kabanero/route
+                exit 0
+              fi
+            done
+            echo "Unable to get route"
+            exit 1
+        volumeMounts:
+        - name: shared-data
+          mountPath: /usr/share/kabanero
       containers:
       - name: nginx
         image: REGISTRY/NAMESPACE/kabanero-index:TAG
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
-        env:
-        - name: EXTERNAL_URL
-          value: "http://HOST"
+        command: ['/bin/sh']
+        args:
+          - -cex
+          - |
+            export EXTERNAL_URL=$(cat /usr/share/kabanero/route)
+            /opt/startup.sh
+        volumeMounts:
+        - name: shared-data
+          mountPath: /usr/share/kabanero
+      volumes:
+      - name: shared-data
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service

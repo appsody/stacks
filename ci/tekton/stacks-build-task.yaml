@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: collections-build-task
+  name: stacks-build-task
 spec:
   inputs:
     resources:
@@ -12,21 +12,21 @@ spec:
         type: string
         description: Docker registry
         default: image-registry.openshift-image-registry.svc:5000
-      - name: namespace
+      - name: registryNamespace
         type: string
         description: Namespace
         default: kabanero
-      - name: hostname
+      - name: stacks
         type: string
-        description: Hostname of the application hosting collections
-        default: kabanero-index
-      - name: clusterSubdomain
+        description: List of stacks to build. Specify 'all' to build all stacks.
+        default: all
+      - name: routeHostname
         type: string
+        description: Hostname of the route for the application hosting stacks index
         default: ""
-        description: Cluster subdomain
 
   steps:
-    - name: build-collections
+    - name: build-stacks
       securityContext:
         privileged: true
       image: quay.io/buildah/stable:v1.9.0
@@ -35,32 +35,31 @@ spec:
         - -cex
         - |
           # install yq
-          curl -L -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/2.4.0/yq_linux_amd64
-          chmod +x /usr/local/bin/yq
+          /workspace/git-source/ci/install_yq.sh
+
+          # install appsody
+          /workspace/git-source/ci/download_cli.sh
 
           # install git
           yum install -y git which findutils
-
-          curl -L -s -o "appsody-0.5.4-1.x86_64.rpm" "https://github.com/groeges/appsody/releases/download/0.5.4/appsody-0.5.4-1.x86_64.rpm"
-          sudo yum install -y appsody-0.5.4-1.x86_64.rpm
-          rm appsody-0.5.4-1.x86_64.rpm
                 
           # install pyyaml
-          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-          python3 get-pip.py
-          pip install pyyaml
+          pip3 install pyyaml
 
           # do build and release
           export USE_BUILDAH="true"
           export BUILDAH_FORMAT="docker"
           export IMAGE_REGISTRY="$(inputs.params.registry)"
-          export IMAGE_REGISTRY_ORG="$(inputs.params.namespace)"
+          export IMAGE_REGISTRY_ORG="$(inputs.params.registryNamespace)"
           export IMAGE_REGISTRY_PUBLISH="true"
           # disable tests as 'appsody run' does not work without docker
           export SKIP_TESTS="true"
           cd /workspace/git-source/
-          ./ci/prefetch.sh
-          ./ci/build.sh .
+          if [ "$(inputs.params.stacks)" == "all" ]; then
+            ./ci/build.sh
+          else
+            ./ci/build.sh $(inputs.params.stacks)
+          fi
           ./ci/release.sh
       env:
         - name: gitsource
@@ -69,20 +68,20 @@ spec:
         - name: var-lib-containers
           mountPath: /var/lib/containers
 
-    - name: deploy-collections-index
+    - name: deploy-stacks-index
       image: kabanero/kabanero-utils:0.3.0
       command: ['/bin/sh']
       args:
         - -cex
         - |
           YAML_FILE=/workspace/git-source/ci/tekton/openshift.yaml
-          if [ -z "$(inputs.params.clusterSubdomain)" ]; then
+          if [ -z "$(inputs.params.routeHostname)" ]; then
             sed -i -e '/host:/d' $YAML_FILE
           else
-            sed -i -e 's/HOST/$(inputs.params.hostname).$(inputs.params.clusterSubdomain)/' $YAML_FILE
+            sed -i -e 's/host:/host: $(inputs.params.routeHostname)/' $YAML_FILE
           fi
           sed -i -e 's/REGISTRY/$(inputs.params.registry)/' $YAML_FILE
-          sed -i -e 's/NAMESPACE/$(inputs.params.namespace)/' $YAML_FILE
+          sed -i -e 's/NAMESPACE/$(inputs.params.registryNamespace)/' $YAML_FILE
           sed -i -e 's/TAG/latest/' $YAML_FILE
           sed -i -e "s/DATE/$(date --utc '+%FT%TZ')/" $YAML_FILE
           kubectl apply --validate=false -f $YAML_FILE
