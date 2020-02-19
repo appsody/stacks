@@ -155,6 +155,30 @@ do
                 popd
             fi
         done
+
+        for repo_stack in $STACKS_LIST
+        do
+            stack_dir=$(dirname $repo_stack)
+            stack_id=$(basename $repo_stack)
+            if [ "${stack_dir}" == "${repo_name}" ]; then
+                if [ ! -d $repo_stack ]
+                then
+                    echo -e "\n- REMOVING stack image: $stack_dir/$stack_id"
+                    echo "File containing output from remove-from-repo: ${build_dir}/remove-from-repo.$stack_id.log"
+                    if ${CI_WAIT_FOR} appsody stack remove-from-repo $stack_dir $stack_id -v $useCachedIndex \
+                        > ${build_dir}/remove-from-repo.$stack_id.log 2>&1
+                    then
+                        useCachedIndex="--use-local-cache"
+                        trace  "Output from remove-from-repo command" "${build_dir}/remove-from-repo.$stack_id.log"
+                    else
+                        echo "Error running `appsody stack remove-from-repo` command"
+                        cat ${build_dir}/remove-from-repo.$stack_id.log
+                        exit 1
+                    fi
+                fi
+            fi
+        done
+
         if [ "$useCachedIndex" != "" ]; then
             if [ -f $HOME/.appsody/stacks/dev.local/$repo_name-index.yaml ]; then
                 cp $HOME/.appsody/stacks/dev.local/$repo_name-index.yaml $index_file
