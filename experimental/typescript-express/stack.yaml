@@ -1,0 +1,10 @@
+name: Typescript template
+version: 0.1.1
+description: Runnable typescript stack 
+license: Apache-2.0
+language: typescript
+maintainers: 
+  - name: Saif ur Rehman
+    email: saif.ur.rehman@.ibm.com
+    github-id: SaifRehman
+default-template: simple
