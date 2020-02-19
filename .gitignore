@@ -6,6 +6,7 @@
 **/00_local
 **/.DS_Store
 **/node_modules
+**/cli
 **/*.log
 **/target
 **/.settings
