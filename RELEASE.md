@@ -95,7 +95,7 @@ The `prefetch.sh` script downloads all latest released templates and makes them 
 
 ### Create Codewind Index
 
-The `create_codewind_index.py` script generates the `index.json` files from the built stacks' `index.yaml` files, for Codewind to consume Appsody projects.
+The `create_codewind_index.py` script generates the `index.json` files from the built stacks' `index.yaml` files, for Codewind to consume Appsody projects. Run `./ci/create_codewind_index.py -h` to see the optional arguments available to the script.
 
 ## Release Phase
 
