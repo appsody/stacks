@@ -2,6 +2,7 @@ if [ -n "$TRAVIS_TAG" ]
 then
   if [ -n "$RELEASE_BRANCH" ]
   then
+    # This environment variable can be set in the Travis settings
     echo "Release branch is: $RELEASE_BRANCH"
     TRAVIS_BRANCH=${RELEASE_BRANCH}
   else
@@ -9,12 +10,11 @@ then
     TRAVIS_BRANCH="master"
   fi
 
-  git clone --depth=50 --branch=$TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_BUILD_DIR/release
+  git clone --branch=$TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_BUILD_DIR/release
   cd $TRAVIS_BUILD_DIR/release
 
   echo "Looking for release commit in branch..."
   git branch --contains $TRAVIS_COMMIT
-  git status
 
   if [[ $(echo $?) != "0" ]]
   then
@@ -24,7 +24,9 @@ then
 
   echo "Reseting branch to release commit: $TRAVIS_COMMIT"
   git reset --hard $TRAVIS_COMMIT
-  git status
+
+  # Logging the current commit
+  git log -n 1
 fi
 
 
