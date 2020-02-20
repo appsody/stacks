@@ -34,6 +34,9 @@ RUN cd /project/user-app/target && \
 # Step 2: Package Open Liberty image
 FROM open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9
 
+# Allow appsody deploy to set --build-arg for an env variable
+ARG IBM_JAVA_OPTIONS
+
 COPY --chown=1001:0 --from=compile /config/ /config/
 
 RUN configure.sh
