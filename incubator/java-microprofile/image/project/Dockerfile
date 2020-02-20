@@ -1,6 +1,9 @@
 # Step 1: Build the user's application
 FROM adoptopenjdk/openjdk8-openj9 as compile
 
+# Allow appsody deploy to set --build-arg for an env variable
+ARG IBM_JAVA_OPTIONS
+
 RUN apt-get update && \
     apt-get install -y maven unzip wget xmlstarlet
 
@@ -33,6 +36,9 @@ RUN cd /project/user-app/target && \
 
 # Step 2: Package Open Liberty image
 FROM open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9
+
+# Allow appsody deploy to set --build-arg for an env variable
+ARG IBM_JAVA_OPTIONS
 
 COPY --chown=1001:0 --from=compile /config/ /config/
 
