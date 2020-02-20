@@ -26,6 +26,14 @@
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
+        <!-- Aggregate of Jakarta EE APIs -->
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>8.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- For tests -->
         <dependency>
             <groupId>junit</groupId>
@@ -90,9 +98,15 @@
                 <artifactId>liberty-maven-plugin</artifactId>
                 <version>${version.liberty-maven-plugin}</version>
                 <!-- Since we're mainly using the install dir layout and not actually running anything in stage 1, we don't
-                     hugely care what version of Open Liberty we install.   That seems like the kind of thing that could make
-                     somewhat a bit nervous, so we call this out here in this comment. -->
+                     hugely care what version of Open Liberty we install.   That seems like the kind of thing that could be
+                     a bit confusing, so we call this out here in this comment. -->
                 <configuration>
+                    <runtimeArtifact>
+                        <groupId>io.openliberty</groupId>
+                        <artifactId>openliberty-kernel</artifactId>
+                        <version>{{.stack.libertyversion}}</version>
+                        <type>zip</type>
+                    </runtimeArtifact>
                     <runtimeInstallDirectory>/project/user-app/target/liberty</runtimeInstallDirectory>
                 </configuration>
             </plugin>
