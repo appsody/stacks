@@ -7,11 +7,12 @@ RUN apt-get update \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 
+WORKDIR "/project/user-app/node_modules"
+
 # Install user-app dependencies
 WORKDIR "/project/user-app"
 COPY ./user-app/package*.json ./
-RUN npm install --production
-WORKDIR "/project/user-app/node_modules"
+RUN npm install --production && ls -al && tar czf app_modules.tgz node_modules
 
 # Copy the dependencies into a slim Node docker image
 FROM node:12-slim
@@ -23,12 +24,13 @@ RUN apt-get update \
  && echo 'Finished installing dependencies'
 
 # Copy the project
-COPY --chown=node:node . /project
+COPY --chown=node:node package*.json /project
+COPY --chown=node:node user-app /project/user-app
 
 # Copy all dependencies
-COPY --chown=node:node --from=0 /project/user-app/node_modules /project/user-app/node_modules
-
 WORKDIR "/project/user-app"
+COPY --chown=node:node --from=0 /project/user-app/app_modules.tgz .
+RUN tar xf app_modules.tgz && chown -R node:node node_modules && rm app_modules.tgz
 
 ENV NODE_ENV production
 
