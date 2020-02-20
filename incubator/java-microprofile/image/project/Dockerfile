@@ -1,9 +1,6 @@
 # Step 1: Build the user's application
 FROM adoptopenjdk/openjdk8-openj9 as compile
 
-#Allow appsody deploy to set --build-arg for an env variable
-ARG IBM_JAVA_OPTIONS
-
 RUN apt-get update && \
     apt-get install -y maven unzip wget xmlstarlet
 
