@@ -15,6 +15,11 @@ exec_hooks $script_dir/ext/pre_package.d
 for repo_name in $REPO_LIST
 do
     repo_dir=$base_dir/$repo_name
+    if [ "${BUILD_ALL}" == "true" ]
+    then
+        echo "apiVersion: v2" > $HOME/.appsody/stacks/dev.local/$repo_name-index.yaml
+        echo "stacks:" >> $HOME/.appsody/stacks/dev.local/$repo_name-index.yaml
+    fi
     useCachedIndex="--use-local-cache"
     if [ -d $repo_dir ]
     then
@@ -121,7 +126,7 @@ do
                     echo -e "\n- ADD $repo_name with release URL prefix $RELEASE_URL/$stack_id-v$stack_version/$repo_name."
                     if appsody stack add-to-repo $repo_name \
                         --release-url $RELEASE_URL/$stack_id-v$stack_version/$repo_name. \
-                        $useCachedIndex
+                        -v $useCachedIndex
                     then
                         useCachedIndex="--use-local-cache"
                     else
