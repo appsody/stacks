@@ -60,6 +60,9 @@ RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
 # Step 2: Package Open Liberty image
 FROM openliberty/open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9-ubi
 
+# Allow appsody deploy to set --build-arg for an env variable
+ARG IBM_JAVA_OPTIONS
+
 #2a) copy any resources 
 COPY --chown=1001:0 --from=compile /shared /opt/ol/wlp/usr/shared/
 
