@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-10:1-54
+FROM registry.access.redhat.com/ubi8/nodejs-10:1-66
 
 USER root
 
@@ -19,7 +19,12 @@ WORKDIR /project/user-app
 COPY ./user-app/package*.json ./
 RUN npm install --production
 
-COPY . /project
+COPY .* /project/
+COPY *.* /project/
+COPY Dockerfile /project/
+COPY test /project/test/
+COPY user-app /project/user-app/
+
 RUN chown -hR node:0 /project \
  && chmod -R g=u /project
 
