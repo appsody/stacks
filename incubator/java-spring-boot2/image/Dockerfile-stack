@@ -1,5 +1,11 @@
 FROM {{.stack.baseimage}}
 
+LABEL vendor="Kabanero" \
+    name="kabanero/java-spring-boot2" \
+    version="0.3.23" \
+    summary="Image for Kabanero java-spring-boot2 development" \
+    description="This image is the Kabanero development container for the java-spring-boot2 stack"
+
 # Ensure up to date / patched OS
 COPY ./project/update.sh /update.sh
 RUN  /update.sh --system
