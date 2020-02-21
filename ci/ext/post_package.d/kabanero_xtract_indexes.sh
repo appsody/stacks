@@ -22,12 +22,18 @@ if [ -f $kabanero_index_file ]; then
             stack_version=$(yq r ${kabanero_index_file} stacks[$stack_count].version)
             index_name=$stack_id-$stack_version-index.yaml
             index_file=$assets_dir/$index_name
+            nginx_file=$base_dir/ci/build/index-src/$index_name
+            
             echo "stack index: $index_file"
             echo "apiVersion: v2" > $index_file
             echo "stacks:" >> $index_file
+            
             yq r ${kabanero_index_file} stacks.[$stack_count] > $stack_content
             yq p -i $stack_content stacks.[+]
             yq m -a -i $index_file $stack_content
+            
+            sed -e "s|${RELEASE_URL}/.*/|{{EXTERNAL_URL}}/|" $index_file > $nginx_file
+            
         done
     fi
 else
