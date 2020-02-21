@@ -7,7 +7,7 @@ ENV APPSODY_DEPS=/project/user-app/node_modules
 ENV APPSODY_USER_RUN_AS_LOCAL=true
 
 ENV APPSODY_WATCH_DIR=/project/user-app
-ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/node_modules
+ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/node_modules;/project/user-app/.config
 ENV APPSODY_WATCH_REGEX="^.*.json$"
 
 ENV APPSODY_PREP="npm install --prefix user-app && npm audit fix --prefix user-app"
