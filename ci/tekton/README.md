@@ -51,7 +51,7 @@ Use these steps to trigger a Tekton pipeline build of your collections repositor
       params:
         - name: stacks
           value: all
-      serviceAccount: kabanero-index
+      serviceAccountName: kabanero-index
       timeout: 60m
     ```
 
