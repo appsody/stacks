@@ -11,6 +11,8 @@ COPY ./LICENSE /licenses/
 COPY --chown=java_user:java_group ./project /project
 COPY --chown=java_user:java_group ./config /config
 
+USER java_user
+
 RUN  /project/util/check_version build
 
 WORKDIR /project/
@@ -22,8 +24,6 @@ RUN chmod -R 777 /opt/ol
 
 
 WORKDIR /project/user-app
-
-USER java_user
 
 ENV APPSODY_MOUNTS="~/.m2/repository:/mvn/repository;.:/project/user-app"
 
