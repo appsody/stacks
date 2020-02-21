@@ -1,16 +1,15 @@
 if [ -n "$TRAVIS_TAG" ]
 then
-  if [ -n "$RELEASE_BRANCH" ]
+  if [ -z "$RELEASE_BRANCH" ]
   then
     # This environment variable can be set in the Travis settings
-    echo "Release branch is: $RELEASE_BRANCH"
-    TRAVIS_BRANCH=${RELEASE_BRANCH}
-  else
     echo "No RELEASE_BRANCH environment variable set: defaulting to master"
-    TRAVIS_BRANCH="master"
+    export RELEASE_BRANCH="master"
   fi
 
-  git clone --branch=$TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_BUILD_DIR/release
+  echo "Release branch is: $RELEASE_BRANCH"
+
+  git clone --branch=$RELEASE_BRANCH https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_BUILD_DIR/release
   cd $TRAVIS_BUILD_DIR/release
 
   echo "Looking for release commit in branch..."
@@ -18,7 +17,7 @@ then
 
   if [[ $(echo $?) != "0" ]]
   then
-    echo "Error: could not find release commit in release branch! Branch: $TRAVIS_BRANCH , Commit: $TRAVIS_COMMIT"
+    echo "Error: could not find release commit in release branch! Branch: $RELEASE_BRANCH , Commit: $TRAVIS_COMMIT"
     exit 1
   fi
 
