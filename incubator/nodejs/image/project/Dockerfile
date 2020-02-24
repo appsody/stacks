@@ -7,11 +7,12 @@ RUN apt-get update \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 
-WORKDIR "/project/user-app/node_modules"
-
 # Install user-app dependencies
+RUN mkdir -p "/project/user-app/node_modules"
 WORKDIR "/project/user-app"
 COPY ./user-app/package*.json ./
+# Working around poor performance issue with buildah 1.9.0.
+# Once https://github.com/appsody/appsody-buildah/pull/14 is merged, we can remove the additional steps.
 RUN npm install --production && ls -al && tar czf app_modules.tgz node_modules
 
 # Copy the dependencies into a slim Node docker image
@@ -24,6 +25,8 @@ RUN apt-get update \
  && echo 'Finished installing dependencies'
 
 # Copy the project
+# Working around poor performance issue with buildah 1.9.0.
+# Once https://github.com/appsody/appsody-buildah/pull/14 is merged, we can remove the additional steps.
 COPY --chown=node:node package*.json /project
 COPY --chown=node:node user-app /project/user-app
 
