@@ -27,7 +27,7 @@ RUN apt-get update \
 # Copy the project
 # Working around poor performance issue with buildah 1.9.0 as it does not honour .dockerignore.
 # Once https://github.com/appsody/appsody-buildah/pull/14 is merged, we can remove the additional steps.
-COPY --chown=node:node package*.json /project
+COPY --chown=node:node package*.json /project/
 COPY --chown=node:node user-app /project/user-app
 
 # Copy all dependencies
