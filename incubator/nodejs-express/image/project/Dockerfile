@@ -8,6 +8,7 @@ RUN apt-get update \
  && echo 'Finished installing dependencies'
 
 # Install stack dependencies
+WORKDIR /project/node_modules
 WORKDIR /project
 COPY ./package*.json ./
 RUN npm install --production && tar czf stack_modules.tgz node_modules && rm -rf node_modules
