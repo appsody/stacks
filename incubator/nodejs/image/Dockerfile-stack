@@ -2,7 +2,7 @@ FROM registry.access.redhat.com/ubi8/nodejs-12:1-27
 
 LABEL vendor="Kabanero" \
     name="kabanero/nodejs" \
-    version="0.3.1" \
+    version="0.3.3" \
     summary="Image for Kabanero Nodejs development" \
     description="This image contains the Kabanero development stack for the Nodejs collection"
 
@@ -35,7 +35,11 @@ COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
 
+RUN npm install npm@latest
+RUN chown -R default:root "/opt/app-root/src/.npm"
+
 RUN chown -R default:root /project
+
 WORKDIR /project
 USER default
 RUN mkdir -p /project/user-app/node_modules
