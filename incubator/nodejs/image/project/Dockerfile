@@ -7,13 +7,18 @@ RUN apt-get update \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 
+# Copying individual files/folders as buildah 1.9.0 does not honour .dockerignore
+COPY --chown=node:node package*.json /project/
+COPY --chown=node:node user-app /project/user-app
+# Removing node_modules as we can not make assumptions about file structure of user-app
+ RUN rm -rf /project/user-app/node_modules && mkdir -p /project/user-app/node_modules
+
 # Install user-app dependencies
-RUN mkdir -p "/project/user-app/node_modules"
-WORKDIR "/project/user-app"
-COPY ./user-app/package*.json ./
-# Working around poor performance issue with buildah 1.9.0 as it does not honour .dockerignore.
-# Once https://github.com/appsody/appsody-buildah/pull/14 is merged, we can remove the additional steps.
-RUN npm install --production && ls -al && tar czf app_modules.tgz node_modules
+WORKDIR /project/user-app
+RUN npm install --production 
+
+# Creating a tar to work around poor copy performance when using buildah 1.9.0
+RUN cd / && tar czf project.tgz project
 
 # Copy the dependencies into a slim Node docker image
 FROM node:12-slim
@@ -24,16 +29,11 @@ RUN apt-get update \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 
-# Copy the project
-# Working around poor performance issue with buildah 1.9.0 as it does not honour .dockerignore.
-# Once https://github.com/appsody/appsody-buildah/pull/14 is merged, we can remove the additional steps.
-COPY --chown=node:node package*.json /project/
-COPY --chown=node:node user-app /project/user-app
+# Copy project with dependencies
+COPY --chown=node:node --from=0 /project.tgz .
+RUN tar xf project.tgz && chown -R node:node project && rm project.tgz
 
-# Copy all dependencies
-WORKDIR "/project/user-app"
-COPY --chown=node:node --from=0 /project/user-app/app_modules.tgz .
-RUN tar xf app_modules.tgz && chown -R node:node node_modules && rm app_modules.tgz
+WORKDIR /project/user-app
 
 ENV NODE_ENV production
 
