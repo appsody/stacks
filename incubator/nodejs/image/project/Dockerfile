@@ -8,8 +8,8 @@ RUN apt-get update \
  && echo 'Finished installing dependencies'
 
 # Copying individual files/folders as buildah 1.9.0 does not honour .dockerignore
-COPY --chown=node:node package*.json /project/
-COPY --chown=node:node user-app /project/user-app
+COPY package*.json /project/
+COPY user-app /project/user-app
 # Removing node_modules as we can not make assumptions about file structure of user-app
  RUN rm -rf /project/user-app/node_modules && mkdir -p /project/user-app/node_modules
 
