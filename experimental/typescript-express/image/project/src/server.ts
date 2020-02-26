@@ -32,9 +32,6 @@ class App {
     this.express.use("/metrics", require("appmetrics-prometheus").endpoint());
   }
   private routes(): void {
-    this.express.get("/", function(_, res) {
-      res.send("hi");
-    });
     this.express.use("/", IndexController);
   }
 }
