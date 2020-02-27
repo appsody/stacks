@@ -9,21 +9,22 @@ RUN yum upgrade --disableplugin=subscription-manager -y \
  && ln -s /usr/bin/python2 /usr/bin/python \
  && useradd --uid 1000 --gid 0 --shell /bin/bash --create-home node
 
+RUN npm -v
+
+COPY package*.json /project/
+COPY *.js /project/
+COPY user-app /project/user-app
+RUN rm -rf /project/user-app/node_modules && mkdir -p /project/user-app/node_modules
+
+RUN chown -hR root:0 /project
+
 # Install stack dependencies
 WORKDIR /project
-COPY ./package*.json ./
-RUN npm install --production
+RUN npm install --unsafe-perm --production
 
 # Install user-app dependencies
 WORKDIR /project/user-app
-COPY ./user-app/package*.json ./
-RUN npm install --production
-
-COPY .* /project/
-COPY *.* /project/
-COPY Dockerfile /project/
-COPY test /project/test/
-COPY user-app /project/user-app/
+RUN npm install --unsafe-perm --production
 
 RUN chown -hR node:0 /project \
  && chmod -R g=u /project
