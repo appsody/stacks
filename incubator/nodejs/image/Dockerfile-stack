@@ -5,6 +5,7 @@ RUN useradd -m node_user && groupadd node_group
 ENV APPSODY_MOUNTS=/:/project/user-app
 ENV APPSODY_DEPS=/project/user-app/node_modules
 ENV APPSODY_PROJECT_DIR=/project
+ENV APPSODY_USER_RUN_AS_LOCAL=true
 
 ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/node_modules
@@ -35,6 +36,9 @@ RUN mkdir -p /project/user-app/node_modules
 RUN npm install && npm audit fix
 
 WORKDIR /project/user-app
+ENV NODE_PATH=/project/user-app/node_modules
+ENV NPM_CONFIG_CACHE=/project/user-app/.npm
+ENV XDG_CONFIG_HOME=/project/user-app/.config
 
 ENV PORT=3000
 
