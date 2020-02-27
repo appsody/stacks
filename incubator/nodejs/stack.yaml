@@ -1,5 +1,5 @@
 name: Node.js
-version: 0.3.2
+version: 0.3.3
 description: Runtime for Node.js applications
 license: Apache-2.0
 language: nodejs
@@ -8,3 +8,6 @@ maintainers:
     email: vieuxtech@gmail.com
     github-id: sam-github
 default-template: simple
+requirements:
+  docker-version: ">= 17.09.0"
+  appsody-version: ">= 0.2.7"
