@@ -1,5 +1,5 @@
 name: Spring Boot®
-version: 0.3.23
+version: 0.3.24
 description: Spring Boot using OpenJ9 and Maven
 license: Apache-2.0
 language: java
@@ -18,6 +18,6 @@ templating-data:
   baseimage: kabanero/ubi8-maven:0.3.0
   finalimage: adoptopenjdk/openjdk8-openj9:ubi-jre
   parentpomgroup: dev.appsody
-  parentpomid: spring-boot2-stack-snowdrop
+  parentpomid: spring-boot2-stack
   parentpomrange: '[0.3, 0.4)'
   parentpomfilename: appsody-boot2-snowdrop-pom.xml
