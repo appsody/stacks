@@ -7,11 +7,17 @@ RUN apt-get update \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 
+# Copying individual files/folders as buildah 1.9.0 does not honour .dockerignore
+COPY user-app /project/user-app
+# Removing node_modules as we can not make assumptions about file structure of user-app
+RUN rm -rf /project/user-app/node_modules && mkdir -p /project/user-app/node_modules
+
 # Install user-app dependencies
-WORKDIR "/project/user-app"
-COPY ./user-app/package*.json ./
-RUN npm install --production
-WORKDIR "/project/user-app/node_modules"
+WORKDIR /project/user-app
+RUN npm install --production 
+
+# Creating a tar to work around poor copy performance when using buildah 1.9.0
+RUN cd / && tar czf project.tgz project
 
 # Copy the dependencies into a slim Node docker image
 FROM node:12-slim
@@ -22,13 +28,11 @@ RUN apt-get update \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 
-# Copy the project
-COPY --chown=node:node . /project
+# Copy project with dependencies
+COPY --chown=node:node --from=0 /project.tgz .
+RUN tar xf project.tgz && chown -R node:node project && rm project.tgz
 
-# Copy all dependencies
-COPY --chown=node:node --from=0 /project/user-app/node_modules /project/user-app/node_modules
-
-WORKDIR "/project/user-app"
+WORKDIR /project/user-app
 
 ENV NODE_ENV production
 
