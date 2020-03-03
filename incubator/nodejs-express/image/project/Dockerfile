@@ -37,6 +37,7 @@ RUN apt-get update \
 # Copy project with dependencies
 COPY --chown=node:node --from=0 /project.tgz /
 RUN tar xf project.tgz && chown -R node:node /project && rm project.tgz
+WORKDIR /project
 
 ENV NODE_PATH=/project/user-app/node_modules
 
