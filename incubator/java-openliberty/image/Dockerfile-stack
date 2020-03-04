@@ -1,15 +1,13 @@
 FROM kabanero/ubi8-maven:0.3.1
-RUN  groupadd --gid 1000 java_group \
-  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user \
+RUN useradd --gid 0 --shell /bin/bash --create-home java_user \
   && mkdir -p /mvn/repository \
-  && chown -R java_user:java_group /mvn \
+  && chown -R java_user:0 /mvn \
   && mkdir -p /opt/ol \
-  && chown -R java_user:java_group /opt
-
+  && chown -R java_user:0 /opt
 
 COPY ./LICENSE /licenses/
-COPY --chown=java_user:java_group ./project /project
-COPY --chown=java_user:java_group ./config /config
+COPY --chown=java_user:0 ./project /project
+COPY --chown=java_user:0 ./config /config
 
 USER java_user
 
@@ -20,8 +18,6 @@ WORKDIR /project/
 RUN mkdir -p /mvn/repository
 RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 RUN mvn -B -Pstack-image-package -Dmaven.repo.local=/mvn/repository liberty:install-server install dependency:go-offline
-RUN chmod -R 777 /opt/ol 
-
 
 WORKDIR /project/user-app
 
