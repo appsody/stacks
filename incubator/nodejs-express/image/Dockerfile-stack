@@ -1,5 +1,7 @@
 FROM appsody/nodejs:0.3
 
+RUN useradd --gid 0 --shell /bin/bash --create-home node_user
+
 ENV APPSODY_PROJECT_DIR=/project
 ENV APPSODY_MOUNTS=/:/project/user-app
 ENV APPSODY_DEPS=/project/user-app/node_modules
@@ -23,9 +25,16 @@ ENV APPSODY_TEST_ON_CHANGE=""
 ENV APPSODY_TEST_KILL=false
 
 COPY ./LICENSE /licenses/
-COPY ./project /project
-COPY ./config /config
+COPY --chown=node_user:0 ./project /project
+COPY --chown=node_user:0 ./config /config
+
 WORKDIR /project
+
+RUN mkdir -p /project/user-app/node_modules \
+ && chmod -R g=u /project
+
+USER node_user
+ 
 RUN npm install && npm audit fix
 
 ENV PORT=3000
