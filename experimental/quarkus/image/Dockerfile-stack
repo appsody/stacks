@@ -1,5 +1,5 @@
 # Dockerfile for building the stack
-FROM quay.io/quarkus/centos-quarkus-maven:19.2.1
+FROM quay.io/quarkus/centos-quarkus-maven:19.3.1-java8
 
 COPY ./LICENSE /licenses/
 COPY ./project /project
