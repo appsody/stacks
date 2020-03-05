@@ -6,11 +6,12 @@ COPY ./project /project
 COPY ./config /config
 
 WORKDIR /project
+RUN mkdir "user-app"
 
 RUN mvn -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 RUN mvn -B install dependency:go-offline -DskipTests
 
-ENV APPSODY_MOUNTS=".:/project/user-app"
+ENV APPSODY_MOUNTS="src:/project/user-app/src;pom.xml:/project/user-app/pom.xml;mvnw:/project/user-app/mvnw;mvnw.cmd:/project/user-app/mvnw.cmd"
 ENV APPSODY_DEPS="/home/quarkus/.m2"
 
 ENV APPSODY_RUN="./mvnw -B compile quarkus:dev"
