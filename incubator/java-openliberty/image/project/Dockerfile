@@ -73,6 +73,5 @@ COPY --chown=1001:0 --from=compile /config/ /config/
 
 # 2d) Changes to the application binary
 COPY --chown=1001:0 --from=compile /project/user-app/target/*.[ew]ar /config/apps
-USER root
-RUN configure.sh
-USER 1001
+RUN configure.sh && \
+    chmod 664 /opt/ol/wlp/usr/servers/defaultServer/configDropins/defaults/keystore.xml
