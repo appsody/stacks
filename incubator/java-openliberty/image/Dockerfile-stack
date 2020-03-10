@@ -2,7 +2,7 @@ FROM kabanero/ubi8-maven:0.3.1
 
 LABEL vendor="Kabanero" \
     name="kabanero/java-openliberty" \
-    version="0.2.2" \
+    version="0.2.3" \
     summary="Image for Kabanero java-openliberty development" \
     description="This image is the Kabanero development container for the java-openliberty stack"
 
