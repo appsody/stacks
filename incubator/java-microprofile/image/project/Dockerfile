@@ -14,7 +14,7 @@ COPY --chown=java_user:java_group ./pom.xml /project/pom.xml
 RUN cd /project && mvn -B --no-transfer-progress install dependency:go-offline -DskipTests
 
 # Copy and run a simple version check
-COPY ./util /project/util
+COPY --chown=java_user:java_group ./util /project/util
 RUN  /project/util/check_version build
 
 # Copy the user's application pom and resolve all dependencies
@@ -40,4 +40,5 @@ FROM openliberty/open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9-ubi
 
 COPY --chown=1001:0 --from=compile /config/ /opt/ol/wlp/usr/servers/defaultServer/
 
-RUN configure.sh
+RUN configure.sh && \
+    chmod 664 /opt/ol/wlp/usr/servers/defaultServer/configDropins/defaults/keystore.xml
