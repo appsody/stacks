@@ -31,7 +31,7 @@ spec:
               if [ -z "$ROUTE" ]; then
                 sleep 1
               else
-                echo "http://$ROUTE" >> /usr/share/kabanero/route
+                echo "http://$ROUTE" > /usr/share/kabanero/route
                 exit 0
               fi
             done
