@@ -58,11 +58,10 @@
 
   <properties>
     <!-- Required library versions -->
-    <spring-boot-bom.version>2.1.6.SP3-redhat-00001</spring-boot-bom.version>
-    <spring-boot.version>2.1.6.RELEASE</spring-boot.version>
-
-    <opentracing-spring-jaeger-web-starter.version>2.0.0</opentracing-spring-jaeger-web-starter.version>
-
+    
+    <spring-boot-bom.version>2.1.12.Final-redhat-00001</spring-boot-bom.version>
+    <spring-boot.version>2.1.12.RELEASE</spring-boot.version>
+    
     <java.version>1.8</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -81,7 +80,7 @@
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 		<maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
 		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
-		<maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
+		<maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
 		<maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
 		<maven-install-plugin.version>2.5.2</maven-install-plugin.version>
 		<maven-invoker-plugin.version>3.1.0</maven-invoker-plugin.version>
@@ -138,7 +137,6 @@
     <dependency>
       <groupId>io.opentracing.contrib</groupId>
       <artifactId>opentracing-spring-jaeger-web-starter</artifactId>
-      <version>${opentracing-spring-jaeger-web-starter.version}</version>
     </dependency>
   </dependencies>
 
