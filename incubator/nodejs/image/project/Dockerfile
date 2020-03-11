@@ -1,12 +1,6 @@
 # Install the app dependencies in a full Node docker image
 FROM node:12
 
-# Install OS updates
-RUN apt-get update \
- && apt-get dist-upgrade -y \
- && apt-get clean \
- && echo 'Finished installing dependencies'
-
 # Copying individual files/folders as buildah 1.9.0 does not honour .dockerignore
 COPY user-app /project/user-app
 # Removing node_modules as we can not make assumptions about file structure of user-app
@@ -21,12 +15,6 @@ RUN cd / && tar czf project.tgz project
 
 # Copy the dependencies into a slim Node docker image
 FROM node:12-slim
-
-# Install OS updates
-RUN apt-get update \
- && apt-get dist-upgrade -y \
- && apt-get clean \
- && echo 'Finished installing dependencies'
 
 # Copy project with dependencies
 COPY --chown=node:node --from=0 /project.tgz .
