@@ -1,8 +1,9 @@
 FROM node:12
 
+ENV APPSODY_PROJECT_DIR=/project
 ENV APPSODY_MOUNTS=/:/project/user-app
 ENV APPSODY_DEPS=/project/user-app/node_modules
-ENV APPSODY_PROJECT_DIR=/project
+ENV APPSODY_USER_RUN_AS_LOCAL=true
 
 ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/node_modules
@@ -23,9 +24,10 @@ ENV APPSODY_TEST_ON_CHANGE=""
 ENV APPSODY_TEST_KILL=false
 
 COPY ./LICENSE /licenses/
-COPY ./project /project
 COPY ./config /config
 
+USER node
+COPY --chown=node ./project /project
 WORKDIR /project
 RUN npm install
 
