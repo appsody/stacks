@@ -80,10 +80,10 @@ spec:
           else
             sed -i -e 's/host:/host: $(inputs.params.routeHostname)/' $YAML_FILE
           fi
-          sed -i -e 's/REGISTRY/$(inputs.params.registry)/' $YAML_FILE
-          sed -i -e 's/NAMESPACE/$(inputs.params.registryNamespace)/' $YAML_FILE
-          sed -i -e 's/TAG/latest/' $YAML_FILE
-          sed -i -e "s/DATE/$(date --utc '+%FT%TZ')/" $YAML_FILE
+          sed -i -e 's|REGISTRY|$(inputs.params.registry)|' $YAML_FILE
+          sed -i -e 's|NAMESPACE|$(inputs.params.registryNamespace)|' $YAML_FILE
+          sed -i -e 's|TAG|latest|' $YAML_FILE
+          sed -i -e "s|DATE|$(date --utc '+%FT%TZ')|" $YAML_FILE
           kubectl apply --validate=false -f $YAML_FILE
 
   volumes:
