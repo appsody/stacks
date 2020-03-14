@@ -10,7 +10,7 @@
   },
   "scripts": {
     "debug": "node --inspect=0.0.0.0 server.js",
-    "start": "node server.js",
+    "start": "node --experimental-report --report-filename=stdout --report-on-fatalerror --report-on-signal --report-uncaught-exception server.js",
     "test": "mocha"
   },
   "dependencies": {

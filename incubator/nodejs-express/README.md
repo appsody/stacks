@@ -18,6 +18,13 @@ The [@cloudnative/cloud-health](https://github.com/CloudNativeJS/cloud-health) m
 
 You can override or enhance the following endpoints by configuring your own health checks in your application.
 
+## Diagnostic reporting
+
+Diagnostic reports are enabled. A structured (JSON) dump of the current process
+state will be dumped on abnormal termination of the process. It can also
+be manually triggered by sending `SIGUSR2` to the node process. See the
+Node.js [report](https:....FIXME) documentation for more information.
+
 ## Application metrics
 
 Enable powerful monitoring for your distributed application and configure rule-based alerting using Prometheus. This is vital for diagnosing problems and ensuring the reliability of your application.

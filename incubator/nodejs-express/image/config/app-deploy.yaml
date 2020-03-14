@@ -2,6 +2,8 @@ apiVersion: appsody.dev/v1beta1
 kind: AppsodyApplication
 metadata:
   name: APPSODY_PROJECT_NAME
+  labels:
+    nodejs.appsody.dev/report: supported
 spec:
   # Add fields here
   version: 1.0.0
