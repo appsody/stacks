@@ -1,9 +1,11 @@
 const express = require('express');
 const health = require('@cloudnative/health-connect');
+const metrics = require('appmetrics-prometheus')
 const fs = require('fs');
 const http = require('http');
 
 const app = express();
+app.use('/metrics', metrics.endpoint());
 const server = http.createServer(app)
 
 // Code sensitive to production vs development mode.
@@ -42,7 +44,6 @@ const healthcheck = new health.HealthChecker();
 app.use('/live', health.LivenessEndpoint(healthcheck));
 app.use('/ready', health.ReadinessEndpoint(healthcheck));
 app.use('/health', health.HealthEndpoint(healthcheck));
-app.use('/metrics', require('appmetrics-prometheus').endpoint());
 
 app.get('*', (req, res) => {
   res.status(404).send("Not Found");
