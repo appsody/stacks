@@ -6,6 +6,9 @@ go:
 os: linux
 dist: bionic
 
+env:
+  - GITHUB_READ_TOKEN: "05a26637e299a0d3481c9f9c62c8d5a373c74af9"
+
 services:
   - docker
 
