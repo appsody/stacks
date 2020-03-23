@@ -23,6 +23,9 @@ RUN cd /project/user-app && mvn -B liberty:install-server
 # Remove quick-start-security.xml since it is only needed during local development.
 COPY ./user-app/src /project/user-app/src
 RUN cd /project/user-app && \
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "quick-start-security is not secure for production environments. It is being removed"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     rm -f src/main/liberty/config/configDropins/defaults/quick-start-security.xml && \
     mvn package -DskipTests
 
