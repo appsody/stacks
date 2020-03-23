@@ -2,13 +2,13 @@ FROM appsody/nodejs:0.3
 
 ENV APPSODY_PROJECT_DIR=/project
 ENV APPSODY_MOUNTS=/:/project/user-app
-ENV APPSODY_DEPS=/project/user-app/node_modules
+#ENV APPSODY_DEPS=/project/user-app/node_modules
 
 ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/node_modules
 ENV APPSODY_WATCH_REGEX="^.*.js$"
 
-ENV APPSODY_PREP="npm install --prefix user-app"
+ENV APPSODY_PREP="cd /project/user-app && npm install"
 
 ENV APPSODY_RUN="npm start"
 ENV APPSODY_RUN_ON_CHANGE="npm start"
@@ -18,7 +18,7 @@ ENV APPSODY_DEBUG="npm run debug"
 ENV APPSODY_DEBUG_ON_CHANGE="npm run debug"
 ENV APPSODY_DEBUG_KILL=true
 
-ENV APPSODY_TEST="npm test && npm test --prefix user-app"
+ENV APPSODY_TEST="cd /project/user-app && npm test"
 ENV APPSODY_TEST_ON_CHANGE=""
 ENV APPSODY_TEST_KILL=false
 
@@ -29,7 +29,6 @@ WORKDIR /project
 RUN npm install
 
 ENV PORT=3000
-ENV NODE_PATH=/project/user-app/node_modules
 
 EXPOSE 3000
 EXPOSE 9229
