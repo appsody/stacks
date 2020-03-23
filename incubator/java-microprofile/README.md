@@ -44,6 +44,13 @@ OpenAPI endpoints:
 - http://localhost:9080/openapi (the RESTful APIs of the inventory service)
 - http://localhost:9080/openapi/ui (Swagger UI of the deployed APIs)
 
+### Config dropin: **quick-start-security.xml**
+
+The metrics endpoint is secured with a userid and password enabled through the config dropin included in the default template at path:
+**src/main/liberty/config/configDropins/defaults/quick-start-security.xml**.
+
+In order to lock down the production image built via `appsody build` this file is deleted during the Docker build of your application production image.  (The same file would be deleted if you happened to create your own file at this location as well).
+
 ## Getting Started
 
 1. Create a new folder in your local directory and initialize it using the Appsody CLI, e.g.:
@@ -73,6 +80,8 @@ OpenAPI endpoints:
     - OpenAPI endpoint: http://localhost:9080/openapi
     - Swagger UI endpoint: http://localhost:9080/openapi/ui
     - Javametrics Dashboard endpoint: http://localhost:9080/javametrics-dash/ (development-time only)
+
+
 
 ## License
 
