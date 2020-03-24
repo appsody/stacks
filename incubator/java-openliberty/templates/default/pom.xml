@@ -6,8 +6,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent><!--required parent POM-->
-        <groupId>dev.appsody</groupId>
-        <artifactId>java-openliberty</artifactId>
+        <groupId>{{.stack.parentpomgroup}}</groupId>
+        <artifactId>{{.stack.parentpomid}}</artifactId>
         <version>{{.stack.parentpomrange}}</version>
         <relativePath/>
     </parent>
