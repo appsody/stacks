@@ -1,4 +1,4 @@
-language: go
+language: generic
 
 go:
   - 1.12.x
@@ -8,8 +8,6 @@ dist: bionic
 
 services:
   - docker
-install:
-  - make get-cli
 
 # Delete git repo setup from travis
 # and replace with git clone to master.
