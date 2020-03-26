@@ -8,7 +8,7 @@ ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/node_modules
 ENV APPSODY_WATCH_REGEX="^.*.js$"
 
-ENV APPSODY_PREP="npm install --prefix user-app && npm audit fix --prefix user-app"
+ENV APPSODY_PREP="npm install --prefix user-app"
 
 ENV APPSODY_RUN="npm start"
 ENV APPSODY_RUN_ON_CHANGE="npm start"
@@ -26,7 +26,7 @@ COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
 WORKDIR /project
-RUN npm install && npm audit fix
+RUN npm install
 
 ENV PORT=3000
 ENV NODE_PATH=/project/user-app/node_modules
