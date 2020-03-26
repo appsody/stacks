@@ -8,6 +8,18 @@ This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open 
 
 **Note:** Maven is provided by the Appsody stack container, allowing you to build, test, and debug your Java application without installing Maven locally. However, we recommend installing Maven locally for the best IDE experience.
 
+
+## Prerequisites
+
+This stack requires the [Open Liberty Operator](https://github.com/OpenLiberty/open-liberty-operator) to be installed in the cluster prior to deploying the stack.
+
+Operator user guide can be viewed [here](https://github.com/OpenLiberty/open-liberty-operator/blob/master/doc/user-guide.md)
+
+Aside from `OpenLibertyApplication` CRD used to deploy the application, Open Liberty Operator provides day-2 operations such as `OpenLibertyDump` and `OpenLibertyTrace`
+
+These additional [day-2 operations](https://github.com/OpenLiberty/open-liberty-operator/blob/master/doc/user-guide.md#day-2-operations) make it easier to collect debug data from the running Open Liberty pods in the Kubernetes cluster. 
+
+
 ## Templates
 
 Templates are used to create your local project and start your development. When initializing your project you will be provided with an Open Liberty template application.
