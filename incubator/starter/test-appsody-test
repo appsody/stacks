@@ -1,0 +1,6 @@
+#!/bin/sh
+
+. ./test-common.sh
+
+echo _____________ Do appsody test
+appsody test

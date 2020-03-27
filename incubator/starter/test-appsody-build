@@ -1,0 +1,7 @@
+#!/bin/sh
+
+. ./test-common.sh
+
+echo _____________ Do appsody build and ensure it is runnable
+appsody build
+docker run dev.local/ex-$STACK

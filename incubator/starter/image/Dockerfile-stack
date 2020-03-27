@@ -8,7 +8,7 @@ FROM registry.access.redhat.com/ubi7/ubi
 ENV APPSODY_MOUNTS=/:/project/userapp
 
 # Define a volume for dependencies to be stored between runs, for example
-ENV APPSODY_DEPS=/project/deps
+ENV APPSODY_DEPS=/project/userapp/deps
 
 # Directories to watch for changes in
 ENV APPSODY_WATCH_DIR=/project/userapp
@@ -21,7 +21,7 @@ ENV APPSODY_WATCH_REGEX="^.*.sh$"
 
 # Optional command executed before RUN/TEST/DEBUG - typically used to install any dependencies from
 # the user application
-ENV APPSODY_PREP=
+ENV APPSODY_PREP="ls -l /project /project/userapp /project/userapp/deps; mkdir -p /project/userapp/deps/installed-during-appsody-prep ~/.dep-cache/installed-during-appsody-prep"
 
 # Configurations for appsody run
 # APPSODY_RUN should specify the command to launch your application
@@ -60,3 +60,8 @@ WORKDIR /project
 
 # Expose the relevant ports (change this to be specific to your application).
 EXPOSE 8080
+
+# Run as a non-root user in group 0.
+RUN useradd -u 1001 -r -g 0 -s /usr/sbin/nologin -m default \
+  && chown -R 1001:0 /project
+USER default

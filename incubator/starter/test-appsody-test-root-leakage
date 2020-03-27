@@ -1,0 +1,8 @@
+#!/bin/sh
+
+. ./test-common.sh
+
+echo _____________ Do appsody test and check host fs is still usable
+appsody test --no-watcher
+mkdir -p deps/installed-on-host-after-test
+rm -rf deps
