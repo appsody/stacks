@@ -5,8 +5,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dev.appsody</groupId>
-    <artifactId>java-openliberty</artifactId>
+    <groupId>{{.stack.parentpomgroup}}</groupId>
+    <artifactId>{{.stack.parentpomid}}</artifactId>
     <version>{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}</version>
     <packaging>pom</packaging>
 
