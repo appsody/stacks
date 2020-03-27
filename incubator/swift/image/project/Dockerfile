@@ -8,7 +8,7 @@ RUN apt-get update \
  && echo 'Finished installing dependencies'
 
 # Install user-app dependencies
-WORKDIR "/project/user-app"
+WORKDIR "/project"
 COPY ./user-app ./
 
 # Build project, and discover executable name
@@ -25,8 +25,8 @@ RUN apt-get update \
  && echo 'Finished installing dependencies'
 
 WORKDIR "/project"
-COPY --from=builder /project/user-app/.build /project/.build
-COPY --from=builder /project/user-app/run.sh /project
+COPY --from=builder /project/.build /project/.build
+COPY --from=builder /project/run.sh /project
 
 ENV PORT 8080
 EXPOSE 8080
