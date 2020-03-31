@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "type": "node",
+            "name": "Debug MyPrj",
+            "request": "attach",
+            "address": "127.0.0.1",
+            "localRoot": "/Users/mchilant/MyPrj",
+            "remoteRoot": "/project/user-app",
+            "restart": true
+        },
+        {
+            "type": "java",
+            "name": "Debug my-blockchain",
+            "request": "attach",
+            "hostName": "127.0.0.1",
+            "projectName": "my-blockchain"
+        }
+    ]
+}

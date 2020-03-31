@@ -1,0 +1,22 @@
+name: Blockchain Client Open Liberty
+version: 0.1.0
+description: Blockchain Client Open Liberty & OpenJ9 using Maven
+license: Apache-2.0
+language: java
+maintainers:
+  - name: Nate Rykal
+    email: rykal@us.ibm.com
+    github-id: rykal
+  - name: Terrence Nixa
+    email: tnixa@us.ibm.com
+    github-id: tnixa
+  - name: Michele Chilanti
+    email: chilantim@us.ibm.com
+    github: chilanti
+default-template: default
+requirements:
+    docker-version: ">= 17.09.0"
+    appsody-version: ">= 0.5.0"
+templating-data:
+    libertyversion: '19.0.0.12'
+    parentpomrange: '[0.2, 0.3)'
