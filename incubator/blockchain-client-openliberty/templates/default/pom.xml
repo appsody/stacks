@@ -6,14 +6,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent><!--required parent POM TODO-->
-        <groupId>TODO</groupId>
-        <artifactId>TODO</artifactId>
+        <groupId>{{.stack.parentpomgroup}}</groupId>
+        <artifactId>{{.stack.parentpomid}}</artifactId>
         <version>{{.stack.parentpomrange}}</version>
         <relativePath/>
     </parent>
-    <!-- TODO -->
-    <groupId>TODO</groupId>
-    <artifactId>TODO</artifactId>
+
+    <groupId>{{.stack.parentpomgroup}}.starter.java-openliberty</groupId>
+    <artifactId>starter-app</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     
