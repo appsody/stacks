@@ -48,7 +48,9 @@
                     <groupId>io.openliberty.tools</groupId>
                     <artifactId>liberty-maven-plugin</artifactId>
                     <version>${version.liberty-maven-plugin}</version>
-                    <!--  No common plugin configuration currently in this stack, but it could be added here. -->
+                    <configuration>
+                        <serverStartTimeout>120</serverStartTimeout>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
