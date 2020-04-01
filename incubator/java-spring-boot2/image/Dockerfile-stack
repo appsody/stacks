@@ -8,7 +8,7 @@ LABEL vendor="Kabanero" \
 
 # Ensure up to date / patched OS
 COPY ./project/update.sh /update.sh
-RUN  /update.sh --system
+RUN  /update.sh
 
 RUN groupadd --gid 1000 java_group \
  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user \

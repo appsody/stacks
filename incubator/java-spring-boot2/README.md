@@ -75,7 +75,11 @@ The stack implementation provides for two Docker image specifications, as stack 
 
 The `finalimage` specification determines the image that will be used as the base for the application image. The `baseimage` is used as the base for the stack runtime (a development tool), and also for the "prep" stage of the application image build. By default, as shown above, a Debian image is used for `baseimage` and a Red Hat UBI image is used for `finalimage`. 
 
-The stack implementation provides for optionally updating the packages in these images during the Docker build. By default, the UBI base for the `finalimage` is not updated, while the stack image on the other hand does get updated during a build of the stack itself. 
+The stack implementation provides for optionally updating the packages in these images during the Docker build. By default, packages are not updated in either image. To "turn on" package update, modify the Dockerfile (or Dockerfile-stack) and add the `--system` option to the invocation of `update.sh`. 
+
+```
+RUN  /update.sh --system
+```
 
 For more information about UBI see:
 [Introducing the Red Hat Universal Base Image](https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image)
