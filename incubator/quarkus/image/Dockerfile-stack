@@ -12,7 +12,7 @@ RUN mvn -B install dependency:go-offline -DskipTests
 
 RUN mkdir -p /project/user-app/target
 ENV APPSODY_MOUNTS=".:/project/user-app"
-ENV APPSODY_DEPS="/project/user-app/target"
+ENV APPSODY_DEPS="/project/user-app/target;/home/quarkus/.m2"
 ENV APPSODY_PREP=""
 
 ENV APPSODY_RUN="./mvnw -B compile quarkus:dev"
