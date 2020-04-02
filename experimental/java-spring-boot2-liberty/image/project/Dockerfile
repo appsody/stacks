@@ -17,10 +17,7 @@ USER java_user
 
 # Copy and build the dev.appsody:java-openliberty parent pom
 COPY --chown=java_user:java_group ./pom.xml /project/pom.xml
-RUN cd /project && mvn -B install dependency:go-offline -DskipTests ; echo repo ; ls -R ~/.m2/repository ; echo done
-
-RUN cat /project/pom.xml
-RUN ls -R ~/.m2/repository
+RUN cd /project && mvn -B install dependency:go-offline -DskipTests
 
 # Prime image
 #   a) Prime .m2/repository with common artifacts 
