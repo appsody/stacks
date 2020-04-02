@@ -8,3 +8,5 @@ maintainers:
     email: probinso@redhat.com
     github-id: paulrobinson
 default-template: default
+requirements:
+   appsody-version: ">= 0.6.0"
