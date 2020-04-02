@@ -1,12 +1,12 @@
 <server description="Liberty server">
     <featureManager>
-        <feature>springBoot-2.0</feature>
         <feature>servlet-4.0</feature>
     </featureManager>
-    <quickStartSecurity userName="admin" userPassword="adminpwd"/>
-    <keyStore id="defaultKeyStore" location="key.jks" type="jks" password="mpKeystore"/>
+
+    <webApplication location="${artifactId}.war" contextRoot="/"/>
+
     <httpEndpoint host="*" httpPort="${default.http.port}" 
         httpsPort="${default.https.port}" id="defaultHttpEndpoint"/>
-    
-    <application type="spring" location="thin-starter-app-exec.jar" contextRoot="/"/>
+
+    <variable name="io_openliberty_guides_system_inMaintenance" value="false"/>
 </server>

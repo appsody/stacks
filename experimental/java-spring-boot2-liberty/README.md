@@ -4,6 +4,8 @@ The Spring Boot 2 stack supports the development of [Spring Boot 2](https://spri
 
 The Spring Boot 2 stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins. Specifically, this stack enables [Spring Boot Actuator](https://github.com/spring-projects/spring-boot/tree/master/spring-boot-project/spring-boot-actuator), the Prometheus Micrometer reporter, and OpenTracing support for Spring using a Jaeger tracer.
 
+This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.12`. It provides live reloading during development by utilizing the "dev mode" capability in the liberty-maven-plugin.  To see dev mode in action (though not in Appsody) check out this [shorter demo](https://openliberty.io/blog/2019/10/22/liberty-dev-mode.html) and this  [a bit longer demo](https://blog.sebastian-daschner.com/entries/openliberty-plugin-dev-mode).
+
 **Note:** Maven is provided by the Appsody stack container, allowing you to build, test, and debug your Java application without installing Maven locally. We recommend installing Maven locally for the best IDE experience.
 
 ## Templates
@@ -38,6 +40,28 @@ The default template provides a `pom.xml` file that references the parent POM de
     - Liveness endpoint: http://localhost:9080/actuator/liveness
     - Metrics endpoint: http://localhost:9080/actuator/metrics
     - Prometheus endpoint: http://localhost:9080/actuator/prometheus
+
+## Appsody local development operations: (run/debug/test )
+
+### RUN
+If you launch via `appsody run` then the liberty-maven-plugin will launch dev mode in "hot test" mode, where unit tests and integration tests get automatically re-executed after each detected change.  
+
+You can alternatively launch the container with `appsody run --interactive`, in which case the tests will only execute after you input `<Enter>` from the terminal, allowing you to make a set of application and/or test changes, and only execute the tests by pressing `<Enter>` when ready. 
+### DEBUG
+The `appsody debug` launches the Open Liberty server in debug mode, listening for the debugger on port 7777 (but not waiting, suspended).  Otherwise it allows you to perform the same iteractive, interactive testing as the `appsody run` command.
+
+### TEST
+The command `appsody test` launches the Open Liberty server, runs integration tests, and then exits with a "success" or "failure" return code (and message).  If you want to run tests interactively, then just use `appsody run`, since dev mode will run allow you to iteratively test and develop interactively.
+
+## Notes to Windows 10 Users
+
+### Shared Drive and Permission Setup 
+* See the instructions [here](https://appsody.dev/docs/docker-windows-aad/) for information on setting up "Shared Drives" and permissions to enable mounting the host filesystem from the appsody container.
+
+### Changes from Windows 10 host side not detected within container
+* Because of an issue in Docker for Windows 10, changes made from the host side to the application may not be detected by the liberty-maven-plugin dev mode watcher running inside the Appsody Docker container, and thus the normal expected compile, app update, test execution etc. may not run.
+* At the time of the release of this java-openliberty stack, this problem seems to be getting the active attention of the Docker Desktop for Windows developement team, (e.g. see [this issue](https://github.com/docker/for-win/issues/5530)). Naturally, updating your Docker Desktop for Windows installation might help, however, we can not simply point to a recommended version that is known to work for all users.   
+* **Workaround**: This may be worked around by making the changes from the host, and then doing a `touch` of the corresponding files from within the container.
 
 ## Health checks, readiness and liveness
 

@@ -1,47 +1,80 @@
-FROM {{.stack.image.namespace}}/{{.stack.id}}:{{.stack.semver.major}}.{{.stack.semver.minor}} as compile
+# Step 1: Build the user's application
+FROM kabanero/ubi8-maven:0.3.1 as compile
 
-COPY . /project
+RUN  groupadd java_group \
+   && useradd --gid java_group --shell /bin/bash --create-home java_user \
+   && mkdir -p /mvn/repository \
+   && chown -R java_user:java_group /mvn \
+   && mkdir -p /config \
+   && chown -R java_user:java_group /config \
+# make a well known place for shared library jars seperate from the rest of the defaultServer contents (to help with caching)
+   && mkdir /configlibdir \
+   && chown -R java_user:java_group /configlibdir \
+   &&  mkdir /shared \
+   && chown -R java_user:java_group /shared 
 
-WORKDIR /project/user-app
+USER java_user
 
-# Ensure parent pom is used for compile
-RUN cd /project && mvn -B install dependency:go-offline -DskipTests
+# Copy and build the dev.appsody:java-openliberty parent pom
+COPY --chown=java_user:java_group ./pom.xml /project/pom.xml
+RUN cd /project && mvn -B install dependency:go-offline -DskipTests ; echo repo ; ls -R ~/.m2/repository ; echo done
 
-# Build version range check util for project/parent pom
-RUN  /project/util/check_version build
+RUN cat /project/pom.xml
+RUN ls -R ~/.m2/repository
 
-# Build project
-RUN ../validate.sh && mvn -B install -DskipTests
+# Prime image
+#   a) Prime .m2/repository with common artifacts 
+#   b) Create target/liberty/wlp/usr/servers/defaultServer dir
+COPY --chown=java_user:java_group ./preload-m2-pom.xml /project/user-app/preload-m2-pom.xml
+RUN cd /project/user-app && \ 
+    mvn -B -f /project/user-app/preload-m2-pom.xml liberty:install-server dependency:go-offline && \
+    rm /project/user-app/preload-m2-pom.xml
 
-# Gather built resources to staging dirs
-RUN cd target && \
-    unzip *.zip && \
-    mkdir -p /config && \
-    mv wlp/usr/servers/*/* /config/ && \
-    mv wlp/usr/shared/resources/lib.index.cache /lib.index.cache
+# Copy and run a simple version check
+COPY --chown=java_user:java_group ./util /project/util
+RUN     /project/util/check_version build
 
-FROM open-liberty:kernel-java8-openj9
+# Copy the validate.sh script and application pom.xml
+COPY --chown=java_user:java_group ./validate.sh /project/user-app/validate.sh
+# -- This is the first app-specific piece --
+COPY --chown=java_user:java_group ./user-app/pom.xml /project/user-app/pom.xml
+# Validate 
+RUN cd /project/user-app && ./validate.sh build
 
-# Ensure up to date / patched OS
-USER root
-RUN  apt-get -qq update \
-  && DEBIAN_FRONTEND=noninteractive apt-get -qq upgrade -y \
-  && apt-get -qq clean \
-  && rm -rf /tmp/* /var/lib/apt/lists/*
-USER 1001
+# Copy the rest of the application source
+COPY --chown=java_user:java_group ./user-app /project/user-app
 
-# Bring in built artifacts from previous stage
+# Build (and run unit tests) 
+#  also liberty:create copies config from src->target
+#  also remove quick-start-security.xml since it's convenient for local dev mode but should not be in the production image.
+RUN cd /project/user-app && \
+    rm -f src/main/liberty/config/configDropins/defaults/quick-start-security.xml && \
+    mvn -Pappsody-build -B liberty:create package
+
+# process any resources or shared libraries - if they are present in the dependencies block for this project (there may be none potentially)
+# test to see if each is present and move to a well known location for later processing in the next stage
+# 
+RUN cd /project/user-app/target/liberty/wlp/usr/servers && \
+    if [ -d ./defaultServer/lib ]; then mv ./defaultServer/lib /configlibdir; fi && \
+    if [ ! -d /configlibdir/lib ]; then mkdir /configlibdir/lib; fi && \
+    mv -f defaultServer/* /config/ && \
+    if [ -d ../shared ]; then mv ../shared/* /shared/; fi
+
+# Step 2: Package Open Liberty image
+FROM openliberty/open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9-ubi
+
+#2a) copy any resources 
+COPY --chown=1001:0 --from=compile /shared /opt/ol/wlp/usr/shared/
+
+# 2b) next copy shared library
+#      but can't assume config/lib exists - copy from previous stage to a tmp holding place and test
+COPY --chown=1001:0 --from=compile /configlibdir/ /config
+
+# 2c) Server config, bootstrap.properties, and everything else
 COPY --chown=1001:0 --from=compile /config/ /config/
-COPY --chown=1001:0 --from=compile /lib.index.cache/ /lib.index.cache/
 
-# Set metadata
-ARG artifactId=appsody-spring-liberty
-ARG version=1.0-SNAPSHOT
-ENV JVM_ARGS=""
 
-LABEL org.opencontainers.image.version="${version}"
-LABEL org.opencontainers.image.title="${artifactId}"
-LABEL appsody.stack="{{.stack.image.namespace}}/{{.stack.id}}:{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}"
-
-EXPOSE 9080
-EXPOSE 9443
+# 2d) Changes to the application binary
+COPY --chown=1001:0 --from=compile /project/user-app/target/*.[ew]ar /config/apps
+RUN configure.sh && \
+    chmod 664 /opt/ol/wlp/usr/servers/defaultServer/configDropins/defaults/keystore.xml

@@ -1,49 +1,43 @@
-FROM adoptopenjdk/openjdk8-openj9
+FROM kabanero/ubi8-maven:0.3.1
+RUN  groupadd --gid 1000 java_group \
+  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user \
+  && mkdir -p /mvn/repository \
+  && chown -R java_user:java_group /mvn \
+  && mkdir -p /opt/ol \
+  && chown -R java_user:java_group /opt
 
-USER root
-RUN  apt-get -qq update \
-  && apt-get -qq install -y curl maven wget unzip xmlstarlet \
-  && DEBIAN_FRONTEND=noninteractive apt-get -qq upgrade -y \
-  && apt-get -qq clean \
-  && rm -rf /tmp/* /var/lib/apt/lists/*
 
 COPY ./LICENSE /licenses/
-COPY ./project /project
-COPY ./config /config
+COPY --chown=java_user:java_group ./project /project
+COPY --chown=java_user:java_group ./config /config
 
-WORKDIR /project
+USER java_user
 
-# Build utility for version range processing
-# Install parent pom
-# Install maven wrapper in /project
-RUN mkdir -p /mvn/repository \
- && /project/util/check_version build \
- && cd /project \
- && mvn -B -Dmaven.repo.local=/mvn/repository install dependency:go-offline -DskipTests \
- && mvn -B -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
+RUN  /project/util/check_version build
+
+WORKDIR /project/
+
+RUN mkdir -p /mvn/repository
+RUN mvn -e help:evaluate -Dexpression=maven.version -DforceStdout
+RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
+RUN mvn -B -Pstack-image-package -Dmaven.repo.local=/mvn/repository liberty:install-server install dependency:go-offline
+RUN chmod -R 777 /opt/ol 
+
 
 WORKDIR /project/user-app
 
-ENV APPSODY_MOUNTS="~/.m2/repository:/mvn/repository;src:/project/user-app/src;pom.xml:/project/user-app/pom.xml"
-ENV APPSODY_DEPS=
+ENV APPSODY_MOUNTS="~/.m2/repository:/mvn/repository;.:/project/user-app"
 
-ENV APPSODY_WATCH_DIR=/project/user-app
-ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/target
-ENV APPSODY_WATCH_REGEX="^.*(.xml|.java|.properties)$"
+ENV APPSODY_USER_RUN_AS_LOCAL=true
 
-ENV APPSODY_INSTALL="../validate.sh && mvn -B -Dmaven.repo.local=/mvn/repository install -DskipTests"
+# Allow validate to distinguish build via APPSODY_DEV_MODE
+ENV APPSODY_PREP="/project/run-stack.sh prep"
 
-ENV APPSODY_RUN="mvn -B -Dmaven.repo.local=/mvn/repository liberty:run"
-ENV APPSODY_RUN_ON_CHANGE="mvn -Dmaven.repo.local=/mvn/repository package -DskipTests"
-ENV APPSODY_RUN_KILL=false
+ENV APPSODY_RUN="/project/run-stack.sh run"
 
-ENV APPSODY_DEBUG="mvn -B -Dmaven.repo.local=/mvn/repository liberty:debug"
-ENV APPSODY_DEBUG_ON_CHANGE="mvn -Dmaven.repo.local=/mvn/repository package -DskipTests"
-ENV APPSODY_DEBUG_KILL=false
+ENV APPSODY_DEBUG="/project/run-stack.sh debug"
 
-ENV APPSODY_TEST="mvn -B -Dmaven.repo.local=/mvn/repository verify"
-ENV APPSODY_TEST_ON_CHANGE=""
-ENV APPSODY_TEST_KILL=false
+ENV APPSODY_TEST="/project/run-stack.sh test"
 
 ENV PORT=9080
 

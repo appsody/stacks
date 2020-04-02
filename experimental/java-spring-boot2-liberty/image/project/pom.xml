@@ -4,7 +4,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <name>Appsody Spring Boot2 on Open Liberty stack</name>
-    <description>Parent POM file for Kabanero project to facilitate usage of Spring Boot on OpenShift.</description>
+    <description>Parent POM file for Appsody project to facilitate usage of Spring Boot on OpenShift.</description>
     <url>https://appsody.dev</url>
 
     <licenses>
@@ -18,9 +18,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>net.wasdev.wlp.maven.parent</groupId>
-        <artifactId>liberty-maven-app-parent</artifactId>
-        <version>2.6.4</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>2.1.12.RELEASE</version>
         <relativePath></relativePath>
     </parent>
 
@@ -30,30 +30,31 @@
     <packaging>pom</packaging>
 
     <properties>
+        <!-- Required library versions -->
+        <spring-boot.version>2.1.12.RELEASE</spring-boot.version>
+        <opentracing-spring-jaeger-web-starter.version>2.0.0</opentracing-spring-jaeger-web-starter.version>
+
         <java.version>1.8</java.version>
         <kotlin.version>1.3.40</kotlin.version>
+
         <kotlin.compiler.jvmTarget>${java.version}</kotlin.compiler.jvmTarget>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!-- Plugins -->
-        <version.maven-war-plugin>3.2.2</version.maven-war-plugin>
-        <version.dockerfile-maven-plugin>1.4.10</version.dockerfile-maven-plugin>
-        <version.maven-surefire-plugin>3.0.0-M1</version.maven-surefire-plugin>
-        <version.maven-failsafe-plugin>3.0.0-M1</version.maven-failsafe-plugin>
+
         <!-- OpenLiberty runtime -->
         <liberty.groupId>io.openliberty</liberty.groupId>
         <liberty.artifactId>openliberty-runtime</liberty.artifactId>
-        <version.openliberty-runtime>19.0.0.7</version.openliberty-runtime>
+        <version.openliberty-runtime>{{.stack.libertyversion}}</version.openliberty-runtime>
+        <version.liberty-maven-plugin>3.2</version.liberty-maven-plugin>
         <http.port>9080</http.port>
         <https.port>9443</https.port>
         <packaging.type>usr</packaging.type>
         <app.name>${project.artifactId}</app.name>
         <package.file>${project.build.directory}/${app.name}.zip</package.file>
-        <!-- Required library versions -->
-        <spring-boot.version>2.1.6.RELEASE</spring-boot.version>
-        <opentracing-spring-jaeger-web-starter.version>2.0.0</opentracing-spring-jaeger-web-starter.version>
+        <liberty.var.artifactId>${project.artifactId}</liberty.var.artifactId>
     </properties>
 
     <repositories>
@@ -61,71 +62,11 @@
             <id>localrepository</id>
             <url>/mvn/repository</url>
         </repository>
-    </repositories>
-
-    <!-- maven-enforcer-plugin -->
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-                <executions>
-                    <execution>
-                    <goals>
-                        <goal>repackage</goal>
-                    </goals>
-                    <configuration>
-                            <classifier>exec</classifier>
-                    </configuration>
-                    </execution>
-                </executions>
-             </plugin>
-            <!-- Enforcing Open Liberty and JDK Version -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0-M2</version>
-                <executions>
-                <execution>
-                    <id>enforce-versions</id>
-                    <goals>
-                        <goal>enforce</goal>
-                    </goals>
-                    <configuration>
-                        <rules>
-                            <requireJavaVersion>
-                                <version>[1.8,1.9)</version>
-                            </requireJavaVersion>
-                            <requireProperty>
-                                <property>version.openliberty-runtime</property>
-                                <regex>19.0.0.7</regex>
-                                <regexMessage>Open Liberty runtime version must be 19.0.0.7</regexMessage>
-                            </requireProperty>
-                        </rules>
-                    </configuration>
-                </execution>
-            </executions>
-            </plugin>
-        </plugins>
-    </build>
+    </repositories>    
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>io.openliberty.features</groupId>
-                <artifactId>features-bom</artifactId>
-                <version>${version.openliberty-runtime}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+            <!-- required dependency versions -->
         </dependencies>
     </dependencyManagement>
 
@@ -139,30 +80,294 @@
 
         <!-- Core -->
         <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-test</artifactId>
-          <scope>test</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
-
+    
         <!--Monitoring -->
         <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-actuator</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-          <groupId>io.micrometer</groupId>
-          <artifactId>micrometer-registry-prometheus</artifactId>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
+    
+        <!-- Distributed tracing with OpenTracing. Define requried configuration for production use: 
+            https://github.com/opentracing-contrib/java-spring-jaeger
+            -->
+        <dependency>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-spring-jaeger-web-starter</artifactId>
+            <version>${opentracing-spring-jaeger-web-starter.version}</version>
+        </dependency>
+    </dependencies>
 
-        <!-- Distributed tracing with OpenTracing -->
-        <dependency>
-          <groupId>io.opentracing.contrib</groupId>
-          <artifactId>opentracing-spring-jaeger-web-starter</artifactId>
-          <version>${opentracing-spring-jaeger-web-starter.version}</version>
-        </dependency>
-      </dependencies>
+    <!-- maven-enforcer-plugin -->
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>io.openliberty.tools</groupId>
+                    <artifactId>liberty-maven-plugin</artifactId>
+                    <version>${version.liberty-maven-plugin}</version>
+                    <!--  No common plugin configuration currently in this stack, but it could be added here. -->
+                </plugin>
+            </plugins>
+        </pluginManagement>        
+        <plugins>
+            <!-- Enforcing OpenLiberty and JDK Version -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[1.8,1.9)</version>
+                                </requireJavaVersion>
+                                <requireProperty>
+                                    <property>version.openliberty-runtime</property>
+                                    <regex>{{.stack.libertyversion}}</regex>
+                                    <regexMessage>OpenLiberty runtime version must be {{.stack.libertyversion}}</regexMessage>
+                                </requireProperty>
+                        
+                                <!-- Restrict the Liberty Maven plugin version -->
+                                <bannedPlugins>
+                                    <message>This project is only permitted to use Liberty Maven Plugin version ${version.liberty-maven-plugin} from io.openliberty.tools. i.e. io.openliberty.tools:liberty-maven-plugin:3.2</message>
+                                    <excludes>
+                                        <exclude>io.openliberty.tools:liberty-maven-plugin:*</exclude>
+                                        <exclude>net.wasdev.wlp.maven.plugins:liberty-maven-plugin:*</exclude>
+                                    </excludes>
+                                    <includes>
+                                        <include>io.openliberty.tools:liberty-maven-plugin:${version.liberty-maven-plugin}</include>
+                                    </includes>
+                                </bannedPlugins>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <packagingExcludes>pom.xml</packagingExcludes>
+                </configuration>
+            </plugin>
+            <!-- Enable liberty-maven plugin -->
+            <plugin>
+                <groupId>io.openliberty.tools</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <configuration>
+                    <stripVersion>true</stripVersion>
+                    <serverStartTimeout>120</serverStartTimeout>
+                    <bootstrapProperties>
+                        <default.http.port>${http.port}</default.http.port>
+                        <default.https.port>${https.port}</default.https.port>
+                        <app.context.root>${app.name}</app.context.root>
+                    </bootstrapProperties>
+                </configuration>
+            </plugin>
+            <!-- Plugin to run unit tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <id>default-test</id>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/it/**</exclude>
+                            </excludes>
+                            <reportsDirectory>
+                                ${project.build.directory}/test-reports/unit
+                            </reportsDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Plugin to run functional tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>integration-test</phase>
+                        <id>default-cli</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/it/**</include>
+                            </includes>
+                            <systemPropertyVariables>
+                                <liberty.test.port>${http.port}</liberty.test.port>
+                                <war.name>${app.name}</war.name>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>verify-results</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <summaryFile>
+                        ${project.build.directory}/test-reports/it/failsafe-summary.xml
+                    </summaryFile>
+                    <reportsDirectory>
+                        ${project.build.directory}/test-reports/it
+                    </reportsDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+            <!-- This profile is used when the stack image is initially built 
+                during "appsody stack package". The runtimeInstallDirectory 
+                property is configured in the Liberty Maven plugin to specify 
+                where to install the Open Liberty runtime in the Docker image. --> 
+            <profile>
+                <id>stack-image-package</id>
+                <activation>
+                    <activeByDefault>false</activeByDefault>
+                </activation>
+                <properties>
+                    <wlp.install.dir>/opt/ol/wlp</wlp.install.dir>
+                </properties>
+                <build>
+                    <pluginManagement>
+                        <plugins>
+                            <plugin>
+                                <groupId>io.openliberty.tools</groupId>
+                                <artifactId>liberty-maven-plugin</artifactId>
+                                <version>${version.liberty-maven-plugin}</version>
+                                <configuration>
+                                    <runtimeInstallDirectory>/opt/ol</runtimeInstallDirectory>
+                                    <runtimeArtifact>
+                                        <groupId>${liberty.groupId}</groupId>
+                                        <artifactId>${liberty.artifactId}</artifactId>
+                                        <version>${version.openliberty-runtime}</version>
+                                        <type>zip</type>
+                                    </runtimeArtifact>
+                                </configuration>
+                            </plugin>
+                        </plugins>
+                    </pluginManagement>
+                </build>
+            </profile>
+            
+            <!-- This profile is used when the stack image is run via "appsody run/test/debug". 
+                The installDirectory property is configured in the Liberty Maven plugin to specify 
+                where the existing Open Liberty installation is in the Docker image. --> 
+            <profile>
+                <id>local-dev</id>
+                <activation>
+                    <activeByDefault>false</activeByDefault>
+                </activation>
+                <properties>
+                    <wlp.install.dir>/opt/ol/wlp</wlp.install.dir>
+                </properties>
+                <build>
+                    <pluginManagement>
+                        <plugins>
+                            <plugin>
+                                <groupId>io.openliberty.tools</groupId>
+                                <artifactId>liberty-maven-plugin</artifactId>
+                                <version>${version.liberty-maven-plugin}</version>
+                                <configuration>
+                                    <installDirectory>/opt/ol/wlp</installDirectory>
+                                    <runtimeArtifact>
+                                        <groupId>${liberty.groupId}</groupId>
+                                        <artifactId>${liberty.artifactId}</artifactId>
+                                        <version>${version.openliberty-runtime}</version>
+                                        <type>zip</type>
+                                    </runtimeArtifact>
+                                </configuration>
+                            </plugin>
+                        </plugins>
+                    </pluginManagement>
+                </build>
+            </profile>
+    
+    
+            <!-- This profile is used during "appsody build" where just any image will do, so it's
+                better to start small, and there's no benefit in caching a more complete artifact.  -->
+            <profile>
+                <id>appsody-build</id>
+                <activation>
+                    <activeByDefault>false</activeByDefault>
+                </activation>
+                <build>
+                    <pluginManagement>
+                        <plugins>
+                            <plugin>
+                                <groupId>io.openliberty.tools</groupId>
+                                <artifactId>liberty-maven-plugin</artifactId>
+                                <version>${version.liberty-maven-plugin}</version>
+                                <configuration>
+                                    <runtimeArtifact>
+                                        <groupId>${liberty.groupId}</groupId>
+                                        <artifactId>openliberty-kernel</artifactId>
+                                        <version>${version.openliberty-runtime}</version>
+                                        <type>zip</type>
+                                    </runtimeArtifact>
+                                    <installDirectory>${project.build.directory}/liberty/wlp</installDirectory>
+                                </configuration>
+                            </plugin>
+                        </plugins>
+                    </pluginManagement>
+                </build>
+            </profile>
+    
+            <!-- Last, if no other profile is activated, we are in host mode, where we don't assumed an already-installed OL -->
+            <profile>
+                <id>default-profile</id>
+                <activation>
+                    <activeByDefault>true</activeByDefault>
+                </activation>
+                <build>
+                    <pluginManagement>
+                        <plugins>
+                            <plugin>
+                                <groupId>io.openliberty.tools</groupId>
+                                <artifactId>liberty-maven-plugin</artifactId>
+                                <version>${version.liberty-maven-plugin}</version>
+                                <configuration>
+                                    <runtimeArtifact>
+                                        <groupId>${liberty.groupId}</groupId>
+                                        <artifactId>openliberty-kernel</artifactId>
+                                        <version>${version.openliberty-runtime}</version>
+                                        <type>zip</type>
+                                    </runtimeArtifact>
+                                    <runtimeInstallDirectory>${project.build.directory}/liberty</runtimeInstallDirectory>
+                                </configuration>
+                            </plugin>
+                        </plugins>
+                    </pluginManagement>
+                </build>
+            </profile>
+        </profiles>
+
 </project>
