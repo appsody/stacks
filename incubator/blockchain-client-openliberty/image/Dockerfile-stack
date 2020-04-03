@@ -1,0 +1,3 @@
+FROM kabanero/java-openliberty:0.2
+COPY ./project/pom.xml /project
+COPY ./project/run-stack.sh /project
