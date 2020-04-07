@@ -12,14 +12,12 @@ import org.hyperledger.fabric.gateway.Wallet;
 
 import application.wm.WalletManagerDelegate;
 
-public class GatewayFactory {
+public class ConnectionManager {
 
     private static HashMap<String, Gateway> gateways;
     private static String syncHelper = "Helper";
-    private static final String FABRIC_CHANNEL_ENV_VAR = "FABRIC_CHANNEL";
-    private static final String FABRIC_CONTRACT_ENV_VAR = "FABRIC_CONTRACT";
 
-    public GatewayFactory() {
+    public ConnectionManager() {
         synchronized (syncHelper) {
             if (gateways == null) {
                 gateways = new HashMap<String, Gateway>();
@@ -36,7 +34,8 @@ public class GatewayFactory {
             if (gateway == null) { // Call wallet manager here
                 ByteArrayInputStream connProfileIS = new ByteArrayInputStream(
                         ConnectionConfiguration.getConnectionProfile().getBytes());
-                Wallet wallet = WalletManagerDelegate.getWalletManager().getWallet();
+                WalletManagerDelegate wmd = new WalletManagerDelegate();
+                Wallet wallet = wmd.getWallet();
                 try {
                     builder = Gateway.createBuilder().identity(wallet, id).networkConfig(connProfileIS).discovery(true);
                 } catch (IOException e) {
@@ -53,9 +52,9 @@ public class GatewayFactory {
     }
 
     public Contract getContract(String identityId) {
-        String contractName = System.getenv().get(FABRIC_CONTRACT_ENV_VAR);
-        String channel = System.getenv().get(FABRIC_CHANNEL_ENV_VAR);
+        
+        String channel = ConnectionConfiguration.getChannel();
 
-        return getGateway(identityId).getNetwork(channel).getContract(contractName);
+        return getGateway(identityId).getNetwork(channel).getContract(ConnectionConfiguration.getContractId());
     }
 }

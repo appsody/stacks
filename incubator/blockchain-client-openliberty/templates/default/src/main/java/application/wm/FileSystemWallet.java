@@ -9,7 +9,7 @@ import org.hyperledger.fabric.gateway.Wallet;
 
 public class FileSystemWallet implements WalletManager {
     static final String WALLET_PATH_ENV_VAR="WALLET_PATH";
-
+    @Override
     public Wallet getWallet() {
         String walletPath = System.getenv().get(WALLET_PATH_ENV_VAR);
 
