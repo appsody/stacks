@@ -28,41 +28,28 @@ import org.hyperledger.fabric.gateway.Contract;
 import org.hyperledger.fabric.gateway.ContractException;
 import org.hyperledger.fabric.gateway.Gateway;
 import org.hyperledger.fabric.gateway.Network;
-import application.api.model.Asset;
+import application.model.MyAsset;
+import application.exceptions.AssetException;
+import application.exceptions.AssetNotFoundException;
 
-@Path("/assets")
-@OpenAPIDefinition(info = @Info(title = "Blockchain Asset Web Service", version = "0.1", description = "Restful Web Service for blockchain transactions.", contact = @Contact(url = "https://www.ibm.com/blockchain")), externalDocs = @ExternalDocumentation(description = "https://www.ibm.com/blockchain", url = "https://www.ibm.com/blockchain"))
-public class AssetWebservice {
+@Path("/myassets")
+@OpenAPIDefinition(info = @Info(title = "Blockchain MyAsset Web Service", version = "0.1", description = "Restful Web Service for blockchain transactions.", contact = @Contact(url = "https://www.ibm.com/blockchain")), externalDocs = @ExternalDocumentation(description = "https://www.ibm.com/blockchain", url = "https://www.ibm.com/blockchain"))
+public class AssetService {
 
     @GET
     @Path("/{id}")
     @Produces("application/json")
     @APIResponses(value = {
-        @APIResponse(responseCode = "200", description = "Asset", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Asset.class))),
-        @APIResponse(responseCode = "400", description = "Error reading asset", content = @Content(mediaType = "application/json")),    
-        @APIResponse(responseCode = "404", description = "Asset not found", content = @Content(mediaType = "application/json")) }) 
-    @Operation(summary = "Retrieve asset from the blockchain", description = "Retrieves the asset from the blockchain.")
-    @Tag(name = "Assets")
-    public Response getAsset(@PathParam("id") String id) throws AssetNotFoundException, AssetException {
+        @APIResponse(responseCode = "200", description = "MyAsset", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MyAsset.class))),
+        @APIResponse(responseCode = "400", description = "Error reading MyAsset", content = @Content(mediaType = "application/json")),    
+        @APIResponse(responseCode = "404", description = "MyAsset not found", content = @Content(mediaType = "application/json")) }) 
+    @Operation(summary = "Retrieve MyAsset from the blockchain", description = "Retrieves the MyAsset from the blockchain.")
+    @Tag(name = "MyAssets")
+    public Response getMyAsset(@PathParam("id") String id) throws AssetNotFoundException, AssetException {
 
         byte[] result = new byte[0];
 
         return Response.ok().entity(new String(result, StandardCharsets.UTF_8)).build();
-    }
-
-    @GET
-    @Path("/{id}/exists")
-    @Produces("application/json")
-    @APIResponses(value = {
-        @APIResponse(responseCode = "200", description = "boolean", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Asset.class))),
-    @Operation(summary = "Retrieve asset from the blockchain", description = "Retrieves the asset from the blockchain.")
-    @Tag(name = "Assets")
-    public Response assetExists(@PathParam("id") String id) throws AssetNotFoundException, AssetException {
-
-        boolean exists = true;
-        HashMap<String,Boolean> result = new HashMap<String,Boolean>();
-
-        return Response.ok().entity(result.put("exists", exists)).build();
     }
 
     @PUT
@@ -70,13 +57,12 @@ public class AssetWebservice {
     @Consumes("application/json")
     @Produces("application/json")
     @APIResponses(value = {
-        @APIResponse(responseCode = "204", description = "Asset updated"),
-        @APIResponse(responseCode = "400", description = "Error reading asset", content = @Content(mediaType = "application/json")),    
-        @APIResponse(responseCode = "404", description = "Asset not found", content = @Content(mediaType = "application/json")) }) 
-    @Operation(summary = "Update asset on the blockchain", description = "Updates an asset on the blockchain.")
-    @Tag(name = "Assets")
-    public Response updateAsset(@PathParam("id") String id, Asset asset) {
-
+        @APIResponse(responseCode = "204", description = "MyAsset updated"),
+        @APIResponse(responseCode = "400", description = "Error reading MyAsset", content = @Content(mediaType = "application/json")),    
+        @APIResponse(responseCode = "404", description = "MyAsset not found", content = @Content(mediaType = "application/json")) }) 
+    @Operation(summary = "Update MyAsset on the blockchain", description = "Updates an MyAsset on the blockchain.")
+    @Tag(name = "MyAssets")
+    public Response updateMyAsset(@PathParam("id") String id, MyAsset asset) {
 
         return Response.noContent().build();
     }
@@ -85,13 +71,12 @@ public class AssetWebservice {
     @Path("/{id}")
     @Produces("application/json")
     @APIResponses(value = {
-        @APIResponse(responseCode = "204", description = "Asset Deleted"),
-        @APIResponse(responseCode = "400", description = "Error reading asset", content = @Content(mediaType = "application/json")),    
-        @APIResponse(responseCode = "404", description = "Asset not found", content = @Content(mediaType = "application/json")) }) 
-    @Operation(summary = "Deletes asset from the blockchain", description = "Deletes asset from the blockchain.")
-    @Tag(name = "Assets")
-    public Response deleteAsset(@PathParam("id") String id) {
-
+        @APIResponse(responseCode = "204", description = "MyAsset Deleted"),
+        @APIResponse(responseCode = "400", description = "Error reading MyAsset", content = @Content(mediaType = "application/json")),    
+        @APIResponse(responseCode = "404", description = "MyAsset not found", content = @Content(mediaType = "application/json")) }) 
+    @Operation(summary = "Deletes MyAsset from the blockchain", description = "Deletes MyAsset from the blockchain.")
+    @Tag(name = "MyAssets")
+    public Response deleteMyAsset(@PathParam("id") String id) {
 
         return Response.noContent().build();
     }    
@@ -100,13 +85,12 @@ public class AssetWebservice {
     @Consumes("application/json")
     @Produces("application/json")
     @APIResponses(value = {
-        @APIResponse(responseCode = "204", description = "Asset Created"),
-        @APIResponse(responseCode = "400", description = "Error reading asset", content = @Content(mediaType = "application/json")),    
-        @APIResponse(responseCode = "404", description = "Asset not found", content = @Content(mediaType = "application/json")) }) 
-    @Operation(summary = "Create asset on the blockchain", description = "Create asset on the blockchain.")
-    @Tag(name = "Assets")
-    public Response createAsset(Asset asset) {
-
+        @APIResponse(responseCode = "204", description = "MyAsset Created"),
+        @APIResponse(responseCode = "400", description = "Error reading MyAsset", content = @Content(mediaType = "application/json")),    
+        @APIResponse(responseCode = "404", description = "MyAsset not found", content = @Content(mediaType = "application/json")) }) 
+    @Operation(summary = "Create MyAsset on the blockchain", description = "Create MyAsset on the blockchain.")
+    @Tag(name = "MyAssets")
+    public Response createMyAsset(MyAsset asset) {
 
         return Response.noContent().build();
     }
