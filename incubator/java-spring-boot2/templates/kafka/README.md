@@ -20,6 +20,11 @@ This will initialize a Spring Boot 2 project using the kafka template.
 ```
 appsody run --docker-options "--env KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}"
 ```
+E.g:
+```
+appsody run --network kafka_default --docker-options "--env KAFKA_BOOTSTRAP_SERVERS=kafka:9092"
+```
+`DOCKER_NETWORK_NAME` is the name of the docker network in which the kafka container is running.
 
 This template expects `KAFKA_BOOTSTRAP_SERVERS` environment variable to be set to addresses of the bootstrap servers of kafka.
 
