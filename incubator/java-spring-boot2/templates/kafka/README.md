@@ -20,6 +20,7 @@ This will initialize a Spring Boot 2 project using the kafka template.
 ```
 appsody run --docker-options "--env KAFKA_BOOTSTRAP_SERVERS=${KAFKA_BOOTSTRAP_SERVERS}"
 ```
+
 This template expects `KAFKA_BOOTSTRAP_SERVERS` environment variable to be set to addresses of the bootstrap servers of kafka.
 
 This launches a Docker container that will run your application in the foreground, exposing it on port 8080. You should see that the producer publishes message to the kafka topic and the consumer reads it. The application will be restarted automatically when changes are detected.

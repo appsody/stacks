@@ -14,7 +14,7 @@ import java.util.UUID;
 public class KafkaProducer {
 
     @Autowired
-    KafkaTemplate kafkaTemplate;
+    KafkaTemplate<String, String> kafkaTemplate;
     
 	private static String TOPIC_NAME = "orders";
 

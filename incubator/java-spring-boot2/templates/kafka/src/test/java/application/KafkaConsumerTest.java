@@ -32,7 +32,7 @@ public class KafkaConsumerTest {
 	private static String TOPIC_NAME = "orders";
 
 	@Autowired
-	KafkaTemplate kafkaTemplate;
+	KafkaTemplate<String, String> kafkaTemplate;
 
 	@Autowired
 	KafkaConsumer consumer;

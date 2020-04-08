@@ -10,7 +10,7 @@ import java.util.concurrent.CountDownLatch;
 public class KafkaConsumer {
     private final CountDownLatch countDownLatch = new CountDownLatch(1);
 
-    @KafkaListener(topics = "orders", groupId = "order-service")
+    @KafkaListener(topics = "orders", groupId = "orders-service")
     public void receiveString(String message) {
         System.out.println("Receiving message = " + message);
         countDownLatch.countDown();
