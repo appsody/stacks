@@ -5,7 +5,7 @@
     <parent>
         <groupId>dev.appsody</groupId>
         <artifactId>quarkus</artifactId>
-        <version>[0.2,0.3)</version>
+        <version>[0.3,0.4)</version>
     </parent>
 
     <groupId>org.acme</groupId>
@@ -32,6 +32,10 @@
     <build>
         <plugins>
             <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler-plugin.version}</version>
+            </plugin>
+            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire-plugin.version}</version>
                 <configuration>
@@ -43,7 +47,7 @@
             <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
-                <version>${quarkus.version}</version>
+                <version>${quarkus-plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -69,7 +73,7 @@
                     <plugin>
                         <groupId>io.quarkus</groupId>
                         <artifactId>quarkus-maven-plugin</artifactId>
-                        <version>${quarkus.version}</version>
+                        <version>${quarkus-plugin.version}</version>
                         <executions>
                             <execution>
                                 <goals>
