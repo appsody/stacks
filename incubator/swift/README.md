@@ -52,7 +52,7 @@ You can enable an existing project as follows:
 2. Initialize your Appsody project with the Swift stack, but without a template:
 
     ```bash
-    appsody init swift --no-template
+    appsody init swift none
     ```
 
 3. After your project has been initialized you can then run your application using the following command:

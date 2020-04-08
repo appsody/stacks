@@ -86,7 +86,7 @@ The default template uses JUnit 5. You may be used to JUnit 4, but here are some
 ### RUN
 If you launch via `appsody run` then the liberty-maven-plugin will launch dev mode in "hot test" mode, where unit tests and integration tests get automatically re-executed after each detected change.  
 
-You can alternatively launch the container with `appsody run --interactive`, in which case the tests will only execute after you input `<Enter>` from the terminal, allowing you to make a set of application and/or test changes, and only execute the tests by pressing `<Enter>` when ready. 
+You can alternatively launch the container with `appsody run --interactive`, in which case the tests will only execute after you input `<Enter>` from the terminal, allowing you to make a set of application and/or test changes, and only execute the tests by pressing `<Enter>` when ready.
 ### DEBUG
 The `appsody debug` launches the Open Liberty server in debug mode, listening for the debugger on port 7777 (but not waiting, suspended).  Otherwise it allows you to perform the same iteractive, interactive testing as the `appsody run` command.
 
@@ -95,7 +95,7 @@ The command `appsody test` launches the Open Liberty server, runs integration te
 
 ## Notes to Windows 10 Users
 
-### Shared Drive and Permission Setup 
+### Shared Drive and Permission Setup
 * See the instructions [here](https://appsody.dev/docs/docker-windows-aad/) for information on setting up "Shared Drives" and permissions to enable mounting the host filesystem from the appsody container.
 
 ### Changes from Windows 10 host side not detected within container
@@ -117,6 +117,34 @@ The metrics endpoint is secured with a userid and password enabled through the c
 **src/main/liberty/config/configDropins/defaults/quick-start-security.xml**.
 
 In order to lock down the production image built via `appsody build` this file is deleted during the Docker build of your application production image.  (The same file would be deleted if you happened to create your own file at this location as well).
+
+## Stack development
+
+The Java Open Liberty stack is fully functional out of the box. However, depending on business needs and requirements, it may become necessary to create a custom stack with additional features and enhancements. This can be done by following the steps outlines here: https://appsody.dev/docs/stacks/develop
+
+Additionally, the Java Open Liberty stack includes a set of custom variables and enforcement rules that can be leveraged when modifying the stack.
+
+### Stack template variables
+
+Custom template variables are defined in the `stack.yaml` file. The Java Open Liberty stack includes the following that are propagated when the stack is packaged.
+
+* **libertyversion** - The version of the Open Liberty runtime to be used for development and production images. Without any other modifications to the Dockerfiles in this project, this version must be a quarterly release (x.0.0.3, x.0.0.6, x.0.0.9, x.0.0.12)
+
+* **parentpomgroup** - The group id used for the parent pom definition and a prefix for the default template group id.
+* **parentpomid** - The artifact id used for the parent pom definition
+* **parentpomrange** - The version range used within the template project definitions. e.g. [0.2, 0.3). This allows micro version updates to be automatically picked up by users of this stack.
+
+Notes:
+
+1. The stack version must be within the range defined by the 'parentpomrange' variable.
+
+2. When updating the stack version, a new Maven artifact for the parent pom will be built in the stack developers local .m2 directory. Any locally inited Appsody projects will pick up this latest stack. If you want to go back to using a previous parent pom, this latest artifact will either need to be removed from the local .m2 directory (maven-metadata-local.xml and resolver-status.properties files), OR the parent pom version can be hardcoded in the Appsody project instead of the parent pom range.
+
+### Maven Enforcer plugin rules
+
+* **Liberty Maven plugin version** - The version of the Liberty Maven plugin used by the default stack is restricted to the value of the Maven parent pom property *version.liberty-maven-plugin*.
+
+* **Liberty runtime version** - The version of the Liberty runtime is restricted to the value of the *libertyversion* stack template variable defined in `stack.yaml`.
 
 ## License
 
