@@ -17,15 +17,12 @@ public class ConnectionManager {
     private static HashMap<String, Gateway> gateways;
     private static String syncHelper = "Helper";
 
-    public ConnectionManager() {
-        synchronized (syncHelper) {
-            if (gateways == null) {
-                gateways = new HashMap<String, Gateway>();
-            }
-        }
+    static {
+        gateways = new HashMap<String, Gateway>();
     }
 
-    public Gateway getGateway(String id) {
+
+    public static Gateway getGateway(String id) {
         Gateway gateway;
 
         synchronized (gateways) {
@@ -51,7 +48,7 @@ public class ConnectionManager {
         return gateway;
     }
 
-    public Contract getContract(String identityId) {
+    public static Contract getContract(String identityId) {
         
         String channel = ConnectionConfiguration.getChannel();
 
