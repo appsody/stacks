@@ -26,6 +26,8 @@ public class InMemoryWallet implements WalletManager {
         }    
         //TODO - need to add checking for nulls, excpt handling
         String mspId = walletProfile.getString("msp_id");
+        //TODO - need to add logic to attempt retrieval from a key vault
+        //       wnen no vars are found        
         String certificate = walletProfile.getJSONObject("keys").getString("certificate");
         String privateKey = walletProfile.getJSONObject("keys").getString("private_key");
 
