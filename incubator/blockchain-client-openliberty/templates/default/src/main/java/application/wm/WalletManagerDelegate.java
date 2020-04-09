@@ -1,10 +1,13 @@
 package application.wm;
 
 import org.hyperledger.fabric.gateway.Wallet;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import application.cm.ConnectionConfiguration;
 
 public class WalletManagerDelegate implements WalletManager {
     private Wallet theWallet;
-    private static String WALLET_TYPE_ENV_VAR="WALLET_TYPE";
     private static String WALLET_TYPE_FILE_SYSTEM="FILE_SYSTEM";
     private static String WALLET_TYPE_IN_MEMORY="IN_MEMORY";
 
@@ -16,7 +19,16 @@ public class WalletManagerDelegate implements WalletManager {
         theWallet = aWallet;
     }
     private static WalletManager getWalletManager() {
-        String walletType = System.getenv().get(WALLET_TYPE_ENV_VAR);
+       
+        // TODO - Util function to retrieve/validate these JSONObjects from strings
+        JSONObject walletProfile;
+        String walletProfileString = ConnectionConfiguration.getWalletProfile();
+        try {
+            walletProfile = new JSONObject(walletProfileString);
+        } catch (JSONException excpt) { //should log and throw?
+            return null;
+        }          
+        String walletType = walletProfile.getString("type");
         if (walletType == WALLET_TYPE_FILE_SYSTEM) {
             return new FileSystemWallet();
         }
@@ -27,10 +39,10 @@ public class WalletManagerDelegate implements WalletManager {
         return null;
     }
     @Override
-    public synchronized Wallet getWallet() {
+    public synchronized Wallet getWallet(String identity) {
         Wallet wallet = getCachedWallet();
         if (wallet == null) {
-            wallet = getWalletManager().getWallet();
+            wallet = getWalletManager().getWallet(identity);
             setCachedWallet(wallet);
         }
         return wallet;
