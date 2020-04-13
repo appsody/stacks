@@ -57,3 +57,110 @@ E.g: my-cluster-kafka-bootstrap.strimzi.svc.cluster.local:9092
 * `kafka-bootstrap` is the Broker load balancer name.
 * `strimzi` is the namespace in which Kafka instance is deployed.
 * `9092` is the PLAINTEXT port.
+
+5. To deploy the application that connects to kafka managed by Strimzi operator where the brokers support TLS Client authentication
+
+Add the following properties to `application.properties`
+
+```
+spring.kafka.properties.security.protocol=ssl
+spring.kafka.properties.ssl.protocol=ssl
+spring.kafka.properties.ssl.truststore.location=/etc/secrets/keystores/truststore.p12
+spring.kafka.properties.ssl.truststore.password=changeit
+spring.kafka.properties.ssl.truststore.type=${TRUSTSTORE_PASSWORD}
+spring.kafka.properties.ssl.keystore.location=/etc/secrets/keystores/keystore.p12
+spring.kafka.properties.ssl.keystore.password=${KEYSTORE_PASSWORD}
+spring.kafka.properties.ssl.keystore.type=PKCS12
+spring.kafka.properties.ssl.key.password=${KEYSTORE_PASSWORD}
+spring.kafka.properties.ssl.endpoint.identification.algorithm=
+```
+
+`TRUSTSTORE_PASSWORD` is the password that you have used when creating the truststore.
+
+`KEYSTORE_PASSWORD` is the password that you have used when creating the keystore.
+
+Next, add the following in the `app-deploy.yaml` under `spec` section
+
+a. Add the following volumes
+
+```
+volumes:
+# emptyDir volume to store the keystore and truststore files so that the application container can eventually read them.
+- emtpyDir: {}
+  name: keystore-volume
+# this is the secret that is created when the kafka user is created  
+- name: my-user-credentials
+  secret:
+    secretName: my-user
+# secret that holds CA certificate created by the operator for the brokers
+- name: my-cluster-cluster-ca-cert
+  secret:
+    secretName: my-cluster-cluster-ca-cert
+```
+b. Volume mount the `keystore-volume`
+```
+volumeMounts:
+- mountPath: /etc/secrets/keystores
+  name: keystore-volume
+```
+c. Add `KAFKA_BOOTSTRAP_SERVERS` environment variable
+```
+env:
+- name: KAFKA_BOOTSTRAP_SERVERS
+  value: my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9093
+```
+`9093` is the TLS port.
+
+d. Add `initContainers` that generate the keystore and truststore which will eventually be used by the application container.
+```
+initContainers:
+- args:
+  - -c
+  - echo $ca_bundle && csplit -z -f crt- $ca_bundle '/-----BEGIN CERTIFICATE-----/'
+    '{*}' && for file in crt-*; do keytool -import -noprompt -keystore $truststore_jks
+    -file $file -storepass $password -storetype PKCS12 -alias service-$file; done
+  command:
+  - /bin/bash
+  env:
+  - name: ca_bundle
+    value: /etc/secrets/my-cluster-cluster-ca-cert/ca.crt
+  - name: truststore_jks
+    value: /etc/secrets/keystores/truststore.p12
+  - name: password
+    value: ${TRUSTSTORE_PASSWORD}
+  image: registry.access.redhat.com/redhat-sso-7/sso71-openshift:1.1-16
+  name: pem-to-truststore
+  volumeMounts:
+  - mountPath: /etc/secrets/keystores
+    name: keystore-volume
+  - mountPath: /etc/secrets/my-user
+    name: my-user-credentials
+    readOnly: true
+  - mountPath: /etc/secrets/my-cluster-cluster-ca-cert
+    name: my-cluster-cluster-ca-cert
+    readOnly: true
+- args:
+  - -c
+  - openssl pkcs12 -export -inkey $keyfile -in $crtfile -out $keystore_pkcs12 -password
+    pass:$password -name "name"
+  command:
+  - /bin/bash
+  env:
+  - name: keyfile
+    value: /etc/secrets/my-user/user.key
+  - name: crtfile
+    value: /etc/secrets/my-user/user.crt
+  - name: keystore_pkcs12
+    value: /etc/secrets/keystores/keystore.p12
+  - name: password
+    value: ${KEYSTORE_PASSWORD}
+  image: registry.access.redhat.com/redhat-sso-7/sso71-openshift:1.1-16
+  name: pem-to-keystore
+  volumeMounts:
+  - mountPath: /etc/secrets/keystores
+    name: keystore-volume
+  - mountPath: /etc/secrets/my-user
+    name: my-user-credentials
+    readOnly: true
+```
+** Here `my-user` is the kafka user and `my-cluster` is the kafka cluster name.
