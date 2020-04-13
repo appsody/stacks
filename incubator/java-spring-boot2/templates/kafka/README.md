@@ -81,7 +81,7 @@ spring.kafka.properties.ssl.endpoint.identification.algorithm=
 
 Next, add the following in the `app-deploy.yaml` under `spec` section
 
-a. Add the following volumes
+* Add the following volumes
 
 ```
 volumes:
@@ -97,13 +97,15 @@ volumes:
   secret:
     secretName: my-cluster-cluster-ca-cert
 ```
-b. Volume mount the `keystore-volume`
+* Volume mount the `keystore-volume`
+
 ```
 volumeMounts:
 - mountPath: /etc/secrets/keystores
   name: keystore-volume
 ```
-c. Add `KAFKA_BOOTSTRAP_SERVERS` environment variable
+* Add `KAFKA_BOOTSTRAP_SERVERS` environment variable. E.g.:
+
 ```
 env:
 - name: KAFKA_BOOTSTRAP_SERVERS
@@ -111,7 +113,8 @@ env:
 ```
 `9093` is the TLS port.
 
-d. Add `initContainers` that generate the keystore and truststore which will eventually be used by the application container.
+* Add `initContainers` that generate the keystore and truststore which will eventually be used by the application container.
+
 ```
 initContainers:
 - args:
