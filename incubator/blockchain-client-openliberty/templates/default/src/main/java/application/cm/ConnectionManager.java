@@ -32,7 +32,7 @@ public class ConnectionManager {
                 ByteArrayInputStream connProfileIS = new ByteArrayInputStream(
                         ConnectionConfiguration.getConnectionProfile().getBytes());
                 WalletManagerDelegate wmd = new WalletManagerDelegate();
-                Wallet wallet = wmd.getWallet(id);
+                Wallet wallet = wmd.getWallet();
                 try {
                     builder = Gateway.createBuilder().identity(wallet, id).networkConfig(connProfileIS).discovery(true);
                 } catch (IOException e) {
