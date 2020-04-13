@@ -39,10 +39,10 @@ public class WalletManagerDelegate implements WalletManager {
         return null;
     }
     @Override
-    public synchronized Wallet getWallet(String identity) {
+    public synchronized Wallet getWallet() {
         Wallet wallet = getCachedWallet();
         if (wallet == null) {
-            wallet = getWalletManager().getWallet(identity);
+            wallet = getWalletManager().getWallet();
             setCachedWallet(wallet);
         }
         return wallet;

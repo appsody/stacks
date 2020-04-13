@@ -16,8 +16,7 @@ import application.cm.ConnectionConfiguration;
 public class FileSystemWallet implements WalletManager {
 
     @Override
-    public Wallet getWallet(String id) {
-        //Note: FileSystemWallet makes no use of the id parm
+    public Wallet getWallet() {
         Wallet wallet;
         String walletPath;
         JSONObject walletProfile;
