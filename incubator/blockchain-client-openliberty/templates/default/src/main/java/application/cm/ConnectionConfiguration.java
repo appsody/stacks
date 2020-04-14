@@ -7,6 +7,7 @@ public class ConnectionConfiguration {
     private static final String FABRIC_CONTRACT_ENV_VAR = "FABRIC_CONTRACT";
     private static final String FABRIC_CONN_PROFILE_ENV_VAR = "FABRIC_CONNECTION_PROFILE";
     private static final String FABRIC_WALLET_PROFILE_ENV_VAR = "FABRIC_WALLET_PROFILE";
+    private static final String FABRIC_WALLET_CREDENTIALS_ENV_VAR = "FABRIC_WALLET_CREDENTIALS";
 
 
     public static String getChannel() {
@@ -23,5 +24,8 @@ public class ConnectionConfiguration {
 
     public static String getWalletProfile() {
         return System.getenv(FABRIC_WALLET_PROFILE_ENV_VAR);
+    }
+    public static String getWalletCredentials() {
+        return System.getenv(FABRIC_WALLET_CREDENTIALS_ENV_VAR);    
     }
 }
