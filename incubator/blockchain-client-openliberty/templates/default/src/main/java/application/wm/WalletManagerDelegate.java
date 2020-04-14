@@ -29,11 +29,12 @@ public class WalletManagerDelegate implements WalletManager {
             return null;
         }          
         String walletType = walletProfile.getString("type");
-        if (walletType == WALLET_TYPE_FILE_SYSTEM) {
+        walletType = walletType.toUpperCase();
+        if (walletType.equals(WALLET_TYPE_FILE_SYSTEM)) {
             return new FileSystemWallet();
         }
 
-        if (walletType == WALLET_TYPE_IN_MEMORY) {
+        if (walletType.equals(WALLET_TYPE_IN_MEMORY)) {
             return new InMemoryWallet();
         }
         return null;

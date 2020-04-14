@@ -2,6 +2,7 @@ package application.wm;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Base64;
 
 import org.hyperledger.fabric.gateway.Wallet;
 import org.json.JSONArray;
@@ -10,7 +11,6 @@ import org.json.JSONObject;
 
 import application.cm.ConnectionConfiguration;
 
-
 public class InMemoryWallet implements WalletManager {
 
     @Override
@@ -18,30 +18,45 @@ public class InMemoryWallet implements WalletManager {
         Wallet wallet = Wallet.createInMemoryWallet();
         Wallet.Identity identity = null;
         // TODO - Util function to retrieve/validate these JSONObjects from strings
-    //    JSONObject walletProfile;
+
         JSONObject walletCredential;
         JSONArray walletCredentials;
-        String walletProfileString = ConnectionConfiguration.getWalletProfile();
         String walletCredentialsString = ConnectionConfiguration.getWalletCredentials();
-    //    try {
-    //        walletProfile = new JSONObject(walletProfileString);
-    //    } catch (JSONException excpt) { //TODO - should log and throw?
-    //        return null;
-    //    }    
+     
         try {
             walletCredentials = new JSONArray(walletCredentialsString);
         } catch (JSONException excpt) { //TODO - should log and throw?
             return null;
-        }    
+        } 
+        
+        // process each identity
         for (Object walletCredentialObj: walletCredentials) {
             walletCredential = (JSONObject) walletCredentialObj;
-            String certificate = walletCredential.getString("cert");
-            String privateKey = walletCredential.getString("private_key");
-            String mspId = walletCredential.getString("mspId");
-            String id = walletCredential.getString("name");
+            StringReader certificateRdr = null;
+            StringReader privateKeyRdr = null;
 
-            StringReader certificateRdr = new StringReader(certificate);
-            StringReader privateKeyRdr = new StringReader(privateKey);
+            String certificate = walletCredential.getString("cert");
+            if (certificate != null && !certificate.isEmpty()) {
+                byte[] encoded = Base64.getDecoder().decode(certificate);
+                certificateRdr = new StringReader(new String(encoded));
+            }
+            
+            String privateKey = walletCredential.getString("private_key");
+            if (privateKey != null && !privateKey.isEmpty()) {
+                byte[] encoded = Base64.getDecoder().decode(privateKey);
+                privateKeyRdr = new StringReader(new String(encoded));
+            }
+
+            String mspId = walletCredential.getString("msp_id");
+            if (mspId == null || mspId.isEmpty()) {
+                // todo handle missing case
+            }
+
+            String id = walletCredential.getString("name");
+            if (id == null || id.isEmpty()) {
+                // todo handle missing case
+            }     
+
     //TODO - proper exception handling
             try {
                 identity = Wallet.Identity.createIdentity(mspId, certificateRdr, privateKeyRdr);

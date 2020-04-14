@@ -1,5 +1,4 @@
 package application.cm;
-//Creates the Gateway from an Identity (now in BlockchainClient.java)
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -9,18 +8,15 @@ import org.hyperledger.fabric.gateway.Contract;
 import org.hyperledger.fabric.gateway.Gateway;
 import org.hyperledger.fabric.gateway.Wallet;
 
-
 import application.wm.WalletManagerDelegate;
 
 public class ConnectionManager {
 
     private static HashMap<String, Gateway> gateways;
-    private static String syncHelper = "Helper";
 
     static {
         gateways = new HashMap<String, Gateway>();
     }
-
 
     public static Gateway getGateway(String id) {
         Gateway gateway;
