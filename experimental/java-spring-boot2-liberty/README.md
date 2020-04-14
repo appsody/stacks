@@ -4,7 +4,7 @@ The Spring Boot 2 stack supports the development of [Spring Boot 2](https://spri
 
 The Spring Boot 2 stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins. Specifically, this stack enables [Spring Boot Actuator](https://github.com/spring-projects/spring-boot/tree/master/spring-boot-project/spring-boot-actuator), the Prometheus Micrometer reporter, and OpenTracing support for Spring using a Jaeger tracer.
 
-This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.12`. It provides live reloading during development by utilizing the "dev mode" capability in the liberty-maven-plugin.  To see dev mode in action (though not in Appsody) check out this [shorter demo](https://openliberty.io/blog/2019/10/22/liberty-dev-mode.html) and this  [a bit longer demo](https://blog.sebastian-daschner.com/entries/openliberty-plugin-dev-mode).
+This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v20.0.0.3`. It provides live reloading during development by utilizing the "dev mode" capability in the liberty-maven-plugin.  To see dev mode in action (though not in Appsody) check out this [shorter demo](https://openliberty.io/blog/2019/10/22/liberty-dev-mode.html) and this  [a bit longer demo](https://blog.sebastian-daschner.com/entries/openliberty-plugin-dev-mode).
 
 **Note:** Maven is provided by the Appsody stack container, allowing you to build, test, and debug your Java application without installing Maven locally. We recommend installing Maven locally for the best IDE experience.
 

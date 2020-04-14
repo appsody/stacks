@@ -14,4 +14,4 @@ templating-data:
   parentpomgroup: dev.appsody
   parentpomid: java-spring-boot2-liberty
   parentpomrange: '[0.2, 0.3)'
-  libertyversion: '19.0.0.12'
+  libertyversion: '20.0.0.3'
