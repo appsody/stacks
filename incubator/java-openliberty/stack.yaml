@@ -1,6 +1,6 @@
 name: Open Liberty
-version: 0.2.5
-description: Open Liberty & OpenJ9 using Maven
+version: 0.2.8
+description: Eclipse MicroProfile & Jakarta EE on Open Liberty & OpenJ9 using Maven
 license: Apache-2.0
 language: java
 maintainers:
@@ -21,7 +21,7 @@ requirements:
     docker-version: ">= 17.09.0"
     appsody-version: ">= 0.5.0"
 templating-data:
-    libertyversion: '19.0.0.12'
+    libertyversion: '20.0.0.3'
     parentpomgroup: 'dev.appsody'
     parentpomid: 'java-openliberty'
     parentpomrange: '[0.2, 0.3)'

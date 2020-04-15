@@ -18,6 +18,8 @@ RUN  /project/util/check_version build
 WORKDIR /project/
 
 RUN mkdir -p /mvn/repository
+# Let's see the command we're hiding within the next line
+RUN mvn -e help:evaluate -Dexpression=maven.version -DforceStdout
 RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 RUN mvn -B -Pstack-image-package -Dmaven.repo.local=/mvn/repository liberty:install-server install dependency:go-offline
 RUN chmod -R 777 /opt/ol 
