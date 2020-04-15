@@ -2,6 +2,8 @@ apiVersion: appsody.dev/v1beta1
 kind: AppsodyApplication
 metadata:
   name: APPSODY_PROJECT_NAME
+  annotations:
+    kappnav.subkind: Nodejs
 spec:
   # Add fields here
   version: 1.0.0
