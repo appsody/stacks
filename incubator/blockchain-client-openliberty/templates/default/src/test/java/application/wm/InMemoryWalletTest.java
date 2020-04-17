@@ -335,8 +335,6 @@ public class InMemoryWalletTest {
         array.put(id1);
         array.put(id2);
 
-        System.out.println(array);
-
         PowerMockito.mockStatic(ConnectionConfiguration.class);
         PowerMockito.when(ConnectionConfiguration.getWalletCredentials()).thenReturn(array.toString());
 
