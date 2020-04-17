@@ -1,24 +1,22 @@
 package application.wm;
 
-import application.cm.ConnectionConfiguration;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
 import org.hyperledger.fabric.gateway.Wallet;
 import org.hyperledger.fabric_ca.sdk.exception.IdentityException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import application.cm.ConnectionConfiguration;
 
 /**
  * InMemoryWalletTest
@@ -64,7 +62,7 @@ public class InMemoryWalletTest {
 
     // walletCredentialsString json array invalid
     @Test(expected = IdentityException.class)
-    public void tnixa() throws IdentityException {
+    public void testWalletCredentialsStringArrayInvalid() throws IdentityException {
         String arrayString = "[{type:FILE_SYSTEM,options:{path:/project/user-app/src/main/java/application/Org1}}]";
         PowerMockito.mockStatic(ConnectionConfiguration.class);
         PowerMockito.when(ConnectionConfiguration.getWalletCredentials()).thenReturn(arrayString);
@@ -75,8 +73,248 @@ public class InMemoryWalletTest {
         fail("Expected Exception to be thrown");
     }
 
+    // walletCredentialsString array invalid
+    @Test(expected = IdentityException.class)
+    public void testWalletCredentialsStringJsonInvalid() throws IdentityException {
+        String arrayString = "{type:FILE_SYSTEM,options:{path:/project/user-app/src/main/java/application/Org1}}";
+        PowerMockito.mockStatic(ConnectionConfiguration.class);
+        PowerMockito.when(ConnectionConfiguration.getWalletCredentials()).thenReturn(arrayString);
+
+        InMemoryWallet imw = new InMemoryWallet();
+        imw.getWallet();
+
+        fail("Expected Exception to be thrown");
+    }
+
+    // walletCredentials json missing cert
+    @Test(expected = IdentityException.class)
+    public void testWalletCredentialsCertMissing() throws IdentityException {
+        JSONArray array = new JSONArray();
+
+        //create identity1
+        JSONObject id1 = new JSONObject();
+        id1.put("msp_id", MSPID);
+        id1.put("private_key", KEY);
+        id1.put("name", "id1");
+
+        array.put(id1);
+        
+        PowerMockito.mockStatic(ConnectionConfiguration.class);
+        PowerMockito.when(ConnectionConfiguration.getWalletCredentials()).thenReturn(array.toString());
+
+        InMemoryWallet imw = new InMemoryWallet();
+        imw.getWallet();
+
+        fail("Expected Exception to be thrown");
+    }
+
+    // wallet Credentials json cert empty
+    @Test(expected = IdentityException.class)
+    public void testWalletCredentialsCertJsonEmpty() throws IdentityException {
+        JSONArray array = new JSONArray();
+
+        //create identity1
+        JSONObject id1 = new JSONObject();
+        id1.put("cert", "");
+        id1.put("msp_id", MSPID);
+        id1.put("private_key", KEY);
+        id1.put("name", "id1");
+
+        array.put(id1);
+        
+        PowerMockito.mockStatic(ConnectionConfiguration.class);
+        PowerMockito.when(ConnectionConfiguration.getWalletCredentials()).thenReturn(array.toString());
+
+        InMemoryWallet imw = new InMemoryWallet();
+        imw.getWallet();
+
+        fail("Expected Exception to be thrown");
+    }
+
+    // wallet Credentials json cert not encoded
+    @Test(expected = IdentityException.class)
+    public void testWalletCredentialsCertEncodeInvalid() throws IdentityException {
+        JSONArray array = new JSONArray();
+
+        //create identity1
+        JSONObject id1 = new JSONObject();
+        id1.put("cert", "{875634");
+        id1.put("msp_id", MSPID);
+        id1.put("private_key", KEY);
+        id1.put("name", "id1");
+
+        array.put(id1);
+        
+        PowerMockito.mockStatic(ConnectionConfiguration.class);
+        PowerMockito.when(ConnectionConfiguration.getWalletCredentials()).thenReturn(array.toString());
+
+        InMemoryWallet imw = new InMemoryWallet();
+        imw.getWallet();
+
+        fail("Expected Exception to be thrown");
+    }
+
+    // walletCredentials json missing private_key
+    @Test(expected = IdentityException.class)
+    public void testWalletCredentialsPrivateKeyMissing() throws IdentityException {
+        JSONArray array = new JSONArray();
+
+        //create identity1
+        JSONObject id1 = new JSONObject();
+        id1.put("cert", CERT);
+        id1.put("msp_id", MSPID);
+        id1.put("name", "id1");
+
+        array.put(id1);
+        
+        PowerMockito.mockStatic(ConnectionConfiguration.class);
+        PowerMockito.when(ConnectionConfiguration.getWalletCredentials()).thenReturn(array.toString());
+
+        InMemoryWallet imw = new InMemoryWallet();
+        imw.getWallet();
+
+        fail("Expected Exception to be thrown");
+    }
+
+    // walletCredentials json private_key empty
+    @Test(expected = IdentityException.class)
+    public void testWalletCredentialsPrivateKeyJsonEmpty() throws IdentityException {
+        JSONArray array = new JSONArray();
+
+        //create identity1
+        JSONObject id1 = new JSONObject();
+        id1.put("cert", CERT);
+        id1.put("msp_id", MSPID);
+        id1.put("private_key", "");
+        id1.put("name", "id1");
+
+        array.put(id1);
+        
+        PowerMockito.mockStatic(ConnectionConfiguration.class);
+        PowerMockito.when(ConnectionConfiguration.getWalletCredentials()).thenReturn(array.toString());
+
+        InMemoryWallet imw = new InMemoryWallet();
+        imw.getWallet();
+
+        fail("Expected Exception to be thrown");
+    }
+
+    // walletCredentials json private_key not encoded
+    @Test(expected = IdentityException.class)
+    public void testWalletCredentialsPrivateKeyEncodeInvalid() throws IdentityException {
+        JSONArray array = new JSONArray();
+
+        //create identity1
+        JSONObject id1 = new JSONObject();
+        id1.put("cert", CERT);
+        id1.put("msp_id", MSPID);
+        id1.put("private_key", "{8765");
+        id1.put("name", "id1");
+
+        array.put(id1);
+        
+        PowerMockito.mockStatic(ConnectionConfiguration.class);
+        PowerMockito.when(ConnectionConfiguration.getWalletCredentials()).thenReturn(array.toString());
+
+        InMemoryWallet imw = new InMemoryWallet();
+        imw.getWallet();
+
+        fail("Expected Exception to be thrown");
+    }
+
+    // walletCredentials json missing msp_id
+    @Test(expected = IdentityException.class)
+    public void testWalletCredentialsMspMissing() throws IdentityException {
+        JSONArray array = new JSONArray();
+
+        //create identity1
+        JSONObject id1 = new JSONObject();
+        id1.put("cert", CERT);
+        id1.put("private_key", KEY);
+        id1.put("name", "id1");
+
+        array.put(id1);
+        
+        PowerMockito.mockStatic(ConnectionConfiguration.class);
+        PowerMockito.when(ConnectionConfiguration.getWalletCredentials()).thenReturn(array.toString());
+
+        InMemoryWallet imw = new InMemoryWallet();
+        imw.getWallet();
+
+        fail("Expected Exception to be thrown");
+    }
+
+    // wallet Credentials json msp_id empty
+    @Test(expected = IdentityException.class)
+    public void testWalletCredentialsMspEmpty() throws IdentityException {
+        JSONArray array = new JSONArray();
+
+        //create identity1
+        JSONObject id1 = new JSONObject();
+        id1.put("cert", CERT);
+        id1.put("msp_id", "");
+        id1.put("private_key", KEY);
+        id1.put("name", "id1");
+
+        array.put(id1);
+        
+        PowerMockito.mockStatic(ConnectionConfiguration.class);
+        PowerMockito.when(ConnectionConfiguration.getWalletCredentials()).thenReturn(array.toString());
+
+        InMemoryWallet imw = new InMemoryWallet();
+        imw.getWallet();
+
+        fail("Expected Exception to be thrown");
+    }
+
+    // walletCredentials json missing name
+    @Test(expected = IdentityException.class)
+    public void testWalletCredentialsNameMissing() throws IdentityException {
+        JSONArray array = new JSONArray();
+
+        //create identity1
+        JSONObject id1 = new JSONObject();
+        id1.put("cert", CERT);
+        id1.put("msp_id", MSPID);
+        id1.put("private_key", KEY);
+
+        array.put(id1);
+        
+        PowerMockito.mockStatic(ConnectionConfiguration.class);
+        PowerMockito.when(ConnectionConfiguration.getWalletCredentials()).thenReturn(array.toString());
+
+        InMemoryWallet imw = new InMemoryWallet();
+        imw.getWallet();
+
+        fail("Expected Exception to be thrown");
+    }
+
+    // wallet Credentials json name invalid
+    @Test(expected = IdentityException.class)
+    public void testWalletCredentialsNameEmpty() throws IdentityException {
+        JSONArray array = new JSONArray();
+
+        //create identity1
+        JSONObject id1 = new JSONObject();
+        id1.put("cert", CERT);
+        id1.put("msp_id", MSPID);
+        id1.put("private_key", KEY);
+        id1.put("name", "");
+
+        array.put(id1);
+        
+        PowerMockito.mockStatic(ConnectionConfiguration.class);
+        PowerMockito.when(ConnectionConfiguration.getWalletCredentials()).thenReturn(array.toString());
+
+        InMemoryWallet imw = new InMemoryWallet();
+        imw.getWallet();
+
+        fail("Expected Exception to be thrown");
+    }
+
+    // full good path
     @Test
-    public void testWalletCredentialsStringJsonInvalid() throws IdentityException, IOException {
+    public void testWalletCredentialsGP() throws IdentityException, IOException {
 
         JSONArray array = new JSONArray();
 
@@ -108,155 +346,4 @@ public class InMemoryWalletTest {
         assertNotNull(resultWallet);
         assertEquals(resultWallet.getAllLabels().size(), 2);
     }
-
-    // walletCredentials json invalid
-
-    // walletCredentials json missing cert
-
-    // wallet Credentials json cert invalid
-
-    // wallet Credentials json cert not encoded
-
-    // walletCredentials json missing private_key
-
-    // walletCredentials json private_key invalid
-
-    // walletCredentials json private_key not encoded
-
-    // walletCredentials json missing msp_id
-
-    // wallet Credentials json msp_id invalid
-
-    // walletCredentials json missing name
-
-    // wallet Credentials json name invalid
-
-    // something to cause the identity to fail, not sure how to do that ??
-
-    // something to test the array, maybe the first value in the array is good but the second is bad json?
-
-
-
-
-
-
-  
-    // profile string valid
-
-    // profile string empty
-    @Test(expected = IdentityException.class)
-    public void testProfileStringEmpty() throws IdentityException {
-        PowerMockito.mockStatic(ConnectionConfiguration.class);
-        PowerMockito.when(ConnectionConfiguration.getWalletProfile()).thenReturn("");
-
-        FileSystemWallet fsw = new FileSystemWallet(); 
-        fsw.getWallet();
-    
-        fail("Expected Exception to be thrown");
-    }
-
-    // profile string null
-    @Test(expected = IdentityException.class)
-    public void testProfileStringNULL() throws IdentityException {
-        PowerMockito.mockStatic(ConnectionConfiguration.class);
-        PowerMockito.when(ConnectionConfiguration.getWalletProfile()).thenReturn(null);
-
-        FileSystemWallet fsw = new FileSystemWallet(); 
-        fsw.getWallet();
-    
-        fail("Expected Exception to be thrown");
-    }
-
-    // profile json valid
-
-    // profile json invalid
-    @Test(expected = IdentityException.class)
-    public void testJsonInvalid() throws IdentityException {
-        String json = "{type:FILE_SYSTEM,options:{path:/project/user-app/src/main/java/application/Org1}}";
-
-        PowerMockito.mockStatic(ConnectionConfiguration.class);
-        PowerMockito.when(ConnectionConfiguration.getWalletProfile()).thenReturn(json);
-
-        FileSystemWallet fsw = new FileSystemWallet(); 
-        fsw.getWallet();
-    
-        fail("Expected Exception to be thrown");
-    }
-
-    // options provided 
-
-    // options missing
-    @Test(expected = IdentityException.class)
-    public void testOptionsMissing() throws IdentityException {
-        JSONObject root = new JSONObject();
-        root.put("type", "FILE_SYSTEM");
-        String json = root.toString();
-
-        PowerMockito.mockStatic(ConnectionConfiguration.class);
-        PowerMockito.when(ConnectionConfiguration.getWalletProfile()).thenReturn(json);
-
-        FileSystemWallet fsw = new FileSystemWallet(); 
-        fsw.getWallet();
-    
-        fail("Expected Exception to be thrown");
-    }
-
-    // path missing
-    @Test(expected = IdentityException.class)
-    public void testPathMissing() throws IdentityException {
-        JSONObject root = new JSONObject();
-        root.put("type", "FILE_SYSTEM");
-        JSONObject options = new JSONObject();
-        root.put("options", options);
-        String json = root.toString();
-
-        PowerMockito.mockStatic(ConnectionConfiguration.class);
-        PowerMockito.when(ConnectionConfiguration.getWalletProfile()).thenReturn(json);
-
-        FileSystemWallet fsw = new FileSystemWallet(); 
-        fsw.getWallet();
-    
-        fail("Expected Exception to be thrown");
-    }
-
-    // path invalid
-    @Test(expected = IdentityException.class)
-    public void testPathInvalid() throws IdentityException {
-        JSONObject root = new JSONObject();
-        root.put("type", "FILE_SYSTEM");
-        JSONObject options = new JSONObject();
-        options.put("path", "/somewhere");
-        root.put("options", options);
-        String json = root.toString();
-
-        PowerMockito.mockStatic(ConnectionConfiguration.class);
-        PowerMockito.when(ConnectionConfiguration.getWalletProfile()).thenReturn(json);
-
-        FileSystemWallet fsw = new FileSystemWallet(); 
-        fsw.getWallet();
-    
-        fail("Expected Exception to be thrown");
-    }
-
-    // path valid
-    @Test(expected = IdentityException.class)
-    public void testPathValid() throws IdentityException {
-        JSONObject root = new JSONObject();
-        root.put("type", "FILE_SYSTEM");
-        JSONObject options = new JSONObject();
-        options.put("path", "/somewhere");
-        root.put("options", options);
-        String json = root.toString();
-
-        PowerMockito.mockStatic(ConnectionConfiguration.class);
-        PowerMockito.when(ConnectionConfiguration.getWalletProfile()).thenReturn(json);
-
-        FileSystemWallet fsw = new FileSystemWallet(); 
-        fsw.getWallet();
-    
-        fail("Expected Exception to be thrown");
-    }
-
-
-
 }
