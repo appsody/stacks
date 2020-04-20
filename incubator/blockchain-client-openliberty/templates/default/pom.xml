@@ -56,12 +56,20 @@
         </dependency>
 
         <!-- For tests -->
-        <dependency>
+        <!-- jupiter doesn't work with powermock -->
+        <!-- https://github.com/powermock/powermock/issues/929 -->
+        <!-- <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.6.0</version>
             <scope>test</scope>
-        </dependency>
+        </dependency> -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.7</version>
+            <scope>test</scope>
+          </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-rs-client</artifactId>
@@ -78,6 +86,24 @@
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
             <version>1.0.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.3.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>2.0.7</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito2</artifactId>
+            <version>2.0.7</version>
             <scope>test</scope>
         </dependency>
         <!-- Support for JDK 9 and above -->
