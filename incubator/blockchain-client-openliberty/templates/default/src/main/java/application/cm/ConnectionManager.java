@@ -18,7 +18,7 @@ public class ConnectionManager {
 
     private static HashMap<String, Gateway> gateways = new HashMap<String, Gateway>();
 
-    public static Gateway getGateway(String fabricId) throws IdentityException, GatewayException {
+    private static Gateway getGateway(String fabricId) throws IdentityException, GatewayException {
         Gateway gateway = null;
 
         synchronized (gateways) {
