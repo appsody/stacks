@@ -59,7 +59,7 @@ Options contains:
   to the server. For example, with [socket.io](https://socket.io/):
   `io = require('socket.io')(options.server)`.
 
-The [`express-pino-logger`](https://registry.npmjs.org/express-pino-logger) has been registered as middleware, so:
+The [`pino-http`](https://registry.npmjs.org/pino-http) has been registered as middleware, so:
 1. All requests will be logged as JSON, for easy consumability by log aggregators.
 2. All `req` objects will be decorated with a `req.log` property, an instance of [`pino`](https://registry.npmjs.org/pino). It can be used for application specific logging. The default log level is `'info'` in production, and `'debug'` in non-production.
 
