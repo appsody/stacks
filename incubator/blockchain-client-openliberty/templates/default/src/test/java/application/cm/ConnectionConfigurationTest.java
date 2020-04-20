@@ -133,5 +133,4 @@ public class ConnectionConfigurationTest {
         String wallet = ConnectionConfiguration.getWalletProfile();
         assertNull(wallet);
     }
-
 }
