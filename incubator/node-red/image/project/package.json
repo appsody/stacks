@@ -20,9 +20,9 @@
     "express": "~4.16.0"
   },
   "devDependencies": {
+    "appmetrics-dash": "^5.0.0",
     "chai": "^4.2.0",
-    "mocha": "~6.1.0",
-    "request": "^2.88.0",
-    "appmetrics-dash": "^5.0.0"
+    "mocha": "^7.1.1",
+    "request": "^2.88.0"
   }
 }
