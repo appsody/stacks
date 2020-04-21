@@ -1,6 +1,6 @@
 name: Eclipse MicroProfile®
 version: 0.2.26
-description: This stack has been deprecated. Please use the Open Liberty stack. 
+description: Eclipse MicroProfile on Open Liberty & OpenJ9 using Maven 
 license: Apache-2.0
 language: java
 maintainers:
@@ -21,4 +21,4 @@ requirements:
     appsody-version: ">= 0.5.0"
 templating-data:
     libertyversion: '19.0.0.12'
-deprecated: 04/20/2020 - Replaced with the Open Liberty stack (java-openliberty).
+deprecated: 04/20/2020 - This stack has been replaced by the Open Liberty stack (java-openliberty)
