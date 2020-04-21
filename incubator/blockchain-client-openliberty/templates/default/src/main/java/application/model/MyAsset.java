@@ -4,6 +4,14 @@ public class MyAsset {
     private String myAssetId = null;
     private String value = null;
 
+    public MyAsset(){
+    }
+
+    public MyAsset(String myAssetId, String value) {
+        this.myAssetId = myAssetId;
+        this.value = value;
+    }
+
     public String getMyAssetId() {
         return myAssetId;
     }
@@ -19,5 +27,7 @@ public class MyAsset {
     public void setValue(String value) {
         this.value = value;
     }
+
+
 
 }
