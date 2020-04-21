@@ -1,0 +1,10 @@
+name: Rust Tide
+version: 0.1.0
+description: Tide web framework for Rust
+license: Apache-2.0
+language: rust
+maintainers: 
+  - name: Anton Whalley
+    email: anton@venshare.com
+    github-id: No9
+default-template: default

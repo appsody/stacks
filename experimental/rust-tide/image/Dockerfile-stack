@@ -1,0 +1,37 @@
+FROM rust:1.42-buster
+
+RUN apt-get update && apt-get install -y lldb
+
+ENV CARGO_HOME=/usr/local/cargo/deps
+
+ENV APPSODY_MOUNTS=/:/project/userapp
+ENV APPSODY_DEPS=$CARGO_HOME
+ENV APPSODY_WATCH_DIR=/project/userapp
+ENV APPSODY_WATCH_IGNORE_DIR= 
+ENV APPSODY_WATCH_REGEX="^(Cargo.toml|.*.rs)$"
+ENV APPSODY_PREP=
+
+ENV APPSODY_RUN="cargo run --manifest-path ./server/bin/Cargo.toml"
+ENV APPSODY_RUN_ON_CHANGE=$APPSODY_RUN
+ENV APPSODY_RUN_KILL=true
+
+ENV APPSODY_DEBUG="cargo build --manifest-path ./server/bin/Cargo.toml && lldb-server platform --listen '*:1234' --min-gdbserver-port 5000 --max-gdbserver-port 5001 --server"
+ENV APPSODY_DEBUG_ON_CHANGE="$APPSODY_DEBUG"
+ENV APPSODY_DEBUG_KILL=true
+
+ENV APPSODY_TEST="cargo test --manifest-path /project/userapp/Cargo.toml"
+ENV APPSODY_TEST_ON_CHANGE=$APPSODY_TEST
+ENV APPSODY_TEST_KILL=false
+
+COPY ./LICENSE /licenses/
+COPY ./project /project
+COPY ./config /config
+
+WORKDIR /project
+
+# Expose the relevant ports (change this to be specific to your application).
+ENV PORT=8000
+
+EXPOSE 8000
+EXPOSE 1234
+EXPOSE 5000
