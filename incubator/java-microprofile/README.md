@@ -1,4 +1,6 @@
-# Java MicroProfile Stack
+# Java MicroProfile Stack (DEPRECATED)
+
+## This stack has been deprecated! Please use the [Java Open Liberty](https://github.com/appsody/stacks/tree/master/incubator/java-openliberty) stack.
 
 The Java MicroProfile stack provides a consistent way of developing microservices based upon the [Eclipse MicroProfile specifications](https://microprofile.io). This stack lets you use [Maven](https://maven.apache.org) to develop applications for [Open Liberty](https://openliberty.io) runtime, that is running on OpenJDK with container-optimizations in OpenJ9.
 
