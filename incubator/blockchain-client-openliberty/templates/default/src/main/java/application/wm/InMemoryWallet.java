@@ -3,6 +3,7 @@ package application.wm;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Base64;
+import java.util.logging.Logger;
 
 import org.hyperledger.fabric.gateway.Wallet;
 import org.hyperledger.fabric_ca.sdk.exception.IdentityException;
@@ -13,7 +14,7 @@ import org.json.JSONObject;
 import application.cm.ConnectionConfiguration;
 
 public class InMemoryWallet implements WalletManager {
-
+    public final static Logger LOGGER = Logger.getLogger(InMemoryWallet.class.getName());
     @Override
     public Wallet getWallet() throws IdentityException {
         Wallet wallet = Wallet.createInMemoryWallet();
@@ -21,6 +22,7 @@ public class InMemoryWallet implements WalletManager {
 
         String walletCredentialsString = ConnectionConfiguration.getWalletCredentials();
         if (walletCredentialsString == null || walletCredentialsString.isEmpty()) {
+            LOGGER.severe("Wallet credentials not provided. Cannot create wallet.");
             throw new IdentityException("Wallet credentials not found.");
         }
         JSONArray walletCredentials = null;
@@ -29,6 +31,7 @@ public class InMemoryWallet implements WalletManager {
         try {
             walletCredentials = new JSONArray(walletCredentialsString);
         } catch (JSONException e) {
+            LOGGER.severe("Error parsing wallet credentials. Exception :"+e.toString());
             throw new IdentityException("Error parsing wallet credentials.", e);
         } 
         
@@ -47,6 +50,7 @@ public class InMemoryWallet implements WalletManager {
                     byte[] encoded = Base64.getDecoder().decode(certificate);
                     certificateRdr = new StringReader(new String(encoded));
                 } else {
+                    LOGGER.severe("Certificate not provided in wallet credentials. Cannot create wallet.");
                     throw new IdentityException("Invalid certificate provided.");
                 }
                 
@@ -55,19 +59,23 @@ public class InMemoryWallet implements WalletManager {
                     byte[] encoded = Base64.getDecoder().decode(privateKey);
                     privateKeyRdr = new StringReader(new String(encoded));
                 } else {
+                    LOGGER.severe("Private key not provided in wallet credentials. Cannot create wallet.");
                     throw new IdentityException("Invalid private key provided.");
                 }
 
                 mspId = walletCredential.getString("msp_id");
                 if (mspId == null || mspId.isEmpty()) {
+                    LOGGER.severe("MSP id not provided in wallet credentials. Cannot create wallet.");
                     throw new IdentityException("Invalid msp id provided.");
                 }
 
                 id = walletCredential.getString("name");
                 if (id == null || id.isEmpty()) {
+                    LOGGER.severe("Identity name not provided in wallet credentials. Cannot create wallet.");                    
                     throw new IdentityException("Invalid id provided");
                 } 
             } catch (JSONException | IllegalArgumentException | ClassCastException  e) {
+                LOGGER.severe("Error processing credentials. Cannot create wallet: "+e.toString());  
                 throw new IdentityException("Exception processing identity.", e);
             }
 
@@ -75,6 +83,7 @@ public class InMemoryWallet implements WalletManager {
                 identity = Wallet.Identity.createIdentity(mspId, certificateRdr, privateKeyRdr);
                 wallet.put(id, identity);
             } catch (IOException e) {
+                LOGGER.severe("Error creating identity. Cannot create wallet: "+e.toString());
                 throw new IdentityException("Exception creating wallet identity.", e);
             }
         }
