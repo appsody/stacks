@@ -1,5 +1,5 @@
 name: Spring Boot®
-version: 0.3.28
+version: 0.3.29
 description: Spring Boot using OpenJ9 and Maven
 license: Apache-2.0
 language: java
@@ -10,12 +10,18 @@ maintainers:
   - name: Ozzy Osborne
     email: ozzy@ca.ibm.com
     github-id: bardweller
+  - name: Richard Trotter
+    email: rtrotter@us.ibm.com
+    github-id: richard-trotter
+  - name: Harish Yayi
+    email: hyayi@us.ibm.com
+    github-id: yharish991
 default-template: default
 requirements:
    appsody-version: ">= 0.5.0"
    docker-version: ">= 17.09.0"
 templating-data:
-  baseimage: kabanero/ubi8-maven:0.3.0
+  baseimage: kabanero/ubi8-maven:0.9.0
   finalimage: adoptopenjdk/openjdk8-openj9:ubi-jre
   parentpomgroup: dev.appsody
   parentpomid: spring-boot2-stack
