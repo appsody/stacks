@@ -28,6 +28,9 @@ public class MyAsset {
         this.value = value;
     }
 
-
+    @Override
+    public String toString() {
+        return "MyAsset [myAssetId=" + myAssetId + ", value=" + value + "]";
+    }
 
 }

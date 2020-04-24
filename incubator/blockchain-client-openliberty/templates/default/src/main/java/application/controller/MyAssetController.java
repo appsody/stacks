@@ -1,6 +1,8 @@
 package application.controller;
 
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Logger;
 
 import org.hyperledger.fabric.gateway.Contract;
 import org.hyperledger.fabric.gateway.ContractException;
@@ -9,69 +11,80 @@ import application.exceptions.AssetException;
 import application.exceptions.AssetNotFoundException;
 import application.model.MyAsset;
 
-/*
-In the controller package, create a class MyAssetController (remove FabricController, since it is not feasible to create a generic controller that introspects the Contract and understands what to do with it).
-MyAssetController has four method - one per API resource (GET, PUT, POST, and DELETE).
-All methods take the Contract and the model MyAsset object.
-Each method will call the appropriate transaction on the Contract, and use the model Object to populate the parms.
-*/
-
 public class MyAssetController {
 
+    private static final Logger LOGGER = Logger.getLogger(MyAssetController.class.getName());
+
     public byte[] getMyAsset(Contract contract, String assetId) throws AssetException, AssetNotFoundException {
+        LOGGER.info("AssetId = " + assetId);
         byte[] results = null;
         try {
             results = contract.submitTransaction("readMyAsset", assetId);
-        } catch (ContractException e1) {
-            throw new AssetNotFoundException("Asset not found on the ledger");
-        } catch (TimeoutException e1) {
-            throw new AssetException("Trasaction timeout");
-        } catch (InterruptedException e1) {
-            throw new AssetException("Trasaction error");
+        } catch (ContractException e) {
+            LOGGER.severe("Contract Exception submitting transaction." + e.toString());
+            throw new AssetNotFoundException("Asset not found on the ledger.", e);
+        } catch (TimeoutException e) {
+            LOGGER.severe("TimeoutException submitting transaction." + e.toString());
+            throw new AssetException("Trasaction timeout.", e);
+        } catch (InterruptedException e) {
+            LOGGER.severe("Interrupted Exception submitting transaction." + e.toString());
+            throw new AssetException("Trasaction error.", e);
         }
+        LOGGER.info("Results = " + new String(results, StandardCharsets.UTF_8) );
         return results;
     }
 
     public void createMyAsset(Contract contract, MyAsset asset) throws AssetException, AssetNotFoundException {
+        LOGGER.info(asset.toString());
         // Submit transactions to add state on the ledger
         try {
             // transaction has no return value
             contract.submitTransaction("createMyAsset", asset.getMyAssetId(), asset.getValue());
-        } catch (ContractException e1) {
-            throw new AssetNotFoundException("Asset not found on the ledger");
-        } catch (TimeoutException e1) {
-            throw new AssetException("Trasaction timeout");
-        } catch (InterruptedException e1) {
-            throw new AssetException("Trasaction error");
+        } catch (ContractException e) {
+            LOGGER.severe("Contract Exception submitting transaction." + e.toString());
+            throw new AssetNotFoundException("Asset not found on the ledger.", e);
+        } catch (TimeoutException e) {
+            LOGGER.severe("TimeoutException submitting transaction." + e.toString());
+            throw new AssetException("Trasaction timeout.", e);
+        } catch (InterruptedException e) {
+            LOGGER.severe("Interrupted Exception submitting transaction." + e.toString());
+            throw new AssetException("Trasaction error.", e);
         }
     }
 
     public void updateMyAsset(Contract contract, MyAsset asset) throws AssetException, AssetNotFoundException {
+        LOGGER.info(asset.toString());
         // Submit transactions to modify state on the ledger
         try {
             // transaction has no return value
             contract.submitTransaction("updateMyAsset", asset.getMyAssetId(), asset.getValue());
-        } catch (ContractException e1) {
-            throw new AssetNotFoundException("Asset not found on the ledger");
-        } catch (TimeoutException e1) {
-            throw new AssetException("Trasaction timeout");
-        } catch (InterruptedException e1) {
-            throw new AssetException("Trasaction error");
+        } catch (ContractException e) {
+            LOGGER.severe("Contract Exception submitting transaction." + e.toString());
+            throw new AssetNotFoundException("Asset not found on the ledger.", e);
+        } catch (TimeoutException e) {
+            LOGGER.severe("TimeoutException submitting transaction." + e.toString());
+            throw new AssetException("Trasaction timeout.", e);
+        } catch (InterruptedException e) {
+            LOGGER.severe("Interrupted Exception submitting transaction." + e.toString());
+            throw new AssetException("Trasaction error.", e);
         }
     }
 
     public void deleteMyAsset(Contract contract, String assetId) throws AssetException, AssetNotFoundException {
+        LOGGER.info("AssetId = " + assetId);
         // Submit transactions to delete state on the ledger
         try {
             // transaction has no return value
             contract.submitTransaction("deleteMyAsset", assetId);
-        } catch (ContractException e1) {
-            throw new AssetNotFoundException("Asset not found on the ledger");
-        } catch (TimeoutException e1) {
-            throw new AssetException("Trasaction timeout");
-        } catch (InterruptedException e1) {
-            throw new AssetException("Trasaction error");
+        } catch (ContractException e) {
+            LOGGER.severe("Contract Exception submitting transaction." + e.toString());
+            throw new AssetNotFoundException("Asset not found on the ledger.", e);
+        } catch (TimeoutException e) {
+            LOGGER.severe("TimeoutException submitting transaction." + e.toString());
+            throw new AssetException("Trasaction timeout.", e);
+        } catch (InterruptedException e) {
+            LOGGER.severe("Interrupted Exception submitting transaction." + e.toString());
+            throw new AssetException("Trasaction error.", e);
         }
     }
-
 }

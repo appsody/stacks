@@ -1,6 +1,7 @@
 package application.api;
 
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -41,6 +42,8 @@ public class AssetService {
     @Context
     private HttpHeaders headers = null;
 
+    private static final Logger LOGGER = Logger.getLogger(AssetService.class.getName());
+
     @GET
     @Path("/{id}")
     @Produces("application/json")
@@ -51,11 +54,14 @@ public class AssetService {
     @Operation(summary = "Retrieve MyAsset from the blockchain", description = "Retrieves the MyAsset from the blockchain.")
     @Tag(name = "MyAssets")
     public Response getMyAsset(@PathParam("id") String id) throws AssetNotFoundException, AssetException, IdentityException, GatewayException{
+        LOGGER.info("AssetId : "+ id);
         String fabricId = headers.getHeaderString("X-FABRIC-IDENTITY");
         Contract contract = ConnectionManager.getContract(fabricId);
         MyAssetController controller = new MyAssetController(); 
         byte[] result = controller.getMyAsset(contract, id);
-        return Response.ok().entity(new String(result, StandardCharsets.UTF_8)).build();
+        String responseString = new String(result, StandardCharsets.UTF_8);
+        LOGGER.info("Transaction response : " + responseString);
+        return Response.ok().entity(responseString).build();
     }
 
     @PUT
@@ -68,8 +74,8 @@ public class AssetService {
         @APIResponse(responseCode = "404", description = "MyAsset not found", content = @Content(mediaType = "application/json")) }) 
     @Operation(summary = "Update MyAsset on the blockchain", description = "Updates an MyAsset on the blockchain.")
     @Tag(name = "MyAssets")
-    public Response updateMyAsset(@PathParam("id") String id, MyAsset asset)
-            throws IdentityException, GatewayException {
+    public Response updateMyAsset(@PathParam("id") String id, MyAsset asset) throws IdentityException, GatewayException {
+        LOGGER.info("Asset : " + asset.toString());
         String fabricId = headers.getHeaderString("X-FABRIC-IDENTITY");
         Contract contract = ConnectionManager.getContract(fabricId);
         MyAssetController controller = new MyAssetController(); 
@@ -87,6 +93,7 @@ public class AssetService {
     @Operation(summary = "Deletes MyAsset from the blockchain", description = "Deletes MyAsset from the blockchain.")
     @Tag(name = "MyAssets")
     public Response deleteMyAsset(@PathParam("id") String id) throws IdentityException, GatewayException {
+        LOGGER.info("AssetId  : " + id);
         String fabricId = headers.getHeaderString("X-FABRIC-IDENTITY");
         Contract contract = ConnectionManager.getContract(fabricId);
         MyAssetController controller = new MyAssetController(); 
@@ -104,6 +111,7 @@ public class AssetService {
     @Operation(summary = "Create MyAsset on the blockchain", description = "Create MyAsset on the blockchain.")
     @Tag(name = "MyAssets")
     public Response createMyAsset(MyAsset asset) throws IdentityException, GatewayException {
+        LOGGER.info("Asset : " + asset.toString());
         String fabricId = headers.getHeaderString("X-FABRIC-IDENTITY");
         Contract contract = ConnectionManager.getContract(fabricId);
         MyAssetController controller = new MyAssetController(); 
