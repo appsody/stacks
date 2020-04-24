@@ -1,9 +1,6 @@
 package application.api;
 
 import java.io.IOException;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
-
 import java.util.logging.Logger;
 
 import javax.ws.rs.container.ContainerRequestContext;
@@ -16,23 +13,17 @@ import javax.ws.rs.ext.Provider;
 import application.auth.DefaultIdentityMapper;
 import application.auth.IdentityMapper;
 
-
 @Provider
 @PreMatching
 public class IdentityExtractorFilter implements ContainerRequestFilter {
 
-
-    public static final Handler handler = new ConsoleHandler();
     public static final Logger LOGGER = Logger.getLogger(IdentityExtractorFilter.class.getName());
-    static {
-        LOGGER.addHandler(handler);
-    }
+
     @Override
     public void filter(ContainerRequestContext reqContext) throws IOException {
 
         String principal = extractPrincipal(reqContext);
         Response response = Response.status(Status.UNAUTHORIZED).build();
-        
         
         if (principal == null) {
             // If the extractor couldn't determine the prinicipal
@@ -40,9 +31,10 @@ public class IdentityExtractorFilter implements ContainerRequestFilter {
             LOGGER.severe("Could not extract the authenticated subject from the incoming request.");
             reqContext.abortWith(response);
         }
-        LOGGER.info("Principal: "+principal);
+        LOGGER.info("Principal: " + principal);
         IdentityMapper mapper = new DefaultIdentityMapper();
         String identity = mapper.getFabricIdentity(principal);
+        LOGGER.info("Identity: " + identity);
         if (identity == null) {
             // If the mapper cannot determine the fabric identity
             // the request is coming from an identity that cannot access the Fabric
