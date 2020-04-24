@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-10:1-66
+FROM registry.access.redhat.com/ubi8/nodejs-12:1-36
 
 USER root
 
