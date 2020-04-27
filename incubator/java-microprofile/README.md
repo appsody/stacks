@@ -1,10 +1,12 @@
-# Java MicroProfile Stack
+# Java MicroProfile Stack (DEPRECATED)
+
+## This stack has been deprecated! Please use the [Java Open Liberty](https://github.com/appsody/stacks/tree/master/incubator/java-openliberty) stack.
 
 The Java MicroProfile stack provides a consistent way of developing microservices based upon the [Eclipse MicroProfile specifications](https://microprofile.io). This stack lets you use [Maven](https://maven.apache.org) to develop applications for [Open Liberty](https://openliberty.io) runtime, that is running on OpenJDK with container-optimizations in OpenJ9.
 
 The Java MicroProfile stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins.
 
-This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.9`. It provides live reloading during development by utilizing `loose application` capabilities.
+This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open Liberty v19.0.0.12`. It provides live reloading during development by utilizing `loose application` capabilities.
 
 The stack also provides a in-built application monitoring dashboard based on [javametrics](https://github.com/runtimetools/javametrics). This dashboard is only included during development and is not included in the image built using `appsody build`.
 
@@ -44,6 +46,13 @@ OpenAPI endpoints:
 - http://localhost:9080/openapi (the RESTful APIs of the inventory service)
 - http://localhost:9080/openapi/ui (Swagger UI of the deployed APIs)
 
+### Config dropin: **quick-start-security.xml**
+
+The metrics endpoint is secured with a userid and password enabled through the config dropin included in the default template at path:
+**src/main/liberty/config/configDropins/defaults/quick-start-security.xml**.
+
+In order to lock down the production image built via `appsody build` this file is deleted during the Docker build of your application production image.  (The same file would be deleted if you happened to create your own file at this location as well).
+
 ## Getting Started
 
 1. Create a new folder in your local directory and initialize it using the Appsody CLI, e.g.:
@@ -73,6 +82,8 @@ OpenAPI endpoints:
     - OpenAPI endpoint: http://localhost:9080/openapi
     - Swagger UI endpoint: http://localhost:9080/openapi/ui
     - Javametrics Dashboard endpoint: http://localhost:9080/javametrics-dash/ (development-time only)
+
+
 
 ## License
 

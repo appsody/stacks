@@ -4,17 +4,21 @@ description: Eclipse MicroProfile on Open Liberty & OpenJ9 using Maven
 license: Apache-2.0
 language: java
 maintainers:
-  - name: Emily Jiang
-    email: emijiang6@googlemail.com
-    github-id: Emily-Jiang
-  - name: Neeraj Laad
-    email: neeraj.laad@gmail.com
-    github-id: neeraj-laad
-  - name: Ozzy
-    email: ozzy@ca.ibm.com
-    github-id: BarDweller
+  - name: Mike Andrasak
+    email: andrasak@us.ibm.com
+    github-id: uberskigeek
+  - name: Andy Mauer
+    email: ajmauer@us.ibm.com
+    github-id: ajm01
+  - name: Scott Kurz
+    email: skurz@us.ibm.com
+    github-id: scottkurz
+  - name: Adam Wisniewski
+    email: awisniew@us.ibm.com
+    github-id: awisniew90
 default-template: default
 requirements:
     appsody-version: ">= 0.5.0"
 templating-data:
-    libertyversion: '19.0.0.12' 
+    libertyversion: '19.0.0.12'
+deprecated: 04/20/2020 - This stack has been replaced by the Open Liberty stack (java-openliberty)
