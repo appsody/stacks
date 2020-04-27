@@ -22,7 +22,7 @@ COPY --from=build /project/user-app/target/*-runner /work/application
 USER root
 RUN microdnf -y install shadow-utils \
     && microdnf clean all ;\
-    useradd -u 1001 -r -g 0 -s /usr/sbin/nologin quarkus
+    useradd -r -g 0 -s /usr/sbin/nologin quarkus
 
 RUN chown -R quarkus /work
 RUN chmod -R g+w /work
