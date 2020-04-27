@@ -19,7 +19,6 @@ requirements:
     appsody-version: ">= 0.5.0"
 templating-data:
     libertyversion: '19.0.0.12'
-    parentpomrange: '[0.1, 0.3)'
     parentpomgroup: 'blockchain-client'
     parentpomid: 'java-openliberty'
     parentpomrange: '[0.1, 0.3)'
