@@ -29,12 +29,11 @@ do
         # iterate over each stack
         for stack in $(ls $repo_dir/*/stack.yaml 2>/dev/null | sort)
         do
-            echo $stack
             stack_dir=$(dirname $stack)
 
             if [ -d $stack_dir ]
             then
-                pushd $stack_dir
+                pushd $stack_dir &>/dev/null
 
                 stack_id=$(basename $stack_dir)
                 stack_version=$(awk '/^version *:/ { gsub("version:","",$NF); gsub("\"","",$NF); print $NF}' $stack)
@@ -138,7 +137,7 @@ do
                     echo -e "\n- SKIPPING stack image: $repo_name/$stack_id"
                 fi
 
-                popd
+                popd &>/dev/null
             fi
         done
 
