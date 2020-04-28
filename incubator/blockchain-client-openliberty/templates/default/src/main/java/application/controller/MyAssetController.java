@@ -19,16 +19,10 @@ public class MyAssetController {
         LOGGER.info("AssetId = " + assetId);
         byte[] results = null;
         try {
-            results = contract.submitTransaction("readMyAsset", assetId);
+            results = contract.evaluateTransaction("readMyAsset", assetId);
         } catch (ContractException e) {
             LOGGER.severe("Contract Exception submitting transaction." + e.toString());
             throw new AssetNotFoundException("Asset not found on the ledger.", e);
-        } catch (TimeoutException e) {
-            LOGGER.severe("TimeoutException submitting transaction." + e.toString());
-            throw new AssetException("Trasaction timeout.", e);
-        } catch (InterruptedException e) {
-            LOGGER.severe("Interrupted Exception submitting transaction." + e.toString());
-            throw new AssetException("Trasaction error.", e);
         }
         LOGGER.info("Results = " + new String(results, StandardCharsets.UTF_8) );
         return results;

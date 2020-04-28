@@ -76,6 +76,10 @@ public class AssetService {
     @Tag(name = "MyAssets")
     public Response updateMyAsset(@PathParam("id") String id, MyAsset asset) throws IdentityException, GatewayException {
         LOGGER.info("Asset : " + asset.toString());
+        // Give preference to the value passed in the path rather than a possible value in the payload. 
+        if(!asset.getMyAssetId().equals(id)){
+            asset.setMyAssetId(id);
+        }
         String fabricId = headers.getHeaderString("X-FABRIC-IDENTITY");
         Contract contract = ConnectionManager.getContract(fabricId);
         MyAssetController controller = new MyAssetController(); 
