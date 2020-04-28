@@ -118,19 +118,21 @@ public class ConnectionConfigurationTest {
 
     @Test
     public void testGetWalletProfileBP() {
-        String TEST_CONNECTION_PROFILE_BP = "";
+        final String DEFAULT_WALLET_PROFILE = "{\"type\":\"IN_MEMORY\"}";
+        String TEST_WALLET_PROFILE_BP = "";
         PowerMockito.mockStatic(System.class);
-        PowerMockito.when(System.getenv("FABRIC_WALLET_PROFILE")).thenReturn(TEST_CONNECTION_PROFILE_BP);
+        PowerMockito.when(System.getenv("FABRIC_WALLET_PROFILE")).thenReturn(TEST_WALLET_PROFILE_BP);
         String wallet = ConnectionConfiguration.getWalletProfile();
-        assertEquals(TEST_CONNECTION_PROFILE_BP, wallet);  
+        assertEquals(DEFAULT_WALLET_PROFILE, wallet);  
     }
 
     @Test
     public void testGetWalletProfileNULL() {
-        String TEST_CONNECTION_PROFILE_NULL = null;
+        final String DEFAULT_WALLET_PROFILE = "{\"type\":\"IN_MEMORY\"}";
+        String TEST_WALLET_PROFILE_BP = null;
         PowerMockito.mockStatic(System.class);
-        PowerMockito.when(System.getenv("FABRIC_WALLET_PROFILE")).thenReturn(TEST_CONNECTION_PROFILE_NULL);
+        PowerMockito.when(System.getenv("FABRIC_WALLET_PROFILE")).thenReturn(TEST_WALLET_PROFILE_BP);
         String wallet = ConnectionConfiguration.getWalletProfile();
-        assertNull(wallet);
+        assertEquals(DEFAULT_WALLET_PROFILE, wallet);  
     }
 }
