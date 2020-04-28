@@ -74,8 +74,17 @@ public class AssetService {
         @APIResponse(responseCode = "404", description = "MyAsset not found", content = @Content(mediaType = "application/json")) }) 
     @Operation(summary = "Update MyAsset on the blockchain", description = "Updates an MyAsset on the blockchain.")
     @Tag(name = "MyAssets")
-    public Response updateMyAsset(@PathParam("id") String id, MyAsset asset) throws IdentityException, GatewayException {
+    public Response updateMyAsset(@PathParam("id") String id, MyAsset asset) throws IdentityException, GatewayException, AssetException{
         LOGGER.info("Asset : " + asset.toString());
+        // The path value is required.  
+        if(asset.getMyAssetId() == null || asset.getMyAssetId().isEmpty()){
+            asset.setMyAssetId(id);
+        } 
+        // If the data is inconsistent fail. 
+        else if (!asset.getMyAssetId().equals(id)){
+            LOGGER.severe("Data is incosistent - ID : "+ id + " Asset : " + asset);
+            throw new AssetException("Not able to update asset, conflicting id values passed.");
+        }
         String fabricId = headers.getHeaderString("X-FABRIC-IDENTITY");
         Contract contract = ConnectionManager.getContract(fabricId);
         MyAssetController controller = new MyAssetController(); 

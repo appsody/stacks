@@ -29,7 +29,7 @@ public class MyAssetControllerTest {
 
         // Mock the fabric call
         Contract mock = mock(Contract.class);
-        when(mock.submitTransaction("readMyAsset", assetId)).thenReturn(expectedValue);
+        when(mock.evaluateTransaction("readMyAsset", assetId)).thenReturn(expectedValue);
 
         MyAssetController controller = new MyAssetController();
         byte[] results = controller.getMyAsset(mock, assetId);
@@ -44,38 +44,8 @@ public class MyAssetControllerTest {
 
         // Mock the fabric call
         Contract mock = mock(Contract.class);
-        when(mock.submitTransaction("readMyAsset", assetId))
+        when(mock.evaluateTransaction("readMyAsset", assetId))
                 .thenThrow(new ContractException("Test Contract Exception"));
-
-        MyAssetController controller = new MyAssetController();
-        controller.getMyAsset(mock, assetId);
-
-        fail("Expected Asset Exception");
-    }
-
-    @Test(expected = AssetException.class)
-    public void testGetMyAssetTimeoutException() throws ContractException, TimeoutException, InterruptedException {
-        // Value Setup
-        String assetId = "fakeAsset";
-
-        // Mock the fabric call
-        Contract mock = mock(Contract.class);
-        when(mock.submitTransaction("readMyAsset", assetId)).thenThrow(new TimeoutException());
-
-        MyAssetController controller = new MyAssetController();
-        controller.getMyAsset(mock, assetId);
-
-        fail("Expected Asset Exception");
-    }
-
-    @Test(expected = AssetException.class)
-    public void testGetMyAssetInterruptedException() throws ContractException, TimeoutException, InterruptedException {
-        // Value Setup
-        String assetId = "fakeAsset";
-
-        // Mock the fabric call
-        Contract mock = mock(Contract.class);
-        when(mock.submitTransaction("readMyAsset", assetId)).thenThrow(new InterruptedException());
 
         MyAssetController controller = new MyAssetController();
         controller.getMyAsset(mock, assetId);
