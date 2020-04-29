@@ -2,3 +2,4 @@ FROM kabanero/java-openliberty:0.2
 COPY ./project/pom.xml /project
 COPY ./project/preload-m2-pom.xml /project
 COPY ./project/run-stack.sh /project
+COPY ./config/app-deploy.yaml /config
