@@ -11,3 +11,4 @@ default-template: simple
 requirements:
   docker-version: ">= 17.09.0"
   appsody-version: ">= 0.2.7"
+ 
