@@ -33,8 +33,8 @@
             <groupId>org.eclipse.microprofile.reactive.messaging</groupId>
             <artifactId>microprofile-reactive-messaging-api</artifactId>
             <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
-            
 
         <!-- Aggregate of MicroProfile APIs -->
         <dependency>
@@ -190,4 +190,30 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>appsody-build</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>local-dev</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>default-profile</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <liberty.var.mp.messaging.connector.liberty-kafka.bootstrap.servers>localhost:9093</liberty.var.mp.messaging.connector.liberty-kafka.bootstrap.servers>
+            </properties>
+        </profile>
+    </profiles>
+ 
+     
 </project>
