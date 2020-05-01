@@ -29,7 +29,7 @@ RUN mkdir -p /mvn/repository
 RUN mvn -e help:evaluate -Dexpression=maven.version -DforceStdout
 RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
 RUN mvn -B -Pstack-image-package -Dmaven.repo.local=/mvn/repository liberty:install-server install dependency:go-offline
-RUN chmod -R 777 /opt/ol 
+RUN chmod -R 777 /opt/ol && chmod -R 777 /mvn/repository
 
 
 WORKDIR /project/user-app
