@@ -1,9 +1,9 @@
 # Install the app dependencies
-FROM swift:5.1 as builder
+FROM swift:5.2 as builder
 
 # Install OS updates
 RUN apt-get update \
- && apt-get install -y zlib1g-dev libcurl4-openssl-dev libssl-dev \
+ && apt-get install -y libcurl4-openssl-dev libssl-dev \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 
@@ -17,7 +17,7 @@ RUN echo '#!/bin/bash' > run.sh \
  && cat output.txt | awk 'END {print "./.build/x86_64-unknown-linux/release/" $NF}' >> run.sh \
  && chmod 755 run.sh
 
-FROM swift:5.1-slim
+FROM swift:5.2-slim
 
 # Install OS updates
 RUN apt-get update \
