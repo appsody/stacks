@@ -34,7 +34,7 @@ def generate_json():
                                 template = ""
                             else:
                                 template = " " + item['templates'][n]['id']
-
+                            
                             # populate stack details
                             res = (OrderedDict([
                                 ("displayName", displayNamePrefix + " " + item['name'] + template + " template"),
@@ -48,6 +48,11 @@ def generate_json():
                                         item['id'] + "/devfile.yaml")
                                 ]))
                             ]))
+                            
+                            if ('deprecated' in item):
+                                res.update([("displayName", "[Deprecated] " + displayNamePrefix + " " + item['name'] + template + " template"),
+                                             ("deprecated", item['deprecated'])])
+                                
                             list.append(res)
 
                 jsonFile.write(json.dumps(list, indent=4, ensure_ascii=False).encode('utf8'))
