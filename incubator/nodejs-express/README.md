@@ -22,9 +22,9 @@ You can override or enhance the following endpoints by configuring your own heal
 
 Enable powerful monitoring for your distributed application and configure rule-based alerting using Prometheus. This is vital for diagnosing problems and ensuring the reliability of your application.
 
-The [appmetrics-prometheus](https://github.com/CloudNativeJS/appmetrics-prometheus) module will collect a wide range of resource-centric (CPU, memory) and application-centric (HTTP request responsiveness) metrics from your application, and then expose them as multi-dimensional time-series data through an application endpoint for Prometheus to scrape and aggregate.
+The [prom-client](https://www.npmjs.com/package/prom-client) module will collect a wide range of resource-centric (CPU, memory) and application-centric (HTTP request responsiveness) metrics from your application, and then expose them as multi-dimensional time-series data through an application endpoint for Prometheus to scrape and aggregate.
 
-This stack also comes with Prometheus metrics, which has been preconfigured to work with your application. You will not be able to override this endpoint:
+This stack comes with prom-client preconfigured to work with your application. You will not be able to override this endpoint:
 
 - Metrics endpoint: http://localhost:3000/metrics
 
