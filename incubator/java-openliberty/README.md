@@ -115,11 +115,6 @@ The command `appsody test` launches the Open Liberty server, runs integration te
 ### Shared Drive and Permission Setup
 * See the instructions [here](https://appsody.dev/docs/docker-windows-aad/) for information on setting up "Shared Drives" and permissions to enable mounting the host filesystem from the appsody container.
 
-### Changes from Windows 10 host side not detected within container
-* Because of an issue in Docker for Windows 10, changes made from the host side to the application may not be detected by the liberty-maven-plugin dev mode watcher running inside the Appsody Docker container, and thus the normal expected compile, app update, test execution etc. may not run.
-* At the time of the release of this java-openliberty stack, this problem seems to be getting the active attention of the Docker Desktop for Windows developement team, (e.g. see [this issue](https://github.com/docker/for-win/issues/5530)). Naturally, updating your Docker Desktop for Windows installation might help, however, we can not simply point to a recommended version that is known to work for all users.   
-* **Workaround**: This may be worked around by making the changes from the host, and then doing a `touch` of the corresponding files from within the container.
-
 ## Other externals and usage notes
 
 The stack itself defines an externals worth noting here, which is not apparent from the default template:
