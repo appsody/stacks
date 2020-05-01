@@ -37,9 +37,9 @@ p_groupId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x
 p_artifactId=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:artifactId" pom.xml)
 p_version_range=$(xmlstarlet sel -T -N x="http://maven.apache.org/POM/4.0.0" -t -v "/x:project/x:parent/x:version" pom.xml)
 
-# Install parent pom
+# Install parent pom (skip tests to avoid writing to this path)
 echo "Installing parent ${a_groupId}:${a_artifactId}:${a_version}"
-mvn install $M2_LOCAL_REPO -Denforcer.skip=true -f ../pom.xml
+mvn install $M2_LOCAL_REPO -DskipTests=true -Denforcer.skip=true -f ../pom.xml
 
 
 
