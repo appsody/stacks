@@ -1,5 +1,5 @@
 name: Open Liberty
-version: 0.2.9
+version: 0.2.10
 description: Eclipse MicroProfile & Jakarta EE on Open Liberty & OpenJ9 using Maven
 license: Apache-2.0
 language: java
