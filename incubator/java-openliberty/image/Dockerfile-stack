@@ -1,4 +1,11 @@
 FROM kabanero/ubi8-maven:0.9.0
+
+LABEL vendor="Open Liberty" \
+    name="{{.stack.id}}" \
+    version="{{.stack.version}}" \
+    summary="{{.stack.name}}" \
+    description="{{.stack.description}}"
+    
 RUN  groupadd --gid 1000 java_group \
   && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user \
   && mkdir -p /mvn/repository \

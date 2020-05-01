@@ -73,6 +73,7 @@ const userApp = require(basePath + getEntryPoint());
 app.use('/', userApp({
   server: server,
   app: app,
+  log: pino,
 }));
 
 app.get('*', (req, res) => {
