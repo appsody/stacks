@@ -3,7 +3,7 @@ FROM registry.access.redhat.com/ubi8/nodejs-12:1-36
 USER root
 
 # Install OS updates
-RUN yum install --disableplugin=subscription-manager python2 -y \
+RUN yum install --disableplugin=subscription-manager python2 openssl-devel -y \
  && yum clean --disableplugin=subscription-manager packages \
  && ln -s /usr/bin/python2 /usr/bin/python \
  && useradd --uid 1000 --gid 0 --shell /bin/bash --create-home node
