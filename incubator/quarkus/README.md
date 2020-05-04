@@ -58,13 +58,9 @@ Once you have updated your `app-deploy.yaml` to inject the environment variable,
     ```bash
     mkdir my-project
     cd my-project
-    appsody init experimental/quarkus
+    appsody init quarkus
     ```
     This will initialize a Quarkus project using the default template.
-
-    **NOTE:** If you encounter the following error, [configure the experimental repo](#Configuring-Experimental-Repo):
-
-    **`[Error] Repository experimental is not in configured list of repositories`**.
 
 1. After your project has been initialized you can then run your application using the following command:
 
@@ -109,16 +105,6 @@ You can verify that this worked by visiting http://0.0.0.0:8080/ and observing t
 ## Known Issue:
 
 - Currently there is no configuration or documentation on `appsody debug`.
-
-## Configuring Experimental Repo
-
-Upgrade your CLI to the latest version and add the experimental repo:
-
-1. `brew upgrade appsody` or for other platforms visit the [upgrading appsody section](https://appsody.dev/docs/getting-started/installation).
-
-2. `appsody repo add experimental https://github.com/appsody/stacks/releases/latest/download/experimental-index.yaml`
-
-You should now be able to [initialise your application](#Getting-Started).
 
 ## License
 
