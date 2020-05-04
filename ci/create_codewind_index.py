@@ -4,21 +4,23 @@ import yaml
 import json
 import os
 import fnmatch
-import sys
 from collections import OrderedDict
+import argparse
+from argparse import ArgumentDefaultsHelpFormatter
 
-base_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
+parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
-displayNamePrefix = "Appsody"
-if len(sys.argv) > 1:
-    displayNamePrefix = sys.argv[1]
+parser.add_argument("-n", "--namePrefix", help="Display name prefix.", default="Appsody")
+parser.add_argument("-f", "--file", help="Absolute or relative path, to a yaml file or directory of yaml files.", default=os.getcwd())
 
-# directory to store assets for test or release
-assets_dir = base_dir + "/assets/"
+args = parser.parse_args()
 
-for file in os.listdir(assets_dir):
-    if fnmatch.fnmatch(file, '*index.yaml'):
-        with open(assets_dir + file, 'r') as yamlFile, open(assets_dir + os.path.splitext(file)[0] + ".json", 'wb') as jsonFile:
+displayNamePrefix = args.namePrefix
+
+yaml_dir = os.path.normpath(args.file)
+
+def generate_json():
+    with open(inputFile, 'r') as yamlFile, open(inputFile.rsplit('.', 1)[0] + ".json", 'wb') as jsonFile:
             try:
                 doc = yaml.safe_load(yamlFile)
                 list = []
@@ -32,7 +34,7 @@ for file in os.listdir(assets_dir):
                                 template = ""
                             else:
                                 template = " " + item['templates'][n]['id']
-
+                            
                             # populate stack details
                             res = (OrderedDict([
                                 ("displayName", displayNamePrefix + " " + item['name'] + template + " template"),
@@ -46,10 +48,23 @@ for file in os.listdir(assets_dir):
                                         item['id'] + "/devfile.yaml")
                                 ]))
                             ]))
+                            
+                            if ('deprecated' in item):
+                                res.update([("displayName", "[Deprecated] " + displayNamePrefix + " " + item['name'] + template + " template"),
+                                             ("deprecated", item['deprecated'])])
+                                
                             list.append(res)
 
                 jsonFile.write(json.dumps(list, indent=4, ensure_ascii=False).encode('utf8'))
-                print("Generated: " + os.path.splitext(file)[0] + ".json")
-
+                print("Generated: " + inputFile.rsplit('.', 1)[0] + ".json")
             except yaml.YAMLError as exc:
                 print(exc)
+
+if os.path.isdir(yaml_dir):
+    for file in os.listdir(yaml_dir):
+        if fnmatch.fnmatch(file, '*.yaml'):
+            inputFile = yaml_dir + "/" + file
+            generate_json()
+else:
+    inputFile = yaml_dir
+    generate_json()
