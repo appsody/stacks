@@ -1,10 +1,10 @@
-FROM swift:5.1
+FROM swift:5.2
 
 LABEL Description="Appsody runtime for Swift applications"
 LABEL maintainer="Ian Partridge <ianpartridge>, David Jones <djones6>"
 
 RUN apt-get update \
- && apt-get install -y zlib1g-dev libcurl4-openssl-dev libssl-dev \
+ && apt-get install -y libcurl4-openssl-dev libssl-dev \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 

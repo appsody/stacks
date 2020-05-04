@@ -9,7 +9,7 @@
             "initCommands": [
                 "platform select remote-linux",
                 "platform connect connect://localhost:1234",
-                "platform settings -w /project/user-app/target/debug"
+                "platform settings -w /project/user-app/target/x86_64-unknown-linux-musl/debug"
             ],
             "targetCreateCommands": [
                 "file rust-simple"
