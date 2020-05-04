@@ -1,34 +1,70 @@
-FROM {{.stack.image.namespace}}/{{.stack.id}}:{{.stack.semver.major}}.{{.stack.semver.minor}} as compile
+############################################################################
+# 
+# Prepare stable image layers to be cached and reused below, as referenced
+# via "--from=compile".
+#
+FROM {{.stack.baseimage}} as compile
 
-#setup project folder for java build step
-COPY . /project
+USER root
+
+# Ensure up to date / patched OS
+COPY ./update.sh /update.sh
+RUN  /update.sh
+
+RUN  groupadd --gid 1000 java_group \
+  && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user \
+  && mkdir -p /mvn/repository \
+  && chown -R java_user:java_group /mvn
+
+USER java_user
+
+# Labels for Intermediate image used for layer caching
+LABEL "stack.appsody.dev/id"="{{.stack.image.namespace}}/{{.stack.id}}"
+LABEL "stack.appsody.dev/version"="{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}"
+
+# Layer caching for stack dependencies
+COPY --chown=java_user:java_group {{.stack.parentpomfilename}} /mvn/{{.stack.parentpomfilename}}
+RUN mvn --no-transfer-progress -B dependency:go-offline install -f /mvn/{{.stack.parentpomfilename}}
+
+# Layer caching for application dependencies
+COPY --chown=java_user:java_group user-app/pom.xml /mvn/pom.xml
+RUN mvn --no-transfer-progress -B dependency:go-offline -f /mvn/pom.xml
+
+# Copy and build project
+COPY --chown=java_user:java_group . /project
 
 WORKDIR /project/user-app
 
 RUN /project/util/check_version build \
- && /project/java-spring-boot2-build.sh package
+ && /project/java-spring-boot2-build.sh package \
+ && /project/java-spring-boot2-build.sh createStartScript
 
-####
-FROM adoptopenjdk:8-jdk-openj9
+############################################################################
+# 
+# Begin build of final application image
+#
+FROM {{.stack.finalimage}}
 
-# Ensure up to date / patched OS
-RUN  apt-get -qq update \
-  && apt-get -qq install -y curl wget xmlstarlet unzip \
-  && DEBIAN_FRONTEND=noninteractive apt-get -qq upgrade -y \
-  && apt-get -qq clean \
-  && rm -rf /tmp/* /var/lib/apt/lists/*
+USER root
 
-ARG artifactId=appsody-spring
-ARG version=1.0-SNAPSHOT
+RUN groupadd --gid 1000 java_group \
+ && useradd --uid 1000 --gid java_group --shell /bin/bash --create-home java_user
+
+USER java_user
+
 ENV JVM_ARGS=""
 
+# Need to find a way to pass version in during appsody build, from the application project source
+ARG version=1.0-SNAPSHOT
 LABEL org.opencontainers.image.version="${version}"
-LABEL org.opencontainers.image.title="${artifactId}"
-LABEL appsody.stack={{.stack.image.namespace}}/{{.stack.id}}:{{.stack.semver.major}}.{{.stack.semver.minor}}.{{.stack.semver.patch}}
 
-COPY --from=compile /project/user-app/target/app.jar /app.jar
+COPY --chown=java_user:java_group --from=compile /project/user-app/target/start.sh /start.sh
+
+ARG DEPENDENCY=/project/user-app/target/dependency
+COPY --chown=java_user:java_group --from=compile ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --chown=java_user:java_group --from=compile ${DEPENDENCY}/META-INF /app/META-INF
+COPY --chown=java_user:java_group --from=compile ${DEPENDENCY}/BOOT-INF/classes /app
 
 EXPOSE 8080
 EXPOSE 8443
-
-ENTRYPOINT [ "sh", "-c", "exec java $JVM_ARGS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
+ENTRYPOINT [ "/start.sh" ]

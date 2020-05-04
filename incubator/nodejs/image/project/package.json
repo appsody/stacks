@@ -1,6 +1,6 @@
 {
   "name": "nodejs",
-  "version": "0.3.0",
+  "version": "0.3.5",
   "description": "Node.js Stack",
   "license": "Apache-2.0",
   "repository": {
@@ -8,8 +8,7 @@
     "url": "https://github.com/appsody/stacks.git",
     "directory": "incubator/nodejs/image/project"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "appmetrics-dash": "^5.0.0"
   }

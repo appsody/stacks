@@ -1,10 +1,10 @@
-FROM swift:5.1
+FROM swift:5.2
 
 LABEL Description="Appsody runtime for Swift applications"
-LABEL maintainer="Ian Partridge <i.partridge@uk.ibm.com>, David Jones <djones6@uk.ibm.com>"
+LABEL maintainer="Ian Partridge <ianpartridge>, David Jones <djones6>"
 
 RUN apt-get update \
- && apt-get install -y zlib1g-dev libcurl4-openssl-dev libssl-dev \
+ && apt-get install -y libcurl4-openssl-dev libssl-dev \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 
@@ -16,7 +16,7 @@ ENV APPSODY_WATCH_DIR=/project/user-app
 ENV APPSODY_WATCH_IGNORE_DIR=/project/user-app/.build
 ENV APPSODY_WATCH_REGEX="^.*.swift$"
 
-ENV APPSODY_INSTALL="swift build"
+ENV APPSODY_PREP="swift build"
 
 ENV APPSODY_RUN="swift run"
 ENV APPSODY_RUN_ON_CHANGE="swift run"

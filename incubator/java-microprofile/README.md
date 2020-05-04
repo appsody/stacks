@@ -1,4 +1,6 @@
-# Java MicroProfile Stack
+# Java MicroProfile Stack (DEPRECATED)
+
+## This stack has been deprecated! Please use the [Java Open Liberty](https://github.com/appsody/stacks/tree/master/incubator/java-openliberty) stack.
 
 The Java MicroProfile stack provides a consistent way of developing microservices based upon the [Eclipse MicroProfile specifications](https://microprofile.io). This stack lets you use [Maven](https://maven.apache.org) to develop applications for [Open Liberty](https://openliberty.io) runtime, that is running on OpenJDK with container-optimizations in OpenJ9.
 
@@ -29,7 +31,12 @@ The `mpMetrics` feature enables MicroProfile Metrics support in Open Liberty. No
 
 Metrics endpoint: http://localhost:9080/metrics
 
-Log in as the `admin` user with `adminpwd` as the password to see both the system and application metrics in a text format.
+The log in user is `admin` and the password is randomly generated at startup by Open Liberty. You can use the following command to retrieve the password from the container which is listed as the `keystore_password` variable:
+```bash
+docker exec -it <container_id>  bash -c "cat /project/user-app/target/liberty/wlp/usr/servers/defaultServer/server.env"
+```
+
+Once logged in, you can see both the system and application metrics in a text format.
 
 ### OpenAPI
 
@@ -38,6 +45,13 @@ The `mpOpenAPI` feature provides a set of Java interfaces and programming models
 OpenAPI endpoints:
 - http://localhost:9080/openapi (the RESTful APIs of the inventory service)
 - http://localhost:9080/openapi/ui (Swagger UI of the deployed APIs)
+
+### Config dropin: **quick-start-security.xml**
+
+The metrics endpoint is secured with a userid and password enabled through the config dropin included in the default template at path:
+**src/main/liberty/config/configDropins/defaults/quick-start-security.xml**.
+
+In order to lock down the production image built via `appsody build` this file is deleted during the Docker build of your application production image.  (The same file would be deleted if you happened to create your own file at this location as well).
 
 ## Getting Started
 
@@ -68,6 +82,8 @@ OpenAPI endpoints:
     - OpenAPI endpoint: http://localhost:9080/openapi
     - Swagger UI endpoint: http://localhost:9080/openapi/ui
     - Javametrics Dashboard endpoint: http://localhost:9080/javametrics-dash/ (development-time only)
+
+
 
 ## License
 
