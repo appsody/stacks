@@ -54,7 +54,7 @@ app.use(requestTimer);
 const pino = require('pino')({
   level: PRODUCTION ? 'info' : 'debug',
 });
-app.use(require('express-pino-logger')({logger: pino}));
+app.use(require('pino-http')({logger: pino}));
 
 // Register the user's app.
 const basePath = __dirname + '/user-app/';
