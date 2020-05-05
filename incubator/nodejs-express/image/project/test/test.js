@@ -8,7 +8,7 @@ const url = "http://localhost:" + PORT;
 
 describe("Node.js Express stack", function () {
 
-    // Testing /metrics enpoint, metrics are up
+    // Testing /metrics endpoint, metrics are up
     describe('/metrics endpoint', function () {
         it('status', function (done) {
             request(url + '/metrics', function (error, response, body) {
@@ -16,17 +16,15 @@ describe("Node.js Express stack", function () {
                 done();
             });
         });
-        // Systems CPU that is currently used exists
-        it("contains os_cpu_used_ratio", function (done) {
+        it("contains process_start_time", function (done) {
             request(url + '/metrics', function (error, response, body) {
-                expect(body).to.contains("os_cpu_used_ratio");
+                expect(body).to.contain("process_start_time");
                 done();
             });
         });
-        // Process CPU that is currently used exists
-        it("contains process_cpu_used_ratio", function (done) {
+        it("contains process_cpu_user_seconds", function (done) {
             request(url + '/metrics', function (error, response, body) {
-                expect(body).to.contains("process_cpu_used_ratio");
+                expect(body).to.contain("process_cpu_user_seconds");
                 done();
             });
         });

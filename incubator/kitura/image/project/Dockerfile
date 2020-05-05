@@ -24,11 +24,6 @@ RUN echo '#!/bin/bash' > run.sh \
 
 FROM swift:5.1-slim
 
-# Install OS updates
-RUN apt-get update \
- && apt-get clean \
- && echo 'Finished installing dependencies'
-
 # Define a kitura user
 RUN useradd -ms /bin/bash kitura
 

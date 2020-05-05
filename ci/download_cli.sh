@@ -13,7 +13,7 @@ then
     fi
     if [ -z "${APPSODY_CLI_FALLBACK}" ]
     then
-        APPSODY_CLI_FALLBACK=0.5.4
+        APPSODY_CLI_FALLBACK=0.6.1
     fi
 
     script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
@@ -22,7 +22,7 @@ then
     cli_dir=$base_dir/cli
     mkdir -p $cli_dir
 
-    curl -L -s -o $cli_dir/release.json "$APPSODY_CLI_RELEASE_URL"
+    curl -H "Authorization: token ${GITHUB_READ_TOKEN}" -L -s -o $cli_dir/release.json "$APPSODY_CLI_RELEASE_URL"
     release_tag=$(cat $cli_dir/release.json | grep "tag_name" | cut -d'"' -f4)
     if ! [[ "$release_tag" =~ [0-9]+\.[0-9]+\.[0-9]+ ]]
     then
@@ -38,6 +38,6 @@ then
     echo " cli_deb=${cli_deb}"
     echo " cli_dist=${cli_dist}"
 
-    curl -L -s -o "$cli_dir/$cli_deb" "$cli_dist"
+    curl -H "Authorization: token ${GITHUB_READ_TOKEN}" -L -s -o "$cli_dir/$cli_deb" "$cli_dist"
     sudo dpkg -i $cli_dir/$cli_deb
 fi

@@ -1,6 +1,6 @@
 {
   "name": "nodejs-express-simple",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Simple Node.js Express application",
   "license": "Apache-2.0",
   "main": "app.js",
@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "~6.1.0",
+    "mocha": "^7.1.1",
     "request": "^2.88.0"
   }
 }
