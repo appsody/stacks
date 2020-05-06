@@ -25,15 +25,13 @@ Start docker compose with the following command:
 
 If you run `docker network list`, you should see a new network with the name of your project directory and the word `_default` appended. For example, `test-appsody-kafka_default`.
 
-Alternatively, if you want to connect to a Kafka broker elsewhere, edit `src/main/resources/META-INF/microprofile-config.properties` and set the value of the `mp.messaging.connector.liberty-kafka.bootstrap.servers` property to the host and port number of the your broker.
-
 ### 3. Run the Appsody application in the new network
 
-Your Appsody application must be run in the same network as Kafka.
+Your Appsody application must be run in the same network as Kafka. You must also supply the host and port number of the Kakfka broker as an environment variable. 
 
 Run the application using the following command:
 
-```appsody run --network test-appsody-kafka_default```
+```appsody run --network test-appsody-kafka_default --docker-options "-e MP_MESSAGING_CONNECTOR_LIBERTY_KAFKA_BOOTSTRAP_SERVERS=kafka:9092"```
 
 ### 4. Produce a message to a topic
 
