@@ -1,4 +1,4 @@
-package application.wm;
+package application.utils;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -11,11 +11,9 @@ import org.hyperledger.fabric_ca.sdk.exception.IdentityException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import application.cm.ConnectionConfiguration;
-
-public class FileSystemWallet implements WalletManager {
+public class FileSystemWallet {
     public final static Logger LOGGER = Logger.getLogger(FileSystemWallet.class.getName());
-    @Override
+
     public Wallet getWallet() throws IdentityException {
         Wallet wallet = null;
         String walletPath = null;

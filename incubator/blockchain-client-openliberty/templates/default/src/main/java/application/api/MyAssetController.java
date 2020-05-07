@@ -1,4 +1,4 @@
-package application.controller;
+package application.api;
 
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
@@ -7,9 +7,9 @@ import java.util.logging.Logger;
 import org.hyperledger.fabric.gateway.Contract;
 import org.hyperledger.fabric.gateway.ContractException;
 
-import application.exceptions.AssetException;
-import application.exceptions.AssetNotFoundException;
-import application.model.MyAsset;
+import application.api.exceptions.AssetException;
+import application.api.exceptions.AssetNotFoundException;
+import application.api.MyAsset;
 
 public class MyAssetController {
 

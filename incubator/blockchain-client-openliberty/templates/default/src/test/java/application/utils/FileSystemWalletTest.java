@@ -1,4 +1,4 @@
-package application.wm;
+package application.utils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -19,7 +19,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import application.cm.ConnectionConfiguration;
+import application.utils.ConnectionConfiguration;
 
 /**
  * FileSystemWalletTest

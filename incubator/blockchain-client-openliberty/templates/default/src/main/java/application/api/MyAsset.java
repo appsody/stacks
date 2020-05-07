@@ -1,4 +1,4 @@
-package application.model;
+package application.api;
 
 public class MyAsset {
     private String myAssetId = null;

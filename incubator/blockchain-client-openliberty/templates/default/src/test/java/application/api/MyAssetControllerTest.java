@@ -1,4 +1,4 @@
-package application.controller;
+package application.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -11,9 +11,9 @@ import org.hyperledger.fabric.gateway.Contract;
 import org.hyperledger.fabric.gateway.ContractException;
 import org.junit.Test;
 
-import application.exceptions.AssetException;
-import application.exceptions.AssetNotFoundException;
-import application.model.MyAsset;
+import application.api.exceptions.AssetException;
+import application.api.exceptions.AssetNotFoundException;
+import application.api.MyAsset;
 
 /**
  * MyAssetControllerTest
