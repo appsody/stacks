@@ -56,7 +56,7 @@ import application.utils.ConnectionConfiguration;
     }
 
     @Test
-    public void testFilterNullPrinciple() throws Exception {
+    public void testFilterNullPrincipal() throws Exception {
         ContainerRequestContext reqContext = mock(ContainerRequestContext.class);
         IdentityMapperFilter filter = PowerMockito.spy(new IdentityMapperFilter());
          PowerMockito.when(filter, "extractPrincipal", reqContext).thenReturn(null);
