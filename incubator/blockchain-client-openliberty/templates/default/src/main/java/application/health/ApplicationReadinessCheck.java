@@ -27,7 +27,7 @@ public class ApplicationReadinessCheck implements HealthCheck {
             LOGGER.severe("Contract id environment variable not provided... app not ready.");
             return false;
         }            
-        return true;
+        return true;  
     }
 	
     @Override
