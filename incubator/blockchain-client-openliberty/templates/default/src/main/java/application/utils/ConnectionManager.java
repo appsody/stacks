@@ -1,4 +1,4 @@
-package application.cm;
+package application.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -11,9 +11,8 @@ import org.hyperledger.fabric.gateway.GatewayException;
 import org.hyperledger.fabric.gateway.GatewayRuntimeException;
 import org.hyperledger.fabric.gateway.Network;
 import org.hyperledger.fabric.gateway.Wallet;
+import org.hyperledger.fabric.gateway.Wallet.Identity;
 import org.hyperledger.fabric_ca.sdk.exception.IdentityException;
-
-import application.wm.WalletManagerDelegate;
 
 public class ConnectionManager {
     public static final Logger LOGGER = Logger.getLogger(ConnectionManager.class.getName());
@@ -29,8 +28,18 @@ public class ConnectionManager {
             if (gateway == null) {
                 LOGGER.info("Creating a new gateway...");
                 ByteArrayInputStream connProfileIS = new ByteArrayInputStream(ConnectionConfiguration.getConnectionProfile().getBytes());
-                WalletManagerDelegate wmd = new WalletManagerDelegate();
-                Wallet wallet = wmd.getWallet();
+                Wallet wallet = new WalletManager().getWallet();
+
+                //Verify identity is in wallet. 
+                try {
+                    Identity id = wallet.get(fabricId);
+                    if(id == null){
+                        throw new IdentityException("Fabric Identity : " + fabricId + " not found in wallet.");
+                    }
+                } catch (IOException e) {
+                    LOGGER.severe("Error accessing wallet: "+e.toString());
+                    throw new IdentityException("Fabric Identity : " + fabricId + " not found in wallet.", e);
+                }
                 
                 try {
                     builder = Gateway.createBuilder().identity(wallet, fabricId).networkConfig(connProfileIS).discovery(true);

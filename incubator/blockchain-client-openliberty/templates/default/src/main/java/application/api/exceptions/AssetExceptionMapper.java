@@ -1,4 +1,4 @@
-package application.exceptions;
+package application.api.exceptions;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -13,7 +13,9 @@ public class AssetExceptionMapper implements ExceptionMapper<Throwable> {
    
   @Override
   public Response toResponse(Throwable exception) {
+    
       ExceptionResponse response = null;
+
       if (exception instanceof AssetNotFoundException){
         response = new ExceptionResponse(exception.getMessage());
         return Response.status(Status.NOT_FOUND).entity(response).build();

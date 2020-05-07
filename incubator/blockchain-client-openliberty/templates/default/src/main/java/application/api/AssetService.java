@@ -29,11 +29,9 @@ import org.hyperledger.fabric.gateway.Contract;
 import org.hyperledger.fabric.gateway.GatewayException;
 import org.hyperledger.fabric_ca.sdk.exception.IdentityException;
 
-import application.cm.ConnectionManager;
-import application.controller.MyAssetController;
-import application.exceptions.AssetException;
-import application.exceptions.AssetNotFoundException;
-import application.model.MyAsset;
+import application.api.exceptions.AssetException;
+import application.api.exceptions.AssetNotFoundException;
+import application.utils.ConnectionManager;
 
 @Path("/myassets")
 @OpenAPIDefinition(info = @Info(title = "Blockchain MyAsset Web Service", version = "0.1", description = "Restful Web Service for blockchain transactions.", contact = @Contact(url = "https://www.ibm.com/blockchain")), externalDocs = @ExternalDocumentation(description = "https://www.ibm.com/blockchain", url = "https://www.ibm.com/blockchain"))

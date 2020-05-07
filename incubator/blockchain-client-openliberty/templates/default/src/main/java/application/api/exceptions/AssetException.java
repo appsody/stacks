@@ -1,4 +1,4 @@
-package application.exceptions;
+package application.api.exceptions;
 
 public class AssetException extends RuntimeException {
     private static final long serialVersionUID = 1L;

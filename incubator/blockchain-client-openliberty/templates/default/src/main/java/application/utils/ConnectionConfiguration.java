@@ -1,4 +1,4 @@
-package application.cm;
+package application.utils;
 
 public class ConnectionConfiguration {
 

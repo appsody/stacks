@@ -10,14 +10,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
-import application.auth.DefaultIdentityMapper;
-import application.auth.IdentityMapper;
+import application.utils.ConnectionConfiguration;
 
 @Provider
 @PreMatching
-public class IdentityExtractorFilter implements ContainerRequestFilter {
+public class IdentityMapperFilter implements ContainerRequestFilter {
 
-    public static final Logger LOGGER = Logger.getLogger(IdentityExtractorFilter.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(IdentityMapperFilter.class.getName());
 
     @Override
     public void filter(ContainerRequestContext reqContext) throws IOException {
@@ -30,16 +29,19 @@ public class IdentityExtractorFilter implements ContainerRequestFilter {
             // the request wasn't properly authenticated
             LOGGER.severe("Could not extract the authenticated subject from the incoming request.");
             reqContext.abortWith(response);
+            return;
         }
         LOGGER.info("Principal: " + principal);
-        IdentityMapper mapper = new DefaultIdentityMapper();
-        String identity = mapper.getFabricIdentity(principal);
+        // Logic here to map the extracted priciple to a fabric identity. 
+        // We will simply pull the default idenity from the environment variable. 
+        String identity = ConnectionConfiguration.getFabricDefaultIdentity();
         LOGGER.info("Identity: " + identity);
         if (identity == null) {
             // If the mapper cannot determine the fabric identity
             // the request is coming from an identity that cannot access the Fabric
             LOGGER.severe("Could not map the authenticated subject "+principal+" to a valid Fabric identity.");            
             reqContext.abortWith(response);
+            return;
         }
         reqContext.getHeaders().add("X-FABRIC-IDENTITY", identity);
     }

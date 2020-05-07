@@ -1,4 +1,4 @@
-package application.wm;
+package application.utils;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -11,11 +11,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import application.cm.ConnectionConfiguration;
-
-public class InMemoryWallet implements WalletManager {
+public class InMemoryWallet {
     public final static Logger LOGGER = Logger.getLogger(InMemoryWallet.class.getName());
-    @Override
+
     public Wallet getWallet() throws IdentityException {
         Wallet wallet = Wallet.createInMemoryWallet();
         Wallet.Identity identity = null;

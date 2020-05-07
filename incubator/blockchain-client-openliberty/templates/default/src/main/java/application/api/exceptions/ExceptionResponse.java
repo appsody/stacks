@@ -1,4 +1,4 @@
-package application.exceptions;
+package application.api.exceptions;
 
 public class ExceptionResponse {
     private String message = null;
@@ -9,9 +9,7 @@ public class ExceptionResponse {
     }
      
     public ExceptionResponse() {
-     
     }
-    // Getters and Setters
 
     public String getMessage() {
         return message;
