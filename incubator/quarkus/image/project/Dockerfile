@@ -18,16 +18,6 @@ FROM registry.access.redhat.com/ubi8/ubi-minimal
 
 WORKDIR /work/
 COPY --from=build /project/user-app/target/*-runner /work/application
-
-USER root
-RUN microdnf -y install shadow-utils \
-    && microdnf clean all ;\
-    useradd -r -g 0 -s /usr/sbin/nologin quarkus
-
-RUN chown -R quarkus /work
-RUN chmod -R g+w /work
-
-
-USER quarkus
+RUN chmod 775 /work
 EXPOSE 8080
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]

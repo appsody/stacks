@@ -24,7 +24,7 @@
         <liberty.groupId>io.openliberty</liberty.groupId>
         <liberty.artifactId>openliberty-runtime</liberty.artifactId>
         <version.openliberty-runtime>{{.stack.libertyversion}}</version.openliberty-runtime>
-        <version.liberty-maven-plugin>3.2.1</version.liberty-maven-plugin>
+        <version.liberty-maven-plugin>3.2</version.liberty-maven-plugin>
         <http.port>9080</http.port>
         <https.port>9443</https.port>
         <packaging.type>usr</packaging.type>
@@ -42,19 +42,19 @@
     </repositories>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>io.openliberty.tools</groupId>
+                    <artifactId>liberty-maven-plugin</artifactId>
+                    <version>${version.liberty-maven-plugin}</version>
+                    <configuration>
+                        <serverStartTimeout>120</serverStartTimeout>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
-            <!-- Enable the liberty-maven plugin. Doing this here in the parent pom
-                 allows the pluginManagement configuration to be used if a child pom 
-                 does not explicitly define this plugin. -->
-            <plugin>
-                <groupId>io.openliberty.tools</groupId>
-                <artifactId>liberty-maven-plugin</artifactId>
-                <version>${version.liberty-maven-plugin}</version>
-                <configuration>
-                    <serverStartTimeout>120</serverStartTimeout>
-                </configuration>
-            </plugin>
-            
             <!-- Enforcing OpenLiberty and JDK Version -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
