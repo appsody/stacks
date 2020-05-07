@@ -33,6 +33,14 @@ Run the application using the following command:
 
 ```appsody run --network test-appsody-kafka_default --docker-options "--env MP_MESSAGING_CONNECTOR_LIBERTY_KAFKA_BOOTSTRAP_SERVERS=kafka:9092"```
 
+Alternatively, edit `src/main/resources/META-INF/microprofile-config.properties` as follows:
+
+```
+mp.messaging.connector.liberty-kafka.bootstrap.servers=kafka:9092
+```
+
+(this value is provided in the sample file, commented out)
+
 ### 4. Produce a message to a topic
 
 Run another container in the same network:
