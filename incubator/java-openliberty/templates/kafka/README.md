@@ -27,11 +27,11 @@ If you run `docker network list`, you should see a new network with the name of 
 
 ### 3. Run the Appsody application in the new network
 
-Your Appsody application must be run in the same network as Kafka. You must also supply the host and port number of the Kakfka broker as an environment variable. 
+Your Appsody application must be run in the same network as Kafka. You must also supply the host and port number of the Kafka broker as an environment variable. 
 
 Run the application using the following command:
 
-```appsody run --network test-appsody-kafka_default --docker-options "-e MP_MESSAGING_CONNECTOR_LIBERTY_KAFKA_BOOTSTRAP_SERVERS=kafka:9092"```
+```appsody run --network test-appsody-kafka_default --docker-options "--env MP_MESSAGING_CONNECTOR_LIBERTY_KAFKA_BOOTSTRAP_SERVERS=kafka:9092"```
 
 ### 4. Produce a message to a topic
 
