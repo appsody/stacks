@@ -2,7 +2,9 @@
 
 The Rust stack provides a consistent way of developing [Rust](https://rust-lang.org/) applications.
 
-This stack is based on the `Rust v1.37` runtime and allows you to develop new or existing Rust applications using Appsody.
+This stack is based on the `Rust v1.39` runtime and allows you to develop new or existing Rust applications using Appsody.
+
+The Rust stack uses [Rust MUSL support](https://doc.rust-lang.org/edition-guide/rust-2018/platform-and-target-support/musl-support-for-fully-static-binaries.html) to build fully static binaries with statically linked libc, making the built images really small.
 
 ## Templates
 

@@ -35,30 +35,45 @@ then
         fi
     elif [ $TRAVIS_TAG ]
     then
-        stack_id=`echo ${TRAVIS_TAG/-v[0-9]*/}`
-        echo "Listing stacks for this release"
+    	stack_id=`echo ${TRAVIS_TAG/-v[0-9]*/}`
+    	if [ $TRAVIS_COMMIT ]
+    	then
+            echo "Listing stacks for this commit $TRAVIS_COMMIT"
+            CHANGED_FILES=$(git diff --name-only --no-renames "$TRAVIS_COMMIT~..$TRAVIS_COMMIT" 2>/dev/null)
+            rc=$?
 
-        for repo_name in $REPO_LIST
-        do
-            repo_dir=$base_dir/$repo_name
-            if [ -d $repo_dir ]
+            if [ $rc -eq 0 ]
             then
-                for stack_exists in $repo_dir/*/stack.yaml
+                for changed_stacks in $CHANGED_FILES
                 do
-                    if [ -f $stack_exists ]
+                    if [[ $changed_stacks == *stack.yaml ]]
                     then
-                        var=`echo ${stack_exists#"$base_dir/"}`
-                        repo_stack=`awk '{split($1, a, "/*"); print a[1]"/"a[2]}' <<< $var`
-                        if [[ $repo_stack != */$stack_id ]]
-                        then
-                            continue;
+                        var=`awk '{split($1, a, "/*"); print a[1]"/"a[2]}' <<< $changed_stacks`
+                        # only add stack if it matches the stack id in the TRAVIS_TAG 
+                        if [[ $var == *$stack_id ]]
+                        then 
+                            STACKS_LIST+=("$var")
                         fi
-                        # list of repositories to build indexes for
-                        export STACKS_LIST+=("$repo_stack")
                     fi
                 done
+            else
+                echo "   Unable to identify any changed files in $TRAVIS_COMMIT"
             fi
-        done
+    	fi
+    	
+        if [ -z "${STACKS_LIST}" ]
+        then
+            echo "Listing stacks for this release"
+
+            for repo_name in $REPO_LIST
+            do
+                repo_dir=$base_dir/$repo_name
+                if [ -d $repo_dir ]
+                then
+                	STACKS_LIST+=("$repo_name/$stack_id")
+                fi
+            done
+        fi
 
         if [ -z "${STACKS_LIST}" ]
         then
@@ -95,7 +110,7 @@ then
             printf "  %-50s %-10s %s\n" "$stack_repo/$stack_name" "$stack_version" "$rebuild"
             if [ "$rebuild" = "true" ]
             then
-                export STACKS_LIST+=("$stack_repo/$stack_name")
+                STACKS_LIST+=("$stack_repo/$stack_name")
             fi
         done
     fi
@@ -104,6 +119,13 @@ then
     if [ -z "${STACKS_LIST}" ]
     then
         echo "Choosing a subset of stacks to test with CI/CD changes"
-        export STACKS_LIST="incubator/java-openliberty incubator/java-spring-boot2 incubator/nodejs-express"
+        STACKS_LIST="incubator/java-spring-boot2 incubator/nodejs-express"
     fi
+    
+    if [ $STACKS_LIST ]
+    then
+       	export STACKS_LIST=${STACKS_LIST[@]}
+    fi
+        
+    echo "STACKS_LIST = '$STACKS_LIST'"
 fi
