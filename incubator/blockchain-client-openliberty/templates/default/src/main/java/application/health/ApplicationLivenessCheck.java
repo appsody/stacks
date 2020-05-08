@@ -13,7 +13,7 @@ public class ApplicationLivenessCheck implements HealthCheck {
     private boolean isAlive() {
         // perform health checks here
 
-        return true;
+        return true; 
     }
 	
     @Override
