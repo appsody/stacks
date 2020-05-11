@@ -119,7 +119,7 @@ then
     if [ -z "${STACKS_LIST}" ]
     then
         echo "Choosing a subset of stacks to test with CI/CD changes"
-        STACKS_LIST="incubator/java-spring-boot2 incubator/nodejs-express"
+        STACKS_LIST="incubator/java-openliberty incubator/java-spring-boot2 incubator/nodejs-express"
     fi
     
     if [ $STACKS_LIST ]
