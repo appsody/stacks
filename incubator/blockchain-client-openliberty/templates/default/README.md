@@ -4,9 +4,39 @@
 
 The intent of the default template in the Blockchain Open Liberty stack is to provide a working example that easily integrates with the default Smart Contract provided by The IBM® Blockchain Platform Visual Studio (VS) Code extension.(<https://cloud.ibm.com/docs/services/blockchain/howto?topic=blockchain-develop-vscode)>
 
-That default Smart Contract is called MyAsset and following a minimal set of instructions detailed in the link above you can have a Fabric Network running the MyAsset Smart Contract.  This template provides an means to easily bind a Java Openlibery Service to the MyAsset Smart Contract. For learning purposes your new project is able to run, connect and execute transactions without any code changes. Not only can you bind to a Local Fabric Instance created by VSCode, you can in fact interact with any Blockchain Fabric Network instance.(<https://www.ibm.com/blockchain/platform)>
+That default Smart Contract is called MyAsset and following a minimal set of instructions detailed in the link above you can have a Fabric Network running the MyAsset Smart Contract.  This template provides a means to easily expose a JAX-RS REST service to the MyAsset Smart Contract. For learning purposes your new project is able to run, connect and execute transactions without any code changes. Not only can you bind to a Local Fabric Instance created by VSCode, you can in fact interact with any Blockchain Fabric Network instance.(<https://www.ibm.com/blockchain/platform)>
 
-The template provides a well structured web application with common componently to get you starting with all things common to transacting on a fabric network.  This starting point is for you to refactor, extend and customize to meet your own project requirements. There are a few component layers that you will want to refactor for your projects needs and a few to only configure. The API Layer, Identity Mapping Layer and finally the Transaction Management Layer. In the following sections we will define layer.
+The template provides a well structured web application with common components to get you starting with all things common to transacting on a fabric network.  This starting point is for you to refactor, extend and customize to meet your own project requirements. There are a few component layers that you will want to refactor for your projects needs and a few to only configure. The API Layer, Identity Mapping Layer and finally the Transaction Management Layer. In the following sections we will define layer.
+
+## API and Data Model
+
+The API Layer is the REST API definition layer for the micro service. This layer defines the set of input and output for each REST API endpoints the service exposes. In the template this component is simply AssetService.java. Looking at the class you will notice a set of open api annotations for each function. It is a best practice to use the Open API specification to document each endpoint, this enables an easy way for developers to test and also provides self service documentation to client consumers of the service.
+
+The Data Model layer are the Java Object that represent the set of inputs and output you wish to model. In the sample this component is simply Asset.java.
+
+## WalletManagement
+
+Wallet(s) are a concept in the fabric SDK that contain identities for transacting on your fabric network. To remain consistent with the terminology we have created the a WalletManager class that contains code for easily onboarding fabric identities into the service.  The WalletManager is intensionally extendable so other wallet implementations can easily be made use of. The purpose of this component is house all the fabric identifies your service will want to transact with. The approach is entirely configuration driven, there are 2 modes of operation out of the box.
+
+`FABRIC_WALLET_PROFILE={"type":"IN_MEMORY"}`
+
+`FABRIC_WALLET_PROFILE={"type":"FILE_SYSTEM","options":{"path":"/project/user-app/src/main/java/application/Org1"}}`
+
+Creating your own Wallet backend is as simple as creating Wallet Implementation, adding configuration and adding a configuration type so the wallet manager can load the new implementation when configured.
+
+## Identity Mapping
+
+Every service should be secure and provide a mechanism for authentication. The template that is provided with the stack makes no assumptions on the specific authentication mechanism used by the client. It assumes that the client invoking the microservice that is based on the template is a trusted client, and that it will have performed some form of authentication. The trusted client will then forward an authentication token - such as JSON Web Token or a SAML assertion - to the microservice. It is the developer's responsibility to extract the appropriate claims from that token and map those claims to a Fabric identity. The template provided with the stack only provides the building blocks to implement this logic, but no specific implementation.  The strategies you choose are beyond the scope of what the application template can provide, however we thought it important there be a minimal set of components that address the issue of mapping a service user to a user of an organization of a fabric network that the service user is acting on behalf. Here is the explanation of how the provider identity parts are meant to be used.
+
+### Identity Request Flow
+
+1. IdentityMapperFilter intercepts the request ahead of being routed to the API resource.  (Pre request filter)
+1. Invokes extractPrincipal(ContainerRequestContext) to get the request identity.
+1. By default the filter method then returns the default identity, based on the FABRIC_DEFAULT_IDENTITY environment variable.
+In a more sophisticated implementation, the mapper would call out to a rule engine, or to a database to perform the mapping.
+1. The identity is then set in an HTTP Header named X-FABRIC-IDENTITY.
+1. The request now gets routed to the API resource.
+1. The resource logic extracts the identity from the X-FABRIC-IDENTITY header and uses it to call getContract(identity) on the ConnectionManager.
 
 ## Required Envirnment Variables
 
@@ -36,36 +66,6 @@ option.path : is that path to the file system wallet structure in compliance wit
     FABRIC_CHANNEL=mychannel
     FABRIC_CONTRACT=myasset
     FABRIC_DEFAULT_IDENTITY=admin
-
-## WalletManagement
-
-Wallet(s) are a concept in the fabric SDK that contain identities for transacting on your fabric network. To remain consistent with the terminology we have created the a WalletManager class that contains code for easily onboarding fabric identities into the service.  The WalletManager is intensionally extendable so other wallet implementations can easily be made use of. The purpose of this component is house all the fabric identifies your service will want to transact with. The approach is entirely configuration driven, there are 2 modes of operation out of the box.
-
-`FABRIC_WALLET_PROFILE={"type":"IN_MEMORY"}`
-
-`FABRIC_WALLET_PROFILE={"type":"FILE_SYSTEM","options":{"path":"/project/user-app/src/main/java/application/Org1"}}`
-
-Creating your own Wallet backend is as simple as creating Wallet Implementation, adding configuration and adding a configuration type so the wallet manager can load the new implementation when configured.
-
-## API and Data Model
-
-The API Layer is the REST API definition layer for the micro service. This layer defines the set of input and output for each REST API endpoints the service exposes. In the template this component is simply AssetService.java. Looking at the class you will notice a set of open api annotations for each function. It is a best practice to use the Open API specification to document each endpoint, this enables an easy way for developers to test and also provides self service documentation to client consumers of the service.
-
-The Data Model layer are the Java Object that represent the set of inputs and output you wish to model. In the sample this component is simply Asset.java.
-
-## Identity Mapping
-
-Every service should be secure and provide a mechanism for authentication. The strategies you choose are beyond the scope of what the application template can provide, however we thought it important there be a minimal set of components that address the issue of mapping a service user to a user of an organization of a fabric network that the service user is acting on behalf. Here is the explanation of how the provider identity parts are meant to be use …
-
-### Identity Request Flow
-
-1. IdentityMapperFilter intercepts the request ahead of being routed to the API resource.  (Pre request filter)
-1. Invokes extractPrincipal(ContainerRequestContext) to get the request identity.
-1. By default the filter method then returns the default identity, based on the FABRIC_DEFAULT_IDENTITY environment variable.
-In a more sophisticated implementation, the mapper would call out to a rule engine, or to a database to perform the mapping.
-1. The identity is then set in an HTTP Header named X-FABRIC-IDENTITY.
-1. The request now gets routed to the API resource.
-1. The resource logic extracts the identity from the X-FABRIC-IDENTITY header and uses it to call getContract(identity) on the ConnectionManager.
 
 ## Enabling Logging
 
