@@ -190,30 +190,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>appsody-build</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>local-dev</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>default-profile</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <liberty.var.mp.messaging.connector.liberty-kafka.bootstrap.servers>localhost:9093</liberty.var.mp.messaging.connector.liberty-kafka.bootstrap.servers>
-            </properties>
-        </profile>
-    </profiles>
- 
-     
 </project>
