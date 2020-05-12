@@ -1,0 +1,148 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kabanero-index
+  annotations:
+    serviceaccounts.openshift.io/oauth-redirectreference.kabanero-index: >-
+      {"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"kabanero-index"}}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kabanero-index
+  labels:
+    app: kabanero-index
+  annotations:
+    service.alpha.openshift.io/serving-cert-secret-name: kabanero-index-tls
+spec:
+  type: ClusterIP
+  selector:
+    app: kabanero-index
+  ports:
+    - name: https
+      port: 443
+      targetPort: 8443
+      protocol: TCP
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+    - name: proxy
+      port: 8888
+      targetPort: oauth-proxy
+      protocol: TCP
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kabanero-index
+  labels:
+    app: kabanero-index
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kabanero-index
+  template:
+    metadata:
+      labels:
+        app: kabanero-index
+      annotations:
+        date: "DATE"
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: kabanero-index
+      initContainers:
+      - name: init
+        image: kabanero/kabanero-utils:0.3.0
+        command: ['/bin/sh']
+        args:
+          - -cex
+          - |
+            for i in 1 2 3; do
+              ROUTE=$(kubectl get route kabanero-index --no-headers -o=jsonpath='{.status.ingress[0].host}')
+              if [ -z "$ROUTE" ]; then
+                sleep 1
+              else
+                echo "https://$ROUTE" > /usr/share/kabanero/route
+                exit 0
+              fi
+            done
+            echo "Unable to get route"
+            exit 1
+        volumeMounts:
+        - name: shared-data
+          mountPath: /usr/share/kabanero
+      containers:
+      - resources: {}
+        terminationMessagePath: /dev/termination-log
+        name: oauth-proxy
+        ports:
+        - name: oauth-proxy
+          containerPort: 8888
+          protocol: TCP
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: secret-kabanero-index-tls
+          mountPath: /etc/tls/private
+        terminationMessagePolicy: File
+        image: 'openshift/oauth-proxy:latest'
+        args:
+          - '-provider=openshift'
+          - '-client-secret-file=/var/run/secrets/kubernetes.io/serviceaccount/token'
+          - '-openshift-service-account=kabanero-index'
+          - '-cookie-secure=true'
+          - '-skip-provider-button=true'
+          - '-openshift-delegate-urls={"/":{"resource":"namespaces","resourceName":"kabanero","namespace":"kabanero","verb":"get"}}'
+          - '-pass-user-bearer-token=true'
+          - '-cookie-secret=mF5P-UG61lA9yIAlNjI8JA=='
+          - '-https-address=:8888'
+          - '-http-address='
+          - '-email-domain=*'
+          - '-upstream=http://localhost:8080'
+          - '-tls-cert=/etc/tls/private/tls.crt'
+          - '-tls-key=/etc/tls/private/tls.key'
+          - '-openshift-ca=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt'
+      - name: nginx
+        image: REGISTRY/NAMESPACE/kabanero-index:TAG
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8443
+        command: ['/bin/sh']
+        args:
+          - -cex
+          - |
+            cp /etc/nginx/nginx.conf /usr/share/nginx/nginx-ssl.conf
+            export EXTERNAL_URL=$(cat /usr/share/kabanero/route)
+            /opt/startup.sh
+        volumeMounts:
+        - name: shared-data
+          mountPath: /usr/share/kabanero
+        - name: secret-kabanero-index-tls
+          mountPath: /etc/tls/private
+      volumes:
+      - name: shared-data
+        emptyDir: {}
+      - name: secret-kabanero-index-tls
+        secret:
+          secretName: kabanero-index-tls
+---
+
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: kabanero-index
+spec:
+  host: HOST
+  to:
+    kind: Service
+    name: kabanero-index
+  port:
+    targetPort: proxy
+  tls:
+    termination: reencrypt
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
