@@ -140,7 +140,7 @@ Additionally, the Java Open Liberty stack includes a set of custom variables and
 
 Custom template variables are defined in the `stack.yaml` file. The Java Open Liberty stack includes the following that are propagated when the stack is packaged.
 
-* **libertyversion** - The version of the Open Liberty runtime to be used for development and production images. Without any other modifications to the Dockerfiles in this project, this version must be a quarterly release (x.0.0.3, x.0.0.6, x.0.0.9, x.0.0.12)
+* **libertyversion** - The version of the Open Liberty runtime to be used for development and production images. 
 
 * **parentpomgroup** - The group id used for the parent pom definition and a prefix for the default template group id.
 * **parentpomid** - The artifact id used for the parent pom definition
