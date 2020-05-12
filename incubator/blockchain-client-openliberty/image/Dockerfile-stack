@@ -1,4 +1,4 @@
-FROM kabanero/java-openliberty:0.2
+FROM appsody/java-openliberty:0.2
 COPY ./project/pom.xml /project
 COPY ./project/preload-m2-pom.xml /project
 COPY ./project/run-stack.sh /project
