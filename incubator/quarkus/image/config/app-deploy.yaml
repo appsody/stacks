@@ -10,4 +10,7 @@ spec:
   service:
     type: NodePort
     port: APPSODY_PORT
+  monitoring:
+    labels:
+      k8s-app: APPSODY_PROJECT_NAME
   expose: true
