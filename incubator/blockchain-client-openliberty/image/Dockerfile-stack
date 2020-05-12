@@ -3,4 +3,3 @@ COPY ./project/pom.xml /project
 COPY ./project/preload-m2-pom.xml /project
 COPY ./project/run-stack.sh /project
 COPY ./config/app-deploy.yaml /config
-COPY ./config/blockchain-secret.yaml /config
