@@ -93,4 +93,53 @@ Its worth noting, the stack does not tolerate changes message.log setting to JSO
 [Container] [ERROR] Failed to execute goal io.openliberty.tools:liberty-maven-plugin:3.2:dev (default-cli) on project starter-app: Could not parse the host name from the log message: {"type":"liberty_message","host":"b10c3a9ac6d0","ibm_userDir":"/opt/ol/wlp/usr/","ibm_serverName":"defaultServer","message":"CWWKT0016I: Web application available (default_host): http://b10c3a9ac6d0:9080/metrics/","ibm_threadId":"00000034","ibm_datetime":"2020-04-22T20:28:22.369+0000","ibm_messageId":"CWWKT0016I","module":"com.ibm.ws.http.internal.VirtualHostImpl","loglevel":"AUDIT","ibm_sequence":"1587587302369_000000000001F"} -> [Help 1]
 ```
 
-## Deploy
+## Deploying your microservice on a Kubernetes cluster
+Once you are ready to deploy the microservice you created using this stack onto a Kubernetes cluster, you can do so by running the `appsody deploy` command. The details of using this command are explained in the [appsody documentation](https://appsody.dev/docs/using-appsody/deploying/). 
+
+Do not forget to ensure that you have fulfilled the prerequisites mentioned below before you attempt to deploy your microservice.
+
+### Prerequisites
+
+Deploying the microservice to a Kubernetes cluster requires you take two preliminary steps.
+
+#### Install the Open Liberty Operator
+
+This stack requires the [Open Liberty Operator](https://github.com/OpenLiberty/open-liberty-operator) to be installed in the cluster prior to deploying the stack.
+
+Operator user guide can be viewed [here](https://github.com/OpenLiberty/open-liberty-operator/blob/master/doc/user-guide.md)
+
+Aside from `OpenLibertyApplication` CRD used to deploy the application, Open Liberty Operator provides day-2 operations such as `OpenLibertyDump` and `OpenLibertyTrace`
+
+These additional [day-2 operations](https://github.com/OpenLiberty/open-liberty-operator/blob/master/doc/user-guide.md#day-2-operations) make it easier to collect debug data from the running Open Liberty pods in the Kubernetes cluster.
+
+#### Create the secret with the connection information
+As described earlier, the microservice relies on a set of environment variables in order to connect to the back-end Fabric. These environment variables, on a Kubernetes cluster, are supplied to the microservice in a secret, which must be created ahead of issuing the `appsody deploy` command.
+
+For convenience, a skeleton of the secret definition is provided in the root of the project, within the file called `blockchain-secret.yaml`. The secret must be created within the same namespace as the microservice.
+
+The secret skeleton is shown below:
+```
+kind: Secret
+apiVersion: v1
+metadata:
+  name: blockchain-secret
+  namespace: test-openliberty-deploy
+stringData:
+  FABRIC_CONNECTION_PROFILE: |-
+    {{connection_profile}}
+  FABRIC_WALLET_CREDENTIALS: |-
+    {{wallet_credentials}}  
+data:
+  FABRIC_CHANNEL: {{fabric_channel}}
+  FABRIC_CONTRACT: {{fabric_contract}}
+  FABRIC_DEFAULT_IDENTITY: {{fabric_default_identity}}
+  FABRIC_WALLET_PROFILE: e3R5cGU6SU5fTUVNT1JZfQo=
+type: Opaque
+```
+Notice the following:
+1) The name of the secret is `blockchain-secret`. This name should not be changed (if you modify it, make sure you also modify the `app-deploy.yaml` file that `appsody deploy` creates for you).
+2) The data in the `stringData` section must be in plain text.
+3) The data in the `data` section must be Base64 encoded.
+
+Clearly, these variables must point to a Fabric instance that is accessible from the Kubernetes cluster where you are going to deploy the microservice.
+

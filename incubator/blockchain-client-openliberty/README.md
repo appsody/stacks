@@ -1,6 +1,8 @@
 # Blockchain Open Liberty Stack
 
-The Open Liberty stack provides a consistent way of developing microservices based upon the [Jakarta EE](https://jakarta.ee/) and [Eclipse MicroProfile](https://microprofile.io) specifications. This stack lets you use [Maven](https://maven.apache.org) to develop applications for [Open Liberty](https://openliberty.io) runtime, that is running on OpenJDK with container-optimizations in OpenJ9.
+The Blockchain Open Liberty stack provides a consistent way of developing microservices based upon the [Jakarta EE](https://jakarta.ee/) and [Eclipse MicroProfile](https://microprofile.io) specifications that consume Blockchain smart contracts deployed on the IBM Blockchain Platform.
+
+This stack lets you use [Maven](https://maven.apache.org) to develop applications for [Open Liberty](https://openliberty.io) runtime, that is running on OpenJDK with container-optimizations in OpenJ9.
 
 The Open Liberty stack uses a parent Maven project object model (POM) to manage dependency versions and provide required capabilities and plugins.
 
@@ -8,19 +10,9 @@ This stack is based on OpenJDK with container-optimizations in OpenJ9 and `Open 
 
 **Note:** Maven is provided by the Appsody stack container, allowing you to build, test, and debug your Java application without installing Maven locally. However, we recommend installing Maven locally for the best IDE experience.
 
-## Prerequisites
-
-This stack requires the [Open Liberty Operator](https://github.com/OpenLiberty/open-liberty-operator) to be installed in the cluster prior to deploying the stack.
-
-Operator user guide can be viewed [here](https://github.com/OpenLiberty/open-liberty-operator/blob/master/doc/user-guide.md)
-
-Aside from `OpenLibertyApplication` CRD used to deploy the application, Open Liberty Operator provides day-2 operations such as `OpenLibertyDump` and `OpenLibertyTrace`
-
-These additional [day-2 operations](https://github.com/OpenLiberty/open-liberty-operator/blob/master/doc/user-guide.md#day-2-operations) make it easier to collect debug data from the running Open Liberty pods in the Kubernetes cluster.
-
 ## Templates
 
-Templates are used to create your local project and start your development. When initializing your project you will be provided with an Open Liberty template application.
+Templates are used to create your local project and start your development. When initializing your project you will be provided with a Blockchain client template application based on OpenLiberty.
 
 ### Default template
 
@@ -134,7 +126,12 @@ In order to lock down the production image built via `appsody build` this file i
 
 ## Stack development
 
-The Java Open Liberty stack is fully functional out of the box. However, depending on business needs and requirements, it may become necessary to create a custom stack with additional features and enhancements. This can be done by following the steps outlines here: https://appsody.dev/docs/stacks/develop
+The Java Open Liberty stack is fully functional out of the box. However, depending on business needs and requirements, it may become necessary to create a custom stack with additional features and enhancements. 
+
+For example, as an Application Architect, you may want to mandate that your development organization uses a certain level of the Blockchain SDK - or, you may want to ensure that developers use a specific logging and tracing framework. 
+In order to effect these changes, you can extend this stack, or use this stack as a basis to create a completely new and independent stack.
+
+This can be done by following the steps outlines here: https://appsody.dev/docs/stacks/develop
 
 Additionally, the Java Open Liberty stack includes a set of custom variables and enforcement rules that can be leveraged when modifying the stack.
 
