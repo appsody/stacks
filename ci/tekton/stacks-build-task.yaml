@@ -1,29 +1,29 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: stacks-build-task
 spec:
-  inputs:
-    resources:
+  resources:
+    inputs:
       - name: git-source
         type: git
-    params:
-      - name: registry
-        type: string
-        description: Docker registry
-        default: image-registry.openshift-image-registry.svc:5000
-      - name: registryNamespace
-        type: string
-        description: Namespace
-        default: kabanero
-      - name: stacks
-        type: string
-        description: List of stacks to build. Specify 'all' to build all stacks.
-        default: all
-      - name: routeHostname
-        type: string
-        description: Hostname of the route for the application hosting stacks index
-        default: ""
+  params:
+    - name: registry
+      type: string
+      description: Docker registry
+      default: image-registry.openshift-image-registry.svc:5000
+    - name: registryNamespace
+      type: string
+      description: Namespace
+      default: kabanero
+    - name: stacks
+      type: string
+      description: List of stacks to build. Specify 'all' to build all stacks.
+      default: all
+    - name: routeHostname
+      type: string
+      description: Hostname of the route for the application hosting stacks index
+      default: ""
 
   steps:
     - name: build-stacks
