@@ -20,6 +20,10 @@ spec:
       type: string
       description: List of stacks to build. Specify 'all' to build all stacks.
       default: all
+    - name: secure
+      type: string
+      description: Determine whether to secure the application hosting stacks index.
+      default: ""
     - name: routeHostname
       type: string
       description: Hostname of the route for the application hosting stacks index
@@ -75,10 +79,13 @@ spec:
         - -cex
         - |
           YAML_FILE=/workspace/git-source/ci/tekton/openshift.yaml
+          if [ "$(inputs.params.secure)" == "proxy" ]; then
+            YAML_FILE=/workspace/git-source/ci/tekton/secure-openshift.yaml
+          fi
           if [ -z "$(inputs.params.routeHostname)" ]; then
-            sed -i -e '/host:/d' $YAML_FILE
+            sed -i -e '/host: /d' $YAML_FILE
           else
-            sed -i -e 's/host:/host: $(inputs.params.routeHostname)/' $YAML_FILE
+            sed -i -e 's/host: /host: $(inputs.params.routeHostname)/' $YAML_FILE
           fi
           sed -i -e 's|REGISTRY|$(inputs.params.registry)|' $YAML_FILE
           sed -i -e 's|NAMESPACE|$(inputs.params.registryNamespace)|' $YAML_FILE
@@ -101,6 +108,15 @@ kind: Role
 metadata:
   name: kabanero-index
 rules:
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - update
+  - patch
+  - get
+  - list
 - apiGroups:
   - ""
   resources:
@@ -207,3 +223,17 @@ roleRef:
   kind: Role
   name: kabanero-index
   apiGroup: rbac.authorization.k8s.io
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: 'kabanero-index-auth-delegator'
+subjects:
+- kind: ServiceAccount
+  name: kabanero-index
+  namespace: kabanero
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: 'system:auth-delegator'
+
