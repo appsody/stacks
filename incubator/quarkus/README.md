@@ -2,7 +2,7 @@
 
 The Quarkus stack is designed to provide a foundation for building and running Java applications on Quarkus with Appsody.
 
-This stack is based on the `Quarkus 1.3.0.Final` runtime. It allows you to develop new or existing Java applications that run on Quarkus and can be turned into a native executable for a low memory footprint and near instantaneous (< 10ms) start times.
+This stack is based on the `Quarkus 1.3.2.Final` runtime. It allows you to develop new or existing Java applications that run on Quarkus and can be turned into a native executable for a low memory footprint and near instantaneous (< 10ms) start times.
 
 ## What is Quarkus?
 
@@ -12,7 +12,15 @@ See: https://quarkus.io/
 
 ## Templates
 
-Templates are used to create your local project and start your development. When initializing your project you will be provided with the default template project. This template provides a simple Java application with a JAX-RS "Hello World!" REST API example and a simple HTML welcome page.
+Templates are used to create your local project and start your development. This stack provides two templates you can choose from: `default` and `kafka`. If you do not specify a template, the `default` template will be used.
+
+### `default` template
+
+This template provides a simple Java application with a JAX-RS "Hello World!" REST API example and a simple HTML welcome page.
+
+### `kafka` template
+
+This template provides a Java application which demonstrates using MicroProfile Reactive Messaging to consume and produce messages on Kafka topics. The application uses the example from the [Quarkus Kafka guide](https://quarkus.io/guides/kafka). For more information, see the [kafka readme](templates/kafka/README.md).
 
 ## Getting Started
 
@@ -21,13 +29,9 @@ Templates are used to create your local project and start your development. When
     ```bash
     mkdir my-project
     cd my-project
-    appsody init experimental/quarkus
+    appsody init quarkus
     ```
     This will initialize a Quarkus project using the default template.
-
-    **NOTE:** If you encounter the following error, [configure the experimental repo](#Configuring-Experimental-Repo):
-
-    **`[Error] Repository experimental is not in configured list of repositories`**.
 
 1. After your project has been initialized you can then run your application using the following command:
 
@@ -63,7 +67,7 @@ docker run -i --rm -p 8080:8080 <my-project>:latest
 Running the production container should give you an output similar to:
 
 ```bash
-2019-07-16 12:43:21,918 INFO  [io.quarkus] (main) Quarkus 1.3.0.Final started in 0.006s. Listening on: http://0.0.0.0:8080
+2019-07-16 12:43:21,918 INFO  [io.quarkus] (main) Quarkus 1.3.2.Final started in 0.006s. Listening on: http://0.0.0.0:8080
 2019-07-16 12:43:21,918 INFO  [io.quarkus] (main) Installed features: [cdi, resteasy]
 ```
 
@@ -72,16 +76,6 @@ You can verify that this worked by visiting http://0.0.0.0:8080/ and observing t
 ## Known Issue:
 
 - Currently there is no configuration or documentation on `appsody debug`.
-
-## Configuring Experimental Repo
-
-Upgrade your CLI to the latest version and add the experimental repo:
-
-1. `brew upgrade appsody` or for other platforms visit the [upgrading appsody section](https://appsody.dev/docs/getting-started/installation).
-
-2. `appsody repo add experimental https://github.com/appsody/stacks/releases/latest/download/experimental-index.yaml`
-
-You should now be able to [initialise your application](#Getting-Started).
 
 ## License
 

@@ -1,5 +1,5 @@
 name: Open Liberty
-version: 0.2.8
+version: 0.2.12
 description: Eclipse MicroProfile & Jakarta EE on Open Liberty & OpenJ9 using Maven
 license: Apache-2.0
 language: java
@@ -12,10 +12,10 @@ maintainers:
     github-id: ajm01
   - name: Scott Kurz
     email: skurz@us.ibm.com
-    github: scottkurz
+    github-id: scottkurz
   - name: Adam Wisniewski
     email: awisniew@us.ibm.com 
-    github: awisniew90
+    github-id: awisniew90
 default-template: default
 requirements:
     docker-version: ">= 17.09.0"
