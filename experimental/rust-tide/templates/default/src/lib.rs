@@ -1,5 +1,5 @@
-pub fn app() -> tide::server::Server<()> {    
+pub fn app() -> tide::Server<()> {    
     let mut api = tide::new();
-    api.at("/hello").get(|_| async move { "Hello, world" });
+    api.at("/hello").get(|_| async move { Ok("Hello, world!") });
     api
 }
