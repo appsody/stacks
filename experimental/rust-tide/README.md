@@ -8,7 +8,7 @@ This stack is based on the `Rust 1.42` runtime.
 
 ## Templates
 
-Templates are used to create your local project and start your development. When initializing your project you will be provided with the default template project. This template provides a http server that returns "Hello World" on http://localhost:8000/hello.
+Templates are used to create your local project and start your development. When initializing your project you will be provided with the default template project. This template provides a http server that returns "Hello World" on http://localhost:8000/.
 
 ## Getting Started
 
@@ -33,21 +33,21 @@ Templates are used to create your local project and start your development. When
 
     ```Running `server/bin/target/debug/rust-tide-server```
 
-1. Open a browser at http://localhost:8000/hello 
+1. Open a browser at http://localhost:8000/
      
      It should return `Hello, world`.
 
-1. Now open lib.rs and change `world` to `tide` and save the file.
+1. Now open lib.rs and change `world` to `Tide` and save the file.
 
     ```rust
-    pub fn app() -> tide::server::Server<()> {    
-        let mut api = tide::new();
-        api.at("/hello").get(|_| async move { "Hello, Tide" });
-        api
-    }
+        pub fn app() -> tide::Server<()> {    
+            let mut api = tide::new();
+            api.at("/").get(|_| async move { Ok("Hello, Tide!") });
+            api
+        }
     ```
 
-1. Your application will be rebuild and republished so refresh http://localhost:8000/hello it will now say `Hello, Tide`
+1. Your application will be rebuild and republished so refresh http://localhost:8000/ it will now say `Hello, Tide`
 
 
 ## Debugging
