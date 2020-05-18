@@ -12,19 +12,12 @@ Templates are used to create your local project and start your development. When
 
 ## Getting Started
 
-1. Clone this repo and configure appsody
-   ```bash
-   git clone https://github.com/No9/rust-tide
-   cd rust-tide
-   appsody stack package
-   ```
-
 1. Create a new folder in your local directory and initialize it using the Appsody CLI, e.g.:
 
     ```bash
     mkdir my-project
     cd my-project
-    appsody init dev.local/rust-tide
+    appsody init experimental/rust-tide
     ```
     This will initialize a Tide project using the default template.
 
