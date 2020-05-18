@@ -6,8 +6,8 @@ fn main() -> Result<(), std::io::Error> {
         app.at("/").nest({
             application::app()
         });
+        println!("Server running on: http://localhost:8000/");
         app.listen("0.0.0.0:8000").await?;
-        println!("Server running on: http://localhost:8000/")
         Ok(())
     })
 }
