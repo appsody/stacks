@@ -1,4 +1,4 @@
-FROM dev.local/appsody/rust-tide as server
+FROM docker.io/appsody/rust-tide as server
 
 FROM rust:1.43.1-buster as builder
 

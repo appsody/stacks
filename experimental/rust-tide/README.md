@@ -31,7 +31,9 @@ Templates are used to create your local project and start your development. When
 
 1. You should see a message printed on the console:
 
-    ```Running `server/bin/target/debug/rust-tide-server```
+```
+    [Container] Server running on: http://localhost:8000/
+```
 
 1. Open a browser at http://localhost:8000/
      
