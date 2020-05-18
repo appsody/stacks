@@ -7,6 +7,7 @@ fn main() -> Result<(), std::io::Error> {
             application::app()
         });
         app.listen("0.0.0.0:8000").await?;
+        println!("Server running on: http://localhost:8000/")
         Ok(())
     })
 }
