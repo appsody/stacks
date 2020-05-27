@@ -64,6 +64,9 @@ FROM openliberty/open-liberty:{{.stack.libertyversion}}-kernel-java8-openj9-ubi
 #2a) copy any resources 
 COPY --chown=1001:0 --from=compile /shared /opt/ol/wlp/usr/shared/
 
+# Work around https://github.com/moby/moby/issues/37965
+RUN true
+
 # 2b) next copy shared library
 #      but can't assume config/lib exists - copy from previous stage to a tmp holding place and test
 COPY --chown=1001:0 --from=compile /configlibdir/ /config
