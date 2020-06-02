@@ -4,9 +4,6 @@ description: Runtime for Node.js applications
 license: Apache-2.0
 language: nodejs
 maintainers:
-  - name: Sam Roberts
-    email: vieuxtech@gmail.com
-    github-id: sam-github
 default-template: simple
 requirements:
   docker-version: ">= 17.09.0"

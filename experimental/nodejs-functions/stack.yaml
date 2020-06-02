@@ -7,9 +7,6 @@ maintainers:
   - name: Chris Bailey
     email: cnbailey@gmail.com
     github-id: seabaylea
-  - name: Sam Roberts
-    email: vieuxtech@gmail.com
-    github-id: sam-github
 default-template: simple
 requirements:
   appsody-version: ">= 0.2.7"
