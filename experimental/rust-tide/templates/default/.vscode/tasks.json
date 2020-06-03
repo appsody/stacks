@@ -2,6 +2,17 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Appsody: copy",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+             "-c",
+             "\"docker cp `docker ps | grep \"rust-tide\" | awk '{ print $1 }'`:/project/server/bin/target/debug/rust-tide-server .\"",
+            ],
+             "group": "build",
+            "problemMatcher": []
+        },
+        {
             "label": "Appsody: run",
             "type": "shell",
             "command": "appsody run",
@@ -11,7 +22,7 @@
         {
             "label": "Appsody: debug",
             "type": "shell",
-            "command": "appsody debug",
+            "command": "appsody debug --docker-options \"--cap-add=SYS_PTRACE --security-opt seccomp=unconfined\"",
             "group": "build",
             "problemMatcher": []
         },

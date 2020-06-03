@@ -1,6 +1,6 @@
 FROM rust:1.43.1-buster
 
-RUN apt-get update && apt-get install -y lldb
+RUN apt-get update && apt-get install -y gdbserver 
 
 ENV CARGO_HOME=/usr/local/cargo/deps
 
@@ -13,7 +13,7 @@ ENV APPSODY_RUN="cargo run --manifest-path ../server/bin/Cargo.toml"
 ENV APPSODY_RUN_ON_CHANGE=$APPSODY_RUN
 ENV APPSODY_RUN_KILL=true
 
-ENV APPSODY_DEBUG="cargo build --manifest-path ../server/bin/Cargo.toml && lldb-server platform --listen '*:1234' --min-gdbserver-port 5000 --max-gdbserver-port 5001 --server"
+ENV APPSODY_DEBUG="cargo build --manifest-path ../server/bin/Cargo.toml && gdbserver localhost:1234 /project/server/bin/target/debug/rust-tide-server"
 ENV APPSODY_DEBUG_ON_CHANGE="$APPSODY_DEBUG"
 ENV APPSODY_DEBUG_KILL=true
 

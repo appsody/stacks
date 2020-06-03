@@ -49,32 +49,28 @@ Templates are used to create your local project and start your development. When
         }
     ```
 
-1. Your application will be rebuild and republished so refresh http://localhost:8000/ it will now say `Hello, Tide`
+1. Your application will rebuild and republish so refresh http://localhost:8000/ it will now say `Hello, Tide`
 
 
 ## Debugging
 
-To debug your application running in a container, start the container using:
+This stack is configured to run a remote gdb server in the app container. 
+You can connect to the gdb server on localhost:1234 with the tools of your choice.
+However the stack also comes preconfigured to integrate with VSCode and you can debug the application with the following steps:
 
-```bash
-    appsody debug --docker-options "--cap-add=SYS_PTRACE --security-opt seccomp=unconfined"
-```
+1. Start the container in debug mode
+   This is done by pressing `CTRL + SHFT + B` and selecting `Appsody: debug` 
+   Or through the menu option `Terminal --> Run Task --> Appsody: debug`
+   The command will start the the app with the gdb server and wait for incoming connections from any address to port 1234. 
 
-The command will start the LLDB platform and wait for incoming connections from any address to port 1234. 
+2. Run the Appsody copy task to get the symbols for the the local debugger.
+   This is done by pressing `CTRL + SHFT + B` and selecting `Appsody: copy` 
+   Or through the menu option `Terminal --> Run Task --> Appsody: copy`
+    
+3. Now we can debug the program with pressing `F5`
+   Or through the menu option `Run --> Start Debugging`
 
-You can connect `lldb` in remote debug mode to this container as follows:
-
-```bash
-lldb \
-  -o "platform select remote-linux" \
-  -o "platform connect connect://localhost:1234" \
-  -o "platform settings -w /project/server/bin/target/debug" \
-  -o "file rust-tide-server" 
-```
-
-Once in lldb, you can use `breakpoint set` to set breakpoints in your application, and then `run` to start the app.
-
-**NOTE:** Due to a current limitation, breakpoints must be set _before_ the application is run. Breakpoints can be disabled, but cannot be re-enabled without restarting the app. After adding or re-enabling breakpoints, restart the app with `process kill` and then `run`.
+4. See https://code.visualstudio.com/docs/cpp/cpp-debug for more information on using the debugger.
 
 ## License
 
