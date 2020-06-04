@@ -72,6 +72,13 @@ However the stack also comes preconfigured to integrate with VSCode and you can 
 
 4. See https://code.visualstudio.com/docs/cpp/cpp-debug for more information on using the debugger.
 
+If the debugger returns an error like 
+```
+Unable to start debugging. Launch options string provided by the project system is invalid. Unable to determine path to debugger...
+```
+You may need to install `gdb` on your system. 
+See Linux(https://code.visualstudio.com/docs/cpp/config-linux), [Mac](https://code.visualstudio.com/docs/cpp/config-clang-mac), [Windows](https://code.visualstudio.com/docs/cpp/cpp-debug#_windows-debugging-with-gdb) for OS specific information.
+
 ## License
 
 This stack is licensed under the [Apache 2.0](./image/LICENSE) license
