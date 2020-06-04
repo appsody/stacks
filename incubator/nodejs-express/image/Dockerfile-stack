@@ -29,6 +29,7 @@ WORKDIR /project
 RUN npm install
 
 ENV PORT=3000
+ENV APPSODY_DEBUG_PORT=9229
 ENV NODE_PATH=/project/user-app/node_modules
 
 EXPOSE 3000
