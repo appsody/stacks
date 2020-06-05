@@ -73,10 +73,6 @@ Running the production container should give you an output similar to:
 
 You can verify that this worked by visiting http://0.0.0.0:8080/ and observing the welcome page. You can also visit http://0.0.0.0:8080/hello/greeting/paul to try the REST API.
 
-## Known Issue:
-
-- Currently there is no configuration or documentation on `appsody debug`.
-
 ## License
 
 This stack is licensed under the [Apache 2.0](./image/LICENSE) license
