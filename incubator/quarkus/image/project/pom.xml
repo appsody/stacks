@@ -4,7 +4,7 @@
 
     <groupId>dev.appsody</groupId>
     <artifactId>quarkus</artifactId>
-    <version>0.3.6</version>
+    <version>0.3.7</version>
     <packaging>pom</packaging>
 
     <properties>
