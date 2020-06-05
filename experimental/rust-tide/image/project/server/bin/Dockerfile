@@ -5,5 +5,8 @@ FROM rust:1.43.1-buster
 
 WORKDIR "/project/server/bin"
 
-COPY Cargo.toml src ./
+COPY Cargo.toml ./
 
+WORKDIR "/project/server/bin/src"
+
+COPY src ./
