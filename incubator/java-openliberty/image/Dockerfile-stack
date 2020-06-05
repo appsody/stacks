@@ -48,6 +48,7 @@ ENV APPSODY_DEBUG="/project/run-stack.sh debug"
 ENV APPSODY_TEST="/project/run-stack.sh test"
 
 ENV PORT=9080
+ENV APPSODY_DEBUG_PORT=7777
 
 EXPOSE 9080
 EXPOSE 9443
