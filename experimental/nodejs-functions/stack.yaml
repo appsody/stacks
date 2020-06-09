@@ -1,5 +1,5 @@
 name: Node.js Functions
-version: 0.2.0
+version: 0.2.1
 description: Serverless runtime for Node.js functions
 license: Apache-2.0
 language: nodejs
