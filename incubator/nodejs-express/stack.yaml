@@ -1,12 +1,12 @@
 name: Node.js Express
-version: 0.4.10
+version: 0.4.11
 description: Express web framework for Node.js
 license: Apache-2.0
 language: nodejs
 maintainers:
-  - name: Sam Roberts
-    email: vieuxtech@gmail.com
-    github-id: sam-github
+  - name: Gireesh Punathil
+    email: gpunathi@in.ibm.com
+    github-id: gireeshpunathil
 default-template: simple
 requirements:
   docker-version: ">= 17.09.0"
