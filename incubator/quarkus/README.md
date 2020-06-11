@@ -2,7 +2,7 @@
 
 The Quarkus stack is designed to provide a foundation for building and running Java applications on Quarkus with Appsody.
 
-This stack is based on the `Quarkus 1.3.2.Final` runtime. It allows you to develop new or existing Java applications that run on Quarkus and can be turned into a native executable for a low memory footprint and near instantaneous (< 10ms) start times.
+This stack is based on the `Quarkus 1.5.0.Final` runtime. It allows you to develop new or existing Java applications that run on Quarkus and can be turned into a native executable for a low memory footprint and near instantaneous (< 10ms) start times.
 
 ## What is Quarkus?
 
@@ -72,10 +72,6 @@ Running the production container should give you an output similar to:
 ```
 
 You can verify that this worked by visiting http://0.0.0.0:8080/ and observing the welcome page. You can also visit http://0.0.0.0:8080/hello/greeting/paul to try the REST API.
-
-## Known Issue:
-
-- Currently there is no configuration or documentation on `appsody debug`.
 
 ## License
 
