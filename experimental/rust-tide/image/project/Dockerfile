@@ -1,4 +1,4 @@
-FROM docker.io/number9/rust-tide:0.1.0 as server
+FROM docker.io/number9/rust-tide-base:0.2.0 as server
 
 FROM rust:1.43.1-buster as builder
 
