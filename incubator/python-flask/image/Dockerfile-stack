@@ -13,7 +13,9 @@ ENV PATH=/home/worker/.local/bin:$PATH
 
 ENV APPSODY_MOUNTS=/:/project/userapp
 ENV APPSODY_DEPS=/project/deps
-ENV APPSODY_USER_RUN_AS_LOCAL=true
+# This (and the project) Dockerfile already ensure we run as worker, rather than root - so don't enable running as the local
+# user, since this would casue a clash of two different UIDs
+ENV APPSODY_USER_RUN_AS_LOCAL=false
 
 ENV APPSODY_WATCH_DIR=/project/userapp
 ENV APPSODY_WATCH_REGEX="^.*.py$"
