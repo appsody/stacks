@@ -20,7 +20,7 @@ ENV APPSODY_USER_RUN_AS_LOCAL=false
 ENV APPSODY_WATCH_DIR=/project/userapp
 ENV APPSODY_WATCH_REGEX="^.*.py$"
 
-ENV APPSODY_PREP="cd /project/userapp;pipenv lock -r > requirements.txt;python -m pip install -r requirements.txt -t /project/deps"
+ENV APPSODY_PREP="cd /project/userapp;whoami;ls -al;pipenv lock -r > requirements.txt;python -m pip install -r requirements.txt -t /project/deps"
 
 ENV APPSODY_RUN="python -m flask run --host=0.0.0.0 --port=8080"
 ENV APPSODY_RUN_ON_CHANGE=$APPSODY_RUN
