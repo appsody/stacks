@@ -26,7 +26,7 @@ RUN cd / && tar czf project.tgz project
 FROM node:12-slim
 
 # librdkafka links against libssl
-RUN apt-get update && apt-get install -y libssl1.1 && apt-get clean
+RUN apt-get update && apt-get install -y libssl1.1 ca-certificates && apt-get clean
 
 # Copy project with dependencies
 COPY --chown=node:node --from=0 /project.tgz /
