@@ -13,6 +13,8 @@ The pull request to be merged must:
 - Have received an approval from the stack maintainer
 - Have a passing travis build and the behaviour of the stack still working as intended (e.g. `appsody run/test/debug/build`)
 
+Stack releases should also be done one at a time. For every pull request that is merged, the release should be done before merging any others.
+
 ### Trigger the release on GitHub
 1. Navigate to https://github.com/appsody/stacks/releases
 1. Click __Draft a new release__ button
