@@ -1,4 +1,4 @@
-FROM rust:1.39 as builder
+FROM rust:1.40 as builder
 
 # Install musl
 RUN apt-get update && apt-get install -y musl-tools

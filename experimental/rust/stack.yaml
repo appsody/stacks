@@ -1,5 +1,5 @@
 name: Rust
-version: 0.2.0
+version: 0.3.0
 description: Runtime for Rust applications
 license: Apache-2.0
 language: rust
@@ -7,4 +7,7 @@ maintainers:
   - name: Sandy Koh
     email: sandy.koh@ibm.com
     github-id: skoh7645
+  - name: Enrique Lacal
+    email: enrique.lacal.bereslawski@ibm.com
+    github-id: EnriqueL8
 default-template: simple
