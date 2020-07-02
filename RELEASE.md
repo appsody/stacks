@@ -7,6 +7,14 @@ A release in this repo represents a new version of a particular stack - denoted 
 ## Steps to create a new stack release
 The Appsody stacks are made available by creating a tagged GitHub release. Follow these steps to create a new release of an Appsody stack:
 
+### Prerequisites
+The pull request to be merged must:
+- Have updated the version of the stack in the `stack.yaml`
+- Have received an approval from the stack maintainer
+- Have a passing travis build and the behaviour of the stack still working as intended (e.g. `appsody run/test/debug/build`)
+
+Stack releases should also be done one at a time. For every pull request that is merged, the release should be done before merging any others.
+
 ### Trigger the release on GitHub
 1. Navigate to https://github.com/appsody/stacks/releases
 1. Click __Draft a new release__ button
@@ -30,13 +38,6 @@ The Appsody stacks are made available by creating a tagged GitHub release. Follo
 1. Click __Edit release__ button
 1. Untick __This is a pre-release__ checkbox
 1. Click __Update release__ button
-
-### Update v1 Index (Incubator stacks only)
-1. For now we are manually updating the [old appsody stacks index](https://github.com/appsody/stacks/blob/master/index.yaml)
-1. Create a pull request to update this file and update the index manually for the updated stack. Usually, we only need to update the `version` and `url` fields for the updated stack
-1. Submit the pull request
-1. Once the pull request is approved, merge the changes
-
 
 # Releasing Dependent Stacks
 There is no fixed release schedule for Appsody stacks. Stacks should be released as we merge pull requests in this repo.
