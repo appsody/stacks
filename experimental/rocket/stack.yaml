@@ -7,4 +7,7 @@ maintainers:
   - name: Sandy Koh
     email: sandy.koh@ibm.com
     github-id: skoh7645
+  - name: Enrique Lacal
+    email: enrique.lacal.bereslawski@ibm.com
+    github-id: EnriqueL8
 default-template: simple
