@@ -8,7 +8,19 @@ RUN rm -rf /project/user-app/node_modules && mkdir -p /project/user-app/node_mod
 
 # Install user-app dependencies
 WORKDIR /project/user-app
-RUN npm install --production 
+RUN npm install --production
+
+# Run a build phase. Projects that need to execute build commands can customize the
+# 'build' script in their package.json. The build script should call 'npm install'.
+# If no build is required, just install production dependencies.
+RUN npm run build --if-present
+
+# Uninstall dev dependencies, leaving only production dependencies. Projects can
+# customize the 'prune' script in their package.json.
+# Ideally this would just be 'npm prune', but this command does not have pre/post
+# hooks. Instead, the user's 'prune' script can itself call 'npm prune' in addition
+# to any additional actions required.
+RUN npm run prune --production --if-present
 
 # Creating a tar to work around poor copy performance when using buildah 1.9.0
 RUN cd / && tar czf project.tgz project
