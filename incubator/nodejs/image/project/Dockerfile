@@ -28,6 +28,9 @@ RUN cd / && tar czf project.tgz project
 # Copy the dependencies into a slim Node docker image
 FROM node:12-slim
 
+# Install common dependencies (TLS and CA support)
+RUN apt-get update && apt-get install -y libssl1.1 ca-certificates && apt-get clean
+
 # Copy project with dependencies
 COPY --chown=node:node --from=0 /project.tgz .
 RUN tar xf project.tgz && chown -R node:node project && rm project.tgz
