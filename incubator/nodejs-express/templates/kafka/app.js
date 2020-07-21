@@ -31,8 +31,15 @@ module.exports = (options) => {
     // 'log.connection.close' : false,
   }
 
-  Produce(Kafka, config, log, app);
-  Consume(Kafka, brokers, log);
+  producer = Produce(Kafka, config, log, app);
+  consumer = Consume(Kafka, brokers, log);
+
+  // Disconnect our Kafka clients when the HTTP server is stopped.
+  options.server.on('close', function () {
+    log.info('Disconnecting Kafka clients');
+    producer.disconnect();
+    consumer.disconnect();
+  });
 
   return app;
 };
@@ -89,6 +96,7 @@ function Produce(Kafka, config, log, app) {
 
   // starting the producer
   producer.connect();
+  return producer;
 }
 
 // Based on:
@@ -145,4 +153,5 @@ function Consume(Kafka, brokers, log) {
 
   // starting the consumer
   consumer.connect();
+  return consumer;
 }
