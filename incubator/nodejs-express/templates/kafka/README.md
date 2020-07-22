@@ -23,7 +23,9 @@ In order to run the starter app.js you must start Kafka and ZooKeeper containers
 
 Start docker compose with the following command:
     
-```docker-compose up```
+```
+docker-compose up
+```
     
 Run ```docker network list``` to see your new network with the name of your project directory and the word ```_default``` appended. For example, ```my-project_default```. This is your `DOCKER_NETWORK_NAME`.
 
