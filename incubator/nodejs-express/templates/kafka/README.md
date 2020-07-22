@@ -46,15 +46,21 @@ This template expects `KAFKA_BOOTSTRAP_SERVERS` environment variable to be set t
 
 You can either POST to the /produce endpoint. This must be in json format if you are using the starter application, for example:
 
-```curl -d '{"foo":"bar"}' -H 'Content-Type: application/json' http://localhost:<port>/produce```
+```
+curl -d '{"foo":"bar"}' -H 'Content-Type: application/json' http://localhost:<port>/produce
+```
 
 or you can start a Kafka producer. You will first need to run another container in the same network:
 
-```docker run -it --network my-project_default strimzi/kafka:0.16.0-kafka-2.4.0 /bin/bash```
+```
+docker run -it --network my-project_default strimzi/kafka:0.16.0-kafka-2.4.0 /bin/bash
+```
 
 Now we can produce a message to ```my-topic``` by running:
 
-```bin/kafka-console-producer.sh --broker-list kafka:9092 --topic my-topic```
+```
+bin/kafka-console-producer.sh --broker-list kafka:9092 --topic my-topic
+```
 
 Type a message in the console. 
 
@@ -62,11 +68,15 @@ Type a message in the console.
 
 Start another container in the same network, as before, for the consumer:
 
-```docker run -it --network my-node-project_default  strimzi/kafka:0.16.0-kafka-2.4.0 /bin/bash```
+```
+docker run -it --network my-node-project_default  strimzi/kafka:0.16.0-kafka-2.4.0 /bin/bash
+```
 
 To consume messages you can run the following command:
 
-```bin/kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic my-topic --from-beginning```
+```
+bin/kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic my-topic --from-beginning
+```
 
 This will start consuming messages from when it is initiated so now you can produce some more messages and you should see them. 
 
