@@ -4,7 +4,7 @@ The Rust Tide stack provides a consistent way of developing [tide](https://githu
 
 Designed to be used with [Appsody](https://appsody.dev/) an [open source](https://github.com/appsody/) development and operations accelerator for containers.
 
-This stack is based on the `Rust 1.44.0-buster` runtime release.
+This stack is based on the `Rust 1.45.0-buster` runtime release.
 
 ## Templates
 
