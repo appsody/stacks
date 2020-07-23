@@ -40,6 +40,20 @@ Templates are used to create your local project and start your development. When
 
     **NOTE:** Currently the `appsody deploy` command only works for deploying web applications.
 
+## Customizing the build
+
+Simple Node projects do not require a 'build' process: they are executed directly from source.  However, some technologies such as Typescipt require commands to be invoked to prepare the project ready to be run.
+
+If your project's dependencies require an additional build step, you can do so as follows:
+
+- In your `package.json`, edit the `"scripts"` section and define two new scripts:
+  - `"build": "npm install && <build commands>"`
+  - `"prune": "<cleanup commands> && npm prune"`
+
+When initially launching your app using `appsody run`, or building the production image with `appsody build`, the 'build' script is executed (if one exists).  Your build script should invoke `npm install` if any dependencies specified in your `devDependencies` are required as part of the build process - such as command line tools.
+
+When generating the production image, the 'prune' script is executed after that, if it exists, and is run with the `--production` flag.  This allows the removal of development dependencies that were required during the 'build' step.  This could be as simple as running the `npm prune` command, which inherits the production flag, and restores the dependencies to a production state.  You may also use this step to clean up any build artifacts that are not necessary in your production image.
+
 ## License
 
 This stack is licensed under the [Apache 2.0](./image/LICENSE) license
