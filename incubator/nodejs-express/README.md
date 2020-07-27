@@ -98,6 +98,33 @@ The [`pino-http`](https://registry.npmjs.org/pino-http) has been registered as m
     - Metrics endpoint: http://localhost:3000/metrics
     - Dashboard endpoint: http://localhost:3000/appmetrics-dash (development only)
 
+## Performance Considerations
+   The node-rdkafka package included in nodejs-express/image/project/package.json may cause long build times in some environments.
+   As a workaround, a modified appsody stack based on the node-express stack can be created.
+   
+   See https://developer.ibm.com/components/appsody/tutorials/modify-appsody-stack/
+   
+   - If kafka is not needed, simply remove the node-rdkafka dependency.
+   - If kafka is needed:
+     1. Create a new base image based on node:12 with the librdkafka libray pre-installed.
+     ```
+     FROM node:12
+     
+     RUN apt-get update && \
+       apt-get install -y libssl-dev && apt-get clean && \
+       git clone https://github.com/edenhill/librdkafka.git && \
+       cd librdkafka && \
+       ./configure --install-deps && \
+       make && \ 
+       make install
+     ```
+     2. Change the top of nodejs-express/image/project/Dockerfile to use the new base image and set an environment variable.
+     ```
+     FROM [IMAGE CREATED ABOVE]
+
+     ENV BUILD_LIBRDKAFKA=0
+     ```
+
 ## License
 
 This stack is licensed under the [Apache 2.0](./image/LICENSE) license
