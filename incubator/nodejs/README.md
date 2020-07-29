@@ -42,7 +42,7 @@ Templates are used to create your local project and start your development. When
 
 ## Customizing the build
 
-Simple Node projects do not require a 'build' process: they are executed directly from source.  However, some technologies such as Typescipt require commands to be invoked to prepare the project ready to be run.
+Simple Node projects do not require a 'build' process: they are executed directly from source.  However, some technologies such as TypeScript require commands to be invoked to prepare the project ready to be run.
 
 If your project's dependencies require an additional build step, you can do so as follows:
 
