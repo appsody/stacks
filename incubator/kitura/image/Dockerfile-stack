@@ -1,11 +1,11 @@
-FROM appsody/swift:0.2
+FROM appsody/swift:0.3
 
 # Fix Python package layout before installing dependencies. This is a bug in the Swift
 # base image and this workaround should be removed once the base image is corrected.
 # See: https://bugs.swift.org/browse/SR-10344
 RUN apt-get update \
  && if [ -d "/usr/lib/python2.7/site-packages" ]; then mv /usr/lib/python2.7/site-packages/* /usr/lib/python2.7/dist-packages && rmdir /usr/lib/python2.7/site-packages && ln -s dist-packages /usr/lib/python2.7/site-packages ; fi \
- && apt-get install -y zlib1g-dev libcurl4-openssl-dev libssl-dev \
+ && apt-get install -y libcurl4-openssl-dev libssl-dev \
  && apt-get clean \
  && echo 'Finished installing dependencies'
 
