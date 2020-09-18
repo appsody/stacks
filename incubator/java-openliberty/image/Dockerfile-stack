@@ -17,6 +17,9 @@ RUN  groupadd --gid 1000 java_group \
 COPY ./LICENSE /licenses/
 COPY --chown=java_user:java_group ./project /project
 COPY --chown=java_user:java_group ./config /config
+COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
+COPY ./mvn-stack-settings.xml /project/mvn-stack-settings.xml
+
 
 USER java_user
 
@@ -27,8 +30,8 @@ WORKDIR /project/
 RUN mkdir -p /mvn/repository
 # Let's see the command we're hiding within the next line
 RUN mvn -e help:evaluate -Dexpression=maven.version -DforceStdout
-RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
-RUN mvn -B -Pstack-image-package -Dmaven.repo.local=/mvn/repository liberty:install-server install dependency:go-offline
+RUN mvn -B  -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
+RUN mvn -B -Pstack-image-package liberty:install-server install dependency:go-offline
 RUN chmod -R 777 /opt/ol && chmod -R 777 /mvn/repository
 
 
