@@ -18,7 +18,6 @@ COPY ./LICENSE /licenses/
 COPY --chown=java_user:java_group ./project /project
 COPY --chown=java_user:java_group ./config /config
 COPY ./mvn-stack-settings.xml /usr/share/maven/conf/settings.xml
-COPY ./mvn-stack-settings.xml /project/mvn-stack-settings.xml
 
 
 USER java_user
