@@ -22,7 +22,7 @@ requirements:
    docker-version: ">= 17.09.0"
 templating-data:
   baseimage: kabanero/ubi8-maven:0.9.0
-  finalimage: adoptopenjdk/openjdk8-openj9:ubi-jre
+  finalimage: registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.7
   parentpomgroup: dev.appsody
   parentpomid: spring-boot2-stack
   parentpomrange: '[0.3, 0.4)'
