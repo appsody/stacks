@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi:8.1-408
+FROM registry.access.redhat.com/ubi8/ubi:8.2-347
 
 RUN yum upgrade --disableplugin=subscription-manager -y \
    && yum clean --disableplugin=subscription-manager packages \
