@@ -1,5 +1,5 @@
 # Step 1: Build the user's application
-FROM kabanero/ubi8-maven:0.9.0 as compile
+FROM kabanero/ubi8-maven:0.10.2 as compile
 
 RUN  groupadd java_group \
    && useradd --gid java_group --shell /bin/bash --create-home java_user \
