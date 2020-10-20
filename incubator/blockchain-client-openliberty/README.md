@@ -60,14 +60,21 @@ OpenAPI endpoints:
 The default template uses Junit 4, Mockito and PowerMockito to do Unit Testing the the provided template.
 
 ## Getting Started
-
-1. Create a new folder in your local directory and initialize it using the Appsody CLI, e.g.:
-    ```bash
-    mkdir my-project
-    cd my-project
-    appsody init blockchain-client-openliberty
-    ```
-
+1. Set up the stack on your local system
+- Install the appsody CLI (for example, on your Mac, issue `brew install appsody/appsody/appsody`)
+- Clone this repo on your local machine
+- From the directory where you cloned the repo, navigate to `appsody-stacks/incubator/blockchain-client-openliberty`
+- Issue `appsody stack package`. This will create the stack and add it to the Appsody repo `dev.local`, hosted on your local system.
+- Create a project directory, for example: 
+```
+cd ~
+mkdir my-project
+cd my-project
+```
+- Create a Blockchain microservice project in that directory: 
+```
+appsody init dev.local/blockchain-client-openliberty
+```
     This will initialize an Open Liberty project using the default template. This will also install all parent pom dependencies into your local .m2 directory.
 
 1. Once your project has been initialized, you can run your application using the following command:
