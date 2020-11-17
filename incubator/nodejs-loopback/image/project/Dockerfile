@@ -3,7 +3,6 @@ FROM node:12
 
 # Copying individual files/folders as buildah 1.9.0 does not honour .dockerignore
 COPY *.json /project/
-COPY *.ts /project/
 COPY user-app /project/user-app
 COPY src /project/src
 

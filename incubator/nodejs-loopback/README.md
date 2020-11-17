@@ -10,10 +10,10 @@ based on [LoopBack 4](https://github.com/strongloop/loopback-next).
 The image contains the main code that loads the user application and configures
 with the following components to help the application become cloud native:
 
-- `@loopback/extension-health`: exposes `/health` endpoint for health checks
+- `@loopback/health`: exposes `/health` endpoint for health checks
   including with `/ready` for readiness and `/live` for liveness checks.
 
-- `@loopback/extension-metrics`: exposes `/metrics` endpoint for metrics data
+- `@loopback/metrics`: exposes `/metrics` endpoint for metrics data
   that can be scraped by (Prometheus)[https://prometheus.io/].
 
 The project layout is structured as follows:

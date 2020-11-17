@@ -5,9 +5,9 @@
 import {ApplicationConfig, Constructor} from '@loopback/core';
 import {Bootable} from '@loopback/boot';
 import {RestApplication} from '@loopback/rest';
-import {HealthComponent} from '@loopback/extension-health';
-import {MetricsComponent} from '@loopback/extension-metrics';
-import * as path from 'path';
+import {HealthComponent} from '@loopback/health';
+import {MetricsComponent} from '@loopback/metrics';
+import path from 'path';
 
 // The user-app is mounted from the template
 const userAppModule = '../user-app';
