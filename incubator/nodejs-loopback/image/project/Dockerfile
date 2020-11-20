@@ -19,7 +19,7 @@ WORKDIR /project/user-app
 RUN npm install
 
 # Creating a tar to work around poor copy performance when using buildah 1.9.0
-RUN cd / && tar czf project.tgz project
+RUN cd / && tar czf /project.tgz project
 
 # Copy the dependencies into a slim Node docker image
 FROM node:12-slim

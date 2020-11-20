@@ -1,5 +1,6 @@
-FROM appsody/nodejs:0.3
+FROM appsody/nodejs:0.4
 
+ENV APPSODY_PROJECT_DIR=/project
 ENV APPSODY_MOUNTS=/:/project/user-app
 ENV APPSODY_DEPS=/project/user-app/node_modules
 
@@ -17,6 +18,7 @@ ENV APPSODY_RUN_KILL=true
 ENV APPSODY_DEBUG="npm run debug"
 ENV APPSODY_DEBUG_ON_CHANGE="npm run pretest --prefix user-app && npm run debug"
 ENV APPSODY_DEBUG_KILL=true
+ENV APPSODY_DEBUG_PORT=9229
 
 ENV APPSODY_TEST="npm test && npm test --prefix user-app"
 ENV APPSODY_TEST_ON_CHANGE=""
@@ -25,6 +27,7 @@ ENV APPSODY_TEST_KILL=false
 COPY ./LICENSE /licenses/
 COPY ./project /project
 COPY ./config /config
+
 WORKDIR /project
 RUN npm install && npm run pretest
 
