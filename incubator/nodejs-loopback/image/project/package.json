@@ -9,6 +9,7 @@
     "directory": "incubator/nodejs-loopback/image/project"
   },
   "main": "dist/index.js",
+  "type": "dist/index.d.ts",
   "scripts": {
     "build": "lb-tsc",
     "clean": "lb-clean dist *.tsbuildinfo",
@@ -18,29 +19,29 @@
     "test": "lb-mocha --allow-console-logs \"dist/__tests__\""
   },
   "dependencies": {
-    "@loopback/boot": "^2.0.2",
-    "@loopback/context": "^3.2.0",
-    "@loopback/core": "^2.2.0",
-    "@loopback/extension-health": "^0.3.2",
-    "@loopback/extension-metrics": "^0.2.2",
-    "@loopback/openapi-v3": "^3.1.1",
-    "@loopback/repository": "^2.0.2",
-    "@loopback/rest": "^3.1.0",
-    "@loopback/rest-explorer": "^2.0.2",
-    "@loopback/service-proxy": "^2.0.2"
+    "@loopback/boot": "^3.1.1",
+    "@loopback/context": "^3.13.1",
+    "@loopback/core": "^2.13.0",
+    "@loopback/health": "^0.6.1",
+    "@loopback/metrics": "^0.5.1",
+    "@loopback/openapi-v3": "^5.1.1",
+    "@loopback/repository": "^3.2.1",
+    "@loopback/rest": "^9.1.0",
+    "@loopback/rest-explorer": "^3.0.4",
+    "@loopback/service-proxy": "^3.0.4"
   },
   "devDependencies": {
-    "@loopback/build": "^5.0.0",
-    "@loopback/eslint-config": "^6.0.2",
-    "@loopback/testlab": "^2.0.2",
-    "@types/node": "^10.17.17",
-    "@typescript-eslint/eslint-plugin": "^2.25.0",
-    "@typescript-eslint/parser": "^2.25.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.1",
-    "eslint-plugin-eslint-plugin": "^2.2.1",
-    "eslint-plugin-mocha": "^6.3.0",
-    "source-map-support": "^0.5.16",
-    "typescript": "~3.8.3"
+    "@loopback/build": "^6.2.7",
+    "@loopback/eslint-config": "^10.0.3",
+    "@loopback/testlab": "^3.2.9",
+    "@types/node": "^10.17.45",
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.1",
+    "eslint": "^7.13.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-eslint-plugin": "^2.3.0",
+    "eslint-plugin-mocha": "^8.0.0",
+    "source-map-support": "^0.5.19",
+    "typescript": "~4.0.5"
   }
 }
