@@ -1,11 +1,6 @@
 ![](https://raw.githubusercontent.com/appsody/website/master/src/images/appsody_full_logo.svg?sanitize=true)
 
-## Welcome to Appsody!
-<https://appsody.dev>
-
-#### Compose a cloud native masterpiece.
-
-Infused with cloud native capabilities from the moment you start, Appsody provides everything you need to iteratively develop applications, ready for deployment to Kubernetes environments. Teams are empowered with sharable technology stacks, configurable and controllable through a central hub. To find out more about Appsody, check out [appsody.dev](https://appsody.dev).
+## Development of Appsody as a standalone project has ended, but the core technologies of Appsody have been merged with odo to create odo 2.0! See our [blog post](https://appsody.dev/blogs/DevelopmentEnded) for more details!
 
 # Stacks
 
