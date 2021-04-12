@@ -14,16 +14,16 @@ maintainers:
     email: skurz@us.ibm.com
     github-id: scottkurz
   - name: Adam Wisniewski
-    email: awisniew@us.ibm.com 
+    email: awisniew@us.ibm.com
     github-id: awisniew90
 default-template: default
 requirements:
-   appsody-version: ">= 0.5.0"
-   docker-version: ">= 17.09.0"
+  appsody-version: ">= 0.5.0"
+  docker-version: ">= 17.09.0"
 templating-data:
-  baseimage: kabanero/ubi8-maven:0.10.2
-  finalimage: registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.8
+  baseimage: kabanero/ubi8-maven:0.10.3
+  finalimage: registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.8-2.6
   parentpomgroup: dev.appsody
   parentpomid: spring-boot2-stack
-  parentpomrange: '[0.3, 0.4)'
+  parentpomrange: "[0.3, 0.4)"
   parentpomfilename: appsody-boot2-snowdrop-pom.xml
