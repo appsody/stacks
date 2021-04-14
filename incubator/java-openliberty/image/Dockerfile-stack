@@ -1,4 +1,4 @@
-FROM kabanero/ubi8-maven:0.10.2
+FROM kabanero/ubi8-maven:0.10.3
 
 LABEL vendor="Open Liberty" \
     name="{{.stack.id}}" \
