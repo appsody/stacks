@@ -21,7 +21,7 @@ requirements:
   docker-version: ">= 17.09.0"
   appsody-version: ">= 0.5.0"
 templating-data:
-  libertyversion: "20.0.0.9"
-  parentpomgroup: "dev.appsody"
-  parentpomid: "java-openliberty"
-  parentpomrange: "[0.2, 0.3)"
+  libertyversion: '20.0.0.9'
+  parentpomgroup: 'dev.appsody'
+  parentpomid: 'java-openliberty'
+  parentpomrange: '[0.2, 0.3)'
