@@ -1,19 +1,19 @@
 # Step 1: Build the user's application
-FROM kabanero/ubi8-maven:0.10.2 as compile
+FROM kabanero/ubi8-maven:0.10.3 as compile
 
 RUN  groupadd java_group \
-   && useradd --gid java_group --shell /bin/bash --create-home java_user \
-   && mkdir -p /mvn/repository \
-   && chown -R java_user:java_group /mvn \
-   && mkdir -p /config \
-   && chown -R java_user:java_group /config \
-# make a well known place for shared library jars seperate from the rest of the defaultServer contents (to help with caching)
-   && mkdir /configlibdir \
-   && chown -R java_user:java_group /configlibdir \
-   &&  mkdir /shared \
-   && chown -R java_user:java_group /shared 
+    && useradd --gid java_group --shell /bin/bash --create-home java_user \
+    && mkdir -p /mvn/repository \
+    && chown -R java_user:java_group /mvn \
+    && mkdir -p /config \
+    && chown -R java_user:java_group /config \
+    # make a well known place for shared library jars seperate from the rest of the defaultServer contents (to help with caching)
+    && mkdir /configlibdir \
+    && chown -R java_user:java_group /configlibdir \
+    &&  mkdir /shared \
+    && chown -R java_user:java_group /shared 
 
- USER java_user
+USER java_user
 
 # Copy and build the dev.appsody:java-openliberty parent pom
 COPY --chown=java_user:java_group ./pom.xml /project/pom.xml
