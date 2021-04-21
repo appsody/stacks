@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi:8.2-347
+FROM registry.access.redhat.com/ubi8/ubi:8.3-297.1618432833
 
 RUN yum upgrade --disableplugin=subscription-manager -y \
    && yum clean --disableplugin=subscription-manager packages \
@@ -7,11 +7,11 @@ RUN yum upgrade --disableplugin=subscription-manager -y \
 USER root
 
 #Install openjdk
-ENV JAVA_VERSION jdk8u222-b10_openj9-0.15.1
+ENV JAVA_VERSION jdk8u282-b08
 
 RUN set -eux; \
-   ESUM='910ae847109a6dd1b6cf69baa7615ea2cce8cff787e5a9349a5331ce7604f3a5'; \
-   BINARY_URL='https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u252-b09_openj9-0.20.0/OpenJDK8U-jdk_x64_linux_openj9_8u252b09_openj9-0.20.0.tar.gz'; \
+   ESUM='ef10c776dccdff02da6222002a3c023c1cc47d50dd1f6f81314da3d1fe28d13e'; \
+   BINARY_URL='https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u282-b08_openj9-0.24.0/OpenJDK8U-jdk_x64_linux_openj9_8u282b08_openj9-0.24.0.tar.gz'; \
    curl -LfsSo /tmp/openjdk.tar.gz ${BINARY_URL}; \
    echo "${ESUM} */tmp/openjdk.tar.gz" | sha256sum -c -; \
    mkdir -p /opt/java/openjdk; \
