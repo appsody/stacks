@@ -92,7 +92,7 @@ do
                         echo "appsody stack package: ok, $IMAGE_REGISTRY_ORG/$stack_id:$stack_version"
                         trace "${build_dir}/package.$stack_id.$stack_version.log"
 
-                        if [ "$SKIP_TESTS" != "true" ]
+                        if [ "$SKIP_TESTS" == "false" ]
                         then
                             echo -e "\n- VALIDATING stack: $repo_name/$stack_id, log: ${build_dir}/validate.$stack_id.$stack_version.log"
                             echo "VALIDATING stack: $repo_name/$stack_id" > ${build_dir}/validate.$stack_id.$stack_version.log
