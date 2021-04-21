@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-12:1-59
+FROM registry.access.redhat.com/ubi8/nodejs-12:latest
 
 LABEL vendor="Kabanero" \
     name="kabanero/nodejs" \
