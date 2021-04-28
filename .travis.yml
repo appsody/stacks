@@ -14,7 +14,8 @@ services:
 # reset hard to $TRAVIS_COMMIT
 install:
   - . ./ci/git_setup.sh
-  - wget -nv https://repo1.maven.org/maven2/org/osgi/org.osgi.core/6.0.0/org.osgi.core-6.0.0.jar -O ${TRAVIS_BUILD_DIR}
+  - mkdir ${TRAVIS_BUILD_DIR}/jars
+  - wget -nv https://repo1.maven.org/maven2/org/osgi/org.osgi.core/6.0.0/org.osgi.core-6.0.0.jar -O ${TRAVIS_BUILD_DIR}/jars/osgi.jar
 
 before_script:
   - ./ci/download_cli.sh

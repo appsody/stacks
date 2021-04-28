@@ -1,5 +1,5 @@
-find . -name "org.osgi.core-6.0.0.jar"
-javac -cp org.osgi.core-6.0.0.jar incubator/java-openliberty/image/project/util/RangeIncludesVersion.java
+find . -name "osgi.jar"
+javac -cp jars/osgi.jar incubator/java-openliberty/image/project/util/RangeIncludesVersion.java
 rm -rf experimental
 cd incubator
 rm -rf java-microprofile
