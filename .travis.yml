@@ -11,10 +11,10 @@ services:
 
 branches:
   except:
-  - update-from-appsody
+    - update-from-appsody
 
 before_install:
-    - ./ci/install_yq.sh
+  - ./ci/install_yq.sh
 
 # Delete git repo setup from travis
 # and replace with git clone to master.
@@ -28,7 +28,7 @@ before_script:
 script:
   - . ./ci/build.sh
   - . ./ci/list_artifacts.sh
-    
+
 # note before_deploy will run before each deploy provider
 before_deploy:
   - . ./ci/release.sh
