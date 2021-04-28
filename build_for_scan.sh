@@ -1,6 +1,4 @@
-find . -name "osgi.jar"
-javac -cp jars/osgi.jar incubator/java-openliberty/image/project/util/RangeIncludesVersion.java
-rm -rf experimental
+mvn compile
 cd incubator
 rm -rf java-microprofile
 rm -rf java-spring-boot2
