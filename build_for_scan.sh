@@ -1,4 +1,4 @@
-javac -cp .:org.osgi.core-6.0.0.jar incubator/java-openliberty/image/project/util/RangeIncludesVersion.java
+javac -cp org.osgi.core-6.0.0.jar incubator/java-openliberty/image/project/util/RangeIncludesVersion.java
 rm -rf experimental
 cd incubator
 rm -rf java-microprofile
