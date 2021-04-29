@@ -11,3 +11,5 @@ rm -rf python-flask
 rm -rf quarkus
 rm -rf starter
 rm -rf swift
+rm -rf ci/nginx
+rm -rf experimental
