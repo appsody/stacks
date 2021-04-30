@@ -7,6 +7,8 @@ LABEL vendor="Kabanero" \
     description="This image contains the Kabanero development stack for the Nodejs collection"
 
 USER root
+RUN rm -rf /etc/my.cnf
+RUN rm -rf /etc/my.cnf.d
 RUN yum install --disableplugin=subscription-manager python2 -y
 RUN ln -s /usr/bin/python2 /usr/bin/python
 
