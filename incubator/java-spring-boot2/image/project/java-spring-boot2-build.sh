@@ -149,6 +149,22 @@ createStartScript() {
   chmod +x target/start.sh
 }
 
+generateSCC() {
+    note "Creating scc folder"
+    # Create scc folder
+    mkdir -p /tmp/scc
+
+    note "Running application in background to generate scc"
+    # Running the application to generate the shared class cache
+    java $JVM_ARGS -cp /project/user-app/target/dependency/BOOT-INF/classes:/project/user-app/target/dependency/BOOT-INF/lib/* \
+    -Xshareclasses:name=sharedcc_default,cacheDir=/tmp/scc -Xscmx50m \
+     $(cat target/dependency/META-INF/MANIFEST.MF | grep 'Start-Class: ' | cut -d' ' -f2 | tr -d '\r\n') &
+
+    note "sleeping for 10 sec"
+    # sleeping for 10 secs as the SCC generation will be completed
+    sleep 10
+}
+
 debug() {
   note "Build and debug project in the foreground"
   exec_run_mvn -Dmaven.test.skip=true \
@@ -185,6 +201,9 @@ case "${ACTION}" in
   ;;
   createStartScript)
     createStartScript
+  ;;
+  generateSCC)
+    generateSCC
   ;;
   debug)
     common
