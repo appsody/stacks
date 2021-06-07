@@ -1,4 +1,6 @@
-FROM registry.access.redhat.com/ubi8/ubi:8.3-297.1618432833
+FROM registry.access.redhat.com/ubi8/ubi:latest
+
+RUN yum -y update-minimal --security --sec-severity=Important --sec-severity=Critical
 
 RUN yum upgrade --disableplugin=subscription-manager -y \
    && yum clean --disableplugin=subscription-manager packages \
