@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Check if can login to docker hub
+if [ -n "$DOCKER_USERNAME" ] && [ -n "$DOCKER_PASSWORD" ]; then
+    echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" "docker.io" --password-stdin
+fi
+
 # setup environment
 . $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/env.sh
 
