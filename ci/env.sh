@@ -289,6 +289,10 @@ image_registry_login() {
             export IMAGE_REGISTRY_PUBLISH=false
         fi
     fi
+    # Check if can login to docker hub
+    if [ -n "$DOCKER_USERNAME" ] && [ -n "$DOCKER_PASSWORD" ]; then
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" "docker.io" --password-stdin
+    fi
 }
 
 #expose an extension point for running after main 'env' processing
