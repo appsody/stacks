@@ -65,10 +65,6 @@ OpenAPI endpoints:
 
 The default template uses JUnit 5. You may be used to JUnit 4, but here are some great reasons to make the switch https://developer.ibm.com/dwblog/2017/top-five-reasons-to-use-junit-5-java/
 
-### Kafka template
-
-The kafka template allows you to develop applications that connect to Kafka using MicroProfile Reactive Messaging. For more information, see the [kafka readme](templates/kafka/README.md).
-
 ## Getting Started
 
 1. Create a new folder in your local directory and initialize it using the Appsody CLI, e.g.:
