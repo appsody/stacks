@@ -1,6 +1,6 @@
-FROM docker.io/number9/rust-tide-base:0.3.0 as server
+FROM docker.io/number9/rust-tide-base:0.4.0 as server
 
-FROM rust:1.44.0-buster as builder
+FROM rust:1.45.0-buster as builder
 
 COPY --from=server /project/server /project/server
 
