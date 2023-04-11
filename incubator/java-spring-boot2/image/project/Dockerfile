@@ -37,7 +37,8 @@ WORKDIR /project/user-app
 
 RUN /project/util/check_version build \
  && /project/java-spring-boot2-build.sh package \
- && /project/java-spring-boot2-build.sh createStartScript
+ && /project/java-spring-boot2-build.sh createStartScript \
+ && /project/java-spring-boot2-build.sh generateSCC
 
 ############################################################################
 # 
@@ -64,6 +65,9 @@ ARG DEPENDENCY=/project/user-app/target/dependency
 COPY --chown=java_user:java_group --from=compile ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --chown=java_user:java_group --from=compile ${DEPENDENCY}/META-INF /app/META-INF
 COPY --chown=java_user:java_group --from=compile ${DEPENDENCY}/BOOT-INF/classes /app
+COPY --chown=java_user:java_group --from=compile /tmp/scc /tmp/scc
+
+ENV JAVA_TOOL_OPTIONS="-Xshareclasses:name=sharedcc_default,cacheDir=/tmp/scc"
 
 EXPOSE 8080
 EXPOSE 8443
